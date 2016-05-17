@@ -1,0 +1,2171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<?xml-stylesheet type="text/xsl" href="schema_view.xsl"?>
+<uds_schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema.xsd">
+
+  <schema_head>
+    <schema_version>6.1091</schema_version>
+    <version_info>
+      <version md5="90d4af99f1949b01d9764ddb4977430a" name="uspp" type="special">1.0000</version>
+      <version md5="6e5fee209206fbc6f167757a1ceddcd6" name="common" type="common">1.0000</version>
+      <version md5="562ca1bae17028df2682785053f8a7c8" name="spr" type="special">1.0000</version>
+    </version_info>
+  </schema_head>
+
+  <schema_body>
+    <sd>
+      <usch_atinfo_list>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10000</at_id>
+          <at_name type="uds:string">dSERVERID</at_name>
+          <data_type type="uds:byte">2</data_type>
+          <min_len type="uds:word">2</min_len>
+          <max_len type="uds:word">2</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">0000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10001</at_id>
+          <at_name type="uds:string">dCOMMANDCODE</at_name>
+          <data_type type="uds:byte">2</data_type>
+          <min_len type="uds:word">2</min_len>
+          <max_len type="uds:word">2</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">0000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10002</at_id>
+          <at_name type="uds:string">dVENDORID</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10003</at_id>
+          <at_name type="uds:string">dFEATURELISTID</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10004</at_id>
+          <at_name type="uds:string">dFEATURELIST</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10005</at_id>
+          <at_name type="uds:string">dPUIA</at_name>
+          <data_type type="uds:byte">4</data_type>
+          <min_len type="uds:word">1</min_len>
+          <max_len type="uds:word">129</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd"/>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10006</at_id>
+          <at_name type="uds:string">dPUIINDICATOR</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10007</at_id>
+          <at_name type="uds:string">dPUI</at_name>
+          <data_type type="uds:byte">5</data_type>
+          <min_len type="uds:word">129</min_len>
+          <max_len type="uds:word">129</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10008</at_id>
+          <at_name type="uds:string">dGROUPID</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10009</at_id>
+          <at_name type="uds:string">dDEFAULTPUIFG</at_name>
+          <data_type type="uds:byte">1</data_type>
+          <min_len type="uds:word">1</min_len>
+          <max_len type="uds:word">1</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10010</at_id>
+          <at_name type="uds:string">dSHORTNUM</at_name>
+          <data_type type="uds:byte">5</data_type>
+          <min_len type="uds:word">129</min_len>
+          <max_len type="uds:word">129</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10011</at_id>
+          <at_name type="uds:string">dSubNum</at_name>
+          <data_type type="uds:byte">2</data_type>
+          <min_len type="uds:word">2</min_len>
+          <max_len type="uds:word">2</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">0000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10012</at_id>
+          <at_name type="uds:string">dSVID</at_name>
+          <data_type type="uds:byte">2</data_type>
+          <min_len type="uds:word">2</min_len>
+          <max_len type="uds:word">2</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">0000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10013</at_id>
+          <at_name type="uds:string">dActivate</at_name>
+          <data_type type="uds:byte">1</data_type>
+          <min_len type="uds:word">1</min_len>
+          <max_len type="uds:word">1</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10014</at_id>
+          <at_name type="uds:string">dSQUENCENUM</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10015</at_id>
+          <at_name type="uds:string">dDeposLength</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10016</at_id>
+          <at_name type="uds:string">dDepositoryData</at_name>
+          <data_type type="uds:byte">4</data_type>
+          <min_len type="uds:word">1</min_len>
+          <max_len type="uds:word">30720</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd"/>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10017</at_id>
+          <at_name type="uds:string">dDATAREFTYPE</at_name>
+          <data_type type="uds:byte">1</data_type>
+          <min_len type="uds:word">1</min_len>
+          <max_len type="uds:word">1</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10018</at_id>
+          <at_name type="uds:string">dASHOSTID</at_name>
+          <data_type type="uds:byte">2</data_type>
+          <min_len type="uds:word">2</min_len>
+          <max_len type="uds:word">2</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">0000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10019</at_id>
+          <at_name type="uds:string">dDATAID</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10020</at_id>
+          <at_name type="uds:string">doldpui</at_name>
+          <data_type type="uds:byte">5</data_type>
+          <min_len type="uds:word">129</min_len>
+          <max_len type="uds:word">129</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10021</at_id>
+          <at_name type="uds:string">dcmode</at_name>
+          <data_type type="uds:byte">1</data_type>
+          <min_len type="uds:word">1</min_len>
+          <max_len type="uds:word">1</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10022</at_id>
+          <at_name type="uds:string">dtpid</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">FFFFFFFF</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10023</at_id>
+          <at_name type="uds:string">dtpname</at_name>
+          <data_type type="uds:byte">5</data_type>
+          <min_len type="uds:word">129</min_len>
+          <max_len type="uds:word">129</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10024</at_id>
+          <at_name type="uds:string">dtpcontent</at_name>
+          <data_type type="uds:byte">4</data_type>
+          <min_len type="uds:word">0</min_len>
+          <max_len type="uds:word">1024</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd"/>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10025</at_id>
+          <at_name type="uds:string">dALIASEID</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10026</at_id>
+          <at_name type="uds:string">dAliaseGroupID</at_name>
+          <data_type type="uds:byte">4</data_type>
+          <min_len type="uds:word">0</min_len>
+          <max_len type="uds:word">129</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd"/>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10027</at_id>
+          <at_name type="uds:string">dCGTPSI</at_name>
+          <data_type type="uds:byte">5</data_type>
+          <min_len type="uds:word">129</min_len>
+          <max_len type="uds:word">129</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</def_val>
+        </usch_atinfo>
+        <usch_atinfo apptype="sd">
+          <at_id type="uds:word">10028</at_id>
+          <at_name type="uds:string">dCount</at_name>
+          <data_type type="uds:byte">3</data_type>
+          <min_len type="uds:word">4</min_len>
+          <max_len type="uds:word">4</max_len>
+          <single_val type="uds:byte">1</single_val>
+          <def_val type="uds:bcd">00000000</def_val>
+        </usch_atinfo>
+      </usch_atinfo_list>
+      <usch_ocinfo_list>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">4500</oc_id>
+            <oc_name type="uds:string">u_dpuidom</oc_name>
+            <oc_type type="uds:byte">1</oc_type>
+            <virtual_fg type="uds:byte">1</virtual_fg>
+            <dynamic_fg type="uds:byte">0</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">0</parse_mode>
+            <ass_oc_at_name_input type="uds:string">NULL</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">0</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">NULL</ass_oc_atname_output>
+            <dsa_type type="uds:string">ID_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list/>
+          <usch_ocinfo_indx_list/>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">275</oc_id>
+            <oc_name type="uds:string">u_dsrvfea</oc_name>
+            <oc_type type="uds:byte">2</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">0</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">0</parse_mode>
+            <ass_oc_at_name_input type="uds:string">NULL</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">0</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">NULL</ass_oc_atname_output>
+            <dsa_type type="uds:string">ID_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10000</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10001</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">3</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10002</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">4</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10003</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">5</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10004</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">2</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">5</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">4</at_num>
+              <at_tag_list type="uds:string">1,2,3,4</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">276</oc_id>
+            <oc_name type="uds:string">u_dpuialias</oc_name>
+            <oc_type type="uds:byte">2</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">0</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">0</parse_mode>
+            <ass_oc_at_name_input type="uds:string">NULL</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">0</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">NULL</ass_oc_atname_output>
+            <dsa_type type="uds:string">P_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10005</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">322</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">2</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">5</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">1</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">277</oc_id>
+            <oc_name type="uds:string">u_dpuiinfo</oc_name>
+            <oc_type type="uds:byte">1</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">0</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">0</parse_mode>
+            <ass_oc_at_name_input type="uds:string">NULL</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">0</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">NULL</ass_oc_atname_output>
+            <dsa_type type="uds:string">P_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">322</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10006</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">3</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10007</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">4</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10008</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">5</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10009</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">6</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10010</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">7</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10011</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">8</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10025</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">1</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">2</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">2</indx_id>
+              <indx_type type="uds:byte">2</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">5</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">3</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">3</indx_id>
+              <indx_type type="uds:byte">2</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">5</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">6</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">4</indx_id>
+              <indx_type type="uds:byte">1</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">5</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">2</at_num>
+              <at_tag_list type="uds:string">1,4</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">5</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">8</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">2</at_num>
+              <at_tag_list type="uds:string">1,2</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">6</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">8</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">2</at_num>
+              <at_tag_list type="uds:string">1,3</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">7</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">8</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">2</at_num>
+              <at_tag_list type="uds:string">1,6</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">278</oc_id>
+            <oc_name type="uds:string">u_ddeposdata</oc_name>
+            <oc_type type="uds:byte">1</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">1</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">1</parse_mode>
+            <ass_oc_at_name_input type="uds:string">dpui</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">277</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">dPUIINDICATOR</ass_oc_atname_output>
+            <dsa_type type="uds:string">P_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">322</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10006</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">3</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10012</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">4</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10013</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">5</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10014</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">6</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10015</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">7</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10016</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">8</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">3</at_num>
+              <at_tag_list type="uds:string">1,2,3</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">279</oc_id>
+            <oc_name type="uds:string">u_dsubscribe</oc_name>
+            <oc_type type="uds:byte">1</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">1</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">1</parse_mode>
+            <ass_oc_at_name_input type="uds:string">dpui</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">277</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">dPUIINDICATOR</ass_oc_atname_output>
+            <dsa_type type="uds:string">P_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">322</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10006</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">3</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10017</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">4</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10018</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">5</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10019</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">8</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">5</at_num>
+              <at_tag_list type="uds:string">1,2,3,4,5</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">2</indx_id>
+              <indx_type type="uds:byte">1</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">5</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">4</at_num>
+              <at_tag_list type="uds:string">1,2,3,5</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">280</oc_id>
+            <oc_name type="uds:string">u_ddynstat</oc_name>
+            <oc_type type="uds:byte">1</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">1</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">0</parse_mode>
+            <ass_oc_at_name_input type="uds:string">NULL</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">0</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">NULL</ass_oc_atname_output>
+            <dsa_type type="uds:string">P_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">334</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">321</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">3</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">1</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">4</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">2</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">5</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">3</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">6</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">4</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">7</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">5</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">8</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">6</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">9</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">7</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">10</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">8</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">11</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">9</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">12</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">13</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">11</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">14</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">12</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">15</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">13</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">16</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">14</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">17</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">15</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">18</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">16</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">19</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">17</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">20</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">18</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">21</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">19</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">22</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">20</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">23</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">21</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">24</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">22</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">25</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">23</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">26</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">24</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">27</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">25</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">28</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">26</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">29</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">27</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">30</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">28</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">31</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">29</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">32</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">30</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">33</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">31</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">34</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">32</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">35</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">33</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">36</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">34</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">37</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">35</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">38</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">36</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">39</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">37</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">40</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">38</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">41</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">39</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">42</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">40</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">43</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">41</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">44</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">42</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">45</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">43</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">46</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">44</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">47</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">45</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">48</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">46</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">49</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">47</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">50</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">48</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">3</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">1</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">281</oc_id>
+            <oc_name type="uds:string">u_dnumchg</oc_name>
+            <oc_type type="uds:byte">1</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">0</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">0</parse_mode>
+            <ass_oc_at_name_input type="uds:string">NULL</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">0</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">NULL</ass_oc_atname_output>
+            <dsa_type type="uds:string">ID_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10020</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10007</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">3</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10021</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">1</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">1</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">2</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">1</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">2</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">282</oc_id>
+            <oc_name type="uds:string">u_dtp</oc_name>
+            <oc_type type="uds:byte">1</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">0</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">0</parse_mode>
+            <ass_oc_at_name_input type="uds:string">NULL</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">0</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">NULL</ass_oc_atname_output>
+            <dsa_type type="uds:string">ID_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10022</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10023</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">3</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10024</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">1</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">1</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">2</indx_id>
+              <indx_type type="uds:byte">1</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">5</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">2</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">283</oc_id>
+            <oc_name type="uds:string">u_daReposInd</oc_name>
+            <oc_type type="uds:byte">1</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">0</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">0</parse_mode>
+            <ass_oc_at_name_input type="uds:string">NULL</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">0</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">NULL</ass_oc_atname_output>
+            <dsa_type type="uds:string">P_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">322</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10006</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">3</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10026</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">1</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">2</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">2</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">1</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">3</at_tag_list>
+            </usch_ocinfo_indx>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">3</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">0</pk_fg>
+              <indx_mergeid type="uds:byte">8</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">2</at_num>
+              <at_tag_list type="uds:string">1,2</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+        <usch_ocinfo apptype="sd">
+          <usch_ocinfo_comm>
+            <oc_id type="uds:word">284</oc_id>
+            <oc_name type="uds:string">u_dCGTPSI</oc_name>
+            <oc_type type="uds:byte">1</oc_type>
+            <virtual_fg type="uds:byte">0</virtual_fg>
+            <dynamic_fg type="uds:byte">0</dynamic_fg>
+            <rollback_fg type="uds:byte">0</rollback_fg>
+            <alias_pfx type="uds:string">SID</alias_pfx>
+            <parse_mode type="uds:byte">0</parse_mode>
+            <ass_oc_at_name_input type="uds:string">NULL</ass_oc_at_name_input>
+            <ass_oc_id type="uds:word">0</ass_oc_id>
+            <ass_oc_atname_output type="uds:string">NULL</ass_oc_atname_output>
+            <dsa_type type="uds:string">ID_DSA</dsa_type>
+            <at_ref_fg type="uds:byte">0</at_ref_fg>
+            <lock_fg type="uds:byte">1</lock_fg>
+            <is_ref_table type="uds:byte">0</is_ref_table>
+            <slice_domid type="uds:byte">0</slice_domid>
+            <ref_domtype type="uds:string">IMSI</ref_domtype>
+            <ref_table_list type="uds:string"/>
+            <ref_handle_list type="uds:string"/>
+          </usch_ocinfo_comm>
+          <usch_ocinfo_at_list>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">1</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10027</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+            <usch_ocinfo_at>
+              <at_tag type="uds:byte">2</at_tag>
+              <at_may type="uds:byte">0</at_may>
+              <at_id type="uds:word">10028</at_id>
+              <at_loc type="uds:byte">0</at_loc>
+              <ptr_at type="uds:ptr"/>
+              <is_ref_at type="uds:byte">0</is_ref_at>
+              <ref_tableid type="uds:word">0</ref_tableid>
+              <ref_domid type="uds:byte">0</ref_domid>
+            </usch_ocinfo_at>
+          </usch_ocinfo_at_list>
+          <usch_ocinfo_indx_list>
+            <usch_ocinfo_indx>
+              <indx_id type="uds:byte">1</indx_id>
+              <indx_type type="uds:byte">0</indx_type>
+              <pk_fg type="uds:byte">1</pk_fg>
+              <indx_mergeid type="uds:byte">1</indx_mergeid>
+              <hashModulus type="uds:dword">2003</hashModulus>
+              <at_num type="uds:byte">1</at_num>
+              <at_tag_list type="uds:string">1</at_tag_list>
+            </usch_ocinfo_indx>
+          </usch_ocinfo_indx_list>
+        </usch_ocinfo>
+      </usch_ocinfo_list>
+      <usch_srinfo_list>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">4500</sr_id>
+          <sup_sr_id type="uds:word">0</sup_sr_id>
+          <rdn_type type="uds:byte">1</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">u_dpuidom</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">4500</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">275</sr_id>
+          <sup_sr_id type="uds:word">0</sup_sr_id>
+          <rdn_type type="uds:byte">0</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">dSERVERID</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">275</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">276</sr_id>
+          <sup_sr_id type="uds:word">4500</sup_sr_id>
+          <rdn_type type="uds:byte">0</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">dpuia</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">276</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">277</sr_id>
+          <sup_sr_id type="uds:word">5003</sup_sr_id>
+          <rdn_type type="uds:byte">1</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">u_dpuiinfo</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">277</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">278</sr_id>
+          <sup_sr_id type="uds:word">277</sup_sr_id>
+          <rdn_type type="uds:byte">1</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">u_ddeposdata</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">278</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">279</sr_id>
+          <sup_sr_id type="uds:word">277</sup_sr_id>
+          <rdn_type type="uds:byte">1</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">u_dsubscribe</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">279</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">280</sr_id>
+          <sup_sr_id type="uds:word">0</sup_sr_id>
+          <rdn_type type="uds:byte">1</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">u_ddynstat</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">280</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">281</sr_id>
+          <sup_sr_id type="uds:word">0</sup_sr_id>
+          <rdn_type type="uds:byte">0</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">doldpui</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">281</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">282</sr_id>
+          <sup_sr_id type="uds:word">0</sup_sr_id>
+          <rdn_type type="uds:byte">0</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">dtpid</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">282</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">283</sr_id>
+          <sup_sr_id type="uds:word">5003</sup_sr_id>
+          <rdn_type type="uds:byte">1</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">U_dAREPOSIND</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">283</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+        <usch_srinfo apptype="sd">
+          <sr_id type="uds:word">284</sr_id>
+          <sup_sr_id type="uds:word">0</sup_sr_id>
+          <rdn_type type="uds:byte">0</rdn_type>
+          <nssr type="uds:byte">0</nssr>
+          <rdn_name type="uds:string">dCGTPSI</rdn_name>
+          <related_rdn_name type="uds:string">NULL</related_rdn_name>
+          <table_type type="uds:byte">0</table_type>
+          <table_id type="uds:word">284</table_id>
+          <nssr_funcname type="uds:string">NULL</nssr_funcname>
+          <nssr_funcaddr type="uds:ptr"/>
+          <wildcard_tableid type="uds:word">0</wildcard_tableid>
+          <cp_fg type="uds:byte">0</cp_fg>
+        </usch_srinfo>
+      </usch_srinfo_list>
+      <usch_spinfo_list>
+        <usch_spinfo apptype="sd">
+          <sp_id type="uds:byte">100</sp_id>
+          <sp_name type="uds:string">SP_0_SDDAPP_SHUDR</sp_name>
+          <readonly_fg type="uds:byte">1</readonly_fg>
+          <sp_funcaddr type="uds:ptr"/>
+        </usch_spinfo>
+        <usch_spinfo apptype="sd">
+          <sp_id type="uds:byte">101</sp_id>
+          <sp_name type="uds:string">SP_0_SDDAPP_SHPUR</sp_name>
+          <readonly_fg type="uds:byte">0</readonly_fg>
+          <sp_funcaddr type="uds:ptr"/>
+        </usch_spinfo>
+        <usch_spinfo apptype="sd">
+          <sp_id type="uds:byte">102</sp_id>
+          <sp_name type="uds:string">SP_0_SDDAPP_SHSNR</sp_name>
+          <readonly_fg type="uds:byte">0</readonly_fg>
+          <sp_funcaddr type="uds:ptr"/>
+        </usch_spinfo>
+      </usch_spinfo_list>
+      <ObjectClasses>
+        <oc>
+          <oc_id type="uds:word">4500</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.4500</oid>
+          <desc type="uds:string">ObjectClass:u_dpuidom</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">275</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.275</oid>
+          <desc type="uds:string">ObjectClass:u_dsrvfea</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">276</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.276</oid>
+          <desc type="uds:string">ObjectClass:u_dpuialias</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">277</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.277</oid>
+          <desc type="uds:string">ObjectClass:u_dpuiinfo</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">278</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.278</oid>
+          <desc type="uds:string">ObjectClass:u_ddeposdata</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">279</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.279</oid>
+          <desc type="uds:string">ObjectClass:u_dsubscribe</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">280</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.280</oid>
+          <desc type="uds:string">ObjectClass:u_ddynstat</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">281</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.281</oid>
+          <desc type="uds:string">ObjectClass:u_dnumchg</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">282</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.282</oid>
+          <desc type="uds:string">ObjectClass:u_dtp</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">283</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.283</oid>
+          <desc type="uds:string">ObjectClass:U_DAREPOSIND</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+        <oc>
+          <oc_id type="uds:word">284</oc_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.7.4.284</oid>
+          <desc type="uds:string">ObjectClass:U_DCGTPSI</desc>
+          <kind type="uds:string">STRUCTURAL</kind>
+        </oc>
+      </ObjectClasses>
+      <AttributeTypes>
+        <at>
+          <at_id type="uds:word">10000</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10000</oid>
+          <desc type="uds:string">Attribute:dSERVERID</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10001</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10001</oid>
+          <desc type="uds:string">Attribute:dCOMMANDCODE</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10002</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10002</oid>
+          <desc type="uds:string">Attribute:dVENDORID</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10003</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10003</oid>
+          <desc type="uds:string">Attribute:dFEATURELISTID</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10004</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10004</oid>
+          <desc type="uds:string">Attribute:dFEATURELIST</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10005</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10005</oid>
+          <desc type="uds:string">Attribute:dPUIA</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10006</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10006</oid>
+          <desc type="uds:string">Attribute:dPUIINDICATOR</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10007</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10007</oid>
+          <desc type="uds:string">Attribute:dPUI</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10008</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10008</oid>
+          <desc type="uds:string">Attribute:dGROUPID</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10009</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10009</oid>
+          <desc type="uds:string">Attribute:dDEFAULTPUIFG</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10010</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10010</oid>
+          <desc type="uds:string">Attribute:dSHORTNUM</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10011</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10011</oid>
+          <desc type="uds:string">Attribute:dSubNum</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10012</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10012</oid>
+          <desc type="uds:string">Attribute:dSVID</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10013</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10013</oid>
+          <desc type="uds:string">Attribute:dActivate</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10014</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10014</oid>
+          <desc type="uds:string">Attribute:dSQUENCENUM</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10015</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10015</oid>
+          <desc type="uds:string">Attribute:dDeposLength</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10016</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10016</oid>
+          <desc type="uds:string">Attribute:dDepositoryData</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10017</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10017</oid>
+          <desc type="uds:string">Attribute:dDATAREFTYPE</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10018</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10018</oid>
+          <desc type="uds:string">Attribute:dASHOSTID</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10019</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10019</oid>
+          <desc type="uds:string">Attribute:dDATAID</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10020</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10020</oid>
+          <desc type="uds:string">Attribute:doldpui</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10021</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10021</oid>
+          <desc type="uds:string">Attribute:dcmode</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10022</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10022</oid>
+          <desc type="uds:string">Attribute:dtpid</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10023</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10023</oid>
+          <desc type="uds:string">Attribute:dtpname</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10024</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10024</oid>
+          <desc type="uds:string">Attribute:dtpcontent</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10025</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10025</oid>
+          <desc type="uds:string">Attribute:DALIASEID</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10026</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10026</oid>
+          <desc type="uds:string">Attribute:DALIASEGROUPID</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10027</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10027</oid>
+          <desc type="uds:string">Attribute:DCGTPSI</desc>
+        </at>
+        <at>
+          <at_id type="uds:word">10028</at_id>
+          <oid type="uds:string">1.3.6.1.4.1.3902.9.3.10028</oid>
+          <desc type="uds:string">Attribute:DCOUNT</desc>
+        </at>
+      </AttributeTypes>
+      <DITStructureRules>
+        <dsr>
+          <sr_id type="uds:word">4500</sr_id>
+          <aliasname>
+            <name type="uds:string">cn=u_dpuidom</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:u_dpuidom</desc>
+          <rdn type="uds:string">cn=u_dpuidom</rdn>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">275</sr_id>
+          <aliasname>
+            <name type="uds:string">dSERVERID=*</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:dSERVERID</desc>
+          <rdn type="uds:string">dSERVERID=*</rdn>
+          <formid type="uds:word">275</formid>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">276</sr_id>
+          <aliasname>
+            <name type="uds:string">dpuia=*</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:dpuia</desc>
+          <rdn type="uds:string">dpuia=*</rdn>
+          <formid type="uds:word">276</formid>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">277</sr_id>
+          <aliasname>
+            <name type="uds:string">cn=u_dpuiinfo</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:u_dpuiinfo</desc>
+          <rdn type="uds:string">cn=u_dpuiinfo</rdn>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">278</sr_id>
+          <aliasname>
+            <name type="uds:string">cn=u_ddeposdata</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:u_ddeposdata</desc>
+          <rdn type="uds:string">cn=u_ddeposdata</rdn>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">279</sr_id>
+          <aliasname>
+            <name type="uds:string">cn=u_dsubscribe</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:u_dsubscribe</desc>
+          <rdn type="uds:string">cn=u_dsubscribe</rdn>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">280</sr_id>
+          <aliasname>
+            <name type="uds:string">cn=u_ddynstat</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:u_ddynstat</desc>
+          <rdn type="uds:string">cn=u_ddynstat</rdn>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">281</sr_id>
+          <aliasname>
+            <name type="uds:string">doldpui=*</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:doldpui</desc>
+          <rdn type="uds:string">doldpui=*</rdn>
+          <formid type="uds:word">281</formid>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">282</sr_id>
+          <aliasname>
+            <name type="uds:string">dtpid=*</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:dtpid</desc>
+          <rdn type="uds:string">dtpid=*</rdn>
+          <formid type="uds:word">282</formid>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">283</sr_id>
+          <aliasname>
+            <name type="uds:string">cn=u_dareposind</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:u_dareposind</desc>
+          <rdn type="uds:string">cn=u_ddynstat</rdn>
+        </dsr>
+        <dsr>
+          <sr_id type="uds:word">284</sr_id>
+          <aliasname>
+            <name type="uds:string">dcgtpsi=*</name>
+          </aliasname>
+          <desc type="uds:string">DIT Structure Rule:dcgtpsi</desc>
+          <rdn type="uds:string">dcgtpsi=*</rdn>
+          <formid type="uds:word">284</formid>
+        </dsr>
+      </DITStructureRules>
+      <NameForms>
+        <nf>
+          <formid type="uds:word">275</formid>
+          <oc_id type="uds:word">275</oc_id>
+          <must>
+            <at_id type="uds:word">10000</at_id>
+          </must>
+        </nf>
+        <nf>
+          <formid type="uds:word">276</formid>
+          <oc_id type="uds:word">276</oc_id>
+          <must>
+            <at_id type="uds:word">10005</at_id>
+          </must>
+        </nf>
+        <nf>
+          <formid type="uds:word">281</formid>
+          <oc_id type="uds:word">281</oc_id>
+          <must>
+            <at_id type="uds:word">10020</at_id>
+          </must>
+        </nf>
+        <nf>
+          <formid type="uds:word">282</formid>
+          <oc_id type="uds:word">282</oc_id>
+          <must>
+            <at_id type="uds:word">10022</at_id>
+          </must>
+        </nf>
+        <nf>
+          <formid type="uds:word">284</formid>
+          <oc_id type="uds:word">284</oc_id>
+          <must>
+            <at_id type="uds:word">10027</at_id>
+          </must>
+        </nf>
+      </NameForms>
+    </sd>
+  </schema_body>
+
+</uds_schema>

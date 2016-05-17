@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<?xml-stylesheet type="text/xsl" href="schema_view.xsl"?>
+<uds_schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema.xsd">
+
+  <schema_head>
+    <schema_version>6.1091</schema_version>
+    <version_info>
+      <version md5="90d4af99f1949b01d9764ddb4977430a" name="uspp" type="special">1.0000</version>
+      <version md5="6e5fee209206fbc6f167757a1ceddcd6" name="common" type="common">1.0000</version>
+      <version md5="562ca1bae17028df2682785053f8a7c8" name="spr" type="special">1.0000</version>
+    </version_info>
+  </schema_head>
+
+  <schema_body>
+    <mnp>
+      <usch_atinfo_list/>
+      <usch_ocinfo_list/>
+      <usch_srinfo_list/>
+      <usch_spinfo_list/>
+    </mnp>
+  </schema_body>
+
+</uds_schema>

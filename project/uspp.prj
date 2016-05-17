@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project.xsd">
+	<name>AMX-SPR</name>
+	<version>V3.0</version>
+	<source name="uspp" file="uspp.schema" type="uds_schema"/>
+	<view name="uspp_standard" file="uspp_standard.schema" type="simple_view">
+		<!-- 依赖于下列数据源 -->
+		<depend>
+			<source_name>uspp</source_name>
+		</depend>
+	</view>
+</project>
