@@ -5,3 +5,5 @@ build
 *.cache
 .libs
 protobuf3
+pbstru/bin/pbstru
+pbstru/bin/codec
