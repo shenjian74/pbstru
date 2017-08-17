@@ -3,4 +3,4 @@ mkdir build
 cd build
 cmake ..
 make
-mv pbstru ../pbstru
+mv pbstru ../bin

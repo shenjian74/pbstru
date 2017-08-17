@@ -11,12 +11,12 @@ list(REMOVE_ITEM SRC_FILES "../bstrlib/bstest.c")
 
 include_directories(
 	../bstrlib
-	../json_pb_com/protobuf2.6.1/src
-	../json_pb_com/protobuf2.6.1/src/google/protobuf/compiler
+	../protobuf3/src
+	../protobuf3/src/google/protobuf/compiler
 )
 
 find_library(PROTOBUF_LIB NAMES protobuf
-             HINTS "../json_pb_com/protobuf2.6.1/src/.libs" )
+             HINTS "../protobuf3/src/.libs" )
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 
 # add the executable
