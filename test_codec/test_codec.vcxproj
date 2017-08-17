@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A8F84D90-F673-446D-91FB-B0BE720E9FA1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>test_codec</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\pbstru\codec;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\pbstru\pbstru\codec\addrequest.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\anysubrequest.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\batchqrypi.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\checkconsistack.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\checkconsistreq.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\compoundrequest.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\deleterequest.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\field.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\filter.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\identifier.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\identifiers.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\itemcount.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\moddata.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\modfield.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\modifyrequest.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\nodifyfield.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\notify.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\notifydata.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\notifymsg.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\parameter.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\path.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\primarykey.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\queryrequest.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\range.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\rccpiinfo.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\rccresult.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\rcctupleinfo.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\response.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\result.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\singleitemcount.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\spinfo.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\statrequest.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\superpath.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\sysinfo.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\tuple.c" />
+    <ClCompile Include="..\..\pbstru\pbstru\codec\userinfo.c" />
+    <ClCompile Include="test_codec.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\pbstru\pbstru\codec\addrequest.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\anysubrequest.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\batchqrypi.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\checkconsistack.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\checkconsistreq.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\compoundrequest.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\deleterequest.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\field.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\filter.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\identifier.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\identifiers.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\itemcount.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\moddata.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\modfield.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\modifyrequest.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\nodifyfield.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\notify.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\notifydata.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\notifymsg.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\parameter.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\path.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\pbstru_comm.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\primarykey.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\queryrequest.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\range.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\rccpiinfo.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\rccresult.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\rcctupleinfo.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\response.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\result.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\singleitemcount.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\spinfo.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\statrequest.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\superpath.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\sysinfo.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\tuple.h" />
+    <ClInclude Include="..\..\pbstru\pbstru\codec\userinfo.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

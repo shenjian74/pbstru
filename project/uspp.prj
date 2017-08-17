@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project.xsd">
-	<name>uspp</name>
-	<version>V3.0</version>
-	<source file="..\source\uspp\" name="uspp" type="uspp_source"/>
-	
-</project>
