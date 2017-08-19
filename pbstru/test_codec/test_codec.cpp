@@ -3,7 +3,10 @@
 
 #pragma warning(disable:4996)  
 
-#include "stdafx.h"
+#include <assert.h>
+#include <string.h>
+#include <stdio.h>
+#include <ctype.h>
 #include "addrequest.h"
 #include "response.h"
 
@@ -59,8 +62,8 @@ int main(int argc, char* argv[])
 		st_PrimaryKey var_PrimaryKey = { 0 };
 		var_PrimaryKey.var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
 		var_PrimaryKey.var_name.length = strlen(var_PrimaryKey.var_name.data);
-		var_PrimaryKey.var_value.data = strdup("732098403urouwaoeljr9749712309u4");
-		var_PrimaryKey.var_value.length = strlen(var_PrimaryKey.var_value.data);
+		var_PrimaryKey.var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
+		var_PrimaryKey.var_value.length = strlen((char *)var_PrimaryKey.var_value.data);
 		buf_len = encode_message_PrimaryKey(&var_PrimaryKey, buf);
 		print_buffer(buf, buf_len);
 		free(var_PrimaryKey.var_name.data);
@@ -76,12 +79,12 @@ int main(int argc, char* argv[])
 		var_Path.var_tid = 1000;
 		var_Path.var_primary_key.item[0].var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
 		var_Path.var_primary_key.item[0].var_name.length = strlen(var_Path.var_primary_key.item[0].var_name.data);
-		var_Path.var_primary_key.item[0].var_value.data = strdup("732098403urouwaoeljr9749712309u4");
-		var_Path.var_primary_key.item[0].var_value.length = strlen(var_Path.var_primary_key.item[0].var_value.data);
+		var_Path.var_primary_key.item[0].var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
+		var_Path.var_primary_key.item[0].var_value.length = strlen((char *)var_Path.var_primary_key.item[0].var_value.data);
 		var_Path.var_primary_key.item[1].var_name.data = strdup("3u2iouflkjalskjfklasjflk");
 		var_Path.var_primary_key.item[1].var_name.length = strlen(var_Path.var_primary_key.item[1].var_name.data);
-		var_Path.var_primary_key.item[1].var_value.data = strdup("324lkjakslfjlksajdfkljaslkdfj");
-		var_Path.var_primary_key.item[1].var_value.length = strlen(var_Path.var_primary_key.item[1].var_value.data);
+		var_Path.var_primary_key.item[1].var_value.data = (BYTE *)strdup("324lkjakslfjlksajdfkljaslkdfj");
+		var_Path.var_primary_key.item[1].var_value.length = strlen((char *)var_Path.var_primary_key.item[1].var_value.data);
 		var_Path.var_primary_key.count = 2;
 		buf_len = encode_message_Path(&var_Path, buf);
 		print_buffer(buf, buf_len);
@@ -100,12 +103,12 @@ int main(int argc, char* argv[])
 		var_Tuple.var_path.var_tid = 1000;
 		var_Tuple.var_path.var_primary_key.item[0].var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
 		var_Tuple.var_path.var_primary_key.item[0].var_name.length = strlen(var_Tuple.var_path.var_primary_key.item[0].var_name.data);
-		var_Tuple.var_path.var_primary_key.item[0].var_value.data = strdup("732098403urouwaoeljr9749712309u4");
-		var_Tuple.var_path.var_primary_key.item[0].var_value.length = strlen(var_Tuple.var_path.var_primary_key.item[0].var_value.data);
+		var_Tuple.var_path.var_primary_key.item[0].var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
+		var_Tuple.var_path.var_primary_key.item[0].var_value.length = strlen((char *)var_Tuple.var_path.var_primary_key.item[0].var_value.data);
 		var_Tuple.var_path.var_primary_key.item[1].var_name.data = strdup("3u2iouflkjalskjfklasjflk");
 		var_Tuple.var_path.var_primary_key.item[1].var_name.length = strlen(var_Tuple.var_path.var_primary_key.item[1].var_name.data);
-		var_Tuple.var_path.var_primary_key.item[1].var_value.data = strdup("324lkjakslfjlksajdfkljaslkdfj");
-		var_Tuple.var_path.var_primary_key.item[1].var_value.length = strlen(var_Tuple.var_path.var_primary_key.item[1].var_value.data);
+		var_Tuple.var_path.var_primary_key.item[1].var_value.data = (BYTE *)strdup("324lkjakslfjlksajdfkljaslkdfj");
+		var_Tuple.var_path.var_primary_key.item[1].var_value.length = strlen((char *)var_Tuple.var_path.var_primary_key.item[1].var_value.data);
 		var_Tuple.var_path.var_primary_key.count = 2;
 		var_Tuple.has_version = true;
 		var_Tuple.var_version = 2000;
@@ -113,11 +116,11 @@ int main(int argc, char* argv[])
 		var_Tuple.var_ttl = 3000;
 		var_Tuple.var_field.count = 2;
 		var_Tuple.var_field.item[0].var_fieldid = 1;
-		var_Tuple.var_field.item[0].var_value.data = strdup("fawejlkrj1230940p1243lkjljfksldaj");
-		var_Tuple.var_field.item[0].var_value.length = strlen(var_Tuple.var_field.item[0].var_value.data);
+		var_Tuple.var_field.item[0].var_value.data = (BYTE *)strdup("fawejlkrj1230940p1243lkjljfksldaj");
+		var_Tuple.var_field.item[0].var_value.length = strlen((char *)var_Tuple.var_field.item[0].var_value.data);
 		var_Tuple.var_field.item[1].var_fieldid = 2;
-		var_Tuple.var_field.item[1].var_value.data = strdup("jflasjfu32ujfljsljkljkljljoiu");
-		var_Tuple.var_field.item[1].var_value.length = strlen(var_Tuple.var_field.item[1].var_value.data);
+		var_Tuple.var_field.item[1].var_value.data = (BYTE *)strdup("jflasjfu32ujfljsljkljkljljoiu");
+		var_Tuple.var_field.item[1].var_value.length = strlen((char *)var_Tuple.var_field.item[1].var_value.data);
 		buf_len = encode_message_Tuple(&(var_Tuple), buf);
 		print_buffer(buf, buf_len);
 		
@@ -145,14 +148,14 @@ int main(int argc, char* argv[])
 		var_AddRequest.var_identifiers.var_primary.count = 1;
 		var_AddRequest.var_identifiers.var_primary.item[0].var_id_type = 1;
 		var_AddRequest.var_identifiers.var_primary.item[0].var_value.count = 1;
-		var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data = strdup("465749674123167465431674613");
-		var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].length = strlen(var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data);
+		var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data = (BYTE *)strdup("465749674123167465431674613");
+		var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].length = strlen((char *)var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data);
 
 		var_AddRequest.var_identifiers.var_non_primary.count = 1;
 		var_AddRequest.var_identifiers.var_non_primary.item[0].var_id_type = 1;
 		var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.count = 1;
-		var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data = strdup("465789461313213646461231324654");
-		var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length = strlen(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data);
+		var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data = (BYTE *)strdup("465789461313213646461231324654");
+		var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length = strlen((char *)var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data);
 
 		var_AddRequest.var_tuple.count = 1;
 		clear_message_Tuple(&(var_AddRequest.var_tuple.item[0]));
@@ -162,14 +165,14 @@ int main(int argc, char* argv[])
 		st_PrimaryKey *pk = &(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[0]);
 		pk->var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
 		pk->var_name.length = strlen(pk->var_name.data);
-		pk->var_value.data = strdup("732098403urouwaoeljr9749712309u4");
-		pk->var_value.length = strlen(pk->var_value.data);
+		pk->var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
+		pk->var_value.length = strlen((char *)pk->var_value.data);
 
 		pk = &(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[1]);
 		pk->var_name.data = strdup("3u2iouflkjalskjfklasjflk");
 		pk->var_name.length = strlen(pk->var_name.data);
-		pk->var_value.data = strdup("324lkjakslfjlksajdfkljaslkdfj");
-		pk->var_value.length = strlen(pk->var_value.data);
+		pk->var_value.data = (BYTE *)strdup("324lkjakslfjlksajdfkljaslkdfj");
+		pk->var_value.length = strlen((char *)pk->var_value.data);
 
 		var_AddRequest.var_tuple.item[0].has_version = true;
 		var_AddRequest.var_tuple.item[0].var_version = 2000;
@@ -178,11 +181,11 @@ int main(int argc, char* argv[])
 
 		var_AddRequest.var_tuple.item[0].var_field.count = 2;
 		var_AddRequest.var_tuple.item[0].var_field.item[0].var_fieldid = 1;
-		var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data = strdup("fawejlkrj1230940p1243lkjljfksldaj");
-		var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.length = strlen(var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data);
+		var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data = (BYTE *)strdup("fawejlkrj1230940p1243lkjljfksldaj");
+		var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data);
 		var_AddRequest.var_tuple.item[0].var_field.item[1].var_fieldid = 2;
-		var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data = strdup("jflasjfu32ujfljsljkljkljljoiu");
-		var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen(var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
+		var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data = (BYTE *)strdup("jflasjfu32ujfljsljkljkljljoiu");
+		var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
 
 		buf_len = encode_message_AddRequest(&var_AddRequest, buf);
 		print_buffer(buf, buf_len);
