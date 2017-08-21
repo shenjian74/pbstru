@@ -80,6 +80,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\bin\codec\pbstru_comm.c" />
     <ClCompile Include="..\bin\codec\addrequest.c" />
     <ClCompile Include="..\bin\codec\anysubrequest.c" />
     <ClCompile Include="..\bin\codec\asyncconfirmreq.c" />

@@ -244,6 +244,9 @@
     <ClCompile Include="..\bin\codec\userinfo.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\bin\codec\pbstru_comm.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\bin\codec\addrequest.h">
