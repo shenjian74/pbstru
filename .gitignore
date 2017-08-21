@@ -13,3 +13,4 @@ Debug
 *.exe
 *.ipch
 *.pdb
+*.suo
