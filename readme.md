@@ -1,18 +1,35 @@
 # ¼ò½é
-	PBSTRUÊÇProtobuf to StructµÄËõĞ´£¬Ö÷ÒªÍê³ÉPBÂëÁ÷ºÍCÓïÑÔ½á¹¹¼äµÄÏà»¥×ª»»£¬¿É×Ô¶¯Éú³ÉPBÏûÏ¢µÄ±à½âÂë´úÂë¡£
+	pbstruÊÇProtobuf to StructµÄËõĞ´£¬Ö÷ÒªÍê³ÉPBÂëÁ÷ºÍCÓïÑÔ½á¹¹¼äµÄÏà»¥×ª»»£¬¿É×Ô¶¯Éú³ÉPBÏûÏ¢µÄ±à½âÂë´úÂë¡£
+	pbstruµÄÄ¿±êÊÇÌôÕ½protobuf±à½âÂëµÄ¼«ÏŞËÙ¶È¡£
 
 # ÊµÏÖÔ­Àí
 
 ```
-    protoÎÄ¼ş -->|                             |--> ±à½âÂë²¿·ÖµÄC´úÂë
+    protoÎÄ¼ş -->|                             |--> ±à½âÂë²¿·ÖµÄC´úÂë -->|--> Áª±àµ½APP
                  |--PBStru¹¤¾ß£¨pbstru.exe£©-->|
 ```
 
+# ±àÒë·½·¨
+
+## Windows
+	WindowsÏÂÊ¹ÓÃVisual Studio 2010±àÒë¡£´ò¿ª\pbstru\pbstru.sln£¬±àÒëpbstruÏîÄ¿¿ÉÉú³Épbstru.exe£©
+
+## linux
+	linuxÏÂ¿ÉÖ´ĞĞ/pbstru/build.sh½øĞĞ±àÒë£¬¿ÉÉú³Épbstru/bin/pbstru¡£
+	×¢ÒâÆäÇ°ÌáÌõ¼şÎªprotobuf3ÒÑ¾­±àÒëÍ¨¹ı£¬±àÒëprotobuf3µÄ²½ÖèÎª£º
+```
+	$ cd pbstru/protobuf3
+	$ autogen.sh
+	$ configure
+	$ make
+```
+	
 # Ö´ĞĞ·½·¨
 
-1. ĞŞ¸ÄprotoÎÄ¼ş£¬ÎÄ¼şÎ»ÖÃ\3rdparty\protobuf\cdb(_ccc).proto¡£¿ÉÔö¼ÓÏûÏ¢£¬»òÕßÔÚÏûÏ¢ÖĞÔö¼Ó×Ö¶Î£¬ĞŞ¸ÄÊ±Çë×¢Òâ½Ó¿Ú¼æÈİĞÔ£¬Ïê¼ûºóÃæµÄ¼æÈİĞÔ×¼Ôò£»
-2. ÔÚwindowsÏÂ£¬ÔËĞĞ\3rdparty\protobuf\protoc.bat£¬´ËÅú´¦ÀíÎÄ¼ş½«¶ÁÈëproto¶¨ÒåÎÄ¼ş£¬²¢×îÖÕÉú³ÉËùÓĞÔ´ÎÄ¼ş£»
-3. ÔÚ\cdbtools\pbstru\pbstru\codecÄ¿Â¼ÏÂ£¬¿É¿´µ½×Ô¶¯Éú³ÉµÄ´úÂë£¬°üº¬Í·ÎÄ¼şºÍÔ´ÎÄ¼ş¡£PBÖĞµÄÒ»¸öÏûÏ¢»á¶ÔÓ¦1¸öÍ·ÎÄ¼şºÍ1¸öÔ´ÎÄ¼ş£»
+1. ĞŞ¸ÄprotoÎÄ¼ş¡£¿ÉÔö¼Ó½Ó¿ÚÏûÏ¢£¬»òÕßÔÚ½Ó¿ÚÏûÏ¢ÖĞÔö¼Ó×Ö¶Î£¬ĞŞ¸ÄÊ±Çë×¢Òâ½Ó¿Ú¼æÈİĞÔ£¬Ïê¼ûºóÃæµÄprotobuf¼æÈİĞÔ×¼Ôò£»
+2. ÔÚwindowsÏÂ£¬ÔËĞĞpbstru\bin\pbstru.exe£¬Èë²ÎÎªprotoÎÄ¼şÃû£¬Éú³ÉËùÓĞ±à½âÂëÔ´ÎÄ¼ş£»
+	ÔÚlinuxÏÂ£¬ÔËĞĞpbstru/bin/pbstru£¬Èë²ÎÎªprotoÎÄ¼şÃû
+3. ÔÚpbstru\bin\codecÄ¿Â¼ÏÂ£¬¿É¿´µ½×Ô¶¯Éú³ÉµÄ´úÂë£¬°üº¬Í·ÎÄ¼şºÍÔ´ÎÄ¼ş£¬¿É¿½±´ÕâĞ©´úÂëµ½ÆäËûÄ¿Â¼£¬²¢ÓëÆäËû´úÂë½øĞĞÁª±à¡£
 
 # µ÷ÓÃ·½·¨
 
@@ -27,8 +44,9 @@ clear_message_Response(&var_response);
 var_response.xxx = xxx;
 ... 
 BYTE buffer[max_buffer_length];
-if(encode_message_Response(&var_response, NULL) <= max_buffer_length){
-    size_t bytes_write = encode_message_Response(&var_response, buffer);
+if(encode_message_Response(&var_response, NULL) <= max_buffer_length)  // First call encode_message_xxx 
+{
+    size_t bytes_write = encode_message_Response(&var_response, buffer);  // second call encode_message_xxx
     ......
 }
 ```
@@ -49,7 +67,9 @@ decodeº¯ÊıÄÚ²¿»áÊ×ÏÈµ÷ÓÃclear_message_XXXÇå¿ÕµÚÈı¸ö²ÎÊıËùÖ¸ÏòµÄ½á¹¹£¬ËùÒÔµ÷ÓÃÕßÎ
 
 # ×¢ÒâÊÂÏî
 	
-* pbstruÊ¹ÓÃÁË¾²Ì¬Êı×é´æ´¢PBµÄrepeated×Ö¶Î£¬ËùÒÔ±ØĞëÊÂÏÈÈ·¶¨Repeated×Ö¶ÎµÄ×î¶à¿ÉÄÜ³öÏÖµÄ¸öÊı²Å¿ÉÒÔÉú³É´úÂë£¬Ïà¹ØµÄÖµĞèÒªÔÚ\cdbtools\pbstru\pbstru\xxx.optionsÎÄ¼şÖĞ¶¨Òå¡£Èç¹ûÎ´¶¨ÒåÏà¹ØµÄ¾²Ì¬Êı×é´óĞ¡£¬pbstru»á¼ì²âµ½²¢±¨´í¡£ÀıÈçÏÂÁĞĞĞ±íÊ¾CCA×´Ì¬ÉÏ±¨ÏûÏ¢ÖĞ×â»§IDĞÅÏ¢×î¶à³öÏÖµÄ´ÎÊı£¬ĞèÒª°´ÕÕÉÏÓÎÎÄµµµÄËµÃ÷ĞŞ¸ÄÎªÕıÈ·µÄÖµ¡£
+* pbstruÊ¹ÓÃÁË¾²Ì¬Êı×é´æ´¢PBµÄrepeated×Ö¶Î£¬ËùÒÔ±ØĞëÊÂÏÈÈ·¶¨Repeated×Ö¶ÎµÄ×î¶à¿ÉÄÜ³öÏÖµÄ¸öÊı²Å¿ÉÒÔÉú³É´úÂë£¬Ïà¹ØµÄÖµĞèÒªÔÚpbstru\bin\xxx.optionsÎÄ¼şÖĞ¶¨Òå¡£
+Èç¹ûÎ´¶¨ÒåÏà¹ØµÄ¾²Ì¬Êı×é´óĞ¡£¬pbstru»á¼ì²âµ½²¢±¨´í¡£
+ÀıÈçÏÂÁĞĞĞ±íÊ¾CCA×´Ì¬ÉÏ±¨ÏûÏ¢ÖĞ×â»§IDĞÅÏ¢×î¶à³öÏÖµÄ´ÎÊı£¬ĞèÒª°´ÕÕÉÏÓÎÎÄµµµÄËµÃ÷ĞŞ¸ÄÎªÕıÈ·µÄÖµ¡£
 
 ```C	
     Cannot read item:"zte.cdb.ccc.CCAResReportRequest.tenant_id max_count:?" from option file.
