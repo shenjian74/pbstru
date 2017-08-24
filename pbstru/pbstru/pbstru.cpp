@@ -527,9 +527,9 @@ void gen_source(const Descriptor *desc){
 
 	fprintf(fp, "#include \"%s.h\"\n", (LPCSTR)name_lower);
 
-	fprintf("\n");
-	fprintf("/* lint -save -e701 -e647 */\n");
-	fprintf("\n");
+	fprintf(fp, "\n");
+	fprintf(fp, "/* lint -save -e701 -e647 */\n");
+	fprintf(fp, "\n");
 	
 	// clear function
 	fprintf(fp, "void clear_message_%s(%s *var_%s){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
@@ -874,9 +874,9 @@ void gen_source(const Descriptor *desc){
 	fprintf(fp, "    }\n");
 	fprintf(fp, "    return TRUE;\n");
 	fprintf(fp, "}\n");
-	fprintf("\n");
-	fprintf("/* lint -restore */\n");
-	fprintf(fp, "\n/* end of file */\n");
+	fprintf(fp, "\n");
+	fprintf(fp, "/* lint -restore */\n");
+	fprintf(fp, "/* end of file */\n");
 
 	fclose(fp);
 }
