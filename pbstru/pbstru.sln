@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pbstru", "pbstru\pbstru.vcxproj", "{CC9930C3-350C-4BDA-A857-3F0053165ECA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0DF029D1-6846-4B27-A3DD-BD695AF0BB4F} = {0DF029D1-6846-4B27-A3DD-BD695AF0BB4F}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bstrlib", "..\bstrlib\bstrlib.vcxproj", "{0DF029D1-6846-4B27-A3DD-BD695AF0BB4F}"
 EndProject
