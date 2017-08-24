@@ -68,7 +68,7 @@ void gen_comm(void) {
 	fprintf(fp, "#define FALSE 0\n");
 	fprintf(fp, "#endif\n");
 	fprintf(fp, "\n#else\n");
-	fprintf(fp, "#include \"cdb_dep.h\"\n");
+	fprintf(fp, "#include \"tulip.h\"\n");
 	fprintf(fp, "\n#endif");
 	fprintf(fp, "\ntypedef struct {\n");
 	fprintf(fp, "	char *data;\n");
@@ -527,8 +527,12 @@ void gen_source(const Descriptor *desc){
 
 	fprintf(fp, "#include \"%s.h\"\n", (LPCSTR)name_lower);
 
+	fprintf("\n");
+	fprintf("/* lint -save -e701 -e647 */\n");
+	fprintf("\n");
+	
 	// clear function
-	fprintf(fp, "\nvoid clear_message_%s(%s *var_%s){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
+	fprintf(fp, "void clear_message_%s(%s *var_%s){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
 	for(int i=0;i<desc->field_count();++i){
 		const FieldDescriptor *field = desc->field(i);
 		if(field->is_repeated()){
@@ -870,6 +874,8 @@ void gen_source(const Descriptor *desc){
 	fprintf(fp, "    }\n");
 	fprintf(fp, "    return TRUE;\n");
 	fprintf(fp, "}\n");
+	fprintf("\n");
+	fprintf("/* lint -restore */\n");
 	fprintf(fp, "\n/* end of file */\n");
 
 	fclose(fp);
