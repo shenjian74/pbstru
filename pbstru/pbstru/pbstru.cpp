@@ -601,25 +601,32 @@ void gen_source(const Descriptor *desc){
 			prefix_spaces = "    ";
 		}
 		fprintf(fp, "%s/* type:%s */\n", (LPCSTR)prefix_spaces, field->type_name());
+
 		switch(field->type()){
 		case FieldDescriptor::TYPE_FIXED32:
 			fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_FIX32, &offset);\n", (LPCSTR)prefix_spaces, field->number());
+                        fprintf(fp, "%sif(NULL != buf){\n", (LPCSTR)prefix_spaces);
 			if(field->is_repeated()){
 				fprintf(fp, "%s*((DWORD *)(buf + offset)) = var_%s->var_%s.item[i];\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			} else {
 				fprintf(fp, "%s*((DWORD *)(buf + offset)) = var_%s->var_%s;\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			}
+                        fprintf(fp, "%s}\n", (LPCSTR)prefix_spaces);
 			fprintf(fp, "%soffset += sizeof(DWORD);\n", (LPCSTR)prefix_spaces);
 			break;
+
 		case FieldDescriptor::TYPE_FIXED64:
 			fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_FIX64, &offset);\n", (LPCSTR)prefix_spaces, field->number());
+                        fprintf(fp, "%sif(NULL != buf){\n", (LPCSTR)prefix_spaces);
 			if(field->is_repeated()){
 				fprintf(fp, "%s*((WORD64 *)(buf + offset)) = var_%s->var_%s.item[i];\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			} else {
 				fprintf(fp, "%s*((WORD64 *)(buf + offset)) = var_%s->var_%s;\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			}
+                        fprintf(fp, "%s}\n", (LPCSTR)prefix_spaces);
 			fprintf(fp, "%soffset += sizeof(WORD64);\n", (LPCSTR)prefix_spaces);
 			break;
+
 		case FieldDescriptor::TYPE_BOOL:
 		case FieldDescriptor::TYPE_UINT32:
 		case FieldDescriptor::TYPE_UINT64:
@@ -631,6 +638,7 @@ void gen_source(const Descriptor *desc){
 				fprintf(fp, "%sencode_varint(var_%s->var_%s, buf, &offset);\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			}
 			break;
+
 		case FieldDescriptor::TYPE_STRING:
 			fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", (LPCSTR)prefix_spaces, field->number());
 			if(field->is_repeated()){
@@ -653,6 +661,7 @@ void gen_source(const Descriptor *desc){
 				fprintf(fp, "%soffset += var_%s->var_%s.length;\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			}
 			break;
+
 		case FieldDescriptor::TYPE_BYTES:
 			fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", (LPCSTR)prefix_spaces, field->number());
 			if(field->is_repeated()){
@@ -675,6 +684,7 @@ void gen_source(const Descriptor *desc){
 				fprintf(fp, "%soffset += var_%s->var_%s.length;\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			}
 			break;
+
 		case FieldDescriptor::TYPE_MESSAGE:
 			fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", (LPCSTR)prefix_spaces, field->number());
 			if(field->is_repeated()){
@@ -692,6 +702,7 @@ void gen_source(const Descriptor *desc){
 			fprintf(fp, "%s}\n", (LPCSTR)prefix_spaces);
 			fprintf(fp, "%soffset += encode_buf_len;\n", (LPCSTR)prefix_spaces);
 			break;
+
 		default:
 			fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
 			break;
