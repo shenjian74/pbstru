@@ -607,9 +607,9 @@ void gen_source(const Descriptor *desc){
 			fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_FIX32, &offset);\n", (LPCSTR)prefix_spaces, field->number());
                         fprintf(fp, "%sif(NULL != buf){\n", (LPCSTR)prefix_spaces);
 			if(field->is_repeated()){
-				fprintf(fp, "%s*((DWORD *)(buf + offset)) = var_%s->var_%s.item[i];\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
+				fprintf(fp, "%s    *((DWORD *)(buf + offset)) = var_%s->var_%s.item[i];\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			} else {
-				fprintf(fp, "%s*((DWORD *)(buf + offset)) = var_%s->var_%s;\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
+				fprintf(fp, "%s    *((DWORD *)(buf + offset)) = var_%s->var_%s;\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			}
                         fprintf(fp, "%s}\n", (LPCSTR)prefix_spaces);
 			fprintf(fp, "%soffset += sizeof(DWORD);\n", (LPCSTR)prefix_spaces);
@@ -619,9 +619,9 @@ void gen_source(const Descriptor *desc){
 			fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_FIX64, &offset);\n", (LPCSTR)prefix_spaces, field->number());
                         fprintf(fp, "%sif(NULL != buf){\n", (LPCSTR)prefix_spaces);
 			if(field->is_repeated()){
-				fprintf(fp, "%s*((WORD64 *)(buf + offset)) = var_%s->var_%s.item[i];\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
+				fprintf(fp, "%s    *((WORD64 *)(buf + offset)) = var_%s->var_%s.item[i];\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			} else {
-				fprintf(fp, "%s*((WORD64 *)(buf + offset)) = var_%s->var_%s;\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
+				fprintf(fp, "%s    *((WORD64 *)(buf + offset)) = var_%s->var_%s;\n", (LPCSTR)prefix_spaces, desc->name().c_str(), field->name().c_str());
 			}
                         fprintf(fp, "%s}\n", (LPCSTR)prefix_spaces);
 			fprintf(fp, "%soffset += sizeof(WORD64);\n", (LPCSTR)prefix_spaces);
