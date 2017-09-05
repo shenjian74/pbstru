@@ -12,7 +12,8 @@
 # 编译方法
 
 ## Windows
-	Windows下使用Visual Studio 2010编译。打开\pbstru\pbstru.sln，编译pbstru项目可生成pbstru.exe）
+	Windows下需要预安装code::block编译器及IDE。
+	而后执行/pbstru/build.bat进行编译，可生成pbstru/bin/pbstru.exe。
 
 ## linux
 	linux下可执行/pbstru/build.sh进行编译，可生成pbstru/bin/pbstru。
