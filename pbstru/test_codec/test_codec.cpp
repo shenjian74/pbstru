@@ -8,7 +8,9 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "addrequest.h"
+#include "compoundrequest.h"
 #include "response.h"
+#include "statresp.h"
 
 void print_buffer(BYTE *content, size_t filelen)
 {
@@ -57,6 +59,48 @@ int main(int argc, char* argv[])
 	size_t buf_len;
 
 	printf("sizeof(st_AddRequest) == %lu\n", sizeof(st_AddRequest));
+	printf("sizeof(st_QueryRequest) == %lu\n", sizeof(st_QueryRequest));
+	{
+		printf("  sizeof(st_Identifiers) == %lu\n", sizeof(st_Identifiers));
+		printf("  sizeof(st_Range_list) == %lu\n", sizeof(st_Range_list));
+		{
+			printf("    sizeof(st_Path) == %lu\n", sizeof(st_Path));
+			printf("    sizeof(enum_Scope) == %lu\n", sizeof(enum_Scope));
+			printf("    sizeof(st_uint32_list) == %lu\n", sizeof(st_uint32_list));
+			printf("    sizeof(st_Filter_list) == %lu\n", sizeof(st_Filter_list));
+		}
+		printf("  sizeof(st_Control_list) == %lu\n", sizeof(st_Control_list));
+		printf("  sizeof(st_SPInfo_list) == %lu\n", sizeof(st_SPInfo_list));
+		printf("  sizeof(st_BatchQRYPI) == %lu\n", sizeof(st_BatchQRYPI));
+	}
+	printf("sizeof(st_ModifyRequest) == %lu\n", sizeof(st_ModifyRequest));
+	{
+		printf("  sizeof(st_ModData) == %lu\n", sizeof(st_ModData));
+		printf("  sizeof(st_ModField_list) == %lu\n", sizeof(st_ModField_list));
+	}
+	printf("sizeof(st_DeleteRequest) == %lu\n", sizeof(st_DeleteRequest));
+	printf("sizeof(st_CompoundRequest) == %lu\n", sizeof(st_CompoundRequest));
+	printf("sizeof(st_Response) == %lu\n", sizeof(st_Response));
+	printf("sizeof(st_StatResp) == %lu\n", sizeof(st_StatResp));
+
+//sizeof(st_AddRequest) == 56424
+//sizeof(st_QueryRequest) == 7928
+//  sizeof(st_Identifiers) == 1064
+//  sizeof(st_Range_list) == 6788
+//    sizeof(st_Path) == 148
+//    sizeof(enum_Scope) == 4
+//    sizeof(st_uint32_list) == 8
+//    sizeof(st_Filter_list) == 52
+//  sizeof(st_Control_list) == 44
+//  sizeof(st_SPInfo_list) == 8
+//  sizeof(st_BatchQRYPI) == 20
+//sizeof(st_ModifyRequest) == 31584
+//  sizeof(st_ModData) == 952
+//  sizeof(st_ModField_list) == 772
+//sizeof(st_DeleteRequest) == 7904
+//sizeof(st_CompoundRequest) == 830984
+//sizeof(st_Response) == 451424
+//sizeof(st_StatResp) == 65568
 
 	{
 		st_PrimaryKey var_PrimaryKey = { 0 };

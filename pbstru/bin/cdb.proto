@@ -26,12 +26,9 @@ enum OPTYPE {
 message Response {
 	repeated Result    result     = 1;  // 对基本操作，result个数为1；对compound操作，result个数可能大于1
 	
-	// 以下错误码和错误信息只针对compound和stat的响应；其他响应只有一个result，错误信息直接放在result中
+	// 以下错误码和错误信息只针对compound响应；其他响应只有一个result，错误信息直接放在result中
 	optional uint32    retcode    = 2;
 	optional string    retmsg     = 3;  
-    
-    //下面该count只针对stat的响应
-	optional ItemCount count_stat = 4;  // 统计值信息
 }
 
 message AddRequest {
@@ -165,7 +162,7 @@ message Tuple {
 	repeated Field field = 4;  
 	// 此记录中除主键字段外其他字段信息, 在修改请求中，可使用ModField中的offset/len，以修改字段中部分信息；其他情况使用Field
 	optional Sysinfo sysinfo = 5;  // 附加信息
-	
+
 	repeated uint32 stat_id = 6;  
 	// 仅对Add请求有效，若成功增加tuple，则此统计项加1；
 	// 若成功删除tuple，则此统计项减1；
@@ -310,6 +307,12 @@ message ItemCount {
 message SingleItemCount {
 	required uint32 stat_id = 1;  // 统计项
 	required uint32 stat_count = 2;  // 统计值，在响应消息中返回
+}
+
+message StatResp {
+	optional uint32    retcode    = 1;
+	optional string    retmsg     = 2;  
+	optional ItemCount count_stat = 3;  // 统计值信息
 }
 
 ///////////////////////////////////////////////////////////////////////////////
