@@ -15,8 +15,12 @@ include_directories(
 	../protobuf3/src/google/protobuf/compiler
 )
 
-find_library(PROTOBUF_LIB NAMES protobuf
-             HINTS "../protobuf3/src/.libs" )
+message("${CMAKE_CURRENT_SOURCE_DIR}")
+IF (WIN32)
+	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
+ELSE()
+	find_library(PROTOBUF_LIB NAMES protobuf HINTS "../protobuf3/src/.libs" )
+ENDIF()
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 
 # add the executable
