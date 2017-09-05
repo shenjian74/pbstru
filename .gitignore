@@ -14,3 +14,5 @@ Debug
 *.ipch
 *.pdb
 *.suo
+*.layout
+*.depend

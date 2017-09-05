@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="test_codec" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/test_codec" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="../bin/codec" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/test_codec" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../bin/codec/addrequest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/addrequest.h" />
+		<Unit filename="../bin/codec/anysubrequest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/anysubrequest.h" />
+		<Unit filename="../bin/codec/asyncconfirmreq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/asyncconfirmreq.h" />
+		<Unit filename="../bin/codec/asyncconfirmresp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/asyncconfirmresp.h" />
+		<Unit filename="../bin/codec/batchqrypi.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/batchqrypi.h" />
+		<Unit filename="../bin/codec/bureauseqinfo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/bureauseqinfo.h" />
+		<Unit filename="../bin/codec/ccaresreportrequest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/ccaresreportrequest.h" />
+		<Unit filename="../bin/codec/ccc2cdnoperslotreq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/ccc2cdnoperslotreq.h" />
+		<Unit filename="../bin/codec/ccc2cdnoperslotresp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/ccc2cdnoperslotresp.h" />
+		<Unit filename="../bin/codec/cccmasterelect.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cccmasterelect.h" />
+		<Unit filename="../bin/codec/cdb_rbccc_t.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdb_rbccc_t.h" />
+		<Unit filename="../bin/codec/cdbmtaack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdbmtaack.h" />
+		<Unit filename="../bin/codec/cdbmtadumpack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdbmtadumpack.h" />
+		<Unit filename="../bin/codec/cdbmtarccack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdbmtarccack.h" />
+		<Unit filename="../bin/codec/cdbmtareq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdbmtareq.h" />
+		<Unit filename="../bin/codec/cdmfdistribnotify.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdmfdistribnotify.h" />
+		<Unit filename="../bin/codec/cdmfgetdistribreq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdmfgetdistribreq.h" />
+		<Unit filename="../bin/codec/cdmfgetstatereq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdmfgetstatereq.h" />
+		<Unit filename="../bin/codec/cdmfstatenotify.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdmfstatenotify.h" />
+		<Unit filename="../bin/codec/cdnresreportreq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cdnresreportreq.h" />
+		<Unit filename="../bin/codec/checkconsistack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/checkconsistack.h" />
+		<Unit filename="../bin/codec/checkconsistreq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/checkconsistreq.h" />
+		<Unit filename="../bin/codec/cmdfqueryusernumack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/cmdfqueryusernumack.h" />
+		<Unit filename="../bin/codec/compoundrequest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/compoundrequest.h" />
+		<Unit filename="../bin/codec/deleterequest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/deleterequest.h" />
+		<Unit filename="../bin/codec/dyncmdreq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/dyncmdreq.h" />
+		<Unit filename="../bin/codec/dyncmdrsp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/dyncmdrsp.h" />
+		<Unit filename="../bin/codec/field.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/field.h" />
+		<Unit filename="../bin/codec/filter.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/filter.h" />
+		<Unit filename="../bin/codec/getnodeidreq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/getnodeidreq.h" />
+		<Unit filename="../bin/codec/getnodeidrsp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/getnodeidrsp.h" />
+		<Unit filename="../bin/codec/global_t.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/global_t.h" />
+		<Unit filename="../bin/codec/globalconfigrsp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/globalconfigrsp.h" />
+		<Unit filename="../bin/codec/identifier.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/identifier.h" />
+		<Unit filename="../bin/codec/identifiers.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/identifiers.h" />
+		<Unit filename="../bin/codec/idvalue.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/idvalue.h" />
+		<Unit filename="../bin/codec/itemcount.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/itemcount.h" />
+		<Unit filename="../bin/codec/keyvalue.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/keyvalue.h" />
+		<Unit filename="../bin/codec/line.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/line.h" />
+		<Unit filename="../bin/codec/moddata.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/moddata.h" />
+		<Unit filename="../bin/codec/modfield.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/modfield.h" />
+		<Unit filename="../bin/codec/modifyrequest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/modifyrequest.h" />
+		<Unit filename="../bin/codec/mtaheader.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/mtaheader.h" />
+		<Unit filename="../bin/codec/nodestate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/nodestate.h" />
+		<Unit filename="../bin/codec/nodifyfield.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/nodifyfield.h" />
+		<Unit filename="../bin/codec/notify.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/notify.h" />
+		<Unit filename="../bin/codec/notifydata.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/notifydata.h" />
+		<Unit filename="../bin/codec/notifymsg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/notifymsg.h" />
+		<Unit filename="../bin/codec/parameter.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/parameter.h" />
+		<Unit filename="../bin/codec/path.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/path.h" />
+		<Unit filename="../bin/codec/pbstru_comm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/pbstru_comm.h" />
+		<Unit filename="../bin/codec/perfdata.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/perfdata.h" />
+		<Unit filename="../bin/codec/primarykey.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/primarykey.h" />
+		<Unit filename="../bin/codec/probepagereq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/probepagereq.h" />
+		<Unit filename="../bin/codec/probequerybyindexreq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/probequerybyindexreq.h" />
+		<Unit filename="../bin/codec/probesource.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/probesource.h" />
+		<Unit filename="../bin/codec/queryrequest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/queryrequest.h" />
+		<Unit filename="../bin/codec/range.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/range.h" />
+		<Unit filename="../bin/codec/rccpiinfo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/rccpiinfo.h" />
+		<Unit filename="../bin/codec/rccresult.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/rccresult.h" />
+		<Unit filename="../bin/codec/rcctupleinfo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/rcctupleinfo.h" />
+		<Unit filename="../bin/codec/replicastate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/replicastate.h" />
+		<Unit filename="../bin/codec/response.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/response.h" />
+		<Unit filename="../bin/codec/resreportresponse.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/resreportresponse.h" />
+		<Unit filename="../bin/codec/result.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/result.h" />
+		<Unit filename="../bin/codec/singleitemcount.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/singleitemcount.h" />
+		<Unit filename="../bin/codec/slotstate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/slotstate.h" />
+		<Unit filename="../bin/codec/spinfo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/spinfo.h" />
+		<Unit filename="../bin/codec/statrequest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/statrequest.h" />
+		<Unit filename="../bin/codec/statresp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/statresp.h" />
+		<Unit filename="../bin/codec/superpath.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/superpath.h" />
+		<Unit filename="../bin/codec/sysinfo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/sysinfo.h" />
+		<Unit filename="../bin/codec/tenant_t.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/tenant_t.h" />
+		<Unit filename="../bin/codec/tenantseqinfo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/tenantseqinfo.h" />
+		<Unit filename="../bin/codec/tuple.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/tuple.h" />
+		<Unit filename="../bin/codec/userinfo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/userinfo.h" />
+		<Unit filename="test_codec.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
