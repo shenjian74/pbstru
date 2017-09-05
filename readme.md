@@ -12,7 +12,7 @@
 # 编译方法
 
 ## Windows
-	Windows下需要预安装code::block编译器及IDE。
+	Windows下需要预安装Code::Blocks编译器及IDE。
 	而后执行/pbstru/build.bat进行编译，可生成pbstru/bin/pbstru.exe。
 
 ## linux
