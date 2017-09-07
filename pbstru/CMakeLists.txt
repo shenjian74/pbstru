@@ -11,15 +11,15 @@ list(REMOVE_ITEM SRC_FILES "../bstrlib/bstest.c")
 
 include_directories(
 	../bstrlib
-	../protobuf3/src
-	../protobuf3/src/google/protobuf/compiler
+	/usr/local/include/google/protobuf
+	/usr/local/include/google/protobuf/compiler
 )
 
 message("${CMAKE_CURRENT_SOURCE_DIR}")
 IF (WIN32)
-	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
+	find_library(PROTOBUF_LIB NAMES protobuf HINTS "{CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
 ELSE()
-	find_library(PROTOBUF_LIB NAMES protobuf HINTS "../protobuf3/src/.libs" )
+	find_library(PROTOBUF_LIB NAMES protobuf HINTS "/usr/local/lib:../protobuf3/src/.libs" )
 ENDIF()
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 
