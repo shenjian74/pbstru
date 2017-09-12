@@ -2,7 +2,6 @@ project (pbstru)
 cmake_minimum_required (VERSION 2.6)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-
 aux_source_directory(./pbstru SRC_FILES)
 aux_source_directory(../bstrlib SRC_FILES)
 list(REMOVE_ITEM SRC_FILES "../bstrlib/test.cpp")
@@ -11,13 +10,15 @@ list(REMOVE_ITEM SRC_FILES "../bstrlib/bstest.c")
 
 include_directories(
 	../bstrlib
-	/usr/local/include/google/protobuf
+	/usr/local/include
 	/usr/local/include/google/protobuf/compiler
+	../protobuf3/src
+	../protobuf3/src/google/protobuf/compiler
 )
 
-message("${CMAKE_CURRENT_SOURCE_DIR}")
 IF (WIN32)
-	find_library(PROTOBUF_LIB NAMES protobuf HINTS "{CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
+	message("${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build")
+	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
 ELSE()
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "/usr/local/lib:../protobuf3/src/.libs" )
 ENDIF()
