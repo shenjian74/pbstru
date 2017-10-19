@@ -17,6 +17,12 @@ include_directories(
 	../protobuf3/src/google/protobuf/compiler
 )
 
+####################
+add_custom_target(
+   protobuf_lib
+   COMMAND ./autogen.sh && ./configure && make -j
+   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3
+)
 IF (WIN32)
 	message("${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build")
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
@@ -25,6 +31,7 @@ ELSE()
 ENDIF()
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 
+####################
 add_custom_target(
    tcmalloc_lib
    COMMAND ./autogen.sh && ./configure && make -j
@@ -36,4 +43,4 @@ set (EXTRA_LIBS ${EXTRA_LIBS} ${TCMALLOC_LIB})
 # add the executable
 add_executable(pbstru ${SRC_FILES})
 target_link_libraries (pbstru  ${EXTRA_LIBS})
-add_dependencies(pbstru tcmalloc_lib)
+add_dependencies(pbstru tcmalloc_lib protobuf_lib)
