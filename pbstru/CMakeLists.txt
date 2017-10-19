@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 2.6)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 aux_source_directory(./pbstru SRC_FILES)
+
 aux_source_directory(../bstrlib SRC_FILES)
 list(REMOVE_ITEM SRC_FILES "../bstrlib/test.cpp")
 list(REMOVE_ITEM SRC_FILES "../bstrlib/testaux.c")
@@ -24,6 +25,15 @@ ELSE()
 ENDIF()
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 
+add_custom_target(
+   tcmalloc_lib
+   COMMAND ./autogen.sh && ./configure && make -j
+   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools
+)
+find_library(TCMALLOC_LIB NAMES tcmalloc HINTS "../gperftools/.libs" )
+set (EXTRA_LIBS ${EXTRA_LIBS} ${TCMALLOC_LIB})
+
 # add the executable
 add_executable(pbstru ${SRC_FILES})
 target_link_libraries (pbstru  ${EXTRA_LIBS})
+add_dependencies(pbstru tcmalloc_lib)
