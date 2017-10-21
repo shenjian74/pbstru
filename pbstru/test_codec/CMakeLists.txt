@@ -15,7 +15,7 @@ add_definitions(-D_TEST_CODEC)
 ####################
 add_custom_target(
    auto_gen_src
-   COMMAND ./gen_codec.sh
+   COMMAND rm -rf codec && mkdir codec && ./pbstru cdb.proto cdb_ccc.proto
    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
 )
 

@@ -32,6 +32,13 @@ char path_prefix[] = "codec\\";
 char path_prefix[] = "codec/";
 #endif
 
+typedef enum{
+    PS_SUCCESS,  // 0
+    PS_FAIL,
+    NO_SUCH_ITEM = 10,
+    NO_MAX_COUNT_IN_FILE
+} e_error_code;
+
 void gen_comm(void) {
 	CBString filename = CBString(path_prefix) + "pbstru_comm.h";
 	FILE *fp = fopen((LPCSTR)filename, "wt");
@@ -80,10 +87,10 @@ void gen_comm(void) {
 	fprintf(fp, "} ps_bytes;\n");
 	fprintf(fp, "\n");
     fprintf(fp, "void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset);\n");
-	fprintf(fp, "void parse_tag_byte(BYTE *buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
-	fprintf(fp, "void deal_unknown_field(BYTE wire_type, BYTE *buf, size_t *offset);\n");
+	fprintf(fp, "void parse_tag_byte(const BYTE* const buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
+	fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* const buf, size_t* const offset);\n");
 	fprintf(fp, "\n");
-	fprintf(fp, "#define encode_varint(len, buf, offset) { \\\n");
+	fprintf(fp, "#define encode_varint(len, buf, offset) do{ \\\n");
 	fprintf(fp, "	unsigned long long remain_len = len; \\\n");
 	fprintf(fp, "	size_t iloop; \\\n");
 	fprintf(fp, "	for (iloop = 0;; ++iloop) { \\\n");
@@ -101,9 +108,9 @@ void gen_comm(void) {
 	fprintf(fp, "		} \\\n");
 	fprintf(fp, "	} \\\n");
 	fprintf(fp, "	*(offset) += 1 + iloop; \\\n");
-	fprintf(fp, "}\n");
+	fprintf(fp, "} while(0)\n");
 	fprintf(fp, "\n");
-	fprintf(fp, "#define decode_varint(buf, value, offset) { \\\n");
+	fprintf(fp, "#define decode_varint(buf, value, offset) do{ \\\n");
 	fprintf(fp, "    size_t iloop; \\\n");
 	fprintf(fp, "    (*(value)) = 0; \\\n");
 	fprintf(fp, "    for(iloop=0;;++iloop){ \\\n");
@@ -113,7 +120,7 @@ void gen_comm(void) {
 	fprintf(fp, "        } \\\n");
 	fprintf(fp, "    } \\\n");
 	fprintf(fp, "    (*(offset)) += 1 + iloop; \\\n");
-	fprintf(fp, "}\n");
+	fprintf(fp, "} while(0)\n");
 	fprintf(fp, "\n");
 	fprintf(fp, "\n#endif\n\n/* end of file */");
 	fclose(fp);
@@ -142,7 +149,7 @@ void gen_comm(void) {
 	fprintf(fp, "	} \n"); 
 	fprintf(fp, "} \n");
 	fprintf(fp, "\n");
-	fprintf(fp, "void parse_tag_byte(BYTE *buf, WORD *field_num, BYTE *wire_type, size_t *offset){ \n");
+	fprintf(fp, "void parse_tag_byte(const BYTE* const buf, WORD *field_num, BYTE *wire_type, size_t *offset){ \n");
 	fprintf(fp, "    if ((buf)[0] & 0x80) { \n");
 	fprintf(fp, "	     *field_num = ((buf)[0] & 0x7F) + ((buf)[1] >> 3) * 128; \n");
 	fprintf(fp, "	     *wire_type = (buf)[1] & 0x07; \n");
@@ -154,7 +161,7 @@ void gen_comm(void) {
 	fprintf(fp, "    } \n");
 	fprintf(fp, "} \n");
 	fprintf(fp, "\n");
-	fprintf(fp, "void deal_unknown_field(BYTE wire_type, BYTE *buf, size_t *offset) { \n");
+	fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* const buf, size_t* const offset) { \n");
 	fprintf(fp, "	size_t tmp_field_len; \n");
 	fprintf(fp, "	switch(wire_type){ \n");
 	fprintf(fp, "	case WIRE_TYPE_VARINT: \n");
@@ -181,7 +188,8 @@ void gen_comm(void) {
 LPSTR proto_filename;
 FILE *fp_option = NULL;
 
-static int get_max_count(LPCSTR message_name, LPCSTR field_name) { 
+// Get the max size of a repeated field.
+static bool get_max_count(LPCSTR message_name, LPCSTR field_name, int* const max_count) {
 	char str1[128];
 	char str2[64];
 	CBString option_filename(proto_filename);
@@ -211,18 +219,20 @@ static int get_max_count(LPCSTR message_name, LPCSTR field_name) {
 		if (0 == strcmp(str1, (LPCSTR)key)) {
 			char *num_str = strstr(str2, "max_count:");
 			if (NULL == num_str) {
-				printf("[%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n", __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
-				exit(11);
+				printf("Error: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n",
+                       __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
+				exit(NO_SUCH_ITEM);
 			}
 			else {
-				return atoi(num_str + strlen("max_count:"));
+                *max_count = atoi(num_str + strlen("max_count:"));
+				return true;
 			}
 		}
 	}
 
-	printf("[%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n", 
+	printf("Warning: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n",
 		__THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
-	exit(12);
+	return false;
 	// 文件不关闭
 }
 
@@ -395,10 +405,15 @@ void gen_header(const Descriptor *desc){
 		CBString field_containing_type_upper(field->containing_type()->name().c_str());
 		field_containing_type_upper.toupper();
 		if(field->is_repeated()){
-			fprintf(fp, "#define MAX_%s_IN_%s %d\n", 
-				(LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper,
-				get_max_count(field->containing_type()->full_name().c_str(), 
-					field->name().c_str()));
+            int max_count;
+            if(get_max_count(field->containing_type()->full_name().c_str(),
+                             field->name().c_str(), &max_count)) {
+                fprintf(fp, "#define MAX_%s_IN_%s %d\n",
+                        (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, max_count);
+            } else {
+                fprintf(fp, "#define MAX_%s_IN_%s 0  // Dynamic array to store unlimited repeated field.\n",
+                        (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper);
+            }
 		}
 	}
 
@@ -439,29 +454,35 @@ void gen_header(const Descriptor *desc){
 			fprintf(fp, "\n#ifndef STRUCT_%s_LIST_DEFINED\n", (LPCSTR)struct_list_name);
 			fprintf(fp, "#define STRUCT_%s_LIST_DEFINED\n", (LPCSTR)struct_list_name);
 			fprintf(fp, "typedef struct {\n");
-			fprintf(fp, "    size_t count;\n"); 
-			switch(field->type()){
+			fprintf(fp, "    size_t count;\n");
+
+            bool is_fixed_array = false;
+            int max_count = 0;
+            if(get_max_count(field->containing_type()->full_name().c_str(),
+                             field->name().c_str(), &max_count)) {
+                is_fixed_array = true;
+            }
+            if(!is_fixed_array) {
+                fprintf(fp, "    size_t max_size;  /* max size of dynamic array */\n");
+            }
+
+            switch(field->type()){
 				case FieldDescriptor::TYPE_FIXED32:
 				case FieldDescriptor::TYPE_UINT32:
-					fprintf(fp, "    DWORD item[MAX_%s_IN_%s];  /* tag:%d type:%s */\n", 
-						(LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, field->number(), field->type_name());
+                    fprintf(fp, "    DWORD");
 					break;
 				case FieldDescriptor::TYPE_FIXED64:
 				case FieldDescriptor::TYPE_UINT64:
-					fprintf(fp, "    WORD64 item[MAX_%s_IN_%s];  /* tag:%d type:%s */\n", 
-						(LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, field->number(), field->type_name());
+                    fprintf(fp, "    WORD64");
 					break;
 				case FieldDescriptor::TYPE_BOOL:
-					fprintf(fp, "    BOOL item[MAX_%s_IN_%s];  /* tag:%d type:%s */\n", 
-						(LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, field->number(), field->type_name());
+                    fprintf(fp, "    BOOL");
 					break;
 				case FieldDescriptor::TYPE_STRING:
-					fprintf(fp, "    ps_string item[MAX_%s_IN_%s];  /* tag:%d type:%s */\n", 
-						(LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, field->number(), field->type_name());
+					fprintf(fp, "    ps_string");
 					break;
 				case FieldDescriptor::TYPE_BYTES:
-					fprintf(fp, "    ps_bytes item[MAX_%s_IN_%s];  /* tag:%d type:%s */\n", 
-						(LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, field->number(), field->type_name());
+					fprintf(fp, "    ps_bytes");
 					break;
 				case FieldDescriptor::TYPE_MESSAGE:
 					{
@@ -470,20 +491,23 @@ void gen_header(const Descriptor *desc){
 							message_type_name.tolower();
 						}
 						CBString struct_name = (CBString)struct_prefix + message_type_name + struct_postfix;
-
-						fprintf(fp, "    %s item[MAX_%s_IN_%s];  /* tag:%d type:%s */\n", (LPCSTR)struct_name, 
-								(LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, field->number(), field->type_name());
+						fprintf(fp, "    %s", (LPCSTR)struct_name);
 					}
 					break;
 				case FieldDescriptor::TYPE_ENUM:
-						fprintf(fp, "    enum_%s item[MAX_%s_IN_%s];  /* tag:%d type:%s */\n", field->enum_type()->name().c_str(),  
-							(LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, field->number(), field->type_name());
+    				fprintf(fp, "    enum_%s", field->enum_type()->name().c_str());
 					break;
 				default:
-					fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
+					fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author for support.\n",
+                            __THIS_FILE__, __LINE__, field->type_name());
 					break;
 				}
-			fprintf(fp, "} st_%s_list;\n", get_struct_list_name(field));
+            if(is_fixed_array){
+                fprintf(fp, " item[MAX_%s_IN_%s", (LPCSTR) field_name_upper, (LPCSTR) field_containing_type_upper);
+            }
+            fprintf(fp, "];  /* tag:%d type:%s */\n", field->number(), field->type_name());
+
+            fprintf(fp, "} st_%s_list;\n", get_struct_list_name(field));
 			fprintf(fp, "#endif\n");
 		}
 	}
@@ -494,9 +518,10 @@ void gen_header(const Descriptor *desc){
 	}
 	fprintf(fp, "} %s;\n", (LPCSTR)struct_name);
 
-	fprintf(fp, "\nvoid clear_message_%s(%s *);\n", desc->name().c_str(), (LPCSTR)struct_name);
-	fprintf(fp, "size_t encode_message_%s(%s *, BYTE *);\n", desc->name().c_str(), (LPCSTR)struct_name);
-	fprintf(fp, "BOOL decode_message_%s(BYTE *, size_t, %s *);\n", desc->name().c_str(), (LPCSTR)struct_name);
+	fprintf(fp, "\nvoid init_message_%s(%s* const msg);  /* if reuse msg, must free it at first. */\n", desc->name().c_str(), (LPCSTR)struct_name);
+    fprintf(fp, "void free_message_%s(%s* const msg);\n", desc->name().c_str(), (LPCSTR)struct_name);
+	fprintf(fp, "size_t encode_message_%s(const %s* const msg, BYTE* const buf);\n", desc->name().c_str(), (LPCSTR)struct_name);
+	fprintf(fp, "BOOL decode_message_%s(BYTE* const buf, const size_t buf_len, %s* const msg);\n", desc->name().c_str(), (LPCSTR)struct_name);
 
 	fprintf(fp, "\n#ifdef __cplusplus\n");
 	fprintf(fp, "}\n");
@@ -532,7 +557,7 @@ void gen_source(const Descriptor *desc){
 	fprintf(fp, "\n");
 	
 	// clear function
-	fprintf(fp, "void clear_message_%s(%s *var_%s){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
+	fprintf(fp, "void init_message_%s(%s* const var_%s){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
 	for(int i=0;i<desc->field_count();++i){
 		const FieldDescriptor *field = desc->field(i);
 		if(field->is_repeated()){
@@ -557,7 +582,7 @@ void gen_source(const Descriptor *desc){
 				fprintf(fp, "    var_%s->var_%s.length = 0;\n", desc->name().c_str(), field->name().c_str());
 				break;
 			case FieldDescriptor::TYPE_MESSAGE:
-				fprintf(fp, "    clear_message_%s(&(var_%s->var_%s));\n", 
+				fprintf(fp, "    init_message_%s(&(var_%s->var_%s));\n",
 					field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
 				break;
 			default:
@@ -568,7 +593,7 @@ void gen_source(const Descriptor *desc){
 	}
 	fprintf(fp, "}\n");
 
-	fprintf(fp, "\nsize_t encode_message_%s(%s *var_%s, BYTE *buf){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
+	fprintf(fp, "\nsize_t encode_message_%s(const %s* const var_%s, BYTE* const buf){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
 	// 有嵌套message的时候会用到编码长度
 	for(int i=0;i<desc->field_count();++i){
 		if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type()){
@@ -716,7 +741,7 @@ void gen_source(const Descriptor *desc){
 
 	///////////////////////////////////////////////////////////////////////////
 	// Decode function
-	fprintf(fp, "\nBOOL decode_message_%s(BYTE *buf, size_t buf_len, %s* var_%s){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
+	fprintf(fp, "\nBOOL decode_message_%s(BYTE* const buf, const size_t buf_len, %s* const var_%s){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
 	fprintf(fp, "	size_t offset = 0;\n");
 	// 包含message字段时，才需要使用此变量
 	for(int i=0;i<desc->field_count();++i){
@@ -727,7 +752,7 @@ void gen_source(const Descriptor *desc){
 	}
 	fprintf(fp, "    WORD field_num;\n");
 	fprintf(fp, "    BYTE wire_type;\n");
-	fprintf(fp, "\n    clear_message_%s(var_%s);\n\n", desc->name().c_str(), desc->name().c_str());
+	fprintf(fp, "\n    init_message_%s(var_%s);\n\n", desc->name().c_str(), desc->name().c_str());
 
 	fprintf(fp, "    for(;offset < buf_len;){\n");
 	fprintf(fp, "        parse_tag_byte(buf + offset, &field_num, &wire_type, &offset);\n");
