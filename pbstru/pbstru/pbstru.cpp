@@ -50,7 +50,7 @@ void gen_comm(void) {
 	fprintf(fp, "#define WIRE_TYPE_LENGTH_DELIMITED 2\n");
 	fprintf(fp, "#define WIRE_TYPE_FIX32 5\n");
 
-	fprintf(fp, "\n#ifdef _WIN32\n");
+	fprintf(fp, "\n#ifdef _TEST_CODEC\n");
 	fprintf(fp, "typedef unsigned char BYTE;\n");
 	fprintf(fp, "typedef unsigned char *PBYTE;\n");
 	fprintf(fp, "typedef char CHAR;\n");

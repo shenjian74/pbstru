@@ -17,6 +17,8 @@ include_directories(
 	../protobuf3/src/google/protobuf/compiler
 )
 
+add_subdirectory("./test_codec")
+
 ####################
 add_custom_target(
    protobuf_lib
