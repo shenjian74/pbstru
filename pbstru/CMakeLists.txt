@@ -20,7 +20,8 @@ include_directories(
 ####################
 add_custom_target(
    protobuf_lib
-   COMMAND ./autogen.sh && ./configure && make -j
+   # COMMAND ./autogen.sh && ./configure && make -j
+   COMMAND make -j
    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3
 )
 IF (WIN32)
@@ -34,7 +35,8 @@ set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 ####################
 add_custom_target(
    tcmalloc_lib
-   COMMAND ./autogen.sh && ./configure && make -j
+   # COMMAND ./autogen.sh && ./configure && make -j
+   COMMAND make -j
    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools
 )
 find_library(TCMALLOC_LIB NAMES tcmalloc HINTS "../gperftools/.libs" )
