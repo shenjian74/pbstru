@@ -656,6 +656,44 @@ void gen_source(const Descriptor *desc){
     }
     fprintf(fp, "}\n");
 
+	// clear function
+	fprintf(fp, "void clear_message_%s(%s* var_%s){\n", 
+            desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
+	for(int i=0;i<desc->field_count();++i){
+		const FieldDescriptor *field = desc->field(i);
+		if(field->is_repeated()){
+			fprintf(fp, "    var_%s->var_%s.count = 0;\n", desc->name().c_str(), field->name().c_str());
+		} else if(field->is_optional()){
+			fprintf(fp, "    var_%s->has_%s = FALSE;\n", desc->name().c_str(), field->name().c_str());
+		} else {
+			switch(field->type()){
+			case FieldDescriptor::TYPE_FIXED32:
+			case FieldDescriptor::TYPE_FIXED64:
+			case FieldDescriptor::TYPE_UINT32:
+			case FieldDescriptor::TYPE_UINT64:
+				fprintf(fp, "    var_%s->var_%s = 0;\n", desc->name().c_str(), field->name().c_str());
+				break;
+			case FieldDescriptor::TYPE_BOOL:
+				fprintf(fp, "    var_%s->var_%s = FALSE;\n", desc->name().c_str(), field->name().c_str());
+				break;
+			case FieldDescriptor::TYPE_ENUM:
+				break;
+			case FieldDescriptor::TYPE_STRING:
+			case FieldDescriptor::TYPE_BYTES:
+				fprintf(fp, "    var_%s->var_%s.length = 0;\n", desc->name().c_str(), field->name().c_str());
+				break;
+			case FieldDescriptor::TYPE_MESSAGE:
+				fprintf(fp, "    clear_message_%s(&(var_%s->var_%s));\n",
+					field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+				break;
+			default:
+				fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
+				break;
+			}
+		}
+	}
+	fprintf(fp, "}\n");
+
     ////////////////////////////////////////
 	fprintf(fp, "\nsize_t encode_message_%s(const %s* var_%s, BYTE* buf){\n", 
             desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
