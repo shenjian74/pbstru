@@ -525,12 +525,15 @@ void gen_header(const Descriptor *desc){
 	}
 	fprintf(fp, "} %s;\n", (LPCSTR)struct_name);
 
-	fprintf(fp, "\nvoid constru_message_%s(%s* msg);  /* if reuse msg, must free it at first. */\n",
+	fprintf(fp, "\n/* construct msg when first use, call clear_message_*() internaly. */\n");
+	fprintf(fp, "void constru_message_%s(%s* msg);\n", 
             desc->name().c_str(), (LPCSTR)struct_name);
+        fprintf(fp, "/* destruct msg */\n");
         fprintf(fp, "void destru_message_%s(%s* msg);\n",
             desc->name().c_str(), (LPCSTR)struct_name);
 
-	fprintf(fp, "\nvoid clear_message_%s(%s *msg);\n", 
+	fprintf(fp, "\n/* clear and reuse msg */\n"); 
+	fprintf(fp, "void clear_message_%s(%s *msg);\n", 
             desc->name().c_str(), (LPCSTR)struct_name);
 	fprintf(fp, "size_t encode_message_%s(const %s* const msg, BYTE* const buf);\n",
             desc->name().c_str(), (LPCSTR)struct_name);
