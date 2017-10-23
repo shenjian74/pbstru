@@ -192,13 +192,13 @@ FILE *fp_option = NULL;
 static bool get_max_count(LPCSTR message_name, LPCSTR field_name, int* max_count) {
 	char str1[128];
 	char str2[64];
-	CBString option_filename(proto_filename);
-
+    static CBString option_filename;
 	CBString key(message_name);
 	key += ".";
 	key += field_name;
 
 	if (NULL == fp_option) {
+        option_filename = proto_filename;
 		int pos = option_filename.reversefind('.', option_filename.length());
 		if (BSTR_ERR == pos) {
 			option_filename += ".options";
@@ -213,9 +213,16 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, int* max_count
 			exit(10);
 		}
 	}
-	
-	for (rewind(fp_option); !feof(fp_option);) {
-		fscanf(fp_option, "%s %s", str1, str2);
+
+    for (rewind(fp_option); ;) {
+        char buffer[1024];
+        if (NULL == fgets(buffer, sizeof(buffer), fp_option)) {
+            break;
+        }
+        if ('#' == buffer[0]) {
+            continue;
+        }
+        sscanf(buffer, "%s %s", str1, str2);
 		if (0 == strcmp(str1, (LPCSTR)key)) {
 			char *num_str = strstr(str2, "max_count:");
 			if (NULL == num_str) {
@@ -365,11 +372,21 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field){
 bool is_dynamic_repeated(const FieldDescriptor *field) {
     int max_count = 0;
     bool is_dynamic = false;
+    static std::map<CBString, bool> kv_store;
+    std::map<CBString, bool>::iterator it;
+    CBString containing_type_name = CBString(field->containing_type()->full_name().c_str());
+    CBString field_name = CBString(field->name().c_str());
+
+    it = kv_store.find(containing_type_name + "." + field_name);
+    if (it != kv_store.end()) {
+        return it->second;
+    }
+
     if(field->is_repeated()){
-        if(false == get_max_count(field->containing_type()->full_name().c_str(),
-                                  field->name().c_str(), &max_count)){
+        if(false == get_max_count(LPCSTR(containing_type_name), LPCSTR(field_name), &max_count)){
             is_dynamic = true;
         }
+        kv_store[containing_type_name + "." + field_name] = is_dynamic;
     }
     return is_dynamic;
 }
@@ -418,14 +435,15 @@ void gen_header(const Descriptor *desc){
 		CBString field_containing_type_upper(field->containing_type()->name().c_str());
 		field_containing_type_upper.toupper();
 		if(field->is_repeated()){
-            int max_count;
-            if(get_max_count(field->containing_type()->full_name().c_str(),
-                             field->name().c_str(), &max_count)) {
-                fprintf(fp, "#define MAX_%s_IN_%s %d\n",
-                        (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, max_count);
-            } else {
+            if(is_dynamic_repeated(field)){
                 fprintf(fp, "#define MAX_%s_IN_%s 0  // Dynamic array to store unlimited repeated field.\n",
                         (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper);
+            } else {
+                int max_count;
+                get_max_count(field->containing_type()->full_name().c_str(),
+                                 field->name().c_str(), &max_count);
+                fprintf(fp, "#define MAX_%s_IN_%s %d\n",
+                    (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, max_count);
             }
 		}
 	}
@@ -464,8 +482,16 @@ void gen_header(const Descriptor *desc){
 			
 			CBString struct_list_name = get_struct_list_name(field);
 			struct_list_name.toupper();
-			fprintf(fp, "\n#ifndef STRUCT_%s_LIST_DEFINED\n", (LPCSTR)struct_list_name);
-			fprintf(fp, "#define STRUCT_%s_LIST_DEFINED\n", (LPCSTR)struct_list_name);
+			fprintf(fp, "\n#ifndef STRUCT_%s_", (LPCSTR)struct_list_name);
+            if(is_dynamic_repeated(field)){
+                fprintf(fp, "DYN_");
+            }
+            fprintf(fp, "LIST_DEFINED\n");
+			fprintf(fp, "#define STRUCT_%s_", (LPCSTR)struct_list_name);
+            if(is_dynamic_repeated(field)){
+                fprintf(fp, "DYN_");
+            }
+            fprintf(fp, "LIST_DEFINED\n");
 			fprintf(fp, "typedef struct {\n");
 			fprintf(fp, "    size_t count;\n");
 
@@ -509,8 +535,9 @@ void gen_header(const Descriptor *desc){
                             __THIS_FILE__, __LINE__, field->type_name());
 					break;
 				}
+            fprintf(fp, " item[");
             if(!is_dynamic_repeated(field)){
-                fprintf(fp, " item[MAX_%s_IN_%s", (LPCSTR) field_name_upper, (LPCSTR) field_containing_type_upper);
+                fprintf(fp, "MAX_%s_IN_%s", (LPCSTR) field_name_upper, (LPCSTR) field_containing_type_upper);
             }
             fprintf(fp, "];  /* tag:%d type:%s */\n", field->number(), field->type_name());
 
@@ -631,7 +658,7 @@ void gen_source(const Descriptor *desc){
                             field->message_type()->name().c_str(), desc->name().c_str());
                     fprintf(fp, "    }\n");
                 }
-                fprintf(fp, "    ps_free(var_%s->item);\n", desc->name().c_str());
+                fprintf(fp, "    ps_free(var_%s->var_%s.item);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "    var_%s->var_%s.max_size = 0;\n", desc->name().c_str(), field->name().c_str());
             }
         } else if(field->is_optional()){
