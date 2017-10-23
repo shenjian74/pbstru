@@ -601,7 +601,7 @@ void gen_source(const Descriptor *desc){
 				fprintf(fp, "    var_%s->var_%s.length = 0;\n", desc->name().c_str(), field->name().c_str());
 				break;
 			case FieldDescriptor::TYPE_MESSAGE:
-				fprintf(fp, "    init_message_%s(&(var_%s->var_%s));\n",
+				fprintf(fp, "    constru_message_%s(&(var_%s->var_%s));\n",
 					field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
 				break;
 			default:
@@ -613,7 +613,7 @@ void gen_source(const Descriptor *desc){
 	fprintf(fp, "}\n");
 
     ////////////////////////////////////////
-    fprintf(fp, "void free_message_%s(%s* var_%s){\n",
+    fprintf(fp, "\nvoid destru_message_%s(%s* var_%s){\n",
             desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
     for(int i=0;i<desc->field_count();++i){
         const FieldDescriptor *field = desc->field(i);
@@ -624,7 +624,7 @@ void gen_source(const Descriptor *desc){
                 if(FieldDescriptor::TYPE_MESSAGE == field->type()) {
                     fprintf(fp, "    for(size_t j=0; j<var_%s->var_%s.max_size; j++){\n",
                             desc->name().c_str(), field->name().c_str());
-                    fprintf(fp, "        free_message_%s(&(var_%s->item[j]));\n",
+                    fprintf(fp, "        destru_message_%s(&(var_%s->item[j]));\n",
                             field->message_type()->name().c_str(), desc->name().c_str());
                     fprintf(fp, "    }\n");
                 }
@@ -645,7 +645,7 @@ void gen_source(const Descriptor *desc){
                 case FieldDescriptor::TYPE_BYTES:
                     break;
                 case FieldDescriptor::TYPE_MESSAGE:
-                    fprintf(fp, "    free_message_%s(&(var_%s->var_%s));\n",
+                    fprintf(fp, "    destru_message_%s(&(var_%s->var_%s));\n",
                             field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                     break;
                 default:

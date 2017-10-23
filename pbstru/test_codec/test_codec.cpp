@@ -185,7 +185,7 @@ int main(int argc, char* argv[])
     }
 
     {
-        init_message_AddRequest(&var_AddRequest);
+        clear_message_AddRequest(&var_AddRequest);
 
         var_AddRequest.var_identifiers.var_primary.count = 1;
         var_AddRequest.var_identifiers.var_primary.item[0].var_id_type = 1;
@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
         var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length = strlen((char *)var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data);
 
         var_AddRequest.var_tuple.count = 1;
-        init_message_Tuple(&(var_AddRequest.var_tuple.item[0]));
+        clear_message_Tuple(&(var_AddRequest.var_tuple.item[0]));
         var_AddRequest.var_tuple.item[0].var_path.var_tid = 1000;
         var_AddRequest.var_tuple.item[0].var_path.var_primary_key.count = 2;
 
