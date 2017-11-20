@@ -15,3 +15,4 @@ Debug
 *.suo
 *.layout
 *.depend
+.idea
