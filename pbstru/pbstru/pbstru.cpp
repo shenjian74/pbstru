@@ -244,30 +244,37 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, int* max_count
 }
 
 LPCSTR get_struct_list_name(const FieldDescriptor *field){
+	CBString field_name_upper(field->name().c_str());
+	field_name_upper.toupper();
+	CBString field_containing_type_upper(field->containing_type()->name().c_str());
+	field_containing_type_upper.toupper();
+
 	static CBString struct_list_name;
+
+        struct_list_name = field_name_upper + "_IN_" + field_containing_type_upper;
 	switch(field->type()){
 	case FieldDescriptor::TYPE_FIXED32:
 	case FieldDescriptor::TYPE_UINT32:
-		struct_list_name = CBString("uint32");
+		struct_list_name += CBString("_uint32");
 		break;
 	case FieldDescriptor::TYPE_FIXED64:
 	case FieldDescriptor::TYPE_UINT64:
-		struct_list_name = CBString("uint64");
+		struct_list_name += CBString("_uint64");
 		break;
 	case FieldDescriptor::TYPE_BOOL:
-		struct_list_name = CBString("boolean");
+		struct_list_name += CBString("_boolean");
 		break;
 	case FieldDescriptor::TYPE_STRING:
-		struct_list_name = CBString("string");
+		struct_list_name += CBString("_string");
 		break;
 	case FieldDescriptor::TYPE_BYTES:
-		struct_list_name = CBString("buffer");
+		struct_list_name += CBString("_buffer");
 		break;
 	case FieldDescriptor::TYPE_MESSAGE:
-		struct_list_name = CBString(field->message_type()->name().c_str());
+		struct_list_name += CBString(field->message_type()->name().c_str());
 		break;
 	case FieldDescriptor::TYPE_ENUM:
-		struct_list_name = CBString(field->enum_type()->name().c_str());
+		struct_list_name += CBString(field->enum_type()->name().c_str());
 		break;
 	default:
 		struct_list_name = "";
@@ -481,18 +488,7 @@ void gen_header(const Descriptor *desc){
 			field_containing_type_upper.toupper();
 			
 			CBString struct_list_name = get_struct_list_name(field);
-			struct_list_name.toupper();
-			fprintf(fp, "\n#ifndef STRUCT_%s_", (LPCSTR)struct_list_name);
-            if(is_dynamic_repeated(field)){
-                fprintf(fp, "DYN_");
-            }
-            fprintf(fp, "LIST_DEFINED\n");
-			fprintf(fp, "#define STRUCT_%s_", (LPCSTR)struct_list_name);
-            if(is_dynamic_repeated(field)){
-                fprintf(fp, "DYN_");
-            }
-            fprintf(fp, "LIST_DEFINED\n");
-			fprintf(fp, "typedef struct {\n");
+			fprintf(fp, "\ntypedef struct {\n");
 			fprintf(fp, "    size_t count;\n");
 
             if(is_dynamic_repeated(field)) {
@@ -542,7 +538,6 @@ void gen_header(const Descriptor *desc){
             fprintf(fp, "];  /* tag:%d type:%s */\n", field->number(), field->type_name());
 
             fprintf(fp, "} st_%s_list;\n", get_struct_list_name(field));
-			fprintf(fp, "#endif\n");
 		}
 	}
 
