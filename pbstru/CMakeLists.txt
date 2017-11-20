@@ -4,7 +4,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 aux_source_directory(./pbstru SRC_FILES)
 
-aux_source_directory(../bstrlib SRC_FILES)
+aux_source_directory("../bstrlib" SRC_FILES)
 list(REMOVE_ITEM SRC_FILES "../bstrlib/test.cpp")
 list(REMOVE_ITEM SRC_FILES "../bstrlib/testaux.c")
 list(REMOVE_ITEM SRC_FILES "../bstrlib/bstest.c")
