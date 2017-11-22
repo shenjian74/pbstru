@@ -11,7 +11,7 @@ zte.cdb.ccc.CDNResReportReq.measure max_count:128
 zte.cdb.ccc.GlobalConfigRsp.tenant max_count:128
 zte.cdb.ccc.GlobalConfigRsp.rbccc max_count:2
 zte.cdb.ccc.CCC2CDNOperSlotReq.slotid_list max_count:144
-zte.cdb.ccc.AsyncConfirmReq.slotid_list max_count:144
+# zte.cdb.ccc.AsyncConfirmReq.slotid_list max_count:144
 zte.cdb.ccc.CDBMTAAck.title max_count:128
 zte.cdb.ccc.CDBMTAAck.lines max_count:128
 zte.cdb.ccc.ProbeQueryByIndexReq.index_info max_count:8
