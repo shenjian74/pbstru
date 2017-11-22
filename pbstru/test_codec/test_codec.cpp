@@ -1,14 +1,16 @@
-// test_codec.cpp : ¶¨Òå¿ØÖÆÌ¨Ó¦ÓÃ³ÌÐòµÄÈë¿Úµã¡£
+// test_codec.cpp : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµã¡£
 //
 
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <asyncconfirmreq.h>
 #include "addrequest.h"
 #include "compoundrequest.h"
 #include "response.h"
 #include "statresp.h"
+#include "asyncconfirmreq.h"
 
 void print_buffer(BYTE *content, size_t filelen)
 {
@@ -50,6 +52,16 @@ void print_buffer(BYTE *content, size_t filelen)
     fflush(stderr);
 }
 
+void pbstru_free(void *buf){
+    if(NULL != buf){
+        free(buf);
+    }
+}
+
+void *pbstru_malloc(size_t size){
+    return malloc(size);
+}
+
 st_AddRequest var_AddRequest;
 int main(int argc, char* argv[])
 {
@@ -60,21 +72,21 @@ int main(int argc, char* argv[])
     printf("sizeof(st_QueryRequest) == %u\n", sizeof(st_QueryRequest));
     {
         printf("  sizeof(st_Identifiers) == %u\n", sizeof(st_Identifiers));
-        printf("  sizeof(st_Range_list) == %u\n", sizeof(st_Range_list));
+        printf("  sizeof(st_RANGE_IN_QUERYREQUEST_Range_list) == %u\n", sizeof(st_RANGE_IN_QUERYREQUEST_Range_list));
         {
             printf("    sizeof(st_Path) == %u\n", sizeof(st_Path));
             printf("    sizeof(enum_Scope) == %u\n", sizeof(enum_Scope));
-            printf("    sizeof(st_uint32_list) == %u\n", sizeof(st_uint32_list));
-            printf("    sizeof(st_Filter_list) == %u\n", sizeof(st_Filter_list));
+            printf("    sizeof(st_FIELD_IN_RANGE_uint32_list) == %u\n", sizeof(st_FIELD_IN_RANGE_uint32_list));
+            printf("    sizeof(st_FILTER_IN_RANGE_Filter_list) == %u\n", sizeof(st_FILTER_IN_RANGE_Filter_list));
         }
-        printf("  sizeof(st_Control_list) == %u\n", sizeof(st_Control_list));
-        printf("  sizeof(st_SPInfo_list) == %u\n", sizeof(st_SPInfo_list));
+        printf("  sizeof(st_CONTROL_IN_QUERYREQUEST_Control_list) == %u\n", sizeof(st_CONTROL_IN_QUERYREQUEST_Control_list));
+        printf("  sizeof(st_SPINFO_IN_QUERYREQUEST_SPInfo_list) == %u\n", sizeof(st_SPINFO_IN_QUERYREQUEST_SPInfo_list));
         printf("  sizeof(st_BatchQRYPI) == %u\n", sizeof(st_BatchQRYPI));
     }
     printf("sizeof(st_ModifyRequest) == %u\n", sizeof(st_ModifyRequest));
     {
         printf("  sizeof(st_ModData) == %u\n", sizeof(st_ModData));
-        printf("  sizeof(st_ModField_list) == %u\n", sizeof(st_ModField_list));
+        printf("  sizeof(st_ModField_list) == %u\n", sizeof(st_FIELD_IN_MODDATA_ModField_list));
     }
     printf("sizeof(st_DeleteRequest) == %u\n", sizeof(st_DeleteRequest));
     printf("sizeof(st_CompoundRequest) == %u\n", sizeof(st_CompoundRequest));
@@ -256,6 +268,31 @@ int main(int argc, char* argv[])
         assert(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.count == 1);
         assert(0 == memcmp(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data, "465789461313213646461231324654", var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length));
     }
+
+    /* disable dynamic array function ...
+    {
+        st_AsyncConfirmReq *msg = (st_AsyncConfirmReq *)pbstru_malloc(sizeof(st_AsyncConfirmReq));
+        constru_message_AsyncConfirmReq(msg);
+
+        clear_message_AsyncConfirmReq(msg);
+        DWORD kk[1000];
+        printf("sizeofkk: %u", sizeof(kk));
+        msg->var_slotid_list.max_size = 1000;
+        msg->var_slotid_list.item = (DWORD *)pbstru_malloc(sizeof(DWORD) * msg->var_slotid_list.max_size);
+        for(int i=0;i<msg->var_slotid_list.max_size;++i){
+            msg->var_slotid_list.item[i] = i;
+            msg->var_slotid_list.count += 1;
+        }
+        for(int i=0;i<msg->var_slotid_list.count;++i){
+            printf("%u ", msg->var_slotid_list.item[i]);
+        }
+
+        destru_message_AsyncConfirmReq(msg);
+        assert(0 == msg->var_slotid_list.count);
+        assert(NULL == msg->var_slotid_list.item);
+        assert(0 == msg->var_slotid_list.max_size);
+    }
+    */
 
     printf("%s Done.\n", argv[0]);
 }
