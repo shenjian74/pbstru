@@ -34,16 +34,6 @@ ELSE()
 ENDIF()
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 
-####################
-add_custom_target(
-   tcmalloc_lib
-   # COMMAND ./autogen.sh && ./configure && make -j
-   COMMAND make -j
-   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../gperftools
-)
-find_library(TCMALLOC_LIB NAMES tcmalloc HINTS "../gperftools/.libs" )
-set (EXTRA_LIBS ${EXTRA_LIBS} ${TCMALLOC_LIB})
-
 # add the executable
 add_executable(pbstru ${SRC_FILES})
 target_link_libraries (pbstru  ${EXTRA_LIBS})

@@ -12,14 +12,19 @@ include_directories(
 )
 
 add_definitions(-D_TEST_CODEC)
+
 ####################
 add_custom_target(
    auto_gen_src
-   COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && rm -rf codec && mkdir codec && ./pbstru cdb.proto cdb_ccc.proto
+   COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && rm -rf codec && mkdir codec && ./pbstru cdb.proto cdb_ccc.proto
    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
 )
+
+####################
+find_library(TCMALLOC_LIB NAMES tcmalloc HINTS "/usr/local/lib:../gperftools/.libs" )
+set (EXTRA_LIBS ${EXTRA_LIBS} ${TCMALLOC_LIB})
 
 # add the executable
 add_executable(${PROJECT_NAME} ${SRC_FILES1})
 add_dependencies(${PROJECT_NAME} auto_gen_src)
-
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
