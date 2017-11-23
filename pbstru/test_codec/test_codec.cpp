@@ -1,4 +1,4 @@
-// test_codec.cpp : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµã¡£
+// test_codec.cpp : ¶¨Òå¿ØÖÆÌ¨Ó¦ÓÃ³ÌÐòµÄÈë¿Úµã¡£
 //
 
 #include <assert.h>
@@ -52,13 +52,17 @@ void print_buffer(BYTE *content, size_t filelen)
     fflush(stderr);
 }
 
+size_t malloc_times = 0;
+size_t free_times = 0;
 void pbstru_free(void *buf){
     if(NULL != buf){
+        free_times += 1;
         free(buf);
     }
 }
 
 void *pbstru_malloc(size_t size){
+    malloc_times += 1;
     return malloc(size);
 }
 
@@ -269,31 +273,37 @@ int main(int argc, char* argv[])
         assert(0 == memcmp(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data, "465789461313213646461231324654", var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length));
     }
 
-    /* disable dynamic array function ...
     {
         st_AsyncConfirmReq *msg = (st_AsyncConfirmReq *)pbstru_malloc(sizeof(st_AsyncConfirmReq));
         constru_message_AsyncConfirmReq(msg);
 
         clear_message_AsyncConfirmReq(msg);
-        DWORD kk[1000];
-        printf("sizeofkk: %u", sizeof(kk));
-        msg->var_slotid_list.max_size = 1000;
-        msg->var_slotid_list.item = (DWORD *)pbstru_malloc(sizeof(DWORD) * msg->var_slotid_list.max_size);
-        for(int i=0;i<msg->var_slotid_list.max_size;++i){
-            msg->var_slotid_list.item[i] = i;
-            msg->var_slotid_list.count += 1;
-        }
-        for(int i=0;i<msg->var_slotid_list.count;++i){
-            printf("%u ", msg->var_slotid_list.item[i]);
-        }
+
+        msg->var_slotid_list = (st_SLOTID_LIST_IN_ASYNCCONFIRMREQ_uint32_list *)pbstru_malloc(sizeof(st_SLOTID_LIST_IN_ASYNCCONFIRMREQ_uint32_list));
+        msg->var_slotid_list_tail = msg->var_slotid_list;
+        msg->var_slotid_list->next = NULL;
+        msg->var_slotid_list->value = 1000;
+        msg->var_slotid_list->next = (st_SLOTID_LIST_IN_ASYNCCONFIRMREQ_uint32_list *)pbstru_malloc(sizeof(st_SLOTID_LIST_IN_ASYNCCONFIRMREQ_uint32_list));
+        msg->var_slotid_list_tail = msg->var_slotid_list->next;
+        msg->var_slotid_list_tail->next = NULL;
+        msg->var_slotid_list_tail->value = 1001;
+
+        size_t size1 = encode_message_AsyncConfirmReq(msg, NULL);
+        assert(6 == size1);
+        size_t size2 = encode_message_AsyncConfirmReq(msg, buf);
+        assert(size1 == size2);
+        decode_message_AsyncConfirmReq(buf, size2, msg);
+        assert(1000 == msg->var_slotid_list->value);
+        assert(1001 == msg->var_slotid_list->next->value);
 
         destru_message_AsyncConfirmReq(msg);
-        assert(0 == msg->var_slotid_list.count);
-        assert(NULL == msg->var_slotid_list.item);
-        assert(0 == msg->var_slotid_list.max_size);
-    }
-    */
+        pbstru_free(msg);
 
+    }
+
+    assert(malloc_times == free_times);
+    printf("<Press any key to continue ...>\n");
+    getchar();
     printf("%s Done.\n", argv[0]);
 }
 
