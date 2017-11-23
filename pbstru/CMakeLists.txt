@@ -20,12 +20,22 @@ include_directories(
 add_subdirectory("./test_codec")
 
 ####################
+IF (WIN32)
 add_custom_target(
-   protobuf_lib
-   # COMMAND ./autogen.sh && ./configure && make -j
-   COMMAND make -j
-   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3
+    protobuf_lib
+    # COMMAND ./autogen.sh && ./configure && make -j
+    COMMAND mingw32-make
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build
 )
+ELSE()
+add_custom_target(
+    protobuf_lib
+    # COMMAND ./autogen.sh && ./configure && make -j
+    COMMAND make -j
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3
+)
+ENDIF()
+
 IF (WIN32)
 	message("${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build")
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
@@ -37,4 +47,4 @@ set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 # add the executable
 add_executable(pbstru ${SRC_FILES})
 target_link_libraries (pbstru  ${EXTRA_LIBS})
-add_dependencies(pbstru tcmalloc_lib protobuf_lib)
+add_dependencies(pbstru protobuf_lib)

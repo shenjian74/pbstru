@@ -14,15 +14,22 @@ include_directories(
 add_definitions(-D_TEST_CODEC)
 
 ####################
+IF (WIN32)
+add_custom_target(
+    auto_gen_src
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru.exe .
+    COMMAND del /S /F /Q codec
+    COMMAND md codec
+    COMMAND pbstru.exe cdb.proto cdb_ccc.proto
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
+)
+ELSE()
 add_custom_target(
    auto_gen_src
    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && rm -rf codec && mkdir codec && ./pbstru cdb.proto cdb_ccc.proto
    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
 )
-
-####################
-find_library(TCMALLOC_LIB NAMES tcmalloc HINTS "/usr/local/lib:../gperftools/.libs" )
-set (EXTRA_LIBS ${EXTRA_LIBS} ${TCMALLOC_LIB})
+ENDIF()
 
 # add the executable
 add_executable(${PROJECT_NAME} ${SRC_FILES1})
