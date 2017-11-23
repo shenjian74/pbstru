@@ -4,8 +4,8 @@ project (${PROJECT_NAME})
 cmake_minimum_required (VERSION 2.6)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-aux_source_directory(. SRC_FILES1)
-aux_source_directory(../bin/codec SRC_FILES1)
+aux_source_directory("." SRC_FILES1)
+aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/../bin/codec" SRC_FILES1)
 
 include_directories(
     ../bin/codec
@@ -14,22 +14,11 @@ include_directories(
 add_definitions(-D_TEST_CODEC)
 
 ####################
-IF (WIN32)
 add_custom_target(
     auto_gen_src
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru.exe .
-    COMMAND del /S /F /Q codec
-    COMMAND md codec
-    COMMAND pbstru.exe cdb.proto cdb_ccc.proto
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru.exe . && ${CMAKE_COMMAND} -E remove_directory codec && ${CMAKE_COMMAND} -E make_directory codec && pbstru cdb.proto cdb_ccc.proto
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
 )
-ELSE()
-add_custom_target(
-   auto_gen_src
-   COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && rm -rf codec && mkdir codec && ./pbstru cdb.proto cdb_ccc.proto
-   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
-)
-ENDIF()
 
 # add the executable
 add_executable(${PROJECT_NAME} ${SRC_FILES1})
