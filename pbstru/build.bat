@@ -3,5 +3,5 @@ rd /S /Q build
 md build
 cd build
 cmake -G "CodeBlocks - MinGW Makefiles" ..
-mingw32-make -j
+mingw32-make
 move pbstru.exe ../bin
