@@ -374,9 +374,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         {
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
                         get_struct_list_name(field), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
                         get_struct_list_name(field), field->name().c_str());
             }
             else
@@ -395,8 +395,8 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         {
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d */\n", get_struct_list_name(field), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;\n", get_struct_list_name(field), field->name().c_str());
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n", get_struct_list_name(field), field->name().c_str(), field->number());
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n", get_struct_list_name(field), field->name().c_str());
             }
             else
             {
@@ -413,8 +413,8 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         {
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d */\n", get_struct_list_name(field), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;\n", get_struct_list_name(field), field->name().c_str());
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n", get_struct_list_name(field), field->name().c_str(), field->number());
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n", get_struct_list_name(field), field->name().c_str());
             }
             else
             {
@@ -431,8 +431,8 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         {
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d */\n", get_struct_list_name(field), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;\n", get_struct_list_name(field), field->name().c_str());
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n", get_struct_list_name(field), field->name().c_str(), field->number());
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n", get_struct_list_name(field), field->name().c_str());
             }
             else
             {
@@ -449,8 +449,8 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         {
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d */\n", get_struct_list_name(field), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;\n", get_struct_list_name(field), field->name().c_str());
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n", get_struct_list_name(field), field->name().c_str(), field->number());
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n", get_struct_list_name(field), field->name().c_str());
             }
             else
             {
@@ -467,8 +467,8 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         {
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d */\n", get_struct_list_name(field), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;\n", get_struct_list_name(field), field->name().c_str());
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n", get_struct_list_name(field), field->name().c_str(), field->number());
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n", get_struct_list_name(field), field->name().c_str());
             }
             else
             {
@@ -493,8 +493,8 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         {
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d */\n", get_struct_list_name(field), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;\n", get_struct_list_name(field), field->name().c_str());
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n", get_struct_list_name(field), field->name().c_str(), field->number());
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n", get_struct_list_name(field), field->name().c_str());
             }
             else
             {
@@ -512,8 +512,8 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         {
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d */\n", get_struct_list_name(field), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;\n", get_struct_list_name(field), field->name().c_str());
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n", get_struct_list_name(field), field->name().c_str(), field->number());
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n", get_struct_list_name(field), field->name().c_str());
             }
             else
             {
@@ -563,15 +563,23 @@ void gen_header(const Descriptor *desc)
     fprintf(fp, "extern \"C\"{\n");
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n#include \"pbstru_comm.h\"\n");
+
+    std::set<std::string> headers;
+    headers.clear();
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
         if(FieldDescriptor::TYPE_MESSAGE == field->type())
         {
-            CBString str(field->message_type()->name().c_str());
-            str.tolower();
-            fprintf(fp, "#include \"%s.h\"\n", (LPCSTR)str);
+            std::string str(field->message_type()->name().c_str());
+            std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+            headers.insert(str);
         }
+    }
+    // 使用set去掉重复的头文件
+    for(std::set<std::string>::iterator it=headers.begin(); it!=headers.end(); ++it)
+    {
+        fprintf(fp, "#include \"%s.h\"\n", it->c_str());
     }
     fprintf(fp, "\n/*\n%s*/\n", desc->DebugString().c_str());
 
@@ -703,11 +711,9 @@ void gen_header(const Descriptor *desc)
     fprintf(fp, "} %s;\n", (LPCSTR)struct_name);
 
     fprintf(fp, "\n/* construct msg when first use, call clear_message_*() internaly. */\n");
-    fprintf(fp, "void constru_message_%s(%s* msg);\n",
-            desc->name().c_str(), (LPCSTR)struct_name);
+    fprintf(fp, "void constru_message_%s(%s *msg);\n", desc->name().c_str(), (LPCSTR)struct_name);
     fprintf(fp, "/* destruct msg */\n");
-    fprintf(fp, "void destru_message_%s(%s* msg);\n",
-            desc->name().c_str(), (LPCSTR)struct_name);
+    fprintf(fp, "void destru_message_%s(%s *msg);\n", desc->name().c_str(), (LPCSTR)struct_name);
 
     fprintf(fp, "\n/* clear and reuse msg */\n");
     fprintf(fp, "void clear_message_%s(%s *msg);\n",
@@ -749,8 +755,144 @@ void alloc_new_repeated_item(FILE *fp, const Descriptor *desc, const FieldDescri
     fprintf(fp, "                    var_%s->var_%s_tail->next = NULL;\n", desc->name().c_str(), field->name().c_str());
     fprintf(fp, "                }\n");
     fprintf(fp, "            }\n");
+    if(FieldDescriptor::TYPE_MESSAGE == field->type())
+    {
+        fprintf(fp, "            constru_message_%s(&(var_%s->var_%s_tail->value));\n",
+                field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+    }
+
 }
 
+void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
+{
+    int it_count = 0;
+
+    // 必要时打印临时变量
+    for(int i=0; i<desc->field_count(); ++i)
+    {
+        const FieldDescriptor *field = desc->field(i);
+        if(field->is_repeated())
+        {
+            if(!is_dynamic_repeated(field) && FieldDescriptor::TYPE_MESSAGE == field->type())
+            {
+                fprintf(fp, "    size_t i = 0;\n");
+                break;
+            }
+        }
+    }
+
+    for(int i=0; i<desc->field_count(); ++i)
+    {
+        const FieldDescriptor *field = desc->field(i);
+        if(field->is_repeated())
+        {
+            if(is_dynamic_repeated(field))
+            {
+                // Recursive clearing message
+                if(false == init)
+                {
+                    fprintf(fp, "    st_%s_list *it%d=var_%s->var_%s;\n", get_struct_list_name(field), ++it_count, desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "    for(; NULL!=it%d; ) {\n", it_count);
+                    fprintf(fp, "        st_%s_list *it_tmp = it%d;\n", get_struct_list_name(field), it_count);
+                    fprintf(fp, "        it%d=it%d->next;\n", it_count, it_count);
+                    if(FieldDescriptor::TYPE_MESSAGE == field->type())
+                    {
+                        fprintf(fp, "        clear_message_%s(&(it_tmp->value));\n", field->message_type()->name().c_str());
+                    }
+                    fprintf(fp, "        pbstru_free((void *)it_tmp);\n");
+                    fprintf(fp, "    }\n");
+                }
+                fprintf(fp, "    var_%s->var_%s = NULL;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "    var_%s->var_%s_tail = NULL;\n\n", desc->name().c_str(), field->name().c_str());
+            }
+            else
+            {
+                if(init)
+                {
+                    CBString field_name_upper(field->name().c_str());
+                    field_name_upper.toupper();
+                    CBString field_containing_type_upper(field->containing_type()->name().c_str());
+                    field_containing_type_upper.toupper();
+
+                    if(FieldDescriptor::TYPE_MESSAGE == field->type())
+                    {
+                        fprintf(fp, "    for(i=0; i<PBSTRU_MAX_%s_IN_%s; ++i){\n", (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper);
+                        fprintf(fp, "        constru_message_%s(&(var_%s->var_%s.item[i]));\n",
+                                field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                        fprintf(fp, "    }\n");
+                    }
+                }
+                else
+                {
+                    if(FieldDescriptor::TYPE_MESSAGE == field->type())
+                    {
+                        fprintf(fp, "    for(i=0; i<var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
+                        fprintf(fp, "        clear_message_%s(&(var_%s->var_%s.item[i]));\n",
+                                field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                        fprintf(fp, "    }\n");
+                    }
+                }
+                fprintf(fp, "    var_%s->var_%s.count = 0;\n", desc->name().c_str(), field->name().c_str());
+            }
+        }
+        else
+        {
+            if(init)
+            {
+                if(FieldDescriptor::TYPE_MESSAGE == field->type())
+                {
+                    fprintf(fp, "        constru_message_%s(&(var_%s->var_%s));\n",
+                            field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                }
+            }
+            else
+            {
+                char spaces[] = "          ";
+                if(field->is_optional())
+                {
+                    fprintf(fp, "    if(TRUE == var_%s->has_%s){\n", desc->name().c_str(), field->name().c_str());
+                    spaces[8] = '\0';
+                } else {
+                    spaces[4] = '\0';
+                }
+                switch(field->type())
+                {
+                case FieldDescriptor::TYPE_FIXED32:
+                case FieldDescriptor::TYPE_FIXED64:
+                case FieldDescriptor::TYPE_UINT32:
+                case FieldDescriptor::TYPE_UINT64:
+                    fprintf(fp, "%svar_%s->var_%s = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
+                    break;
+                case FieldDescriptor::TYPE_BOOL:
+                    fprintf(fp, "%svar_%s->var_%s = FALSE;\n", spaces, desc->name().c_str(), field->name().c_str());
+                    break;
+                case FieldDescriptor::TYPE_ENUM:
+                    break;
+                case FieldDescriptor::TYPE_STRING:
+                case FieldDescriptor::TYPE_BYTES:
+                    fprintf(fp, "%svar_%s->var_%s.length = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "%svar_%s->var_%s.data = NULL;\n", spaces, desc->name().c_str(), field->name().c_str());
+                    break;
+                case FieldDescriptor::TYPE_MESSAGE:
+                    fprintf(fp, "%sclear_message_%s(&(var_%s->var_%s));\n", spaces,
+                            field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                    break;
+                default:
+                    fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
+                    break;
+                }
+                if(field->is_optional())
+                {
+                    fprintf(fp, "    }\n");
+                }
+            }
+            if(field->is_optional())
+            {
+                fprintf(fp, "    var_%s->has_%s = FALSE;\n", desc->name().c_str(), field->name().c_str());
+            }
+        }
+    }
+}
 
 void gen_source(const Descriptor *desc)
 {
@@ -784,130 +926,20 @@ void gen_source(const Descriptor *desc)
 
     ////////////////////////////////////////
     // clear function
-    fprintf(fp, "void constru_message_%s(%s* var_%s){\n",
-            desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
-
-    for(int i=0; i<desc->field_count(); ++i)
-    {
-        const FieldDescriptor *field = desc->field(i);
-        if(field->is_repeated())
-        {
-            if(is_dynamic_repeated(field))
-            {
-                fprintf(fp, "    var_%s->var_%s = NULL;\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "    var_%s->var_%s_tail = NULL;\n", desc->name().c_str(), field->name().c_str());
-            }
-        }
-    }
-    fprintf(fp, "    clear_message_%s(var_%s);\n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "void constru_message_%s(%s *var_%s){\n", desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
+    print_clear_message(fp, desc, true);
     fprintf(fp, "}\n");
 
     ////////////////////////////////////////
     fprintf(fp, "\nvoid destru_message_%s(%s* var_%s){\n",
             desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
-
-    for(int i=0; i<desc->field_count(); ++i)
-    {
-        const FieldDescriptor *field = desc->field(i);
-        if(field->is_repeated())
-        {
-            if(is_dynamic_repeated(field))
-            {
-            }
-            else
-            {
-                fprintf(fp, "    var_%s->var_%s.count = 0;\n", desc->name().c_str(), field->name().c_str());
-            }
-        }
-        else if(field->is_optional())
-        {
-            fprintf(fp, "    var_%s->has_%s = FALSE;\n", desc->name().c_str(), field->name().c_str());
-        }
-        else
-        {
-            switch(field->type())
-            {
-            case FieldDescriptor::TYPE_FIXED32:
-            case FieldDescriptor::TYPE_FIXED64:
-            case FieldDescriptor::TYPE_UINT32:
-            case FieldDescriptor::TYPE_UINT64:
-            case FieldDescriptor::TYPE_BOOL:
-            case FieldDescriptor::TYPE_ENUM:
-            case FieldDescriptor::TYPE_STRING:
-            case FieldDescriptor::TYPE_BYTES:
-                break;
-            case FieldDescriptor::TYPE_MESSAGE:
-                fprintf(fp, "    destru_message_%s(&(var_%s->var_%s));\n",
-                        field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                break;
-            default:
-                fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
-                break;
-            }
-        }
-    }
     fprintf(fp, "    clear_message_%s(var_%s);\n", desc->name().c_str(), desc->name().c_str());
     fprintf(fp, "}\n");
 
     // clear function
     fprintf(fp, "\nvoid clear_message_%s(%s* var_%s){\n",
             desc->name().c_str(), (LPCSTR)struct_name, desc->name().c_str());
-    int it_count = 0;
-    for(int i=0; i<desc->field_count(); ++i)
-    {
-        const FieldDescriptor *field = desc->field(i);
-        if(field->is_repeated())
-        {
-            if(is_dynamic_repeated(field))
-            {
-                // Recursive clearing message
-                fprintf(fp, "    st_%s_list *it%d=var_%s->var_%s;\n", get_struct_list_name(field), ++it_count, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "    for(; NULL!=it%d; ) {\n", it_count);
-                fprintf(fp, "        void *it_tmp = it%d;\n", it_count);
-                fprintf(fp, "        it%d=it%d->next;\n", it_count, it_count);
-                fprintf(fp, "        pbstru_free(it_tmp);\n");
-                fprintf(fp, "    }\n");
-                fprintf(fp, "    var_%s->var_%s = NULL;\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "    var_%s->var_%s_tail = NULL;\n\n", desc->name().c_str(), field->name().c_str());
-            }
-            else
-            {
-                fprintf(fp, "    var_%s->var_%s.count = 0;\n", desc->name().c_str(), field->name().c_str());
-            }
-        }
-        else if(field->is_optional())
-        {
-            fprintf(fp, "    var_%s->has_%s = FALSE;\n", desc->name().c_str(), field->name().c_str());
-        }
-        else
-        {
-            switch(field->type())
-            {
-            case FieldDescriptor::TYPE_FIXED32:
-            case FieldDescriptor::TYPE_FIXED64:
-            case FieldDescriptor::TYPE_UINT32:
-            case FieldDescriptor::TYPE_UINT64:
-                fprintf(fp, "    var_%s->var_%s = 0;\n", desc->name().c_str(), field->name().c_str());
-                break;
-            case FieldDescriptor::TYPE_BOOL:
-                fprintf(fp, "    var_%s->var_%s = FALSE;\n", desc->name().c_str(), field->name().c_str());
-                break;
-            case FieldDescriptor::TYPE_ENUM:
-                break;
-            case FieldDescriptor::TYPE_STRING:
-            case FieldDescriptor::TYPE_BYTES:
-                fprintf(fp, "    var_%s->var_%s.length = 0;\n", desc->name().c_str(), field->name().c_str());
-                break;
-            case FieldDescriptor::TYPE_MESSAGE:
-                fprintf(fp, "    clear_message_%s(&(var_%s->var_%s));\n",
-                        field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                break;
-            default:
-                fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
-                break;
-            }
-        }
-    }
+    print_clear_message(fp, desc, false);
     fprintf(fp, "}\n");
 
     ////////////////////////////////////////
@@ -937,7 +969,7 @@ void gen_source(const Descriptor *desc)
     }
     fprintf(fp, "    size_t offset = 0;\n");
 
-    it_count = 0;
+    int it_count = 0;
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
@@ -1011,7 +1043,7 @@ void gen_source(const Descriptor *desc)
             {
                 if(is_dynamic_repeated(field))
                 {
-                    fprintf(fp, "%s    *((WORD64 *)(buf + offset)) = it%d.value;\n",
+                    fprintf(fp, "%s    *((WORD64 *)(buf + offset)) = it%d->value;\n",
                             (LPCSTR)prefix_spaces, it_count);
                 }
                 else
@@ -1263,10 +1295,10 @@ void gen_source(const Descriptor *desc)
                             (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper);
                     fprintf(fp, "                return FALSE;  /* 数组超限 */\n");
                     fprintf(fp, "            }\n");
-                    fprintf(fp, "            var_%s->var_%s.item[var_%s->var%s.count] = *((DWORD *)(buf + offset));\n",
+                    fprintf(fp, "            var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n",
                             desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                     fprintf(fp, "            offset += sizeof(DWORD);\n");
-                    fprintf(fp, "            var_%s->var%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "            var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
                 }
             }
             else if(field->is_optional())

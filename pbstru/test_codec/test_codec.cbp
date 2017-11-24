@@ -338,6 +338,12 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../bin/codec/userinfo.h" />
+		<Unit filename="../bin/codec/ut_test_message.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/ut_test_sub_message.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="test_codec.cpp" />
 		<Extensions>
 			<code_completion />
