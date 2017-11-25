@@ -22,7 +22,7 @@ using namespace google::protobuf;
 const char struct_prefix[] = "st_";
 const char struct_postfix[] = "";
 // 结构名称是否需要小写
-const bool is_struct_lowercase = false;
+const bool is_struct_lowercase = true;
 ///////////////////////////////////////////////////////////////////////////////
 
 const char __THIS_FILE__[] = "pbstru.cpp";
@@ -264,14 +264,15 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, int* max_count
 
 LPCSTR get_struct_list_name(const FieldDescriptor *field)
 {
-    CBString field_name_upper(field->name().c_str());
-    field_name_upper.toupper();
-    CBString field_containing_type_upper(field->containing_type()->name().c_str());
-    field_containing_type_upper.toupper();
+    CBString field_name_lower(field->name().c_str());
+    field_name_lower.tolower();
+    CBString field_containing_type_lower(field->containing_type()->name().c_str());
+    field_containing_type_lower.tolower();
+    CBString msg_enum_name;
 
     static CBString struct_list_name;
 
-    struct_list_name = field_name_upper + "_IN_" + field_containing_type_upper;
+    struct_list_name = field_name_lower + "_in_" + field_containing_type_lower;
     switch(field->type())
     {
     case FieldDescriptor::TYPE_FIXED32:
@@ -292,10 +293,14 @@ LPCSTR get_struct_list_name(const FieldDescriptor *field)
         struct_list_name += CBString("_buffer");
         break;
     case FieldDescriptor::TYPE_MESSAGE:
-        struct_list_name += CBString("_") + CBString(field->message_type()->name().c_str());
+        msg_enum_name = CBString(field->message_type()->name().c_str());
+        msg_enum_name.tolower();
+        struct_list_name += CBString("_") + msg_enum_name;
         break;
     case FieldDescriptor::TYPE_ENUM:
-        struct_list_name += CBString("_") + CBString(field->enum_type()->name().c_str());
+        msg_enum_name = CBString(field->enum_type()->name().c_str());
+        msg_enum_name.tolower();
+        struct_list_name += CBString("_") + msg_enum_name;
         break;
     default:
         struct_list_name = "";
