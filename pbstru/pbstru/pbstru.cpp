@@ -1293,6 +1293,7 @@ void gen_source(const Descriptor *desc)
                     alloc_new_repeated_item(fp, desc, field);
                     fprintf(fp, "            var_%s->var_%s_tail->value = *((DWORD *)(buf + offset));\n",
                             desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "            offset += sizeof(DWORD);\n");
                 }
                 else
                 {
@@ -1327,6 +1328,7 @@ void gen_source(const Descriptor *desc)
                     alloc_new_repeated_item(fp, desc, field);
                     fprintf(fp, "            var_%s->var_%s_tail->value = *((WORD64 *)(buf + offset));\n",
                             desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "            offset += sizeof(WORD64);\n");
                 }
                 else
                 {
