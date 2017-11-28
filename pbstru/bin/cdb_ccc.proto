@@ -492,26 +492,36 @@ message ut_test_message
 	optional uint32 o_uint32 = 2;
 	repeated uint32 f_uint32 = 3;
 	repeated uint32 d_uint32 = 4;
+	repeated uint32 pf_uint32 = 5 [packed=true];
+	repeated uint32 pd_uint32 = 6 [packed=true];
 	
 	required uint64 r_uint64 = 11;
 	optional uint64 o_uint64 = 12;
 	repeated uint64 f_uint64 = 13;
 	repeated uint64 d_uint64 = 14;
+	repeated uint64 pf_uint64 = 15 [packed=true];
+	repeated uint64 pd_uint64 = 16 [packed=true];
 
 	required fixed32 r_fixed32 = 21;
 	optional fixed32 o_fixed32 = 22;
 	repeated fixed32 f_fixed32 = 23;
 	repeated fixed32 d_fixed32 = 24;
+	repeated fixed32 pf_fixed32 = 25 [packed=true];
+	repeated fixed32 pd_fixed32 = 26 [packed=true];
 
 	required fixed64 r_fixed64 = 31;
 	optional fixed64 o_fixed64 = 32;
 	repeated fixed64 f_fixed64 = 33;
 	repeated fixed64 d_fixed64 = 34;
+	repeated fixed64 pf_fixed64 = 35 [packed=true];
+	repeated fixed64 pd_fixed64 = 36 [packed=true];
 
 	required bool r_bool = 41;
 	optional bool o_bool = 42;
 	repeated bool f_bool = 43;
 	repeated bool d_bool = 44;	
+	repeated bool pf_bool = 45 [packed=true];
+	repeated bool pd_bool = 46 [packed=true];	
 
 	required string r_string = 51;
 	optional string o_string = 52;
