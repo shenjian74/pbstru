@@ -94,6 +94,7 @@ bool verify_ut_test_sub_message(st_ut_test_sub_message *msg)
             }
         }
     }
+    return false;
 }
 
 st_addrequest var_AddRequest;
@@ -354,6 +355,18 @@ int main(int argc, char* argv[])
             msg->var_d_uint32_tail->next = NULL;
             msg->var_d_uint32_tail->value = 1001;
 
+            msg->var_pf_uint32.item[0] = 14;
+            msg->var_pf_uint32.item[1] = 15;
+
+            msg->var_pd_uint32 = (st_pd_uint32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_pd_uint32_in_ut_test_message_uint32_list));
+            msg->var_pd_uint32_tail = msg->var_pd_uint32;
+            msg->var_pd_uint32->next = NULL;
+            msg->var_pd_uint32->value = 16;
+            msg->var_pd_uint32->next = (st_pd_uint32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_pd_uint32_in_ut_test_message_uint32_list));
+            msg->var_pd_uint32_tail = msg->var_pd_uint32->next;
+            msg->var_pd_uint32_tail->next = NULL;
+            msg->var_pd_uint32_tail->value = 17;
+
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
             assert(size1 == size2);
@@ -368,6 +381,11 @@ int main(int argc, char* argv[])
             assert(1000 == msg->var_d_uint32->value);
             assert(1001 == msg->var_d_uint32->next->value);
             assert(NULL == msg->var_d_uint32->next->next);
+            assert(14 == msg->var_pf_uint32.item[0]);
+            assert(15 == msg->var_pf_uint32.item[1]);
+            assert(16 == msg->var_pd_uint32->value);
+            assert(17 == msg->var_pd_uint32->next->value);
+            assert(NULL == msg->var_pd_uint32->next->next);
         }
 
         for(int i=0; i<3; ++i)
@@ -389,6 +407,18 @@ int main(int argc, char* argv[])
             msg->var_d_uint64_tail->next = NULL;
             msg->var_d_uint64_tail->value = 1001;
 
+            msg->var_pf_uint64.item[0] = 14;
+            msg->var_pf_uint64.item[1] = 15;
+
+            msg->var_pd_uint64 = (st_pd_uint64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_pd_uint64_in_ut_test_message_uint64_list));
+            msg->var_pd_uint64_tail = msg->var_pd_uint64;
+            msg->var_pd_uint64->next = NULL;
+            msg->var_pd_uint64->value = 16;
+            msg->var_pd_uint64->next = (st_pd_uint64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_pd_uint64_in_ut_test_message_uint64_list));
+            msg->var_pd_uint64_tail = msg->var_pd_uint64->next;
+            msg->var_pd_uint64_tail->next = NULL;
+            msg->var_pd_uint64_tail->value = 17;
+
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
             assert(size1 == size2);
@@ -403,6 +433,11 @@ int main(int argc, char* argv[])
             assert(1000 == msg->var_d_uint64->value);
             assert(1001 == msg->var_d_uint64->next->value);
             assert(NULL == msg->var_d_uint64->next->next);
+            assert(14 == msg->var_pf_uint64.item[0]);
+            assert(15 == msg->var_pf_uint64.item[1]);
+            assert(16 == msg->var_pd_uint64->value);
+            assert(17 == msg->var_pd_uint64->next->value);
+            assert(NULL == msg->var_pd_uint64->next->next);
         }
 
         for(int i=0; i<3; ++i)
@@ -424,6 +459,18 @@ int main(int argc, char* argv[])
             msg->var_d_fixed32_tail->next = NULL;
             msg->var_d_fixed32_tail->value = 1001;
 
+            msg->var_pf_fixed32.item[0] = 14;
+            msg->var_pf_fixed32.item[1] = 15;
+
+            msg->var_pd_fixed32 = (st_pd_fixed32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_pd_fixed32_in_ut_test_message_uint32_list));
+            msg->var_pd_fixed32_tail = msg->var_pd_fixed32;
+            msg->var_pd_fixed32->next = NULL;
+            msg->var_pd_fixed32->value = 16;
+            msg->var_pd_fixed32->next = (st_pd_fixed32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_pd_fixed32_in_ut_test_message_uint32_list));
+            msg->var_pd_fixed32_tail = msg->var_pd_fixed32->next;
+            msg->var_pd_fixed32_tail->next = NULL;
+            msg->var_pd_fixed32_tail->value = 17;
+
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
             assert(size1 == size2);
@@ -438,6 +485,11 @@ int main(int argc, char* argv[])
             assert(1000 == msg->var_d_fixed32->value);
             assert(1001 == msg->var_d_fixed32->next->value);
             assert(NULL == msg->var_d_fixed32->next->next);
+            assert(14 == msg->var_pf_fixed32.item[0]);
+            assert(15 == msg->var_pf_fixed32.item[1]);
+            assert(16 == msg->var_pd_fixed32->value);
+            assert(17 == msg->var_pd_fixed32->next->value);
+            assert(NULL == msg->var_pd_fixed32->next->next);
         }
 
         for(int i=0; i<3; ++i)
@@ -459,6 +511,18 @@ int main(int argc, char* argv[])
             msg->var_d_fixed64_tail->next = NULL;
             msg->var_d_fixed64_tail->value = 1001;
 
+            msg->var_pf_fixed64.item[0] = 14;
+            msg->var_pf_fixed64.item[1] = 15;
+
+            msg->var_pd_fixed64 = (st_pd_fixed64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_pd_fixed64_in_ut_test_message_uint64_list));
+            msg->var_pd_fixed64_tail = msg->var_pd_fixed64;
+            msg->var_pd_fixed64->next = NULL;
+            msg->var_pd_fixed64->value = 16;
+            msg->var_pd_fixed64->next = (st_pd_fixed64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_pd_fixed64_in_ut_test_message_uint64_list));
+            msg->var_pd_fixed64_tail = msg->var_pd_fixed64->next;
+            msg->var_pd_fixed64_tail->next = NULL;
+            msg->var_pd_fixed64_tail->value = 17;
+
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
             assert(size1 == size2);
@@ -473,6 +537,11 @@ int main(int argc, char* argv[])
             assert(1000 == msg->var_d_fixed64->value);
             assert(1001 == msg->var_d_fixed64->next->value);
             assert(NULL == msg->var_d_fixed64->next->next);
+            assert(14 == msg->var_pf_fixed64.item[0]);
+            assert(15 == msg->var_pf_fixed64.item[1]);
+            assert(16 == msg->var_pd_fixed64->value);
+            assert(17 == msg->var_pd_fixed64->next->value);
+            assert(NULL == msg->var_pd_fixed64->next->next);
         }
 
         for(int i=0; i<3; ++i)
@@ -494,6 +563,18 @@ int main(int argc, char* argv[])
             msg->var_d_bool_tail->next = NULL;
             msg->var_d_bool_tail->value = FALSE;
 
+            msg->var_pf_bool.item[0] = TRUE;
+            msg->var_pf_bool.item[1] = FALSE;
+
+            msg->var_pd_bool = (st_pd_bool_in_ut_test_message_boolean_list *)pbstru_malloc(sizeof(st_pd_bool_in_ut_test_message_boolean_list));
+            msg->var_pd_bool_tail = msg->var_pd_bool;
+            msg->var_pd_bool->next = NULL;
+            msg->var_pd_bool->value = TRUE;
+            msg->var_pd_bool->next = (st_pd_bool_in_ut_test_message_boolean_list *)pbstru_malloc(sizeof(st_pd_bool_in_ut_test_message_boolean_list));
+            msg->var_pd_bool_tail = msg->var_pd_bool->next;
+            msg->var_pd_bool_tail->next = NULL;
+            msg->var_pd_bool_tail->value = FALSE;
+
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
             assert(size1 == size2);
@@ -508,6 +589,11 @@ int main(int argc, char* argv[])
             assert(TRUE == msg->var_d_bool->value);
             assert(FALSE == msg->var_d_bool->next->value);
             assert(NULL == msg->var_d_bool->next->next);
+            assert(TRUE == msg->var_pf_bool.item[0]);
+            assert(FALSE == msg->var_pf_bool.item[1]);
+            assert(TRUE == msg->var_pd_bool->value);
+            assert(FALSE == msg->var_pd_bool->next->value);
+            assert(NULL == msg->var_pd_bool->next->next);
         }
 
         for(int i=0; i<3; ++i)
