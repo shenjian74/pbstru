@@ -72,11 +72,11 @@ void *pbstru_malloc(size_t size)
 void fill_ut_test_sub_message(st_ut_test_sub_message *msg)
 {
     clear_message_ut_test_sub_message(msg);
-    msg->var_d_uint32 = (st_D_UINT32_IN_UT_TEST_SUB_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_UINT32_IN_UT_TEST_SUB_MESSAGE_uint32_list));
+    msg->var_d_uint32 = (st_d_uint32_in_ut_test_sub_message_uint32_list *)pbstru_malloc(sizeof(st_d_uint32_in_ut_test_sub_message_uint32_list));
     msg->var_d_uint32_tail = msg->var_d_uint32;
     msg->var_d_uint32->next = NULL;
     msg->var_d_uint32->value = 1000;
-    msg->var_d_uint32->next = (st_D_UINT32_IN_UT_TEST_SUB_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_UINT32_IN_UT_TEST_SUB_MESSAGE_uint32_list));
+    msg->var_d_uint32->next = (st_d_uint32_in_ut_test_sub_message_uint32_list *)pbstru_malloc(sizeof(st_d_uint32_in_ut_test_sub_message_uint32_list));
     msg->var_d_uint32_tail = msg->var_d_uint32->next;
     msg->var_d_uint32_tail->next = NULL;
     msg->var_d_uint32_tail->value = 1001;
@@ -94,44 +94,45 @@ bool verify_ut_test_sub_message(st_ut_test_sub_message *msg)
             }
         }
     }
+    return false;
 }
 
-st_AddRequest var_AddRequest;
+st_addrequest var_AddRequest;
 int main(int argc, char* argv[])
 {
     BYTE buf[1024];
     size_t buf_len;
 
-    printf("sizeof(st_AddRequest) == %u\n", sizeof(st_AddRequest));
-    printf("sizeof(st_QueryRequest) == %u\n", sizeof(st_QueryRequest));
+    printf("sizeof(st_addrequest) == %u\n", sizeof(st_addrequest));
+    printf("sizeof(st_queryrequest) == %u\n", sizeof(st_queryrequest));
     {
-        printf("  sizeof(st_Identifiers) == %u\n", sizeof(st_Identifiers));
-        printf("  sizeof(st_RANGE_IN_QUERYREQUEST_Range_list) == %u\n", sizeof(st_RANGE_IN_QUERYREQUEST_Range_list));
+        printf("  sizeof(st_identifiers) == %u\n", sizeof(st_identifiers));
+        printf("  sizeof(st_range_in_queryrequest_range_list) == %u\n", sizeof(st_range_in_queryrequest_range_list));
         {
-            printf("    sizeof(st_Path) == %u\n", sizeof(st_Path));
+            printf("    sizeof(st_Path) == %u\n", sizeof(st_path));
             printf("    sizeof(enum_Scope) == %u\n", sizeof(enum_Scope));
-            printf("    sizeof(st_FIELD_IN_RANGE_uint32_list) == %u\n", sizeof(st_FIELD_IN_RANGE_uint32_list));
-            printf("    sizeof(st_FILTER_IN_RANGE_Filter_list) == %u\n", sizeof(st_FILTER_IN_RANGE_Filter_list));
+            printf("    sizeof(st_field_in_range_uint32_list) == %u\n", sizeof(st_field_in_range_uint32_list));
+            printf("    sizeof(st_filter_in_range_filter_list) == %u\n", sizeof(st_filter_in_range_filter_list));
         }
-        printf("  sizeof(st_CONTROL_IN_QUERYREQUEST_Control_list) == %u\n", sizeof(st_CONTROL_IN_QUERYREQUEST_Control_list));
-        printf("  sizeof(st_SPINFO_IN_QUERYREQUEST_SPInfo_list) == %u\n", sizeof(st_SPINFO_IN_QUERYREQUEST_SPInfo_list));
-        printf("  sizeof(st_BatchQRYPI) == %u\n", sizeof(st_BatchQRYPI));
+        printf("  sizeof(st_control_in_queryrequest_control_list) == %u\n", sizeof(st_control_in_queryrequest_control_list));
+        printf("  sizeof(st_spinfo_in_queryrequest_spinfo_list) == %u\n", sizeof(st_spinfo_in_queryrequest_spinfo_list));
+        printf("  sizeof(st_batchqrypi) == %u\n", sizeof(st_batchqrypi));
     }
-    printf("sizeof(st_ModifyRequest) == %u\n", sizeof(st_ModifyRequest));
+    printf("sizeof(st_modifyrequest) == %u\n", sizeof(st_modifyrequest));
     {
-        printf("  sizeof(st_ModData) == %u\n", sizeof(st_ModData));
-        printf("  sizeof(st_ModField_list) == %u\n", sizeof(st_FIELD_IN_MODDATA_ModField_list));
+        printf("  sizeof(st_moddata) == %u\n", sizeof(st_moddata));
+        printf("  sizeof(st_modfield_list) == %u\n", sizeof(st_field_in_moddata_modfield_list));
     }
-    printf("sizeof(st_DeleteRequest) == %u\n", sizeof(st_DeleteRequest));
-    printf("sizeof(st_CompoundRequest) == %u\n", sizeof(st_CompoundRequest));
-    printf("sizeof(st_Response) == %u\n", sizeof(st_Response));
-    printf("sizeof(st_StatResp) == %u\n", sizeof(st_StatResp));
+    printf("sizeof(st_deleterequest) == %u\n", sizeof(st_deleterequest));
+    printf("sizeof(st_compoundrequest) == %u\n", sizeof(st_compoundrequest));
+    printf("sizeof(st_response) == %u\n", sizeof(st_response));
+    printf("sizeof(st_statresp) == %u\n", sizeof(st_statresp));
 
-//sizeof(st_AddRequest) == 56424
-//sizeof(st_QueryRequest) == 7928
-//  sizeof(st_Identifiers) == 1064
+//sizeof(st_addrequest) == 56424
+//sizeof(st_queryrequest) == 7928
+//  sizeof(st_identifiers) == 1064
 //  sizeof(st_Range_list) == 6788
-//    sizeof(st_Path) == 148
+//    sizeof(st_path) == 148
 //    sizeof(enum_Scope) == 4
 //    sizeof(st_uint32_list) == 8
 //    sizeof(st_Filter_list) == 52
@@ -147,7 +148,9 @@ int main(int argc, char* argv[])
 //sizeof(st_StatResp) == 65568
 
     {
-        st_PrimaryKey var_PrimaryKey = { 0 };
+        st_primarykey var_PrimaryKey;
+        constru_message_PrimaryKey(&var_PrimaryKey);
+
         var_PrimaryKey.var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
         var_PrimaryKey.var_name.length = strlen(var_PrimaryKey.var_name.data);
         var_PrimaryKey.var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
@@ -163,7 +166,9 @@ int main(int argc, char* argv[])
     }
 
     {
-        st_Path var_Path = { 0 };
+        st_path var_Path;
+        constru_message_Path(&var_Path);
+
         var_Path.var_tid = 1000;
         var_Path.var_primary_key.item[0].var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
         var_Path.var_primary_key.item[0].var_name.length = strlen(var_Path.var_primary_key.item[0].var_name.data);
@@ -187,7 +192,8 @@ int main(int argc, char* argv[])
     }
 
     {
-        st_Tuple var_Tuple = { 0 };
+        st_tuple var_Tuple;
+        constru_message_Tuple(&var_Tuple);
         var_Tuple.var_path.var_tid = 1000;
         var_Tuple.var_path.var_primary_key.item[0].var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
         var_Tuple.var_path.var_primary_key.item[0].var_name.length = strlen(var_Tuple.var_path.var_primary_key.item[0].var_name.data);
@@ -231,8 +237,9 @@ int main(int argc, char* argv[])
     }
 
     {
-        clear_message_AddRequest(&var_AddRequest);
+        constru_message_AddRequest(&var_AddRequest);
 
+        clear_message_AddRequest(&var_AddRequest);
         var_AddRequest.var_identifiers.var_primary.count = 1;
         var_AddRequest.var_identifiers.var_primary.item[0].var_id_type = 1;
         var_AddRequest.var_identifiers.var_primary.item[0].var_value.count = 1;
@@ -250,7 +257,7 @@ int main(int argc, char* argv[])
         var_AddRequest.var_tuple.item[0].var_path.var_tid = 1000;
         var_AddRequest.var_tuple.item[0].var_path.var_primary_key.count = 2;
 
-        st_PrimaryKey *pk = &(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[0]);
+        st_primarykey *pk = &(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[0]);
         pk->var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
         pk->var_name.length = strlen(pk->var_name.data);
         pk->var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
@@ -311,11 +318,11 @@ int main(int argc, char* argv[])
         for(int i=0; i<3; ++i)
         {
             clear_message_ut_test_message(msg);
-            msg->var_d_uint32 = (st_D_UINT32_IN_UT_TEST_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_UINT32_IN_UT_TEST_MESSAGE_uint32_list));
+            msg->var_d_uint32 = (st_d_uint32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_d_uint32_in_ut_test_message_uint32_list));
             msg->var_d_uint32_tail = msg->var_d_uint32;
             msg->var_d_uint32->next = NULL;
             msg->var_d_uint32->value = 1000;
-            msg->var_d_uint32->next = (st_D_UINT32_IN_UT_TEST_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_UINT32_IN_UT_TEST_MESSAGE_uint32_list));
+            msg->var_d_uint32->next = (st_d_uint32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_d_uint32_in_ut_test_message_uint32_list));
             msg->var_d_uint32_tail = msg->var_d_uint32->next;
             msg->var_d_uint32_tail->next = NULL;
             msg->var_d_uint32_tail->value = 1001;
@@ -339,14 +346,26 @@ int main(int argc, char* argv[])
             msg->var_f_uint32.item[0] = 12;
             msg->var_f_uint32.item[1] = 13;
 
-            msg->var_d_uint32 = (st_D_UINT32_IN_UT_TEST_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_UINT32_IN_UT_TEST_MESSAGE_uint32_list));
+            msg->var_d_uint32 = (st_d_uint32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_d_uint32_in_ut_test_message_uint32_list));
             msg->var_d_uint32_tail = msg->var_d_uint32;
             msg->var_d_uint32->next = NULL;
             msg->var_d_uint32->value = 1000;
-            msg->var_d_uint32->next = (st_D_UINT32_IN_UT_TEST_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_UINT32_IN_UT_TEST_MESSAGE_uint32_list));
+            msg->var_d_uint32->next = (st_d_uint32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_d_uint32_in_ut_test_message_uint32_list));
             msg->var_d_uint32_tail = msg->var_d_uint32->next;
             msg->var_d_uint32_tail->next = NULL;
             msg->var_d_uint32_tail->value = 1001;
+
+            msg->var_pf_uint32.item[0] = 14;
+            msg->var_pf_uint32.item[1] = 15;
+
+            msg->var_pd_uint32 = (st_pd_uint32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_pd_uint32_in_ut_test_message_uint32_list));
+            msg->var_pd_uint32_tail = msg->var_pd_uint32;
+            msg->var_pd_uint32->next = NULL;
+            msg->var_pd_uint32->value = 16;
+            msg->var_pd_uint32->next = (st_pd_uint32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_pd_uint32_in_ut_test_message_uint32_list));
+            msg->var_pd_uint32_tail = msg->var_pd_uint32->next;
+            msg->var_pd_uint32_tail->next = NULL;
+            msg->var_pd_uint32_tail->value = 17;
 
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
@@ -362,6 +381,11 @@ int main(int argc, char* argv[])
             assert(1000 == msg->var_d_uint32->value);
             assert(1001 == msg->var_d_uint32->next->value);
             assert(NULL == msg->var_d_uint32->next->next);
+            assert(14 == msg->var_pf_uint32.item[0]);
+            assert(15 == msg->var_pf_uint32.item[1]);
+            assert(16 == msg->var_pd_uint32->value);
+            assert(17 == msg->var_pd_uint32->next->value);
+            assert(NULL == msg->var_pd_uint32->next->next);
         }
 
         for(int i=0; i<3; ++i)
@@ -374,14 +398,26 @@ int main(int argc, char* argv[])
             msg->var_f_uint64.item[0] = 12;
             msg->var_f_uint64.item[1] = 13;
 
-            msg->var_d_uint64 = (st_D_UINT64_IN_UT_TEST_MESSAGE_uint64_list *)pbstru_malloc(sizeof(st_D_UINT64_IN_UT_TEST_MESSAGE_uint64_list));
+            msg->var_d_uint64 = (st_d_uint64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_d_uint64_in_ut_test_message_uint64_list));
             msg->var_d_uint64_tail = msg->var_d_uint64;
             msg->var_d_uint64->next = NULL;
             msg->var_d_uint64->value = 1000;
-            msg->var_d_uint64->next = (st_D_UINT64_IN_UT_TEST_MESSAGE_uint64_list *)pbstru_malloc(sizeof(st_D_UINT64_IN_UT_TEST_MESSAGE_uint64_list));
+            msg->var_d_uint64->next = (st_d_uint64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_d_uint64_in_ut_test_message_uint64_list));
             msg->var_d_uint64_tail = msg->var_d_uint64->next;
             msg->var_d_uint64_tail->next = NULL;
             msg->var_d_uint64_tail->value = 1001;
+
+            msg->var_pf_uint64.item[0] = 14;
+            msg->var_pf_uint64.item[1] = 15;
+
+            msg->var_pd_uint64 = (st_pd_uint64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_pd_uint64_in_ut_test_message_uint64_list));
+            msg->var_pd_uint64_tail = msg->var_pd_uint64;
+            msg->var_pd_uint64->next = NULL;
+            msg->var_pd_uint64->value = 16;
+            msg->var_pd_uint64->next = (st_pd_uint64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_pd_uint64_in_ut_test_message_uint64_list));
+            msg->var_pd_uint64_tail = msg->var_pd_uint64->next;
+            msg->var_pd_uint64_tail->next = NULL;
+            msg->var_pd_uint64_tail->value = 17;
 
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
@@ -397,6 +433,11 @@ int main(int argc, char* argv[])
             assert(1000 == msg->var_d_uint64->value);
             assert(1001 == msg->var_d_uint64->next->value);
             assert(NULL == msg->var_d_uint64->next->next);
+            assert(14 == msg->var_pf_uint64.item[0]);
+            assert(15 == msg->var_pf_uint64.item[1]);
+            assert(16 == msg->var_pd_uint64->value);
+            assert(17 == msg->var_pd_uint64->next->value);
+            assert(NULL == msg->var_pd_uint64->next->next);
         }
 
         for(int i=0; i<3; ++i)
@@ -409,14 +450,26 @@ int main(int argc, char* argv[])
             msg->var_f_fixed32.item[0] = 12;
             msg->var_f_fixed32.item[1] = 13;
 
-            msg->var_d_fixed32 = (st_D_FIXED32_IN_UT_TEST_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_FIXED32_IN_UT_TEST_MESSAGE_uint32_list));
+            msg->var_d_fixed32 = (st_d_fixed32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_d_fixed32_in_ut_test_message_uint32_list));
             msg->var_d_fixed32_tail = msg->var_d_fixed32;
             msg->var_d_fixed32->next = NULL;
             msg->var_d_fixed32->value = 1000;
-            msg->var_d_fixed32->next = (st_D_FIXED32_IN_UT_TEST_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_FIXED32_IN_UT_TEST_MESSAGE_uint32_list));
+            msg->var_d_fixed32->next = (st_d_fixed32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_d_fixed32_in_ut_test_message_uint32_list));
             msg->var_d_fixed32_tail = msg->var_d_fixed32->next;
             msg->var_d_fixed32_tail->next = NULL;
             msg->var_d_fixed32_tail->value = 1001;
+
+            msg->var_pf_fixed32.item[0] = 14;
+            msg->var_pf_fixed32.item[1] = 15;
+
+            msg->var_pd_fixed32 = (st_pd_fixed32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_pd_fixed32_in_ut_test_message_uint32_list));
+            msg->var_pd_fixed32_tail = msg->var_pd_fixed32;
+            msg->var_pd_fixed32->next = NULL;
+            msg->var_pd_fixed32->value = 16;
+            msg->var_pd_fixed32->next = (st_pd_fixed32_in_ut_test_message_uint32_list *)pbstru_malloc(sizeof(st_pd_fixed32_in_ut_test_message_uint32_list));
+            msg->var_pd_fixed32_tail = msg->var_pd_fixed32->next;
+            msg->var_pd_fixed32_tail->next = NULL;
+            msg->var_pd_fixed32_tail->value = 17;
 
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
@@ -432,6 +485,11 @@ int main(int argc, char* argv[])
             assert(1000 == msg->var_d_fixed32->value);
             assert(1001 == msg->var_d_fixed32->next->value);
             assert(NULL == msg->var_d_fixed32->next->next);
+            assert(14 == msg->var_pf_fixed32.item[0]);
+            assert(15 == msg->var_pf_fixed32.item[1]);
+            assert(16 == msg->var_pd_fixed32->value);
+            assert(17 == msg->var_pd_fixed32->next->value);
+            assert(NULL == msg->var_pd_fixed32->next->next);
         }
 
         for(int i=0; i<3; ++i)
@@ -444,14 +502,26 @@ int main(int argc, char* argv[])
             msg->var_f_fixed64.item[0] = 12;
             msg->var_f_fixed64.item[1] = 13;
 
-            msg->var_d_fixed64 = (st_D_FIXED64_IN_UT_TEST_MESSAGE_uint64_list *)pbstru_malloc(sizeof(st_D_FIXED64_IN_UT_TEST_MESSAGE_uint64_list));
+            msg->var_d_fixed64 = (st_d_fixed64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_d_fixed64_in_ut_test_message_uint64_list));
             msg->var_d_fixed64_tail = msg->var_d_fixed64;
             msg->var_d_fixed64->next = NULL;
             msg->var_d_fixed64->value = 1000;
-            msg->var_d_fixed64->next = (st_D_FIXED64_IN_UT_TEST_MESSAGE_uint64_list *)pbstru_malloc(sizeof(st_D_FIXED64_IN_UT_TEST_MESSAGE_uint64_list));
+            msg->var_d_fixed64->next = (st_d_fixed64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_d_fixed64_in_ut_test_message_uint64_list));
             msg->var_d_fixed64_tail = msg->var_d_fixed64->next;
             msg->var_d_fixed64_tail->next = NULL;
             msg->var_d_fixed64_tail->value = 1001;
+
+            msg->var_pf_fixed64.item[0] = 14;
+            msg->var_pf_fixed64.item[1] = 15;
+
+            msg->var_pd_fixed64 = (st_pd_fixed64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_pd_fixed64_in_ut_test_message_uint64_list));
+            msg->var_pd_fixed64_tail = msg->var_pd_fixed64;
+            msg->var_pd_fixed64->next = NULL;
+            msg->var_pd_fixed64->value = 16;
+            msg->var_pd_fixed64->next = (st_pd_fixed64_in_ut_test_message_uint64_list *)pbstru_malloc(sizeof(st_pd_fixed64_in_ut_test_message_uint64_list));
+            msg->var_pd_fixed64_tail = msg->var_pd_fixed64->next;
+            msg->var_pd_fixed64_tail->next = NULL;
+            msg->var_pd_fixed64_tail->value = 17;
 
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
@@ -467,6 +537,11 @@ int main(int argc, char* argv[])
             assert(1000 == msg->var_d_fixed64->value);
             assert(1001 == msg->var_d_fixed64->next->value);
             assert(NULL == msg->var_d_fixed64->next->next);
+            assert(14 == msg->var_pf_fixed64.item[0]);
+            assert(15 == msg->var_pf_fixed64.item[1]);
+            assert(16 == msg->var_pd_fixed64->value);
+            assert(17 == msg->var_pd_fixed64->next->value);
+            assert(NULL == msg->var_pd_fixed64->next->next);
         }
 
         for(int i=0; i<3; ++i)
@@ -479,14 +554,26 @@ int main(int argc, char* argv[])
             msg->var_f_bool.item[0] = TRUE;
             msg->var_f_bool.item[1] = FALSE;
 
-            msg->var_d_bool = (st_D_BOOL_IN_UT_TEST_MESSAGE_boolean_list *)pbstru_malloc(sizeof(st_D_BOOL_IN_UT_TEST_MESSAGE_boolean_list));
+            msg->var_d_bool = (st_d_bool_in_ut_test_message_boolean_list *)pbstru_malloc(sizeof(st_d_bool_in_ut_test_message_boolean_list));
             msg->var_d_bool_tail = msg->var_d_bool;
             msg->var_d_bool->next = NULL;
             msg->var_d_bool->value = TRUE;
-            msg->var_d_bool->next = (st_D_BOOL_IN_UT_TEST_MESSAGE_boolean_list *)pbstru_malloc(sizeof(st_D_BOOL_IN_UT_TEST_MESSAGE_boolean_list));
+            msg->var_d_bool->next = (st_d_bool_in_ut_test_message_boolean_list *)pbstru_malloc(sizeof(st_d_bool_in_ut_test_message_boolean_list));
             msg->var_d_bool_tail = msg->var_d_bool->next;
             msg->var_d_bool_tail->next = NULL;
             msg->var_d_bool_tail->value = FALSE;
+
+            msg->var_pf_bool.item[0] = TRUE;
+            msg->var_pf_bool.item[1] = FALSE;
+
+            msg->var_pd_bool = (st_pd_bool_in_ut_test_message_boolean_list *)pbstru_malloc(sizeof(st_pd_bool_in_ut_test_message_boolean_list));
+            msg->var_pd_bool_tail = msg->var_pd_bool;
+            msg->var_pd_bool->next = NULL;
+            msg->var_pd_bool->value = TRUE;
+            msg->var_pd_bool->next = (st_pd_bool_in_ut_test_message_boolean_list *)pbstru_malloc(sizeof(st_pd_bool_in_ut_test_message_boolean_list));
+            msg->var_pd_bool_tail = msg->var_pd_bool->next;
+            msg->var_pd_bool_tail->next = NULL;
+            msg->var_pd_bool_tail->value = FALSE;
 
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
@@ -502,6 +589,11 @@ int main(int argc, char* argv[])
             assert(TRUE == msg->var_d_bool->value);
             assert(FALSE == msg->var_d_bool->next->value);
             assert(NULL == msg->var_d_bool->next->next);
+            assert(TRUE == msg->var_pf_bool.item[0]);
+            assert(FALSE == msg->var_pf_bool.item[1]);
+            assert(TRUE == msg->var_pd_bool->value);
+            assert(FALSE == msg->var_pd_bool->next->value);
+            assert(NULL == msg->var_pd_bool->next->next);
         }
 
         for(int i=0; i<3; ++i)
@@ -525,12 +617,12 @@ int main(int argc, char* argv[])
             msg->var_f_string.item[1].data = string4;
             msg->var_f_string.item[1].length = strlen(string4);
 
-            msg->var_d_string = (st_D_STRING_IN_UT_TEST_MESSAGE_string_list *)pbstru_malloc(sizeof(st_D_STRING_IN_UT_TEST_MESSAGE_string_list));
+            msg->var_d_string = (st_d_string_in_ut_test_message_string_list *)pbstru_malloc(sizeof(st_d_string_in_ut_test_message_string_list));
             msg->var_d_string_tail = msg->var_d_string;
             msg->var_d_string->next = NULL;
             msg->var_d_string->value.data = string5;
             msg->var_d_string->value.length = strlen(string5);
-            msg->var_d_string->next = (st_D_STRING_IN_UT_TEST_MESSAGE_string_list *)pbstru_malloc(sizeof(st_D_STRING_IN_UT_TEST_MESSAGE_string_list));
+            msg->var_d_string->next = (st_d_string_in_ut_test_message_string_list *)pbstru_malloc(sizeof(st_d_string_in_ut_test_message_string_list));
             msg->var_d_string_tail = msg->var_d_string->next;
             msg->var_d_string_tail->next = NULL;
             msg->var_d_string_tail->value.data = string6;
@@ -573,12 +665,12 @@ int main(int argc, char* argv[])
             msg->var_f_bytes.item[1].data = bytes4;
             msg->var_f_bytes.item[1].length = strlen((LPCSTR)bytes4);
 
-            msg->var_d_bytes = (st_D_BYTES_IN_UT_TEST_MESSAGE_buffer_list *)pbstru_malloc(sizeof(st_D_BYTES_IN_UT_TEST_MESSAGE_buffer_list));
+            msg->var_d_bytes = (st_d_bytes_in_ut_test_message_buffer_list *)pbstru_malloc(sizeof(st_d_bytes_in_ut_test_message_buffer_list));
             msg->var_d_bytes_tail = msg->var_d_bytes;
             msg->var_d_bytes->next = NULL;
             msg->var_d_bytes->value.data = bytes5;
             msg->var_d_bytes->value.length = strlen((LPCSTR)bytes5);
-            msg->var_d_bytes->next = (st_D_BYTES_IN_UT_TEST_MESSAGE_buffer_list *)pbstru_malloc(sizeof(st_D_BYTES_IN_UT_TEST_MESSAGE_buffer_list));
+            msg->var_d_bytes->next = (st_d_bytes_in_ut_test_message_buffer_list *)pbstru_malloc(sizeof(st_d_bytes_in_ut_test_message_buffer_list));
             msg->var_d_bytes_tail = msg->var_d_bytes->next;
             msg->var_d_bytes_tail->next = NULL;
             msg->var_d_bytes_tail->value.data = bytes6;
@@ -610,11 +702,11 @@ int main(int argc, char* argv[])
             msg->var_f_enum.item[0] = CLIENT_M;
             msg->var_f_enum.item[1] = SERVER_M;
 
-            msg->var_d_enum = (st_D_ENUM_IN_UT_TEST_MESSAGE_ut_test_enum_list *)pbstru_malloc(sizeof(st_D_ENUM_IN_UT_TEST_MESSAGE_ut_test_enum_list));
+            msg->var_d_enum = (st_d_enum_in_ut_test_message_ut_test_enum_list *)pbstru_malloc(sizeof(st_d_enum_in_ut_test_message_ut_test_enum_list));
             msg->var_d_enum_tail = msg->var_d_enum;
             msg->var_d_enum->next = NULL;
             msg->var_d_enum->value = CLIENT_M;
-            msg->var_d_enum->next = (st_D_ENUM_IN_UT_TEST_MESSAGE_ut_test_enum_list *)pbstru_malloc(sizeof(st_D_ENUM_IN_UT_TEST_MESSAGE_ut_test_enum_list));
+            msg->var_d_enum->next = (st_d_enum_in_ut_test_message_ut_test_enum_list *)pbstru_malloc(sizeof(st_d_enum_in_ut_test_message_ut_test_enum_list));
             msg->var_d_enum_tail = msg->var_d_enum->next;
             msg->var_d_enum_tail->next = NULL;
             msg->var_d_enum_tail->value = SERVER_M;
@@ -648,13 +740,13 @@ int main(int argc, char* argv[])
             fill_ut_test_sub_message(&(msg->var_f_message.item[1]));
             assert(malloc_times - 9 == free_times);
 
-            msg->var_d_message = (st_D_MESSAGE_IN_UT_TEST_MESSAGE_ut_test_sub_message_list *)pbstru_malloc(sizeof(st_D_MESSAGE_IN_UT_TEST_MESSAGE_ut_test_sub_message_list));
+            msg->var_d_message = (st_d_message_in_ut_test_message_ut_test_sub_message_list *)pbstru_malloc(sizeof(st_d_message_in_ut_test_message_ut_test_sub_message_list));
             msg->var_d_message_tail = msg->var_d_message;
             msg->var_d_message->next = NULL;
             // 刚申请的message结构需要初始化
             constru_message_ut_test_sub_message(&(msg->var_d_message->value));
             fill_ut_test_sub_message(&(msg->var_d_message->value));
-            msg->var_d_message->next = (st_D_MESSAGE_IN_UT_TEST_MESSAGE_ut_test_sub_message_list *)pbstru_malloc(sizeof(st_D_MESSAGE_IN_UT_TEST_MESSAGE_ut_test_sub_message_list));
+            msg->var_d_message->next = (st_d_message_in_ut_test_message_ut_test_sub_message_list *)pbstru_malloc(sizeof(st_d_message_in_ut_test_message_ut_test_sub_message_list));
             msg->var_d_message_tail = msg->var_d_message->next;
             msg->var_d_message_tail->next = NULL;
             // 刚申请的message结构需要初始化
@@ -691,11 +783,11 @@ int main(int argc, char* argv[])
         for(int i=0; i<3; ++i)
         {
             clear_message_ut_test_sub_message(msg);
-            msg->var_d_uint32 = (st_D_UINT32_IN_UT_TEST_SUB_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_UINT32_IN_UT_TEST_SUB_MESSAGE_uint32_list));
+            msg->var_d_uint32 = (st_d_uint32_in_ut_test_sub_message_uint32_list *)pbstru_malloc(sizeof(st_d_uint32_in_ut_test_sub_message_uint32_list));
             msg->var_d_uint32_tail = msg->var_d_uint32;
             msg->var_d_uint32->next = NULL;
             msg->var_d_uint32->value = 1000;
-            msg->var_d_uint32->next = (st_D_UINT32_IN_UT_TEST_SUB_MESSAGE_uint32_list *)pbstru_malloc(sizeof(st_D_UINT32_IN_UT_TEST_SUB_MESSAGE_uint32_list));
+            msg->var_d_uint32->next = (st_d_uint32_in_ut_test_sub_message_uint32_list *)pbstru_malloc(sizeof(st_d_uint32_in_ut_test_sub_message_uint32_list));
             msg->var_d_uint32_tail = msg->var_d_uint32->next;
             msg->var_d_uint32_tail->next = NULL;
             msg->var_d_uint32_tail->value = 1001;
@@ -714,6 +806,7 @@ int main(int argc, char* argv[])
         assert(malloc_times == free_times);
     }
 
+    assert(malloc_times == free_times);
     printf("<Press any key to continue ...>\n");
     getchar();
     printf("%s Done.\n", argv[0]);

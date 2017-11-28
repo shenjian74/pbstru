@@ -1,6 +1,6 @@
 project (pbstru)
 cmake_minimum_required (VERSION 2.6)
-set(CMAKE_VERBOSE_MAKEFILE ON)
+# set(CMAKE_VERBOSE_MAKEFILE ON)
 
 aux_source_directory(./pbstru SRC_FILES)
 
