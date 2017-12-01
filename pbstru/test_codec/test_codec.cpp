@@ -103,50 +103,6 @@ int main(int argc, char* argv[])
     BYTE buf[1024];
     size_t buf_len;
 
-    printf("sizeof(st_addrequest) == %u\n", sizeof(st_addrequest));
-    printf("sizeof(st_queryrequest) == %u\n", sizeof(st_queryrequest));
-    {
-        printf("  sizeof(st_identifiers) == %u\n", sizeof(st_identifiers));
-        printf("  sizeof(st_range_in_queryrequest_range_list) == %u\n", sizeof(st_range_in_queryrequest_range_list));
-        {
-            printf("    sizeof(st_Path) == %u\n", sizeof(st_path));
-            printf("    sizeof(enum_Scope) == %u\n", sizeof(enum_Scope));
-            printf("    sizeof(st_field_in_range_uint32_list) == %u\n", sizeof(st_field_in_range_uint32_list));
-            printf("    sizeof(st_filter_in_range_filter_list) == %u\n", sizeof(st_filter_in_range_filter_list));
-        }
-        printf("  sizeof(st_control_in_queryrequest_control_list) == %u\n", sizeof(st_control_in_queryrequest_control_list));
-        printf("  sizeof(st_spinfo_in_queryrequest_spinfo_list) == %u\n", sizeof(st_spinfo_in_queryrequest_spinfo_list));
-        printf("  sizeof(st_batchqrypi) == %u\n", sizeof(st_batchqrypi));
-    }
-    printf("sizeof(st_modifyrequest) == %u\n", sizeof(st_modifyrequest));
-    {
-        printf("  sizeof(st_moddata) == %u\n", sizeof(st_moddata));
-        printf("  sizeof(st_modfield_list) == %u\n", sizeof(st_field_in_moddata_modfield_list));
-    }
-    printf("sizeof(st_deleterequest) == %u\n", sizeof(st_deleterequest));
-    printf("sizeof(st_compoundrequest) == %u\n", sizeof(st_compoundrequest));
-    printf("sizeof(st_response) == %u\n", sizeof(st_response));
-    printf("sizeof(st_statresp) == %u\n", sizeof(st_statresp));
-
-//sizeof(st_addrequest) == 56424
-//sizeof(st_queryrequest) == 7928
-//  sizeof(st_identifiers) == 1064
-//  sizeof(st_Range_list) == 6788
-//    sizeof(st_path) == 148
-//    sizeof(enum_Scope) == 4
-//    sizeof(st_uint32_list) == 8
-//    sizeof(st_Filter_list) == 52
-//  sizeof(st_Control_list) == 44
-//  sizeof(st_SPInfo_list) == 8
-//  sizeof(st_BatchQRYPI) == 20
-//sizeof(st_ModifyRequest) == 31584
-//  sizeof(st_ModData) == 952
-//  sizeof(st_ModField_list) == 772
-//sizeof(st_DeleteRequest) == 7904
-//sizeof(st_CompoundRequest) == 830984
-//sizeof(st_Response) == 451424
-//sizeof(st_StatResp) == 65568
-
     {
         st_primarykey var_PrimaryKey;
         constru_message_PrimaryKey(&var_PrimaryKey);
