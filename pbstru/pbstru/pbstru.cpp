@@ -1015,6 +1015,8 @@ void gen_source(const Descriptor *desc)
                     case FieldDescriptor::TYPE_ENUM:
                         fprintf(fp, "    encode_tag_byte(buf, %d, WIRE_TYPE_VARINT, &offset);\n", field->number());
                         break;
+		    default:
+                        break;
                     }
                     fprintf(fp, "    i = 0;  /* i复用为元素个数使用 */\n");
                     fprintf(fp, "    for(it%d=var_%s->var_%s; NULL!=it%d; it%d=it%d->next) {\n",
@@ -1043,6 +1045,8 @@ void gen_source(const Descriptor *desc)
                     case FieldDescriptor::TYPE_UINT64:
                     case FieldDescriptor::TYPE_ENUM:
                         fprintf(fp, "    encode_tag_byte(buf, %d, WIRE_TYPE_VARINT, &offset);\n", field->number());
+                        break;
+                    default:
                         break;
                     }
                     fprintf(fp, "    encode_varint(var_%s->var_%s.count, buf, &offset);\n",
