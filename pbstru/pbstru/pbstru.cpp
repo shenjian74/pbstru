@@ -708,7 +708,7 @@ void gen_header(const Descriptor *desc)
         }
     }
 
-    fprintf(fp, "\ntypedef struct {\n");
+    fprintf(fp, "\ntypedef struct _%s {\n", (LPCSTR)struct_name);
     for(int i=0; i<desc->field_count(); ++i)
     {
         print_field_in_struct(fp, desc->field(i));
