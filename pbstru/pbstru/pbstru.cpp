@@ -5,6 +5,9 @@
 # define _CRT_SECURE_NO_WARNINGS
 # pragma warning(disable: 4482)
 #endif
+
+#include <string>
+#include <algorithm>
 #include <stdio.h>
 #include "importer.h"
 #include "bstrwrap.h"
