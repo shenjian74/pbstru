@@ -1,7 +1,10 @@
 # 简介
 
 	pbstru是Protobuf to Struct的缩写，主要完成PB码流和C语言结构间的相互转换，可自动生成PB消息的编解码代码。
-	pbstru的目标是挑战protobuf编解码的极限速度。
+
+## 版本更新
+
+2017-11-28 v2.4 -- 支持重复字段的packed属性
 
 # 实现原理
 

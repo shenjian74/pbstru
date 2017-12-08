@@ -5,6 +5,9 @@
 # define _CRT_SECURE_NO_WARNINGS
 # pragma warning(disable: 4482)
 #endif
+
+#include <string>
+#include <algorithm>
 #include <stdio.h>
 #include "importer.h"
 #include "bstrwrap.h"
@@ -708,7 +711,7 @@ void gen_header(const Descriptor *desc)
         }
     }
 
-    fprintf(fp, "\ntypedef struct {\n");
+    fprintf(fp, "\ntypedef struct _%s {\n", (LPCSTR)struct_name);
     for(int i=0; i<desc->field_count(); ++i)
     {
         print_field_in_struct(fp, desc->field(i));
@@ -1015,6 +1018,8 @@ void gen_source(const Descriptor *desc)
                     case FieldDescriptor::TYPE_ENUM:
                         fprintf(fp, "    encode_tag_byte(buf, %d, WIRE_TYPE_VARINT, &offset);\n", field->number());
                         break;
+		    default:
+                        break;
                     }
                     fprintf(fp, "    i = 0;  /* i复用为元素个数使用 */\n");
                     fprintf(fp, "    for(it%d=var_%s->var_%s; NULL!=it%d; it%d=it%d->next) {\n",
@@ -1043,6 +1048,8 @@ void gen_source(const Descriptor *desc)
                     case FieldDescriptor::TYPE_UINT64:
                     case FieldDescriptor::TYPE_ENUM:
                         fprintf(fp, "    encode_tag_byte(buf, %d, WIRE_TYPE_VARINT, &offset);\n", field->number());
+                        break;
+                    default:
                         break;
                     }
                     fprintf(fp, "    encode_varint(var_%s->var_%s.count, buf, &offset);\n",
