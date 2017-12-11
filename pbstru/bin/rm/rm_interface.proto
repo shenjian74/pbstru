@@ -123,8 +123,8 @@ message RMNfEventNotifyAck
 message RMNotify
 {
     required bytes primary = 1;  /* 用户标识 */
-    repeated RmTime time   = 2;  /* 时间通知 */
-    repeated RmEvent event = 3;  /* 事件通知 */
+    optional RmTime time   = 2;  /* 时间通知 */
+    optional RmEvent event = 3;  /* 事件通知 */
 }
 
 message RMNotifyNfGeneral
