@@ -8,7 +8,6 @@ void constru_message_RMRegUeEventReq(st_rmregueeventreq *var_RMRegUeEventReq){
         constru_message_RmEvent(&(var_RMRegUeEventReq->var_event.item[i]));
     }
     var_RMRegUeEventReq->var_event.count = 0;
-    var_RMRegUeEventReq->var_srvtype.count = 0;
 }
 
 void destru_message_RMRegUeEventReq(st_rmregueeventreq* var_RMRegUeEventReq){
@@ -23,7 +22,7 @@ void clear_message_RMRegUeEventReq(st_rmregueeventreq* var_RMRegUeEventReq){
         clear_message_RmEvent(&(var_RMRegUeEventReq->var_event.item[i]));
     }
     var_RMRegUeEventReq->var_event.count = 0;
-    var_RMRegUeEventReq->var_srvtype.count = 0;
+    var_RMRegUeEventReq->var_srvtype = 0;
 }
 
 size_t encode_message_RMRegUeEventReq(const st_rmregueeventreq* var_RMRegUeEventReq, BYTE* buf){
@@ -50,11 +49,9 @@ size_t encode_message_RMRegUeEventReq(const st_rmregueeventreq* var_RMRegUeEvent
         offset += encode_buf_len;
     }
 
-    for(i = 0; i < var_RMRegUeEventReq->var_srvtype.count; ++i){
-        /* tag:3 type:uint32 */
-        encode_tag_byte(buf, 3, WIRE_TYPE_VARINT, &offset);
-        encode_varint(var_RMRegUeEventReq->var_srvtype.item[i], buf, &offset);
-    }
+    /* tag:3 type:uint32 */
+    encode_tag_byte(buf, 3, WIRE_TYPE_VARINT, &offset);
+    encode_varint(var_RMRegUeEventReq->var_srvtype, buf, &offset);
     return offset;
 }
 
@@ -87,11 +84,7 @@ BOOL decode_message_RMRegUeEventReq(BYTE* buf, const size_t buf_len, st_rmreguee
             break;
         /* type:uint32 */
         case 3:
-            if(var_RMRegUeEventReq->var_srvtype.count >= PBSTRU_MAX_SRVTYPE_IN_RMREGUEEVENTREQ) {
-                return FALSE;  /* Êý×é³¬ÏÞ */
-            }
-            decode_varint(buf + offset, &(var_RMRegUeEventReq->var_srvtype.item[var_RMRegUeEventReq->var_srvtype.count]), &offset);
-            var_RMRegUeEventReq->var_srvtype.count += 1;
+            decode_varint(buf + offset, &(var_RMRegUeEventReq->var_srvtype), &offset);
             break;
         default:
         	deal_unknown_field(wire_type, buf+offset, &offset);

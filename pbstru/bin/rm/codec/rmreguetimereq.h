@@ -12,26 +12,20 @@ extern "C"{
 message RMRegUeTimeReq {
   required bytes primary = 1;
   repeated .rm.RmTime time = 2;
-  repeated uint32 srvtype = 3;
+  required uint32 srvtype = 3;
 }
 */
 #define PBSTRU_MAX_TIME_IN_RMREGUETIMEREQ 10
-#define PBSTRU_MAX_SRVTYPE_IN_RMREGUETIMEREQ 10
 
 typedef struct _st_time_in_rmreguetimereq_rmtime_list {
     size_t count;
     st_rmtime item[PBSTRU_MAX_TIME_IN_RMREGUETIMEREQ];  /* tag:2 type:message */
 } st_time_in_rmreguetimereq_rmtime_list;
 
-typedef struct _st_srvtype_in_rmreguetimereq_uint32_list {
-    size_t count;
-    DWORD item[PBSTRU_MAX_SRVTYPE_IN_RMREGUETIMEREQ];  /* tag:3 type:uint32 */
-} st_srvtype_in_rmreguetimereq_uint32_list;
-
 typedef struct _st_rmreguetimereq {
     ps_bytes var_primary;  /* tag:1 */
     st_time_in_rmreguetimereq_rmtime_list var_time;  /* tag:2 */
-    st_srvtype_in_rmreguetimereq_uint32_list var_srvtype;  /* tag:3 */
+    DWORD var_srvtype;  /* tag:3 */
 } st_rmreguetimereq;
 
 /* construct msg when first use, call clear_message_*() internaly. */
