@@ -1,0 +1,16 @@
+rm.RMRegUeTimeReq.time max_count:10
+rm.RMRegUeTimeReq.srvtype max_count:10
+rm.RMRegUeTimeAck.time max_count:10
+rm.RMDeregUeTimeReq.time max_count:10
+rm.RMDeregUeTimeReq.srvtype max_count:10
+rm.RMDeregUeTimeAck.time max_count:10
+rm.RMRegUeEventReq.event max_count:10
+rm.RMRegUeEventReq.srvtype max_count:10
+rm.RMRegUeEventAck.event max_count:10
+rm.RMDeregUeEventReq.event max_count:10
+rm.RMDeregUeEventReq.srvtype max_count:10
+rm.RMDeregUeEventAck.event max_count:10
+rm.RMNfEventNotifyReq.srvtype max_count:10
+rm.RMNotify.time max_count:10
+rm.RMNotify.event max_count:10
+rm.RMNotifyNfGeneral.notify max_count:10

@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-D_TEST_CODEC" />
 					<Add directory="../bin/codec" />
 				</Compiler>
 			</Target>
@@ -337,6 +338,12 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../bin/codec/userinfo.h" />
+		<Unit filename="../bin/codec/ut_test_message.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../bin/codec/ut_test_sub_message.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="test_codec.cpp" />
 		<Extensions>
 			<code_completion />
