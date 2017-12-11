@@ -1,0 +1,134 @@
+﻿syntax = "proto2";
+
+package rm;
+
+/* NF类型 */
+enum RMNfType
+{
+    E_RM_NF_TYPE_AMF = 1;
+    E_RM_NF_TYPE_PCF = 2;
+}
+
+message RMRegNfReq
+{
+    required uint32 tenantid = 1; /* 租户标识 */
+    required uint32 nftype   = 2; /* NF类型 */
+}
+
+message RMRegNfAck
+{
+    required uint32 result = 1;   /* 结果 */
+    optional uint32 tenantid = 2; /* 租户标识 */
+    optional uint32 nftype   = 3; /* NF类型 */
+}
+
+
+/* 通知类型 */
+enum RMTimeType
+{
+    E_RM_REQ_TYPE_FIXED = 1;     /* 固定时间 */
+    E_RM_REQ_TYPE_CYCLE = 2;     /* 循环时间 */
+}
+
+message RmTime
+{
+    /* 如果通知类型为固定时间，则时间值为触发时间点（2000年之后的秒数UTC） */
+    /* 如果通知类型为循环时间，则时间值为触发间隔（分钟） */
+    required uint32 type =1;     /* 通知类型 */
+    required bytes key   = 2;    /* 时间扫描关键字 */
+    required uint32 time = 3;    /* 时间通知 */
+    optional uint32 data = 4;    /* 透明数据，RM透传 */
+}
+
+message RMRegUeTimeReq
+{
+    required bytes primary = 1;  /* 用户标识 */
+    repeated RmTime time   = 2;  /* 时间通知 */
+    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+}
+
+message RMRegUeTimeAck
+{
+    required uint32 result = 1;  /* 结果 */
+    optional bytes primary = 2;  /* 用户标识 */
+    repeated RmTime time   = 3;  /* 时间通知 */
+}
+
+
+message RMDeregUeTimeReq
+{
+    required bytes primary = 1;  /* 用户标识 */
+    repeated RmTime time   = 2;  /* 时间通知 */
+    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+}
+
+message RMDeregUeTimeAck
+{
+    required uint32 result = 1;  /* 结果 */
+    optional bytes primary = 2;  /* 用户标识 */
+    repeated RmTime time   = 3;  /* 时间通知 */
+}
+
+
+message RmEvent
+{
+    required uint32 type = 1;    /* 通知类型-值1-16共16个 */
+    required bytes value = 2;    /* 参数 */
+    optional uint32 data = 3;    /* 透明数据，RM透传 */
+}
+
+message RMRegUeEventReq
+{
+    required bytes primary = 1;  /* 用户标识 */
+    repeated RmEvent event = 2;  /* 事件通知 */
+    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+}
+
+message RMRegUeEventAck
+{
+    required uint32 result = 1;  /* 结果 */
+    optional bytes primary = 2;  /* 用户标识 */
+    repeated RmEvent event = 3;  /* 事件通知 */
+}
+
+
+message RMDeregUeEventReq
+{
+    required bytes primary = 1;  /* 用户标识 */
+    repeated RmEvent event = 2;  /* 事件通知 */
+    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+}
+
+message RMDeregUeEventAck
+{
+    required uint32 result = 1;  /* 结果 */
+    optional bytes primary = 2;  /* 用户标识 */
+    repeated RmEvent event = 3;  /* 事件通知 */
+}
+
+
+message RMNfEventNotifyReq
+{
+    required RmEvent event = 1;  /* 事件通知 */
+    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+}
+
+message RMNfEventNotifyAck
+{
+    required uint32 result = 1;  /* 结果 */
+    optional RmEvent event = 2;  /* 事件通知 */
+}
+
+
+message RMNotify
+{
+    required bytes primary = 1;  /* 用户标识 */
+    repeated RmTime time   = 2;  /* 时间通知 */
+    repeated RmEvent event = 3;  /* 事件通知 */
+}
+
+message RMNotifyNfGeneral
+{
+    repeated RMNotify notify = 1;  /* 通知 */
+}
+
