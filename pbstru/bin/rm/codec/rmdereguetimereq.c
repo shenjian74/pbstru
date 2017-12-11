@@ -8,7 +8,6 @@ void constru_message_RMDeregUeTimeReq(st_rmdereguetimereq *var_RMDeregUeTimeReq)
         constru_message_RmTime(&(var_RMDeregUeTimeReq->var_time.item[i]));
     }
     var_RMDeregUeTimeReq->var_time.count = 0;
-    var_RMDeregUeTimeReq->var_srvtype.count = 0;
 }
 
 void destru_message_RMDeregUeTimeReq(st_rmdereguetimereq* var_RMDeregUeTimeReq){
@@ -23,7 +22,7 @@ void clear_message_RMDeregUeTimeReq(st_rmdereguetimereq* var_RMDeregUeTimeReq){
         clear_message_RmTime(&(var_RMDeregUeTimeReq->var_time.item[i]));
     }
     var_RMDeregUeTimeReq->var_time.count = 0;
-    var_RMDeregUeTimeReq->var_srvtype.count = 0;
+    var_RMDeregUeTimeReq->var_srvtype = 0;
 }
 
 size_t encode_message_RMDeregUeTimeReq(const st_rmdereguetimereq* var_RMDeregUeTimeReq, BYTE* buf){
@@ -50,11 +49,9 @@ size_t encode_message_RMDeregUeTimeReq(const st_rmdereguetimereq* var_RMDeregUeT
         offset += encode_buf_len;
     }
 
-    for(i = 0; i < var_RMDeregUeTimeReq->var_srvtype.count; ++i){
-        /* tag:3 type:uint32 */
-        encode_tag_byte(buf, 3, WIRE_TYPE_VARINT, &offset);
-        encode_varint(var_RMDeregUeTimeReq->var_srvtype.item[i], buf, &offset);
-    }
+    /* tag:3 type:uint32 */
+    encode_tag_byte(buf, 3, WIRE_TYPE_VARINT, &offset);
+    encode_varint(var_RMDeregUeTimeReq->var_srvtype, buf, &offset);
     return offset;
 }
 
@@ -87,11 +84,7 @@ BOOL decode_message_RMDeregUeTimeReq(BYTE* buf, const size_t buf_len, st_rmdereg
             break;
         /* type:uint32 */
         case 3:
-            if(var_RMDeregUeTimeReq->var_srvtype.count >= PBSTRU_MAX_SRVTYPE_IN_RMDEREGUETIMEREQ) {
-                return FALSE;  /* Êý×é³¬ÏÞ */
-            }
-            decode_varint(buf + offset, &(var_RMDeregUeTimeReq->var_srvtype.item[var_RMDeregUeTimeReq->var_srvtype.count]), &offset);
-            var_RMDeregUeTimeReq->var_srvtype.count += 1;
+            decode_varint(buf + offset, &(var_RMDeregUeTimeReq->var_srvtype), &offset);
             break;
         default:
         	deal_unknown_field(wire_type, buf+offset, &offset);

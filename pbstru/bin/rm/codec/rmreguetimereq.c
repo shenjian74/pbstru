@@ -8,7 +8,6 @@ void constru_message_RMRegUeTimeReq(st_rmreguetimereq *var_RMRegUeTimeReq){
         constru_message_RmTime(&(var_RMRegUeTimeReq->var_time.item[i]));
     }
     var_RMRegUeTimeReq->var_time.count = 0;
-    var_RMRegUeTimeReq->var_srvtype.count = 0;
 }
 
 void destru_message_RMRegUeTimeReq(st_rmreguetimereq* var_RMRegUeTimeReq){
@@ -23,7 +22,7 @@ void clear_message_RMRegUeTimeReq(st_rmreguetimereq* var_RMRegUeTimeReq){
         clear_message_RmTime(&(var_RMRegUeTimeReq->var_time.item[i]));
     }
     var_RMRegUeTimeReq->var_time.count = 0;
-    var_RMRegUeTimeReq->var_srvtype.count = 0;
+    var_RMRegUeTimeReq->var_srvtype = 0;
 }
 
 size_t encode_message_RMRegUeTimeReq(const st_rmreguetimereq* var_RMRegUeTimeReq, BYTE* buf){
@@ -50,11 +49,9 @@ size_t encode_message_RMRegUeTimeReq(const st_rmreguetimereq* var_RMRegUeTimeReq
         offset += encode_buf_len;
     }
 
-    for(i = 0; i < var_RMRegUeTimeReq->var_srvtype.count; ++i){
-        /* tag:3 type:uint32 */
-        encode_tag_byte(buf, 3, WIRE_TYPE_VARINT, &offset);
-        encode_varint(var_RMRegUeTimeReq->var_srvtype.item[i], buf, &offset);
-    }
+    /* tag:3 type:uint32 */
+    encode_tag_byte(buf, 3, WIRE_TYPE_VARINT, &offset);
+    encode_varint(var_RMRegUeTimeReq->var_srvtype, buf, &offset);
     return offset;
 }
 
@@ -87,11 +84,7 @@ BOOL decode_message_RMRegUeTimeReq(BYTE* buf, const size_t buf_len, st_rmregueti
             break;
         /* type:uint32 */
         case 3:
-            if(var_RMRegUeTimeReq->var_srvtype.count >= PBSTRU_MAX_SRVTYPE_IN_RMREGUETIMEREQ) {
-                return FALSE;  /* Êý×é³¬ÏÞ */
-            }
-            decode_varint(buf + offset, &(var_RMRegUeTimeReq->var_srvtype.item[var_RMRegUeTimeReq->var_srvtype.count]), &offset);
-            var_RMRegUeTimeReq->var_srvtype.count += 1;
+            decode_varint(buf + offset, &(var_RMRegUeTimeReq->var_srvtype), &offset);
             break;
         default:
         	deal_unknown_field(wire_type, buf+offset, &offset);

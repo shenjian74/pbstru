@@ -11,19 +11,13 @@ extern "C"{
 /*
 message RMNfEventNotifyReq {
   required .rm.RmEvent event = 1;
-  repeated uint32 srvtype = 3;
+  required uint32 srvtype = 3;
 }
 */
-#define PBSTRU_MAX_SRVTYPE_IN_RMNFEVENTNOTIFYREQ 10
-
-typedef struct _st_srvtype_in_rmnfeventnotifyreq_uint32_list {
-    size_t count;
-    DWORD item[PBSTRU_MAX_SRVTYPE_IN_RMNFEVENTNOTIFYREQ];  /* tag:3 type:uint32 */
-} st_srvtype_in_rmnfeventnotifyreq_uint32_list;
 
 typedef struct _st_rmnfeventnotifyreq {
     st_rmevent var_event;  /* tag:1 */
-    st_srvtype_in_rmnfeventnotifyreq_uint32_list var_srvtype;  /* tag:3 */
+    DWORD var_srvtype;  /* tag:3 */
 } st_rmnfeventnotifyreq;
 
 /* construct msg when first use, call clear_message_*() internaly. */
