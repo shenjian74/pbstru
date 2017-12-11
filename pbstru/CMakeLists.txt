@@ -33,7 +33,7 @@ ELSE()
 add_custom_target(
     protobuf_lib
     # COMMAND ./autogen.sh && ./configure && make -j
-    COMMAND make -j
+    COMMAND make clean && make -j
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3
 )
 ENDIF()
@@ -42,7 +42,7 @@ IF (WIN32)
 	message("${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build")
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
 ELSE()
-	find_library(PROTOBUF_LIB NAMES protobuf HINTS "/usr/local/lib:../protobuf3/src/.libs" )
+	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/src/.libs" )
 ENDIF()
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 
