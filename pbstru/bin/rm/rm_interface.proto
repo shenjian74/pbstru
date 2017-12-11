@@ -44,7 +44,7 @@ message RMRegUeTimeReq
 {
     required bytes primary = 1;  /* 用户标识 */
     repeated RmTime time   = 2;  /* 时间通知 */
-    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+    required uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
 }
 
 message RMRegUeTimeAck
@@ -59,7 +59,7 @@ message RMDeregUeTimeReq
 {
     required bytes primary = 1;  /* 用户标识 */
     repeated RmTime time   = 2;  /* 时间通知 */
-    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+    required uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
 }
 
 message RMDeregUeTimeAck
@@ -81,7 +81,7 @@ message RMRegUeEventReq
 {
     required bytes primary = 1;  /* 用户标识 */
     repeated RmEvent event = 2;  /* 事件通知 */
-    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+    required uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
 }
 
 message RMRegUeEventAck
@@ -96,7 +96,7 @@ message RMDeregUeEventReq
 {
     required bytes primary = 1;  /* 用户标识 */
     repeated RmEvent event = 2;  /* 事件通知 */
-    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+    required uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
 }
 
 message RMDeregUeEventAck
@@ -110,7 +110,7 @@ message RMDeregUeEventAck
 message RMNfEventNotifyReq
 {
     required RmEvent event = 1;  /* 事件通知 */
-    repeated uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
+    required uint32 srvtype = 3; /* 服务类型 区分记录是PAM/PCM/AMF/SMF */
 }
 
 message RMNfEventNotifyAck
