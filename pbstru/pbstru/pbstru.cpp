@@ -123,7 +123,7 @@ void gen_comm(void)
     fprintf(fp, "    size_t iloop; \\\n");
     fprintf(fp, "    (*(value)) = 0; \\\n");
     fprintf(fp, "    for(iloop=0;;++iloop){ \\\n");
-    fprintf(fp, "	     (*(value)) += ((buf)[iloop] & 0x7F) << (7*iloop); \\\n");
+    fprintf(fp, "        (*(value)) += ((unsigned long long)((buf)[iloop] & 0x7F)) << (7*iloop); \\\n");
     fprintf(fp, "        if(0 == ((buf)[iloop] & 0x80)){ \\\n");
     fprintf(fp, "            break; \\\n");
     fprintf(fp, "        } \\\n");

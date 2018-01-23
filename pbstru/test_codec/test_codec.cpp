@@ -69,6 +69,19 @@ void *pbstru_malloc(size_t size)
     return malloc(size);
 }
 
+void decode_varint1(BYTE *buf, WORD64 *value, size_t *offset) {
+    size_t iloop;
+    (*(value)) = 0;
+    for(iloop=0;;++iloop) {
+        (*(value)) += ((unsigned long long)((buf)[iloop] & 0x7F)) << (7*iloop);
+        if(0 == ((buf)[iloop] & 0x80)){
+            break;
+        }
+    }
+    (*(offset)) += 1 + iloop;
+}
+
+
 void fill_ut_test_sub_message(st_ut_test_sub_message *msg)
 {
     clear_message_ut_test_sub_message(msg);
@@ -346,8 +359,25 @@ int main(int argc, char* argv[])
 
         for(int i=0; i<3; ++i)
         {
+            BYTE buf[64];
+            size_t offset = 0;
+            WORD64 var_int64;
+
+            encode_varint(20360023315404117, buf, &offset);
+            print_buffer(buf, offset);
+            offset = 0;
+            decode_varint(buf, &var_int64, &offset);
+            assert(20360023315404117 == var_int64);
+
+            offset = 0;
+            encode_varint(2447866062020153618, buf, &offset);
+            print_buffer(buf, offset);
+            offset = 0;
+            decode_varint(buf, &var_int64, &offset);
+            assert(2447866062020153618 == var_int64);
+
             clear_message_ut_test_message(msg);
-            msg->var_r_uint64 = 10;
+            msg->var_r_uint64 = 2447866062020153618;
             msg->has_o_uint64 = TRUE;
             msg->var_o_uint64 = 11;
             msg->var_f_uint64.count = 2;
@@ -380,7 +410,7 @@ int main(int argc, char* argv[])
             assert(size1 == size2);
             decode_message_ut_test_message(buf, size2, msg);
 
-            assert(10 == msg->var_r_uint64);
+            assert(2447866062020153618 == msg->var_r_uint64);
             assert(TRUE == msg->has_o_uint64);
             assert(11 == msg->var_o_uint64);
             assert(2 == msg->var_f_uint64.count);
