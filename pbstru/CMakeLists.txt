@@ -24,15 +24,14 @@ add_subdirectory("./test_codec")
 IF (WIN32)
 add_custom_target(
     protobuf_lib
-    # COMMAND ./autogen.sh && ./configure && make -j
     COMMAND mingw32-make
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build
 )
 ELSE()
 add_custom_target(
     protobuf_lib
-    # COMMAND ./autogen.sh && ./configure && make -j
-    COMMAND make clean && make -j
+    # COMMAND ./autogen.sh && ./configure && make
+    COMMAND make
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3
 )
 ENDIF()
