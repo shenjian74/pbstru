@@ -1,8 +1,10 @@
 project (pbstru)
 cmake_minimum_required (VERSION 2.6)
+
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_C_FLAGS "-O0 -Wall -g -ggdb ")
 set(CMAKE_CXX_FLAGS "-O0 -Wall -g -ggdb ")
+# set(CMAKE_EXE_LINKER_FLAGS -static)
 
 aux_source_directory(./pbstru SRC_FILES)
 
@@ -40,6 +42,7 @@ IF (WIN32)
 	message("${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build")
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
 ELSE()
+        set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/src/.libs" )
 ENDIF()
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
