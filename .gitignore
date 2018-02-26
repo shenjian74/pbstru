@@ -4,7 +4,6 @@ build
 *~
 *.cache
 .libs
-pbstru/bin/pbstru
 pbstru/bin/codec
 Debug
 *.sdf
