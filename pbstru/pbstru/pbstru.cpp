@@ -43,6 +43,7 @@ typedef enum
     NO_MAX_COUNT_IN_FILE
 } e_error_code;
 
+// 生成公共文件pbstru_comm.h和pbstru_comm.c
 void gen_comm(void)
 {
     CBString filename = CBString(path_prefix) + "pbstru_comm.h";
@@ -81,6 +82,7 @@ void gen_comm(void)
     fprintf(fp, "#define FALSE 0\n");
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n#else\n");
+    fprintf(fp, "/* 包含数据类型定义 */\n");
     fprintf(fp, "#include \"tulip.h\"\n");
     fprintf(fp, "\n#endif");
     fprintf(fp, "\ntypedef struct {\n");
@@ -99,6 +101,7 @@ void gen_comm(void)
     fprintf(fp, "void *pbstru_malloc(size_t size);\n");
     fprintf(fp, "void pbstru_free(void *buf);\n");
     fprintf(fp, "\n");
+    fprintf(fp, "/* 对varint信息进行编码 */\n");
     fprintf(fp, "#define encode_varint(len, buf, offset) do{ \\\n");
     fprintf(fp, "	unsigned long long remain_len = len; \\\n");
     fprintf(fp, "	size_t iloop; \\\n");
@@ -119,6 +122,7 @@ void gen_comm(void)
     fprintf(fp, "	*(offset) += 1 + iloop; \\\n");
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
+    fprintf(fp, "/* 对varint信息进行解码 */\n");
     fprintf(fp, "#define decode_varint(buf, value, offset) do{ \\\n");
     fprintf(fp, "    size_t iloop; \\\n");
     fprintf(fp, "    (*(value)) = 0; \\\n");
@@ -143,6 +147,7 @@ void gen_comm(void)
     }
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
     fprintf(fp, "\n");
+    fprintf(fp, "/* 对tag信息进行编码 */\n");
     fprintf(fp, "void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset) { \n");
     fprintf(fp, "	if (tag < 16) { \n");
     fprintf(fp, "		if (NULL != buf) { \n");
@@ -159,6 +164,7 @@ void gen_comm(void)
     fprintf(fp, "	} \n");
     fprintf(fp, "} \n");
     fprintf(fp, "\n");
+    fprintf(fp, "/* 对tag信息进行解码 */\n");
     fprintf(fp, "void parse_tag_byte(const BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset){ \n");
     fprintf(fp, "    if ((buf)[0] & 0x80) { \n");
     fprintf(fp, "	     *field_num = ((buf)[0] & 0x7F) + ((buf)[1] >> 3) * 128; \n");
@@ -171,6 +177,7 @@ void gen_comm(void)
     fprintf(fp, "    } \n");
     fprintf(fp, "} \n");
     fprintf(fp, "\n");
+    fprintf(fp, "/* 跳过不认识的字段，向前兼容用 */\n");
     fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* buf, size_t* offset) { \n");
     fprintf(fp, "	size_t tmp_field_len; \n");
     fprintf(fp, "	switch(wire_type){ \n");
@@ -262,7 +269,6 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, int* max_count
            __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
     // exit(NO_MAX_COUNT_IN_FILE);
     return false;
-    // 锟侥硷拷锟斤拷锟截憋拷
 }
 
 LPCSTR get_struct_list_name(const FieldDescriptor *field)
