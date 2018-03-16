@@ -1,3 +1,8 @@
+# 注释行
+# max_count后面可以是数字，也可以字符串方式的宏
+# 例如：
+# max_count:10
+# max_count:MAX_SLOT_NUM
 zte.cdb.ccc.CCAResReportRequest.tenant_id max_count:128
 zte.cdb.ccc.TenantSeqInfo.b_seq max_count:256
 zte.cdb.ccc.ResReportResponse.t_seq max_count:128

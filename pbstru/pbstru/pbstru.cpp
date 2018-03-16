@@ -202,11 +202,23 @@ void gen_comm(void)
     fclose(fp);
 }
 
+std::string& trim(std::string &s)   
+{  
+    if (s.empty())   
+    {  
+        return s;  
+    }  
+  
+    s.erase(0, s.find_first_not_of(" "));  
+    s.erase(s.find_last_not_of(" ") + 1);  
+    return s;  
+}
+
 LPSTR proto_filename;
 FILE *fp_option = NULL;
 
 // Get the max size of a repeated field.
-static bool get_max_count(LPCSTR message_name, LPCSTR field_name, int* max_count)
+static bool get_max_count(LPCSTR message_name, LPCSTR field_name, std::string& max_count)
 {
     char str1[128];
     char str2[64];
@@ -259,7 +271,8 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, int* max_count
             }
             else
             {
-                *max_count = atoi(num_str + strlen("max_count:"));
+                max_count = std::string(num_str + strlen("max_count:"));
+		trim(max_count);
                 return true;
             }
         }
@@ -321,7 +334,7 @@ LPCSTR get_struct_list_name(const FieldDescriptor *field)
 /* Check the field is unlimit repeated field. */
 bool is_dynamic_repeated(const FieldDescriptor *field)
 {
-    int max_count = 0;
+    std::string max_count;
     bool is_dynamic = false;
     static std::map<CBString, bool> kv_store;
     std::map<CBString, bool>::iterator it;
@@ -336,7 +349,8 @@ bool is_dynamic_repeated(const FieldDescriptor *field)
 
     if(field->is_repeated())
     {
-        if(false == get_max_count(LPCSTR(containing_type_name), LPCSTR(field_name), &max_count))
+        // Cannot find max_count in option file
+        if(false == get_max_count(LPCSTR(containing_type_name), LPCSTR(field_name), max_count))
         {
             is_dynamic = true;
         }
@@ -606,11 +620,11 @@ void gen_header(const Descriptor *desc)
         field_containing_type_upper.toupper();
         if(field->is_repeated())
         {
-            int max_count;
-            if(get_max_count(field->containing_type()->full_name().c_str(), field->name().c_str(), &max_count))
+            std::string max_count;
+            if(get_max_count(field->containing_type()->full_name().c_str(), field->name().c_str(), max_count))
             {
-                fprintf(fp, "#define PBSTRU_MAX_%s_IN_%s %d\n",
-                        (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, max_count);
+                fprintf(fp, "#define PBSTRU_MAX_%s_IN_%s %s\n",
+                        (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, max_count.c_str());
             }
         }
     }
