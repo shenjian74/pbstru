@@ -1,3 +1,8 @@
+# 注释行
+# max_count后面可以是数字，也可以字符串方式的宏
+# 例如：
+# max_count:10
+# max_count:MAX_SLOT_NUM
 zte.cdb.AddRequest.control max_count:10
 zte.cdb.AddRequest.tuple max_count:64
 zte.cdb.AddRequest.control max_count:10
