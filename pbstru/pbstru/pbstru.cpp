@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include <stdio.h>
+#include <sys/stat.h>
 #include "importer.h"
 #include "bstrwrap.h"
 
@@ -30,9 +31,9 @@ const bool is_struct_lowercase = true;
 
 const char __THIS_FILE__[] = "pbstru.cpp";
 #ifdef _WIN32
-char path_prefix[] = "codec\\";
+  const char path_sep[] = "\\";
 #else
-char path_prefix[] = "codec/";
+  const char path_sep[] = "/";
 #endif
 
 typedef enum
@@ -44,9 +45,9 @@ typedef enum
 } e_error_code;
 
 // 生成公共文件pbstru_comm.h和pbstru_comm.c
-void gen_comm(void)
+void gen_comm(LPCSTR target_dir)
 {
-    CBString filename = CBString(path_prefix) + "pbstru_comm.h";
+    CBString filename = CBString(target_dir) + path_sep + "pbstru_comm.h";
     FILE *fp = fopen((LPCSTR)filename, "wt");
     if (NULL == fp)
     {
@@ -138,7 +139,7 @@ void gen_comm(void)
     fprintf(fp, "\n#endif\n\n/* end of file */");
     fclose(fp);
 
-    filename = CBString(path_prefix) + "pbstru_comm.c";
+    filename = CBString(target_dir) + path_sep + "pbstru_comm.c";
     fp = fopen((LPCSTR)filename, "wt");
     if (NULL == fp)
     {
@@ -559,7 +560,7 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     }
 }
 
-void gen_header(const Descriptor *desc)
+void gen_header(const Descriptor *desc, LPCSTR target_dir)
 {
     CBString name_lower(desc->name().c_str());
     name_lower.tolower();
@@ -574,7 +575,7 @@ void gen_header(const Descriptor *desc)
         struct_name = (CBString)struct_prefix + desc->name().c_str() + struct_postfix;
     }
 
-    CBString filename = CBString(path_prefix) + name_lower;
+    CBString filename = CBString(target_dir) + path_sep + name_lower;
     filename += ".h";
     FILE *fp = fopen((LPCSTR)filename, "wt");
     if(NULL == fp)
@@ -924,7 +925,7 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
     }
 }
 
-void gen_source(const Descriptor *desc)
+void gen_source(const Descriptor *desc, LPCSTR target_dir)
 {
     CBString name_lower(desc->name().c_str());
     name_lower.tolower();
@@ -939,7 +940,7 @@ void gen_source(const Descriptor *desc)
         struct_name = (CBString)struct_prefix + desc->name().c_str() + struct_postfix;
     }
 
-    CBString filename = CBString(path_prefix) + name_lower;
+    CBString filename = CBString(target_dir) + path_sep + name_lower;
     filename += ".c";
     FILE *fp = fopen((LPCSTR)filename, "wt");
     if(NULL == fp)
@@ -1712,13 +1713,13 @@ void gen_source(const Descriptor *desc)
     fclose(fp);
 }
 
-void gen_all_from_file(const FileDescriptor *f)
+void gen_all_from_file(const FileDescriptor *f, LPCSTR target_dir)
 {
     for(int i=0; i<f->message_type_count(); ++i)
     {
         const Descriptor* desc = f->message_type(i);
-        gen_header(desc);
-        gen_source(desc);
+        gen_header(desc, target_dir);
+        gen_source(desc, target_dir);
 
         /* close option file */
         if(NULL != fp_option)
@@ -1744,12 +1745,7 @@ private:
 
 int main(int argc, char *argv[])
 {
-    if (argc < 2)
-    {
-        printf("Usage: %s xxx.proto xxx.proto\n", argv[0]);
-        return 1;
-    }
-
+    LPSTR target_dir;
     std::string str;
     const FileDescriptor *f;
     ImporterError errorCollector;
@@ -1757,19 +1753,26 @@ int main(int argc, char *argv[])
     compiler::Importer importer(&sourceTree, &errorCollector);
     sourceTree.MapPath("", ".");
 
-    for(int i=1; i<argc; ++i)
+    if (argc < 3)
+    {
+        printf("Usage: %s xxx.proto [xxx.proto] target_dir\n", argv[0]);
+        return 1;
+    }
+
+    target_dir = argv[argc-1];
+    for(int i=1; i<argc-1; ++i)
     {
         proto_filename = argv[i];
         f = importer.Import(proto_filename);
         if (NULL == f)
         {
             printf("Cannot import file:%s", proto_filename);
-            return 2;
+            return 3;
         }
-        gen_all_from_file(f);
+        gen_all_from_file(f, target_dir);
     }
     // common header file
-    gen_comm();
+    gen_comm(target_dir);
 
     return 0;
 }
