@@ -1,10 +1,45 @@
 # 简介
 
-	pbstru是Protobuf to Struct的缩写，主要完成PB码流和C语言结构间的相互转换，可自动生成PB消息的编解码代码。
+	pbstru是Protobuf to Struct的缩写，主要完成PB码流和C语言结构间的相互转换，可依据PB码流定义文件(.proto)自动生成PB消息的编解码代码。
 
 ## 版本更新
 
-2017-11-28 v2.4 -- 支持重复字段的packed属性
+2018-3-16 v2.6 -- 
+
+1. 解决UINT64解码有误的问题
+	在32位环境下，对于无符号64位整数的解码有问题，已解决。
+1. option文件中的max_count支持字符串方式的宏定义
+	option文件中可以将max_count定义为字符串方式的宏，这样pbstru所生成的代码可使用上层头文件中定义的宏，实现宏的单次定义多处引用。
+	例：以下定义将生成数组tenant_id[MAX_SLOT_NUM]
+	```
+	zte.cdb.ccc.CCAResReportRequest.tenant_id max_count:MAX_SLOT_NUM
+	```
+
+
+2017-12-8 v2.5 -- 无重要更新
+
+2017-11-28 v2.4 -- 支持重复字段的packed属性。
+
+对于整数型的repeated字段，有两种编码方式：
+
+1. 普通编码方式：数组中的每一个元素都以tag+len+content的方式出现，相同tag值的信息不需要排列在一起，但顺序需要保证；
+1. 紧缩编码方式，将数组中的元素全部排列在一起，以tag+len+(content_1+...+content_n)的方式出现，所有相同tag值的信息紧密排列在一起，可减少编码后的字节数；
+
+对于基本的数字类型(varint, 32-bit, 或者64-bit) 可将repeated字段可声明成packed，其他类型的repeated字段不允许。
+
+* 在protobuf版本2中，默认支持普通编码，可设置字段的属性为[packed=true]以支持紧缩编码方式。
+* 在protobuf版本3中，默认可以开启紧缩编码方式的都自动开启，可设置字段的属性为[packed=false]以支持普通编码方式。
+
+目前pbstru的特性与protobuf版本2相同，即默认支持普通编码方式。
+在和protobuf版本3进行接口联调时，可在proto文件中将字段设置为[packed=true]，或者要求对方将相应字段设置为[packed=false]，两边需要一致即可。
+
+例：以下proto定义，可要求pbstru生成紧缩方式的码流。
+```
+message ut_test_message
+{
+    repeated uint32 pf_uint32 = 5 [packed=true];
+}
+```
 
 # 实现原理
 
