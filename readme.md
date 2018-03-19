@@ -1,39 +1,39 @@
-# ���
+# 简介
 
-	pbstru��Protobuf to Struct����д����Ҫ���PB������C���Խṹ����໥ת����������PB���������ļ�(.proto)�Զ�����PB��Ϣ�ı������롣
+	pbstru是Protobuf to Struct的缩写，主要完成PB码流和C语言结构间的相互转换，可依据PB码流定义文件(.proto)自动生成PB消息的编解码代码。
 
-## �汾����
+## 版本更新
 
 2018-3-16 v2.6 -- 
 
-1. ���UINT64�������������
-	��32λ�����£������޷���64λ�����Ľ��������⣬�ѽ����
-1. option�ļ��е�max_count֧���ַ�����ʽ�ĺ궨��
-	option�ļ��п��Խ�max_count����Ϊ�ַ�����ʽ�ĺ꣬����pbstru�����ɵĴ����ʹ���ϲ�ͷ�ļ��ж���ĺ꣬ʵ�ֺ�ĵ��ζ���ദ���á�
-	�������¶��彫��������tenant_id[MAX_SLOT_NUM]
-	```
-	zte.cdb.ccc.CCAResReportRequest.tenant_id max_count:MAX_SLOT_NUM
-	```
+1. 解决UINT64解码有误的问题
+	在32位环境下，对于无符号64位整数的解码有问题，已解决。
+1. option文件中的max_count支持字符串方式的宏定义
+	option文件中可以将max_count定义为字符串方式的宏，这样pbstru所生成的代码可使用上层头文件中定义的宏，实现宏的单次定义多处引用。
+	例：以下定义将生成数组tenant_id[MAX_SLOT_NUM]
+```
+zte.cdb.ccc.CCAResReportRequest.tenant_id max_count:MAX_SLOT_NUM
+```
 
 
-2017-12-8 v2.5 -- ����Ҫ����
+2017-12-8 v2.5 -- 无重要更新
 
-2017-11-28 v2.4 -- ֧���ظ��ֶε�packed���ԡ�
+2017-11-28 v2.4 -- 支持重复字段的packed属性。
 
-���������͵�repeated�ֶΣ������ֱ��뷽ʽ��
+对于整数型的repeated字段，有两种编码方式：
 
-1. ��ͨ���뷽ʽ�������е�ÿһ��Ԫ�ض���tag+len+content�ķ�ʽ���֣���ͬtagֵ����Ϣ����Ҫ������һ�𣬵�˳����Ҫ��֤��
-1. �������뷽ʽ���������е�Ԫ��ȫ��������һ����tag+len+(content_1+...+content_n)�ķ�ʽ���֣�������ͬtagֵ����Ϣ����������һ�𣬿ɼ��ٱ������ֽ�����
+1. 普通编码方式：数组中的每一个元素都以tag+len+content的方式出现，相同tag值的信息不需要排列在一起，但顺序需要保证；
+1. 紧缩编码方式，将数组中的元素全部排列在一起，以tag+len+(content_1+...+content_n)的方式出现，所有相同tag值的信息紧密排列在一起，可减少编码后的字节数；
 
-���ڻ�������������(varint, 32-bit, ����64-bit) �ɽ�repeated�ֶο�������packed���������͵�repeated�ֶβ�������
+对于基本的数字类型(varint, 32-bit, 或者64-bit) 可将repeated字段可声明成packed，其他类型的repeated字段不允许。
 
-* ��protobuf�汾2�У�Ĭ��֧����ͨ���룬�������ֶε�����Ϊ[packed=true]��֧�ֽ������뷽ʽ��
-* ��protobuf�汾3�У�Ĭ�Ͽ��Կ����������뷽ʽ�Ķ��Զ��������������ֶε�����Ϊ[packed=false]��֧����ͨ���뷽ʽ��
+* 在protobuf版本2中，默认支持普通编码，可设置字段的属性为[packed=true]以支持紧缩编码方式。
+* 在protobuf版本3中，默认可以开启紧缩编码方式的都自动开启，可设置字段的属性为[packed=false]以支持普通编码方式。
 
-Ŀǰpbstru��������protobuf�汾2��ͬ����Ĭ��֧����ͨ���뷽ʽ��
-�ں�protobuf�汾3���нӿ�����ʱ������proto�ļ��н��ֶ�����Ϊ[packed=true]������Ҫ��Է�����Ӧ�ֶ�����Ϊ[packed=false]��������Ҫһ�¼��ɡ�
+目前pbstru的特性与protobuf版本2相同，即默认支持普通编码方式。
+在和protobuf版本3进行接口联调时，可在proto文件中将字段设置为[packed=true]，或者要求对方将相应字段设置为[packed=false]，两边需要一致即可。
 
-��������proto���壬��Ҫ��pbstru���ɽ�����ʽ��������
+例：以下proto定义，可要求pbstru生成紧缩方式的码流。
 ```
 message ut_test_message
 {
@@ -41,22 +41,22 @@ message ut_test_message
 }
 ```
 
-# ʵ��ԭ��
+# 实现原理
 
 ```
-    proto�ļ� -->|                             |--> ����벿�ֵ�C���� -->|--> ���ൽAPP
-                 |--PBStru���ߣ�pbstru.exe��-->|
+    proto文件 -->|                             |--> 编解码部分的C代码 -->|--> 联编到APP
+                 |--PBStru工具（pbstru.exe）-->|
 ```
 
-# ���뷽��
+# 编译方法
 
 ## Windows
-	Windows����ҪԤ��װCode::Blocks��������IDE��
-	����ִ��/pbstru/build.bat���б��룬������pbstru/bin/pbstru.exe��
+	Windows下需要预安装Code::Blocks编译器及IDE。
+	而后执行/pbstru/build.bat进行编译，可生成pbstru/bin/pbstru.exe。
 
 ## linux
-	linux�¿�ִ��/pbstru/build.sh���б��룬������pbstru/bin/pbstru��
-	ע����ǰ������Ϊprotobuf3�Ѿ�����ͨ��������protobuf3�Ĳ���Ϊ��
+	linux下可执行/pbstru/build.sh进行编译，可生成pbstru/bin/pbstru。
+	注意其前提条件为protobuf3已经编译通过，编译protobuf3的步骤为：
 ```
 	$ cd pbstru/protobuf3
 	$ autogen.sh
@@ -64,16 +64,16 @@ message ut_test_message
 	$ make
 ```
 	
-# ִ�з���
+# 执行方法
 
-1. �޸�proto�ļ��������ӽӿ���Ϣ�������ڽӿ���Ϣ�������ֶΣ��޸�ʱ��ע��ӿڼ����ԣ���������protobuf������׼��
-2. ��windows�£�����pbstru\bin\pbstru.exe�����Ϊproto�ļ������������б����Դ�ļ���
-	��linux�£�����pbstru/bin/pbstru�����Ϊproto�ļ���
-3. ��pbstru\bin\codecĿ¼�£��ɿ����Զ����ɵĴ��룬����ͷ�ļ���Դ�ļ����ɿ�����Щ���뵽����Ŀ¼��������������������ࡣ
+1. 修改proto文件。可增加接口消息，或者在接口消息中增加字段，修改时请注意接口兼容性，详见后面的protobuf兼容性准则；
+2. 在windows下，运行pbstru\bin\pbstru.exe，入参为proto文件名，生成所有编解码源文件；
+	在linux下，运行pbstru/bin/pbstru，入参为proto文件名
+3. 在pbstru\bin\codec目录下，可看到自动生成的代码，包含头文件和源文件，可拷贝这些代码到其他目录，并与其他代码进行联编。
 
-# ���÷���
+# 调用方法
 
-## ��Ϣ����
+## 消息编码
 
 ```C
 #include "response.h"
@@ -90,10 +90,10 @@ if(encode_message_Response(&var_response, NULL) <= max_buffer_length)  // First 
     ......
 }
 ```
-��һ�ε���encode_message_xxxʱ���ڶ������ΪNULL��ֻ������ĳ��ȣ��ڶ��ε���ʱ���ڶ������Ϊ��Ч��ַ����ʱ��ʵ���򻺳���������ݡ�
-����������а��գ�������ɻ����������Ҳ�ɺ��Ե�һ�ε������������Ч�ʡ�
+第一次调用encode_message_xxx时，第二个入参为NULL，只估算包文长度；第二次调用时，第二个入参为有效地址，此时才实际向缓冲区输出数据。
+如果对输入有把握，不会造成缓冲区溢出，也可忽略第一次调用以提高运行效率。
 
-## ��Ϣ����
+## 消息解码
 
 ```C
 #include "response.h"
@@ -102,23 +102,23 @@ if(encode_message_Response(&var_response, NULL) <= max_buffer_length)  // First 
 decode_message_Response(BYTE *buf, size_t buf_len, &var_response);
 ```
 
-decode�����ڲ������ȵ���clear_message_XXX��յ�����������ָ��Ľṹ�����Ե����������ֹ�����clear_message_XXX������
+decode函数内部会首先调用clear_message_XXX清空第三个参数所指向的结构，所以调用者无需手工调用clear_message_XXX函数。
 
 
-# ע������
+# 注意事项
 	
-* pbstruʹ���˾�̬����洢PB��repeated�ֶΣ����Ա�������ȷ��Repeated�ֶε������ܳ��ֵĸ����ſ������ɴ��룬��ص�ֵ��Ҫ��pbstru\bin\xxx.options�ļ��ж��塣
-���δ������صľ�̬�����С��pbstru���⵽��������
-���������б�ʾCCA״̬�ϱ���Ϣ���⻧ID��Ϣ�����ֵĴ�������Ҫ���������ĵ���˵���޸�Ϊ��ȷ��ֵ��
+* pbstru使用了静态数组存储PB的repeated字段，所以必须事先确定Repeated字段的最多可能出现的个数才可以生成代码，相关的值需要在pbstru\bin\xxx.options文件中定义。
+如果未定义相关的静态数组大小，pbstru会检测到并报错。
+例如下列行表示CCA状态上报消息中租户ID信息最多出现的次数，需要按照上游文档的说明修改为正确的值。
 
 ```C	
     Cannot read item:"zte.cdb.ccc.CCAResReportRequest.tenant_id max_count:?" from option file.
 ```
 
-* protobuf������ԭ����Ҫ��
+* protobuf兼容性原则（重要）
 
-	1. �����Ըı��Ѿ����ڵı�ǩ��tagֵ��
-    2. ���������ӻ�ɾ��required�ֶΡ�
-    3. ����ɾ����ѡ(optional)���ظ�(repeated)�ֶΡ�
-    4. ���������µĿ�ѡ���ظ��ֶΣ����Ǳ���ʹ���µ�tag���֣�������֮ǰ���ֶ���û���ù��ġ�
-    5. �µĿ�ѡ��Ϣ�����ھɵ���Ϣ����ʾ����������Ҫʹ�� has_ �ϸ�ļ�������Ƿ���ڣ�������proto �ļ����ṩһ��ȱʡֵ�����û��ȱʡֵ���ͻ���һ��������ص�Ĭ��ȱʡֵ�������ַ������ǿ��ַ��������ڲ���������false��������������Ĭ��Ϊ0��
+	1. 不可以改变已经存在的标签的tag值。
+    2. 不可以增加或删除required字段。
+    3. 可以删除可选(optional)或重复(repeated)字段。
+    4. 可以添加新的可选或重复字段，但是必须使用新的tag数字，必须是之前的字段所没有用过的。
+    5. 新的可选消息不会在旧的消息中显示，所以你需要使用 has_ 严格的检查他们是否存在，或者在proto 文件中提供一个缺省值。如果没有缺省值，就会有一个类型相关的默认缺省值：对于字符串就是空字符串；对于布尔型则是false；对于数字类型默认为0。
