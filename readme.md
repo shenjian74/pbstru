@@ -4,6 +4,15 @@
 
 ## 版本更新
 
+**2018-3-20 v2.7**
+
+1. 支持生成代码到指定目录
+
+	Usage: pbstru xxx.proto [xxx.proto] target_dir
+	
+	生成的源代码生成在target_dir/source目录，头文件生成在target_dir/include目录。
+	如果target_dir目录下不存在source和include目录，则尝试创建目录。
+
 **2018-3-16 v2.6**
 
 1. 解决UINT64解码有误的问题
