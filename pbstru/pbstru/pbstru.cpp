@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include "importer.h"
 #include "bstrwrap.h"
 
@@ -18,6 +19,7 @@ typedef char *LPSTR;
 typedef bool BOOL;
 #define TRUE 1
 #define FALSE 0
+#define EOS ('\0')
 
 using namespace google::protobuf;
 
@@ -31,9 +33,9 @@ const bool is_struct_lowercase = true;
 
 const char __THIS_FILE__[] = "pbstru.cpp";
 #ifdef _WIN32
-  const char path_sep[] = "\\";
+  const char path_sep = '\\';
 #else
-  const char path_sep[] = "/";
+  const char path_sep = '/';
 #endif
 
 typedef enum
@@ -45,9 +47,9 @@ typedef enum
 } e_error_code;
 
 // 生成公共文件pbstru_comm.h和pbstru_comm.c
-void gen_comm(LPCSTR target_dir)
+void gen_comm(CBString &target_dir)
 {
-    CBString filename = CBString(target_dir) + path_sep + "pbstru_comm.h";
+    CBString filename = target_dir + "include" + path_sep + "pbstru_comm.h";
     FILE *fp = fopen((LPCSTR)filename, "wt");
     if (NULL == fp)
     {
@@ -139,7 +141,7 @@ void gen_comm(LPCSTR target_dir)
     fprintf(fp, "\n#endif\n\n/* end of file */");
     fclose(fp);
 
-    filename = CBString(target_dir) + path_sep + "pbstru_comm.c";
+    filename = target_dir + "source" + path_sep + "pbstru_comm.c";
     fp = fopen((LPCSTR)filename, "wt");
     if (NULL == fp)
     {
@@ -203,23 +205,11 @@ void gen_comm(LPCSTR target_dir)
     fclose(fp);
 }
 
-std::string& trim(std::string &s)   
-{  
-    if (s.empty())   
-    {  
-        return s;  
-    }  
-  
-    s.erase(0, s.find_first_not_of(" "));  
-    s.erase(s.find_last_not_of(" ") + 1);  
-    return s;  
-}
-
 LPSTR proto_filename;
 FILE *fp_option = NULL;
 
 // Get the max size of a repeated field.
-static bool get_max_count(LPCSTR message_name, LPCSTR field_name, std::string& max_count)
+static bool get_max_count(LPCSTR message_name, LPCSTR field_name, CBString& max_count)
 {
     char str1[128];
     char str2[64];
@@ -266,21 +256,19 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, std::string& m
             char *num_str = strstr(str2, "max_count:");
             if (NULL == num_str)
             {
-                printf("Error: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n",
-                       __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
+                printf("Error: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n", __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
                 exit(NO_SUCH_ITEM);
             }
             else
             {
-                max_count = std::string(num_str + strlen("max_count:"));
-		trim(max_count);
+                max_count = CBString(num_str + strlen("max_count:"));
+		max_count.trim();
                 return true;
             }
         }
     }
 
-    printf("Warning: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n",
-           __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
+    printf("Warning: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n", __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
     // exit(NO_MAX_COUNT_IN_FILE);
     return false;
 }
@@ -335,7 +323,7 @@ LPCSTR get_struct_list_name(const FieldDescriptor *field)
 /* Check the field is unlimit repeated field. */
 bool is_dynamic_repeated(const FieldDescriptor *field)
 {
-    std::string max_count;
+    CBString max_count;
     bool is_dynamic = false;
     static std::map<CBString, bool> kv_store;
     std::map<CBString, bool>::iterator it;
@@ -560,7 +548,7 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     }
 }
 
-void gen_header(const Descriptor *desc, LPCSTR target_dir)
+void gen_header(const Descriptor *desc, CBString &target_dir)
 {
     CBString name_lower(desc->name().c_str());
     name_lower.tolower();
@@ -575,7 +563,7 @@ void gen_header(const Descriptor *desc, LPCSTR target_dir)
         struct_name = (CBString)struct_prefix + desc->name().c_str() + struct_postfix;
     }
 
-    CBString filename = CBString(target_dir) + path_sep + name_lower;
+    CBString filename = target_dir + "include" + path_sep + name_lower;
     filename += ".h";
     FILE *fp = fopen((LPCSTR)filename, "wt");
     if(NULL == fp)
@@ -621,11 +609,10 @@ void gen_header(const Descriptor *desc, LPCSTR target_dir)
         field_containing_type_upper.toupper();
         if(field->is_repeated())
         {
-            std::string max_count;
+            CBString max_count;
             if(get_max_count(field->containing_type()->full_name().c_str(), field->name().c_str(), max_count))
             {
-                fprintf(fp, "#define PBSTRU_MAX_%s_IN_%s %s\n",
-                        (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, max_count.c_str());
+                fprintf(fp, "#define PBSTRU_MAX_%s_IN_%s %s\n", (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper, (LPCSTR)max_count);
             }
         }
     }
@@ -925,7 +912,7 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
     }
 }
 
-void gen_source(const Descriptor *desc, LPCSTR target_dir)
+void gen_source(const Descriptor *desc, CBString &target_dir)
 {
     CBString name_lower(desc->name().c_str());
     name_lower.tolower();
@@ -940,7 +927,7 @@ void gen_source(const Descriptor *desc, LPCSTR target_dir)
         struct_name = (CBString)struct_prefix + desc->name().c_str() + struct_postfix;
     }
 
-    CBString filename = CBString(target_dir) + path_sep + name_lower;
+    CBString filename = target_dir + "source" + path_sep + name_lower;
     filename += ".c";
     FILE *fp = fopen((LPCSTR)filename, "wt");
     if(NULL == fp)
@@ -1713,7 +1700,7 @@ void gen_source(const Descriptor *desc, LPCSTR target_dir)
     fclose(fp);
 }
 
-void gen_all_from_file(const FileDescriptor *f, LPCSTR target_dir)
+void gen_all_from_file(const FileDescriptor *f, CBString &target_dir)
 {
     for(int i=0; i<f->message_type_count(); ++i)
     {
@@ -1743,9 +1730,37 @@ private:
     }
 };
 
+int create_path(CBString &path)
+{  
+    char dir_name[1024];
+    if(path[path.length()-1] != path_sep)  
+    {
+        path += path_sep;
+    }
+    strcpy(dir_name, path);
+   
+    size_t len = path.length();
+    for(size_t i=1; i<len; i++)  
+    {  
+        if(dir_name[i] == path_sep)  
+        {  
+            dir_name[i] = EOS;  
+            if(access(dir_name, 0))  
+            {  
+                if(mkdir(dir_name, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))  
+                {   
+                    printf("Cannot create directory: %s\n", dir_name);   
+                    return -1;   
+                }  
+            }  
+            dir_name[i] = path_sep;  
+        }  
+    }  
+    return 0;  
+} 
+
 int main(int argc, char *argv[])
 {
-    LPSTR target_dir;
     std::string str;
     const FileDescriptor *f;
     ImporterError errorCollector;
@@ -1759,7 +1774,19 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    target_dir = argv[argc-1];
+    CBString target_dir = argv[argc-1];
+    if(create_path(target_dir)){
+        return 2;
+    }
+    CBString include_path = target_dir + "include" + path_sep;
+    if(create_path(include_path)){
+        return 2;
+    }
+    CBString source_path = target_dir + "source" + path_sep;
+    if(create_path(source_path)){
+        return 2;
+    }
+
     for(int i=1; i<argc-1; ++i)
     {
         proto_filename = argv[i];
