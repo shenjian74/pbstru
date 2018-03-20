@@ -1730,9 +1730,18 @@ private:
     }
 };
 
+/* RAII */
+static inline void freep(char **p) { 
+    if(*p){  
+        free(*p);  
+    }
+    *p = NULL; 
+}
+#define _cleanup_free_ __attribute__((cleanup(freep)))
+
 int create_path(CBString &path)
 {  
-    char dir_name[1024];
+    _cleanup_free_ char* dir_name = (char *)malloc(path.length() + 10);
     if(path[path.length()-1] != path_sep)  
     {
         path += path_sep;
