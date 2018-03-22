@@ -90,9 +90,9 @@ message ut_test_message
 # 执行方法
 
 1. 修改proto文件。可增加接口消息，或者在接口消息中增加字段，修改时请注意接口兼容性，详见后面的protobuf兼容性准则；
-2. 在windows下，运行pbstru\bin\pbstru.exe，入参为proto文件名，生成所有编解码源文件；
-	在linux下，运行pbstru/bin/pbstru，入参为proto文件名
-3. 在pbstru\bin\codec目录下，可看到自动生成的代码，包含头文件和源文件，可拷贝这些代码到其他目录，并与其他代码进行联编。
+2. 在windows下，运行pbstru\bin\pbstru.exe，入参为多个proto文件名及目标文件夹，执行完成后在目标文件夹的include/source子目录生成所有编解码源文件；
+	在linux下，运行pbstru/bin/pbstru，入参为proto文件名及目标文件夹。
+	Usage: pbstru xxx.proto [xxx.proto] target_dir
 
 # 调用方法
 
