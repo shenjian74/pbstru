@@ -101,10 +101,11 @@ message ut_test_message
 ```C
 #include "response.h"
 ... 
-st_Response var_response; 
-clear_message_Response(&var_response); 
-/* set value in struct var_response */
-var_response.xxx = xxx;
+st_Response var_response;
+constru_message_Response(&var_response);  // Init struct at first.
+...
+clear_message_Response(&var_response);  // Clear struct in loop.
+var_response.xxx = xxx;  // set value in struct var_response
 ... 
 BYTE buffer[max_buffer_length];
 if(encode_message_Response(&var_response, NULL) <= max_buffer_length)  // First call encode_message_xxx 
@@ -120,6 +121,9 @@ if(encode_message_Response(&var_response, NULL) <= max_buffer_length)  // First 
 
 ```C
 #include "response.h"
+...
+st_Response var_response;
+constru_message_Response(&var_response);  // Init struct at first.
 ...
 /* NO need to call clear_message_xxx before this function */ 
 decode_message_Response(BYTE *buf, size_t buf_len, &var_response);
