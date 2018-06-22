@@ -1,10 +1,9 @@
 project (pbstru)
 cmake_minimum_required (VERSION 2.6)
-
 # set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_C_FLAGS "-O0 -Wall -g -ggdb ")
-set(CMAKE_CXX_FLAGS "-O0 -Wall -g -ggdb ")
-# set(CMAKE_EXE_LINKER_FLAGS -static)
+set(CMAKE_C_FLAGS "-O0 -Wall -g -ggdb")
+set(CMAKE_CXX_FLAGS "-O0 -Wall -g -ggdb")
+set(CMAKE_EXE_LINKER_FLAGS "-static -pthread")
 
 aux_source_directory(./pbstru SRC_FILES)
 
@@ -21,7 +20,7 @@ include_directories(
 	../protobuf3/src/google/protobuf/compiler
 )
 
-add_subdirectory("./test_codec")
+# add_subdirectory("./test_codec")
 
 IF (WIN32)
 add_custom_target(
