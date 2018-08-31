@@ -1756,7 +1756,11 @@ int create_path(CBString &path)
             dir_name[i] = EOS;  
             if(access(dir_name, 0))  
             {  
-                if(mkdir(dir_name, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))  
+#ifdef _WIN32
+				if(mkdir(dir_name))
+#else
+				if(mkdir(dir_name, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))
+#endif
                 {   
                     printf("Cannot create directory: %s\n", dir_name);   
                     return -1;   
