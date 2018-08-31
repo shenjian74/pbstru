@@ -16,3 +16,4 @@ Debug
 *.depend
 .idea
 *.swp
+/pbstru/bin/pbstru
