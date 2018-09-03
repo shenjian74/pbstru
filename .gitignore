@@ -1,6 +1,7 @@
 build
 *.lo
 *.la
+*.tmp
 *~
 *.cache
 .libs
