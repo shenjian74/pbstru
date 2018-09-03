@@ -3,6 +3,7 @@
 /* lint -save -e701 -e647 */
 
 void constru_message_Http2AppRes(st_http2appres *var_Http2AppRes){
+    size_t i = 0;
     var_Http2AppRes->has_url = FALSE;
     var_Http2AppRes->has_method = FALSE;
     var_Http2AppRes->has_data = FALSE;
@@ -13,9 +14,10 @@ void constru_message_Http2AppRes(st_http2appres *var_Http2AppRes){
     var_Http2AppRes->has_location = FALSE;
         constru_message_Http2TransParam(&(var_Http2AppRes->var_transParam));
     var_Http2AppRes->has_transParam = FALSE;
-    var_Http2AppRes->var_header = NULL;
-    var_Http2AppRes->var_header_tail = NULL;
-
+    for(i=0; i<PBSTRU_MAX_HEADER_IN_HTTP2APPRES; ++i){
+        constru_message_MapheaderEntry(&(var_Http2AppRes->var_header.item[i]));
+    }
+    var_Http2AppRes->var_header.count = 0;
     var_Http2AppRes->has_reqType = FALSE;
 }
 
@@ -24,6 +26,7 @@ void destru_message_Http2AppRes(st_http2appres* var_Http2AppRes){
 }
 
 void clear_message_Http2AppRes(st_http2appres* var_Http2AppRes){
+    size_t i = 0;
     if(TRUE == var_Http2AppRes->has_url){
         var_Http2AppRes->var_url.length = 0;
         var_Http2AppRes->var_url.data = NULL;
@@ -66,16 +69,10 @@ void clear_message_Http2AppRes(st_http2appres* var_Http2AppRes){
         clear_message_Http2TransParam(&(var_Http2AppRes->var_transParam));
     }
     var_Http2AppRes->has_transParam = FALSE;
-    st_header_in_http2appres_headerentry_list *it1=var_Http2AppRes->var_header;
-    for(; NULL!=it1; ) {
-        st_header_in_http2appres_headerentry_list *it_tmp = it1;
-        it1=it1->next;
-        clear_message_HeaderEntry(&(it_tmp->value));
-        pbstru_free((void *)it_tmp);
+    for(i=0; i<var_Http2AppRes->var_header.count; ++i){
+        clear_message_MapheaderEntry(&(var_Http2AppRes->var_header.item[i]));
     }
-    var_Http2AppRes->var_header = NULL;
-    var_Http2AppRes->var_header_tail = NULL;
-
+    var_Http2AppRes->var_header.count = 0;
     if(TRUE == var_Http2AppRes->has_reqType){
     }
     var_Http2AppRes->has_reqType = FALSE;
@@ -83,8 +80,8 @@ void clear_message_Http2AppRes(st_http2appres* var_Http2AppRes){
 
 size_t encode_message_Http2AppRes(const st_http2appres* var_Http2AppRes, BYTE* buf){
     size_t encode_buf_len;
+    size_t i;
     size_t offset = 0;
-    st_header_in_http2appres_headerentry_list *it1=var_Http2AppRes->var_header;
 
     if(var_Http2AppRes->has_url){
         /* tag:1 type:bytes */
@@ -169,13 +166,13 @@ size_t encode_message_Http2AppRes(const st_http2appres* var_Http2AppRes, BYTE* b
         offset += encode_buf_len;
     }
 
-    for(it1=var_Http2AppRes->var_header; NULL!=it1; it1=it1->next) {
+    for(i = 0; i < var_Http2AppRes->var_header.count; ++i){
         /* tag:10 type:message */
         encode_tag_byte(buf, 10, WIRE_TYPE_LENGTH_DELIMITED, &offset);
-        encode_buf_len = encode_message_HeaderEntry(&(it1->value), NULL);
+        encode_buf_len = encode_message_MapheaderEntry(&(var_Http2AppRes->var_header.item[i]), NULL);
         encode_varint(encode_buf_len, buf, &offset);
         if(NULL != buf){
-            encode_message_HeaderEntry(&(it1->value), buf + offset);
+            encode_message_MapheaderEntry(&(var_Http2AppRes->var_header.item[i]), buf + offset);
         }
         offset += encode_buf_len;
     }
@@ -260,28 +257,13 @@ BOOL decode_message_Http2AppRes(BYTE* buf, const size_t buf_len, st_http2appres*
             break;
         /* type:message */
         case 10:
-            if(NULL == var_Http2AppRes->var_header){
-                var_Http2AppRes->var_header = (st_header_in_http2appres_headerentry_list *)pbstru_malloc(sizeof(st_header_in_http2appres_headerentry_list));
-                if(NULL == var_Http2AppRes->var_header){
-                    return FALSE;
-                } else {
-                    var_Http2AppRes->var_header_tail = var_Http2AppRes->var_header;
-                    var_Http2AppRes->var_header_tail->next = NULL;
-                }
-            } else {
-                st_header_in_http2appres_headerentry_list *tmptr = (st_header_in_http2appres_headerentry_list *)pbstru_malloc(sizeof(st_header_in_http2appres_headerentry_list));
-                if(NULL == tmptr){
-                    return FALSE;
-                } else {
-                    var_Http2AppRes->var_header_tail->next = tmptr;
-                    var_Http2AppRes->var_header_tail = tmptr;
-                    var_Http2AppRes->var_header_tail->next = NULL;
-                }
+            if(var_Http2AppRes->var_header.count >= PBSTRU_MAX_HEADER_IN_HTTP2APPRES) {
+                return FALSE;  /* Êý×é³¬ÏÞ */
             }
-            constru_message_HeaderEntry(&(var_Http2AppRes->var_header_tail->value));
             decode_varint(buf + offset, &tmp_field_len, &offset);
-            decode_message_HeaderEntry(buf + offset, tmp_field_len, &(var_Http2AppRes->var_header_tail->value));
+            decode_message_MapheaderEntry(buf + offset, tmp_field_len, &(var_Http2AppRes->var_header.item[var_Http2AppRes->var_header.count]));
             offset += tmp_field_len;
+            var_Http2AppRes->var_header.count += 1;
             break;
         /* type:enum */
         case 21:

@@ -1,3 +1,6 @@
 http2proxy.App2HttpRes.header max_count:10
+http2proxy.App2HttpReq.header max_count:10
+http2proxy.Http2AppReq.header max_count:10
 http2proxy.App2HttpSubscribe.rules max_count:10
-
+http2proxy.Http2AppRes.header max_count:10
+http2proxy.Http2AppSubscribeAck.results max_count:10
