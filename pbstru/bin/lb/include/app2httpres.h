@@ -6,8 +6,8 @@ extern "C"{
 #endif
 
 #include "pbstru_comm.h"
-#include "headerentry.h"
 #include "http2transparam.h"
+#include "mapheaderentry.h"
 
 /*
 message App2HttpRes {
@@ -17,15 +17,15 @@ message App2HttpRes {
   bytes contentType = 4;
   bytes location = 5;
   .http2proxy.Http2TransParam transParam = 6;
-  map<string, bytes> header = 7;
+  repeated .http2proxy.MapheaderEntry header = 7;
 }
 */
 #define PBSTRU_MAX_HEADER_IN_APP2HTTPRES 10
 
-typedef struct _st_header_in_app2httpres_headerentry_list {
+typedef struct _st_header_in_app2httpres_mapheaderentry_list {
     size_t count;
-    st_headerentry item[PBSTRU_MAX_HEADER_IN_APP2HTTPRES];  /* tag:7 type:message */
-} st_header_in_app2httpres_headerentry_list;
+    st_mapheaderentry item[PBSTRU_MAX_HEADER_IN_APP2HTTPRES];  /* tag:7 type:message */
+} st_header_in_app2httpres_mapheaderentry_list;
 
 typedef struct _st_app2httpres {
     BOOL has_sequence;
@@ -40,7 +40,7 @@ typedef struct _st_app2httpres {
     ps_bytes var_location;  /* tag:5 */
     BOOL has_transParam;
     st_http2transparam var_transParam;  /* tag:6 */
-    st_header_in_app2httpres_headerentry_list var_header;  /* tag:7 */
+    st_header_in_app2httpres_mapheaderentry_list var_header;  /* tag:7 */
 } st_app2httpres;
 
 /* construct msg when first use, call clear_message_*() internaly. */

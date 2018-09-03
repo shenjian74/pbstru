@@ -13,7 +13,7 @@ void constru_message_App2HttpReq(st_app2httpreq *var_App2HttpReq){
     var_App2HttpReq->has_contentType = FALSE;
     var_App2HttpReq->has_traced = FALSE;
     for(i=0; i<PBSTRU_MAX_HEADER_IN_APP2HTTPREQ; ++i){
-        constru_message_HeaderEntry(&(var_App2HttpReq->var_header.item[i]));
+        constru_message_MapheaderEntry(&(var_App2HttpReq->var_header.item[i]));
     }
     var_App2HttpReq->var_header.count = 0;
         constru_message_Http2AppInfo(&(var_App2HttpReq->var_appInfo));
@@ -69,7 +69,7 @@ void clear_message_App2HttpReq(st_app2httpreq* var_App2HttpReq){
     }
     var_App2HttpReq->has_traced = FALSE;
     for(i=0; i<var_App2HttpReq->var_header.count; ++i){
-        clear_message_HeaderEntry(&(var_App2HttpReq->var_header.item[i]));
+        clear_message_MapheaderEntry(&(var_App2HttpReq->var_header.item[i]));
     }
     var_App2HttpReq->var_header.count = 0;
     if(TRUE == var_App2HttpReq->has_appInfo){
@@ -174,10 +174,10 @@ size_t encode_message_App2HttpReq(const st_app2httpreq* var_App2HttpReq, BYTE* b
     for(i = 0; i < var_App2HttpReq->var_header.count; ++i){
         /* tag:9 type:message */
         encode_tag_byte(buf, 9, WIRE_TYPE_LENGTH_DELIMITED, &offset);
-        encode_buf_len = encode_message_HeaderEntry(&(var_App2HttpReq->var_header.item[i]), NULL);
+        encode_buf_len = encode_message_MapheaderEntry(&(var_App2HttpReq->var_header.item[i]), NULL);
         encode_varint(encode_buf_len, buf, &offset);
         if(NULL != buf){
-            encode_message_HeaderEntry(&(var_App2HttpReq->var_header.item[i]), buf + offset);
+            encode_message_MapheaderEntry(&(var_App2HttpReq->var_header.item[i]), buf + offset);
         }
         offset += encode_buf_len;
     }
@@ -288,7 +288,7 @@ BOOL decode_message_App2HttpReq(BYTE* buf, const size_t buf_len, st_app2httpreq*
                 return FALSE;  /* Êý×é³¬ÏÞ */
             }
             decode_varint(buf + offset, &tmp_field_len, &offset);
-            decode_message_HeaderEntry(buf + offset, tmp_field_len, &(var_App2HttpReq->var_header.item[var_App2HttpReq->var_header.count]));
+            decode_message_MapheaderEntry(buf + offset, tmp_field_len, &(var_App2HttpReq->var_header.item[var_App2HttpReq->var_header.count]));
             offset += tmp_field_len;
             var_App2HttpReq->var_header.count += 1;
             break;
