@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <ctype.h>
 #include "importer.h"
 #include "bstrwrap.h"
 
@@ -33,9 +34,9 @@ const bool is_struct_lowercase = true;
 
 const char __THIS_FILE__[] = "pbstru.cpp";
 #ifdef _WIN32
-  const char path_sep = '\\';
+const char path_sep = '\\';
 #else
-  const char path_sep = '/';
+const char path_sep = '/';
 #endif
 
 typedef enum
@@ -234,7 +235,7 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, CBString& max_
         fp_option = fopen((LPCSTR)option_filename, "rt");
         if (NULL == fp_option)
         {
-            printf("[%s:%d] Cannot open file:%s for read.\n", __THIS_FILE__, __LINE__, (LPCSTR)option_filename);
+            printf("Error: [%s:%d] Cannot open file:%s for read.\n", __THIS_FILE__, __LINE__, (LPCSTR)option_filename);
             exit(10);
         }
     }
@@ -262,13 +263,13 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, CBString& max_
             else
             {
                 max_count = CBString(num_str + strlen("max_count:"));
-		max_count.trim();
+                max_count.trim();
                 return true;
             }
         }
     }
 
-    printf("Warning: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n", __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
+    printf("Info: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s], It will be created dynamically.\n", __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
     // exit(NO_MAX_COUNT_IN_FILE);
     return false;
 }
@@ -832,7 +833,8 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
 
                     if(FieldDescriptor::TYPE_MESSAGE == field->type())
                     {
-                        fprintf(fp, "    for(i=0; i<PBSTRU_MAX_%s_IN_%s; ++i){\n", (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper);
+                        fprintf(fp, "    for(i=0; i<PBSTRU_MAX_%s_IN_%s; ++i){\n",
+                                (LPCSTR)field_name_upper, (LPCSTR)field_containing_type_upper);
                         fprintf(fp, "        constru_message_%s(&(var_%s->var_%s.item[i]));\n",
                                 field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                         fprintf(fp, "    }\n");
@@ -1026,7 +1028,7 @@ void gen_source(const Descriptor *desc, CBString &target_dir)
                     case FieldDescriptor::TYPE_ENUM:
                         fprintf(fp, "    encode_tag_byte(buf, %d, WIRE_TYPE_VARINT, &offset);\n", field->number());
                         break;
-		    default:
+                    default:
                         break;
                     }
                     fprintf(fp, "    i = 0;  /* i复用为元素个数使用 */\n");
@@ -1731,45 +1733,257 @@ private:
 };
 
 /* RAII */
-static inline void freep(char **p) { 
-    if(*p){  
-        free(*p);  
+static inline void freep(char **p)
+{
+    if(*p)
+    {
+        free(*p);
     }
-    *p = NULL; 
+    *p = NULL;
 }
 #define _cleanup_free_ __attribute__((cleanup(freep)))
 
 int create_path(CBString &path)
-{  
+{
     _cleanup_free_ char* dir_name = (char *)malloc(path.length() + 10);
-    if(path[path.length()-1] != path_sep)  
+    if(path[path.length()-1] != path_sep)
     {
         path += path_sep;
     }
     strcpy(dir_name, path);
-   
+
     size_t len = path.length();
-    for(size_t i=1; i<len; i++)  
-    {  
-        if(dir_name[i] == path_sep)  
-        {  
-            dir_name[i] = EOS;  
-            if(access(dir_name, 0))  
-            {  
-                if(mkdir(dir_name, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))  
-                {   
-                    printf("Cannot create directory: %s\n", dir_name);   
-                    return -1;   
-                }  
-            }  
-            dir_name[i] = path_sep;  
-        }  
-    }  
-    return 0;  
-} 
+    for(size_t i=1; i<len; i++)
+    {
+        if(dir_name[i] == path_sep)
+        {
+            dir_name[i] = EOS;
+            if(access(dir_name, 0))
+            {
+#ifdef _WIN32
+                if(mkdir(dir_name))
+#else
+                if(mkdir(dir_name, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))
+#endif
+                {
+                    printf("Cannot create directory: %s\n", dir_name);
+                    return -1;
+                }
+            }
+            dir_name[i] = path_sep;
+        }
+    }
+    return 0;
+}
+
+int get_syntax(LPCSTR proto_filename)
+{
+    int syntax = 0;
+    char str_syntax[128];
+    char buf[8 * 1024];
+
+    FILE *fp = fopen(proto_filename, "rt");
+    if(NULL != fp)
+    {
+        for(;;)
+        {
+            if(NULL == fgets(buf, sizeof(buf), fp))
+            {
+                break;
+            }
+            else
+            {
+                int i = 0;
+                int start = 0;
+                int len = 0;
+
+                for(;; ++i)
+                {
+                    if(' ' != buf[i] && '\t' != buf[i])
+                    {
+                        break;
+                    }
+                }
+                printf("%s\n", buf+i);
+
+                // 发现"syntax"关键字
+                if(0 == memcmp(buf+i, "syntax", 6))
+                {
+                    for(;; ++i)
+                    {
+                        if(isdigit(buf[i]))
+                        {
+                            start = i;
+                            break;
+                        }
+                    }
+                    for(;; ++i)
+                    {
+                        if(!isdigit(buf[i]))
+                        {
+                            len = i - start;
+                            break;
+                        }
+                    }
+                    memcpy(str_syntax, buf+start, len);
+                    str_syntax[len] = EOS;
+                    syntax = atoi(str_syntax);
+                    break;
+                }
+            }
+        }
+        fclose(fp);
+    }
+    return syntax;
+}
+
+void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
+{
+    char buf[8 * 1024];
+    char key_type[40];
+    char key_value[40];
+    char field_name[80];
+    char field_no[40];
+    char append_buf[8*1024];
+    std::set<CBString> map_entrys;
+
+    append_buf[0] = EOS;
+    FILE *fp = fopen(pbv3_filename, "rt");
+    if(NULL != fp)
+    {
+        FILE *fpout = fopen(pbv2_filename, "wt");
+        if(NULL!= fpout)
+        {
+            for(;;)
+            {
+                if(NULL == fgets(buf, sizeof(buf), fp))
+                {
+                    break;
+                }
+                else
+                {
+                    int i = 0;
+                    int start = 0;
+                    int len = 0;
+
+                    for(;; ++i)
+                    {
+                        if(' ' != buf[i] && '\t' != buf[i])
+                        {
+                            break;
+                        }
+                    }
+
+                    if(0 == memcmp(buf+i, "map", 3))   // 发现"map"关键字
+                    {
+                        printf("%s", buf+i);
+                        for(i=i+3;; ++i)
+                        {
+                            if('<'!=buf[i])
+                            {
+                                break;
+                            }
+                        }
+                        start = i;
+                        for(;; ++i)
+                        {
+                            if(','==buf[i] || ' '==buf[i] || '\t'==buf[i])
+                            {
+                                break;
+                            }
+                        }
+                        len = i - start;
+                        // 定位到key_type信息
+                        memcpy(key_type, buf + start, len);
+                        key_type[len] = EOS;
+                        printf("key_type:%s\n", key_type);
+
+                        for(;; ++i)
+                        {
+                            if(' '!=buf[i] && '\t'!=buf[i] && ','!=buf[i])
+                            {
+                                break;
+                            }
+                        }
+                        start = i;
+                        for(;; ++i)
+                        {
+                            if('>'==buf[i] || ' '==buf[i] || '\t'==buf[i])
+                            {
+                                break;
+                            }
+                        }
+                        len = i - start;
+                        // 定位到key_value信息
+                        memcpy(key_value, buf + start, len);
+                        key_value[len] = EOS;
+                        printf("key_value:%s\n", key_value);
+
+                        for(;; ++i)
+                        {
+                            if('>'!=buf[i] && ' '!=buf[i] && '\t'!=buf[i])
+                            {
+                                break;
+                            }
+                        }
+                        start = i;
+                        for(;; ++i)
+                        {
+                            if('='==buf[i] || ' '==buf[i] || '\t'==buf[i])
+                            {
+                                break;
+                            }
+                        }
+                        len = i - start;
+                        memcpy(field_name, buf + start, len);
+                        field_name[len] = EOS;
+                        printf("field_name:%s\n", field_name);
+
+                        for(;; ++i)
+                        {
+                            if('='!=buf[i] && ' '!=buf[i] && '\t'!=buf[i])
+                            {
+                                break;
+                            }
+                        }
+                        start = i;
+                        for(;; ++i)
+                        {
+                            if(';'==buf[i] || ' '==buf[i] || '\t'==buf[i])
+                            {
+                                break;
+                            }
+                        }
+                        len = i - start;
+                        memcpy(field_no, buf + start, len);
+                        field_no[len] = EOS;
+                        printf("field_no:%s\n", field_no);
+
+                        // 使用set避免同名mapentrys重复插入
+                        CBString map_entry_name = CBString("Map") + CBString(field_name) + "Entry";
+                        if(map_entrys.find(map_entry_name) == map_entrys.end())
+                        {
+                            sprintf(buf, "message Map%sEntry {\n  %s key = 1;\n  %s value = 2;\n}\n\n",
+                                    field_name, key_type, key_value);
+                            strcat(append_buf, buf);
+                            map_entrys.insert(map_entry_name);
+                        }
+                        sprintf(buf, "repeated Map%sEntry %s = %s;\n", field_name, field_name, field_no);
+                    }
+                    // 没有"map"关键字的情况，则直接拷贝
+                    fputs(buf, fpout);
+                }
+            }
+            fputs(append_buf, fpout);
+            fclose(fpout);
+        }
+        fclose(fp);
+    }
+}
 
 int main(int argc, char *argv[])
 {
+    char no_map_filename[256];
     std::string str;
     const FileDescriptor *f;
     ImporterError errorCollector;
@@ -1784,25 +1998,50 @@ int main(int argc, char *argv[])
     }
 
     CBString target_dir = argv[argc-1];
-    if(create_path(target_dir)){
+    if(create_path(target_dir))
+    {
         return 2;
     }
     CBString include_path = target_dir + "include" + path_sep;
-    if(create_path(include_path)){
+    if(create_path(include_path))
+    {
         return 2;
     }
     CBString source_path = target_dir + "source" + path_sep;
-    if(create_path(source_path)){
+    if(create_path(source_path))
+    {
         return 2;
     }
 
     for(int i=1; i<argc-1; ++i)
     {
         proto_filename = argv[i];
-        f = importer.Import(proto_filename);
+        int syntax = get_syntax(proto_filename);
+
+        // 如果是v3的语法，则转换map关键字
+        ///////////////////////////////////////////////////
+        // message MapFieldEntry {
+        //   key_type key = 1;
+        //   value_type value = 2;
+        // }
+        // repeated MapFieldEntry Field = N;
+        ///////////////////////////////////////////////////
+        // map<key_type, value_type> Field = N;
+        ///////////////////////////////////////////////////
+        if(3 == syntax)
+        {
+            sprintf(no_map_filename, "%s.tmp", proto_filename);
+            convert_pbv3(proto_filename, no_map_filename);
+        }
+        else
+        {
+            strcpy(no_map_filename, proto_filename);
+        }
+
+        f = importer.Import(no_map_filename);
         if (NULL == f)
         {
-            printf("Cannot import file:%s", proto_filename);
+            printf("Cannot import file:%s", no_map_filename);
             return 3;
         }
         gen_all_from_file(f, target_dir);

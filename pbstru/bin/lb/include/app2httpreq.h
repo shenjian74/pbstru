@@ -6,8 +6,8 @@ extern "C"{
 #endif
 
 #include "pbstru_comm.h"
-#include "headerentry.h"
 #include "http2appinfo.h"
+#include "mapheaderentry.h"
 
 /*
 message App2HttpReq {
@@ -19,13 +19,14 @@ message App2HttpReq {
   bytes accept = 6;
   bytes contentType = 7;
   bool traced = 8;
-  map<string, bytes> header = 9;
+  repeated .http2proxy.MapheaderEntry header = 9;
   .http2proxy.Http2AppInfo appInfo = 10;
   uint32 linkID = 11;
   bytes userid = 12;
   .http2proxy.ReqType reqType = 21;
 }
 */
+#define PBSTRU_MAX_HEADER_IN_APP2HTTPREQ 10
 
 #ifndef ENUM_REQTYPE_DEFINED
 #define ENUM_REQTYPE_DEFINED
@@ -35,10 +36,10 @@ typedef enum {
 } enum_ReqType;
 #endif
 
-typedef struct _st_header_in_app2httpreq_headerentry_list {
-    struct _st_header_in_app2httpreq_headerentry_list *next;
-    st_headerentry value;  /* tag:9 type:message */
-} st_header_in_app2httpreq_headerentry_list;
+typedef struct _st_header_in_app2httpreq_mapheaderentry_list {
+    size_t count;
+    st_mapheaderentry item[PBSTRU_MAX_HEADER_IN_APP2HTTPREQ];  /* tag:9 type:message */
+} st_header_in_app2httpreq_mapheaderentry_list;
 
 typedef struct _st_app2httpreq {
     BOOL has_url;
@@ -57,8 +58,7 @@ typedef struct _st_app2httpreq {
     ps_bytes var_contentType;  /* tag:7 */
     BOOL has_traced;
     BOOL var_traced;  /* tag:8 */
-    st_header_in_app2httpreq_headerentry_list *var_header;  /* tag:9 链表头指针 */
-    st_header_in_app2httpreq_headerentry_list *var_header_tail;  /* 链表尾指针 */
+    st_header_in_app2httpreq_mapheaderentry_list var_header;  /* tag:9 */
     BOOL has_appInfo;
     st_http2appinfo var_appInfo;  /* tag:10 */
     BOOL has_linkID;

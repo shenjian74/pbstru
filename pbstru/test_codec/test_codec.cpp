@@ -793,8 +793,8 @@ int main(int argc, char* argv[])
     }
 
     assert(malloc_times == free_times);
-    printf("<Press any key to continue ...>\n");
-    getchar();
+    // printf("<Press any key to continue ...>\n");
+    // getchar();
     printf("%s Done.\n", argv[0]);
 }
 
