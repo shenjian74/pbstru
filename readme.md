@@ -4,7 +4,7 @@
 
 ## 版本更新
 
-**2018-9-3**
+**2018-9-3 v2.9**
 
 1. 以兼容性方式支持proto3中的map关键字
 	
@@ -17,7 +17,7 @@
 	repeated MapFieldEntry Field = N;
 	```
 	
-**2018-6-22**
+**2018-6-22 v2.8**
 
 1. 在linux下生成的可执行文件，改为静态编译，不依赖任何外部库
 2. 修改例子，在clear_message_xxx()函数前必须调用constru_message_xxx()**仅**一次
