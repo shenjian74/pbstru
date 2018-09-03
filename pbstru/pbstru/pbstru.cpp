@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <ctype.h>
 #include "importer.h"
 #include "bstrwrap.h"
 
@@ -1775,6 +1776,67 @@ int create_path(CBString &path)
     return 0;
 }
 
+int get_syntax(LPCSTR proto_filename)
+{
+    int syntax = 0;
+    char str_syntax[128];
+    char buf[8 * 1024];
+
+    FILE *fp = fopen(proto_filename, "rt");
+    if(NULL != fp)
+    {
+        for(;;)
+        {
+            if(NULL == fgets(buf, sizeof(buf), fp))
+            {
+                break;
+            }
+            else
+            {
+                int i = 0;
+                int start = 0;
+                int len = 0;
+
+                for(;; ++i)
+                {
+                    if(' ' != buf[i] && '\t' != buf[i])
+                    {
+                        break;
+                    }
+                }
+                printf("%s\n", buf+i);
+
+                // 发现"syntax"关键字
+                if(0 == memcmp(buf+i, "syntax", 6))
+                {
+                    for(;; ++i)
+                    {
+                        if(isdigit(buf[i]))
+                        {
+                            start = i;
+                            break;
+                        }
+                    }
+                    for(;; ++i)
+                    {
+                        if(!isdigit(buf[i]))
+                        {
+                            len = i - start;
+                            break;
+                        }
+                    }
+                    memcpy(str_syntax, buf+start, len);
+                    str_syntax[len] = EOS;
+                    syntax = atoi(str_syntax);
+                    break;
+                }
+            }
+        }
+        fclose(fp);
+    }
+    return syntax;
+}
+
 void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
 {
     char buf[8 * 1024];
@@ -1783,6 +1845,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
     char field_name[80];
     char field_no[40];
     char append_buf[8*1024];
+    std::set<CBString> map_entrys;
 
     append_buf[0] = EOS;
     FILE *fp = fopen(pbv3_filename, "rt");
@@ -1897,9 +1960,15 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         field_no[len] = EOS;
                         printf("field_no:%s\n", field_no);
 
-                        sprintf(buf, "message Map%sEntry {\n  %s key = 1;\n  %s value = 2;\n}\n\n",
-                                field_name, key_type, key_value);
-                        strcat(append_buf, buf);
+                        // 使用set避免同名mapentrys重复插入
+                        CBString map_entry_name = CBString("Map") + CBString(field_name) + "Entry";
+                        if(map_entrys.find(map_entry_name) == map_entrys.end())
+                        {
+                            sprintf(buf, "message Map%sEntry {\n  %s key = 1;\n  %s value = 2;\n}\n\n",
+                                    field_name, key_type, key_value);
+                            strcat(append_buf, buf);
+                            map_entrys.insert(map_entry_name);
+                        }
                         sprintf(buf, "repeated Map%sEntry %s = %s;\n", field_name, field_name, field_no);
                     }
                     // 没有"map"关键字的情况，则直接拷贝
@@ -1915,6 +1984,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
 
 int main(int argc, char *argv[])
 {
+    char pbv2_filename[256];
     std::string str;
     const FileDescriptor *f;
     ImporterError errorCollector;
@@ -1947,25 +2017,24 @@ int main(int argc, char *argv[])
     for(int i=1; i<argc-1; ++i)
     {
         proto_filename = argv[i];
-        f = importer.Import(proto_filename);
-        if (NULL == f)
-        {
-            printf("Cannot import file:%s", proto_filename);
-            return 3;
-        }
+        int syntax = get_syntax(proto_filename);
 
         // 如果是v3的语法，则先转为v2的文件。目前只处理map关键字。
-        if(3 == f->syntax())
+        if(3 == syntax)
         {
-            char pbv2_filename[256];
             sprintf(pbv2_filename, "%s.tmp", proto_filename);
             convert_pbv3(proto_filename, pbv2_filename);
-            f = importer.Import(proto_filename);
-            if (NULL == f)
-            {
-                printf("Cannot import file:%s", proto_filename);
-                return 3;
-            }
+        }
+        else
+        {
+            strcpy(pbv2_filename, proto_filename);
+        }
+
+        f = importer.Import(pbv2_filename);
+        if (NULL == f)
+        {
+            printf("Cannot import file:%s", pbv2_filename);
+            return 3;
         }
         gen_all_from_file(f, target_dir);
     }
