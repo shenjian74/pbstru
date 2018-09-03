@@ -15,10 +15,11 @@ message Http2AppSubscribeAck {
   repeated .http2proxy.LoadRuleResult results = 3;
 }
 */
+#define PBSTRU_MAX_RESULTS_IN_HTTP2APPSUBSCRIBEACK 10
 
 typedef struct _st_results_in_http2appsubscribeack_loadruleresult_list {
-    struct _st_results_in_http2appsubscribeack_loadruleresult_list *next;
-    st_loadruleresult value;  /* tag:3 type:message */
+    size_t count;
+    st_loadruleresult item[PBSTRU_MAX_RESULTS_IN_HTTP2APPSUBSCRIBEACK];  /* tag:3 type:message */
 } st_results_in_http2appsubscribeack_loadruleresult_list;
 
 typedef struct _st_http2appsubscribeack {
@@ -26,8 +27,7 @@ typedef struct _st_http2appsubscribeack {
     DWORD var_sequence;  /* tag:1 */
     BOOL has_errorCode;
     DWORD var_errorCode;  /* tag:2 */
-    st_results_in_http2appsubscribeack_loadruleresult_list *var_results;  /* tag:3 链表头指针 */
-    st_results_in_http2appsubscribeack_loadruleresult_list *var_results_tail;  /* 链表尾指针 */
+    st_results_in_http2appsubscribeack_loadruleresult_list var_results;  /* tag:3 */
 } st_http2appsubscribeack;
 
 /* construct msg when first use, call clear_message_*() internaly. */
