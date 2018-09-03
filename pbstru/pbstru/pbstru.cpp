@@ -1805,14 +1805,16 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
 
                     for(;; ++i)
                     {
-                        if(' ' != buf[i])
+                        if(' ' != buf[i] && '\t' != buf[i])
                         {
                             break;
                         }
                     }
+
                     // 发现"map"关键字
                     if(0 == memcmp(buf+i, "map", 3))
                     {
+                        printf("%s", buf+i);
                         for(i=i+3;; ++i)
                         {
                             if('<'!=buf[i])
@@ -1823,7 +1825,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         start = i;
                         for(;; ++i)
                         {
-                            if(','==buf[i] || ' '==buf[i])
+                            if(','==buf[i] || ' '==buf[i] || '\t'==buf[i])
                             {
                                 break;
                             }
@@ -1832,10 +1834,11 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         // 定位到key_type信息
                         memcpy(key_type, buf + start, len);
                         key_type[len] = EOS;
+                        printf("key_type:%s\n", key_type);
 
                         for(;; ++i)
                         {
-                            if(' '!=buf[i] && ','!=buf[i])
+                            if(' '!=buf[i] && '\t'!=buf[i] && ','!=buf[i])
                             {
                                 break;
                             }
@@ -1843,7 +1846,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         start = i;
                         for(;; ++i)
                         {
-                            if('>'==buf[i] || ' '==buf[i])
+                            if('>'==buf[i] || ' '==buf[i] || '\t'==buf[i])
                             {
                                 break;
                             }
@@ -1852,10 +1855,11 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         // 定位到key_value信息
                         memcpy(key_value, buf + start, len);
                         key_value[len] = EOS;
+                        printf("key_value:%s\n", key_value);
 
                         for(;; ++i)
                         {
-                            if('>'!=buf[i] && ' '!=buf[i])
+                            if('>'!=buf[i] && ' '!=buf[i] && '\t'!=buf[i])
                             {
                                 break;
                             }
@@ -1863,17 +1867,19 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         start = i;
                         for(;; ++i)
                         {
-                            if('='==buf[i] || ' '==buf[i])
+                            if('='==buf[i] || ' '==buf[i] || '\t'==buf[i])
                             {
                                 break;
                             }
                         }
+                        len = i - start;
                         memcpy(field_name, buf + start, len);
                         field_name[len] = EOS;
+                        printf("field_name:%s\n", field_name);
 
                         for(;; ++i)
                         {
-                            if('='!=buf[i] && ' '!=buf[i])
+                            if('='!=buf[i] && ' '!=buf[i] && '\t'!=buf[i])
                             {
                                 break;
                             }
@@ -1881,24 +1887,26 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         start = i;
                         for(;; ++i)
                         {
-                            if(';'==buf[i] || ' '==buf[i])
+                            if(';'==buf[i] || ' '==buf[i] || '\t'==buf[i])
                             {
                                 break;
                             }
                         }
+                        len = i - start;
                         memcpy(field_no, buf + start, len);
                         field_no[len] = EOS;
+                        printf("field_no:%s\n", field_no);
 
-                        sprintf(buf, "message Map%sEntry {\n  %s key = 1;\n  %s value = 2;\n}\n",
+                        sprintf(buf, "message Map%sEntry {\n  %s key = 1;\n  %s value = 2;\n}\n\n",
                                 field_name, key_type, key_value);
                         strcat(append_buf, buf);
                         sprintf(buf, "repeated Map%sEntry %s = %s;\n", field_name, field_name, field_no);
-
                     }
                     // 没有"map"关键字的情况，则直接拷贝
                     fputs(buf, fpout);
                 }
             }
+            fputs(append_buf, fpout);
             fclose(fpout);
         }
         fclose(fp);
@@ -1949,7 +1957,8 @@ int main(int argc, char *argv[])
         // 如果是v3的语法，则先转为v2的文件。目前只处理map关键字。
         if(3 == f->syntax())
         {
-            LPCSTR pbv2_filename = (LPCSTR)(CBString(proto_filename) + ".tmp");
+            char pbv2_filename[256];
+            sprintf(pbv2_filename, "%s.tmp", proto_filename);
             convert_pbv3(proto_filename, pbv2_filename);
             f = importer.Import(proto_filename);
             if (NULL == f)
