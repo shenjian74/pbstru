@@ -26,6 +26,7 @@ message App2HttpReq {
   .http2proxy.ReqType reqType = 21;
 }
 */
+#define PBSTRU_MAX_HEADER_IN_APP2HTTPREQ 10
 
 #ifndef ENUM_REQTYPE_DEFINED
 #define ENUM_REQTYPE_DEFINED
@@ -36,8 +37,8 @@ typedef enum {
 #endif
 
 typedef struct _st_header_in_app2httpreq_headerentry_list {
-    struct _st_header_in_app2httpreq_headerentry_list *next;
-    st_headerentry value;  /* tag:9 type:message */
+    size_t count;
+    st_headerentry item[PBSTRU_MAX_HEADER_IN_APP2HTTPREQ];  /* tag:9 type:message */
 } st_header_in_app2httpreq_headerentry_list;
 
 typedef struct _st_app2httpreq {
@@ -57,8 +58,7 @@ typedef struct _st_app2httpreq {
     ps_bytes var_contentType;  /* tag:7 */
     BOOL has_traced;
     BOOL var_traced;  /* tag:8 */
-    st_header_in_app2httpreq_headerentry_list *var_header;  /* tag:9 链表头指针 */
-    st_header_in_app2httpreq_headerentry_list *var_header_tail;  /* 链表尾指针 */
+    st_header_in_app2httpreq_headerentry_list var_header;  /* tag:9 */
     BOOL has_appInfo;
     st_http2appinfo var_appInfo;  /* tag:10 */
     BOOL has_linkID;

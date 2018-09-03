@@ -23,10 +23,11 @@ message Http2AppReq {
   .http2proxy.Http2Jid httpJid = 9;
 }
 */
+#define PBSTRU_MAX_HEADER_IN_HTTP2APPREQ 10
 
 typedef struct _st_header_in_http2appreq_headerentry_list {
-    struct _st_header_in_http2appreq_headerentry_list *next;
-    st_headerentry value;  /* tag:8 type:message */
+    size_t count;
+    st_headerentry item[PBSTRU_MAX_HEADER_IN_HTTP2APPREQ];  /* tag:8 type:message */
 } st_header_in_http2appreq_headerentry_list;
 
 typedef struct _st_http2appreq {
@@ -44,8 +45,7 @@ typedef struct _st_http2appreq {
     ps_bytes var_contentType;  /* tag:6 */
     BOOL has_transParam;
     st_http2transparam var_transParam;  /* tag:7 */
-    st_header_in_http2appreq_headerentry_list *var_header;  /* tag:8 链表头指针 */
-    st_header_in_http2appreq_headerentry_list *var_header_tail;  /* 链表尾指针 */
+    st_header_in_http2appreq_headerentry_list var_header;  /* tag:8 */
     BOOL has_httpJid;
     st_http2jid var_httpJid;  /* tag:9 */
 } st_http2appreq;
