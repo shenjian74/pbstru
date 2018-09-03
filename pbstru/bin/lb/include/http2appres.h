@@ -24,6 +24,7 @@ message Http2AppRes {
   .http2proxy.ReqType reqType = 21;
 }
 */
+#define PBSTRU_MAX_HEADER_IN_HTTP2APPRES 10
 
 #ifndef ENUM_REQTYPE_DEFINED
 #define ENUM_REQTYPE_DEFINED
@@ -34,8 +35,8 @@ typedef enum {
 #endif
 
 typedef struct _st_header_in_http2appres_headerentry_list {
-    struct _st_header_in_http2appres_headerentry_list *next;
-    st_headerentry value;  /* tag:10 type:message */
+    size_t count;
+    st_headerentry item[PBSTRU_MAX_HEADER_IN_HTTP2APPRES];  /* tag:10 type:message */
 } st_header_in_http2appres_headerentry_list;
 
 typedef struct _st_http2appres {
@@ -57,8 +58,7 @@ typedef struct _st_http2appres {
     ps_bytes var_location;  /* tag:8 */
     BOOL has_transParam;
     st_http2transparam var_transParam;  /* tag:9 */
-    st_header_in_http2appres_headerentry_list *var_header;  /* tag:10 链表头指针 */
-    st_header_in_http2appres_headerentry_list *var_header_tail;  /* 链表尾指针 */
+    st_header_in_http2appres_headerentry_list var_header;  /* tag:10 */
     BOOL has_reqType;
     enum_ReqType var_reqType;  /* tag:21 */
 } st_http2appres;
