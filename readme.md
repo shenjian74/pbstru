@@ -4,6 +4,19 @@
 
 ## 版本更新
 
+**2018-9-3**
+
+1. 以兼容性方式支持proto3中的map关键字
+	
+	对于类似"map<key_type, value_type> Field = N;"的定义，自动转换为：
+	```C
+	message MapFieldEntry {
+		key_type key = 1;
+		value_type value = 2;
+	}
+	repeated MapFieldEntry Field = N;
+	```
+	
 **2018-6-22**
 
 1. 在linux下生成的可执行文件，改为静态编译，不依赖任何外部库
@@ -80,7 +93,7 @@ message ut_test_message
 
 ## Windows
 	Windows下需要预安装Code::Blocks编译器及IDE。
-	而后执行/pbstru/build.bat进行编译，可生成pbstru/bin/pbstru.exe。
+	而后执行/pbstru/build.bat进行编译，可生成pbstru/bin/pbstru.exe，同时生成Code::Blocks下的工程文件(*.cbp)。
 
 ## linux
 	linux下可执行/pbstru/build.sh进行编译，可生成pbstru/bin/pbstru。
