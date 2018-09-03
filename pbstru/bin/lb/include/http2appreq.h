@@ -6,9 +6,9 @@ extern "C"{
 #endif
 
 #include "pbstru_comm.h"
-#include "headerentry.h"
 #include "http2jid.h"
 #include "http2transparam.h"
+#include "mapheaderentry.h"
 
 /*
 message Http2AppReq {
@@ -19,16 +19,16 @@ message Http2AppReq {
   bytes accept = 5;
   bytes contentType = 6;
   .http2proxy.Http2TransParam transParam = 7;
-  map<string, bytes> header = 8;
+  repeated .http2proxy.MapheaderEntry header = 8;
   .http2proxy.Http2Jid httpJid = 9;
 }
 */
 #define PBSTRU_MAX_HEADER_IN_HTTP2APPREQ 10
 
-typedef struct _st_header_in_http2appreq_headerentry_list {
+typedef struct _st_header_in_http2appreq_mapheaderentry_list {
     size_t count;
-    st_headerentry item[PBSTRU_MAX_HEADER_IN_HTTP2APPREQ];  /* tag:8 type:message */
-} st_header_in_http2appreq_headerentry_list;
+    st_mapheaderentry item[PBSTRU_MAX_HEADER_IN_HTTP2APPREQ];  /* tag:8 type:message */
+} st_header_in_http2appreq_mapheaderentry_list;
 
 typedef struct _st_http2appreq {
     BOOL has_url;
@@ -45,7 +45,7 @@ typedef struct _st_http2appreq {
     ps_bytes var_contentType;  /* tag:6 */
     BOOL has_transParam;
     st_http2transparam var_transParam;  /* tag:7 */
-    st_header_in_http2appreq_headerentry_list var_header;  /* tag:8 */
+    st_header_in_http2appreq_mapheaderentry_list var_header;  /* tag:8 */
     BOOL has_httpJid;
     st_http2jid var_httpJid;  /* tag:9 */
 } st_http2appreq;
