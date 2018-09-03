@@ -234,7 +234,7 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, CBString& max_
         fp_option = fopen((LPCSTR)option_filename, "rt");
         if (NULL == fp_option)
         {
-            printf("[%s:%d] Cannot open file:%s for read.\n", __THIS_FILE__, __LINE__, (LPCSTR)option_filename);
+            printf("Error: [%s:%d] Cannot open file:%s for read.\n", __THIS_FILE__, __LINE__, (LPCSTR)option_filename);
             exit(10);
         }
     }
@@ -268,7 +268,7 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, CBString& max_
         }
     }
 
-    printf("Warning: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n", __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
+    printf("Info: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s], It will be created dynamically.\n", __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
     // exit(NO_MAX_COUNT_IN_FILE);
     return false;
 }
