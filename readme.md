@@ -8,7 +8,7 @@
 
 1. 以兼容性方式支持proto3中的map关键字
 	
-	对于类似"map<key_type, value_type> Field = N;"的定义，自动转换为：
+	对于类似"map\<key_type, value_type\> Field = N;"的定义，自动转换为：
 	```C
 	message MapFieldEntry {
 		key_type key = 1;
