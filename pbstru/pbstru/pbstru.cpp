@@ -1874,8 +1874,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         }
                     }
 
-                    // 发现"map"关键字
-                    if(0 == memcmp(buf+i, "map", 3))
+                    if(0 == memcmp(buf+i, "map", 3))   // 发现"map"关键字
                     {
                         printf("%s", buf+i);
                         for(i=i+3;; ++i)
@@ -1984,7 +1983,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
 
 int main(int argc, char *argv[])
 {
-    char pbv2_filename[256];
+    char no_map_filename[256];
     std::string str;
     const FileDescriptor *f;
     ImporterError errorCollector;
@@ -2019,21 +2018,30 @@ int main(int argc, char *argv[])
         proto_filename = argv[i];
         int syntax = get_syntax(proto_filename);
 
-        // 如果是v3的语法，则先转为v2的文件。目前只处理map关键字。
+        // 如果是v3的语法，则转换map关键字
+        ///////////////////////////////////////////////////
+        // message MapFieldEntry {
+        //   key_type key = 1;
+        //   value_type value = 2;
+        // }
+        // repeated MapFieldEntry Field = N;
+        ///////////////////////////////////////////////////
+        // map<key_type, value_type> Field = N;
+        ///////////////////////////////////////////////////
         if(3 == syntax)
         {
-            sprintf(pbv2_filename, "%s.tmp", proto_filename);
-            convert_pbv3(proto_filename, pbv2_filename);
+            sprintf(no_map_filename, "%s.tmp", proto_filename);
+            convert_pbv3(proto_filename, no_map_filename);
         }
         else
         {
-            strcpy(pbv2_filename, proto_filename);
+            strcpy(no_map_filename, proto_filename);
         }
 
-        f = importer.Import(pbv2_filename);
+        f = importer.Import(no_map_filename);
         if (NULL == f)
         {
-            printf("Cannot import file:%s", pbv2_filename);
+            printf("Cannot import file:%s", no_map_filename);
             return 3;
         }
         gen_all_from_file(f, target_dir);
