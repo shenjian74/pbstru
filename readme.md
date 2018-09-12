@@ -8,8 +8,14 @@
 
 1. 以兼容性方式支持proto3中的map关键字
 	
-	对于类似"map\<key_type, value_type\> Field = N;"的定义，自动转换为：
-	```C
+	对于map定义
+	```protobuf
+	map\<key_type, value_type\> Field = N;
+	```
+	
+	自动转换为：
+	
+	```protobuf
 	message MapFieldEntry {
 		key_type key = 1;
 		value_type value = 2;
