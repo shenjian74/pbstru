@@ -1,6 +1,6 @@
 # 简介
 
-	pbstru是Protobuf to Struct的缩写，主要完成PB码流和C语言结构间的相互转换，可依据PB码流定义文件(.proto)自动生成PB消息的编解码代码。
+pbstru是Protobuf to Struct的缩写，主要完成PB码流和C语言结构间的相互转换，可依据PB码流定义文件(.proto)自动生成PB消息的编解码代码。
 
 ## 版本更新
 
