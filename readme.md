@@ -10,7 +10,7 @@
 	
 	对于map定义
 	```protobuf
-	map\<key_type, value_type\> Field = N;
+	map<key_type, value_type> Field = N;
 	```
 	
 	自动转换为：
