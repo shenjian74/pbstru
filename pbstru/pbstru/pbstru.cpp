@@ -139,7 +139,7 @@ void gen_comm(CBString &target_dir)
     fprintf(fp, "    (*(offset)) += 1 + iloop; \\\n");
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
-    fprintf(fp, "\n#endif\n\n/* end of file */");
+    fprintf(fp, "\n#endif\n\n/* end of file */\n\n");
     fclose(fp);
 
     filename = target_dir + "source" + path_sep + "pbstru_comm.c";
@@ -743,7 +743,7 @@ void gen_header(const Descriptor *desc, CBString &target_dir)
     fprintf(fp, "\n#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
     fprintf(fp, "#endif\n");
-    fprintf(fp, "\n#endif\n\n/* end of file */\n");
+    fprintf(fp, "\n#endif\n\n/* end of file */\n\n");
 
     fclose(fp);
 }
@@ -1697,7 +1697,7 @@ void gen_source(const Descriptor *desc, CBString &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
     fprintf(fp, "/* lint -restore */\n");
-    fprintf(fp, "/* end of file */\n");
+    fprintf(fp, "/* end of file */\n\n");
 
     fclose(fp);
 }
@@ -1804,7 +1804,7 @@ int get_syntax(LPCSTR proto_filename)
                         break;
                     }
                 }
-                printf("%s\n", buf+i);
+                // printf("%s\n", buf+i);
 
                 // ·¢ÏÖ"syntax"¹Ø¼ü×Ö
                 if(0 == memcmp(buf+i, "syntax", 6))
@@ -2032,13 +2032,14 @@ int main(int argc, char *argv[])
         {
             sprintf(no_map_filename, "%s.tmp", proto_filename);
             convert_pbv3(proto_filename, no_map_filename);
+            convert_pbv3(no_map_filename, proto_filename);
         }
-        else
-        {
-            strcpy(no_map_filename, proto_filename);
-        }
+    }
 
-        f = importer.Import(no_map_filename);
+    for(int i=1; i<argc-1; ++i)
+    {
+        proto_filename = argv[i];
+        f = importer.Import(proto_filename);
         if (NULL == f)
         {
             printf("Cannot import file:%s", no_map_filename);
@@ -2046,6 +2047,7 @@ int main(int argc, char *argv[])
         }
         gen_all_from_file(f, target_dir);
     }
+
     // common header file
     gen_comm(target_dir);
 

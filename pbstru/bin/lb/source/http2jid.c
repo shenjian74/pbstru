@@ -69,3 +69,4 @@ BOOL decode_message_Http2Jid(BYTE* buf, const size_t buf_len, st_http2jid* var_H
 
 /* lint -restore */
 /* end of file */
+

@@ -76,3 +76,4 @@ BOOL decode_message_LoadRuleResult(BYTE* buf, const size_t buf_len, st_loadruler
 
 /* lint -restore */
 /* end of file */
+

@@ -83,3 +83,4 @@ BOOL decode_message_MapheaderEntry(BYTE* buf, const size_t buf_len, st_mapheader
 
 /* lint -restore */
 /* end of file */
+

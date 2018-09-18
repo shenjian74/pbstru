@@ -41,3 +41,4 @@ BOOL decode_message_DiscoverSC(BYTE* const buf, const size_t buf_len, st_discove
 #endif
 
 /* end of file */
+
