@@ -326,3 +326,4 @@ BOOL decode_message_App2HttpReq(BYTE* buf, const size_t buf_len, st_app2httpreq*
 
 /* lint -restore */
 /* end of file */
+

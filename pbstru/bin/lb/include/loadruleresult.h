@@ -38,3 +38,4 @@ BOOL decode_message_LoadRuleResult(BYTE* const buf, const size_t buf_len, st_loa
 #endif
 
 /* end of file */
+

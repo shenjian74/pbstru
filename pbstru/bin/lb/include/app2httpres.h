@@ -60,3 +60,4 @@ BOOL decode_message_App2HttpRes(BYTE* const buf, const size_t buf_len, st_app2ht
 #endif
 
 /* end of file */
+

@@ -38,3 +38,4 @@ BOOL decode_message_DispatchData(BYTE* const buf, const size_t buf_len, st_dispa
 #endif
 
 /* end of file */
+
