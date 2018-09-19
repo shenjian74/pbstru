@@ -2043,7 +2043,7 @@ int main(int argc, char *argv[])
             return 3;
         }
         gen_all_from_file(f, target_dir);
-        free(importer);
+        delete importer;
     }
 
     // common header file
