@@ -38,3 +38,4 @@ BOOL decode_message_Http2Jid(BYTE* const buf, const size_t buf_len, st_http2jid*
 #endif
 
 /* end of file */
+

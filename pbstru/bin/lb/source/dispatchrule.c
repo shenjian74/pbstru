@@ -86,3 +86,4 @@ BOOL decode_message_DispatchRule(BYTE* buf, const size_t buf_len, st_dispatchrul
 
 /* lint -restore */
 /* end of file */
+

@@ -280,3 +280,4 @@ BOOL decode_message_Http2AppRes(BYTE* buf, const size_t buf_len, st_http2appres*
 
 /* lint -restore */
 /* end of file */
+
