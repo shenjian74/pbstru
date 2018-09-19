@@ -39,3 +39,4 @@ BOOL decode_message_DispatchRule(BYTE* const buf, const size_t buf_len, st_dispa
 #endif
 
 /* end of file */
+

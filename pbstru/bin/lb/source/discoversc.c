@@ -85,3 +85,4 @@ BOOL decode_message_DiscoverSC(BYTE* buf, const size_t buf_len, st_discoversc* v
 
 /* lint -restore */
 /* end of file */
+

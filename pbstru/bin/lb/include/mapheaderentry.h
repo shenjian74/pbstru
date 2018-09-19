@@ -38,3 +38,4 @@ BOOL decode_message_MapheaderEntry(BYTE* const buf, const size_t buf_len, st_map
 #endif
 
 /* end of file */
+

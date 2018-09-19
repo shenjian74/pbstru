@@ -43,7 +43,7 @@ message App2HttpReq
 	bytes accept = 6;
 	bytes contentType = 7;
 	bool traced = 8;
-	map<string,bytes> header = 9;
+repeated MapheaderEntry header = 9;
 	Http2AppInfo appInfo = 10;
 	uint32 linkID = 11;
     bytes userid = 12;        
@@ -59,7 +59,7 @@ message App2HttpRes
 	bytes contentType = 4;
 	bytes location = 5;
 	Http2TransParam transParam = 6;
-	map<string,bytes> header = 7;
+repeated MapheaderEntry header = 7;
 }
 
 message DispatchData
@@ -106,7 +106,7 @@ message Http2AppReq
 	bytes accept = 5;
 	bytes contentType = 6;
 	Http2TransParam transParam = 7;
-	map<string,bytes> header = 8;
+repeated MapheaderEntry header = 8;
 	Http2Jid httpJid = 9;
 }
 
@@ -122,7 +122,7 @@ message Http2AppRes
 	bytes contentType = 7;
 	bytes location = 8;
 	Http2TransParam transParam = 9;
-	map<string,bytes> header = 10;
+repeated MapheaderEntry header = 10;
 	ReqType reqType = 21;
 }
 
@@ -140,4 +140,9 @@ message Http2AppSubscribeAck
 	repeated LoadRuleResult results = 3;
 }
 
+
+message MapheaderEntry {
+  string key = 1;
+  bytes value = 2;
+}
 
