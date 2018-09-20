@@ -1,6 +1,10 @@
 // pbstru.cpp : 定义控制台应用程序的入口点。
 //
 
+#ifndef _BUILDTIME_
+#define _BUILDTIME_ "build: 2018-09-20 13:33:01"
+#endif
+
 #if defined (_MSC_VER)
 # define _CRT_SECURE_NO_WARNINGS
 # pragma warning(disable: 4482)
