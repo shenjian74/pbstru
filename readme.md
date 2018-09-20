@@ -84,8 +84,9 @@ decode函数内部会首先调用clear_message_XXX清空第三个参数所指向
 
 # 注意事项
 
-* pbstru使用了静态数组存储PB的repeated字段，所以必须事先确定Repeated字段的最多可能出现的个数才可以生成代码，相关的值需要在pbstru\bin\xxx.options文件中定义。
-如果未定义相关的静态数组大小，pbstru会检测到并报错。
+* pbstru使用了静态数组存储PB的repeated字段，所以必须事先确定Repeated字段的最多可能出现的个数才可以生成代码，相关的值需要在xxx.options文件中定义。
+
+如果未定义相关的静态数组大小，pbstru会检测到异常并报错。
 例如下列行表示CCA状态上报消息中租户ID信息最多出现的次数，需要按照上游文档的说明修改为正确的值。
 
 ```C
