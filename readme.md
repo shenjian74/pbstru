@@ -35,8 +35,11 @@ pbstru是Protobuf to Struct的缩写，主要完成PB码流和C语言结构间�
 
 1. 修改proto文件。可增加接口消息，或者在接口消息中增加字段，修改时请注意接口兼容性，详见后面的protobuf兼容性准则；
 2. 在windows下，运行pbstru\bin\pbstru.exe，入参为多个proto文件名及目标文件夹，执行完成后在目标文件夹的include/source子目录生成所有编解码源文件；
-	在linux下，运行pbstru/bin/pbstru，入参为proto文件名及目标文件夹。
-	Usage: pbstru xxx.proto [xxx.proto] target_dir
+3. 在linux下，运行pbstru/bin/pbstru，入参为proto文件名及目标文件夹。
+
+```bash
+    Usage: pbstru xxx.proto [xxx.proto] target_dir
+```
 
 # 调用方法
 
