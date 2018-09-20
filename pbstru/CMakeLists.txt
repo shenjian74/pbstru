@@ -20,7 +20,7 @@ include_directories(
 	../protobuf3/src/google/protobuf/compiler
 )
 
-# add_subdirectory("./test_codec")
+add_subdirectory("./test_codec")
 
 IF (WIN32)
 add_custom_target(

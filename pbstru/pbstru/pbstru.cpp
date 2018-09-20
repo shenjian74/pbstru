@@ -2028,7 +2028,20 @@ int main(int argc, char *argv[])
         ///////////////////////////////////////////////////
         if(3 == syntax)
         {
-            sprintf(no_map_filename, "%s.tmp", proto_filename);
+            char no_map_filename[20];
+            int fd = -1;
+
+            sprintf(no_map_filename, "/tmp/%s.XXXXXX", proto_filename);
+            fd = mkstemp(no_map_filename);
+            if(-1 == fd){
+                printf("Cannot create tempfile.\n");
+                delete importer;
+                return 4;
+            } else {
+                printf("tempfile %s created.\n", no_map_filename);
+                close(fd);
+            }
+            // sprintf(no_map_filename, "%s.tmp", proto_filename);
             convert_pbv3(proto_filename, no_map_filename);
         }
         else
@@ -2040,6 +2053,7 @@ int main(int argc, char *argv[])
         if (NULL == f)
         {
             printf("Cannot import file:%s", no_map_filename);
+            delete importer;
             return 3;
         }
         gen_all_from_file(f, target_dir);
