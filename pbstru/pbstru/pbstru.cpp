@@ -48,14 +48,15 @@ typedef enum
 } e_error_code;
 
 // 生成公共文件pbstru_comm.h和pbstru_comm.c
-void gen_comm(CBString &target_dir)
+int gen_comm(CBString &target_dir)
 {
+    int retcode = 0;
     CBString filename = target_dir + "include" + path_sep + "pbstru_comm.h";
     FILE *fp = fopen((LPCSTR)filename, "wt");
     if (NULL == fp)
     {
         printf("Cannot open file:%s for write.\n", (LPCSTR)filename);
-        return;
+        return 1;
     }
     fprintf(fp, "#ifndef __PBSTRU_COMM_H__\n");
     fprintf(fp, "#define __PBSTRU_COMM_H__\n");
@@ -147,7 +148,7 @@ void gen_comm(CBString &target_dir)
     if (NULL == fp)
     {
         printf("Cannot open file:%s for write.\n", (LPCSTR)filename);
-        return;
+        return 1;
     }
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
     fprintf(fp, "\n");
@@ -204,6 +205,8 @@ void gen_comm(CBString &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "/* end of file */\n\n");
     fclose(fp);
+
+    return retcode;
 }
 
 LPSTR proto_filename;
@@ -236,7 +239,7 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, CBString& max_
         if (NULL == fp_option)
         {
             printf("Error: [%s:%d] Cannot open file:%s for read.\n", __THIS_FILE__, __LINE__, (LPCSTR)option_filename);
-            exit(10);
+            return(10);
         }
     }
 
@@ -258,7 +261,7 @@ static bool get_max_count(LPCSTR message_name, LPCSTR field_name, CBString& max_
             if (NULL == num_str)
             {
                 printf("Error: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n", __THIS_FILE__, __LINE__, (LPCSTR)key, (LPCSTR)option_filename);
-                exit(NO_SUCH_ITEM);
+                return(NO_SUCH_ITEM);
             }
             else
             {
@@ -549,8 +552,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     }
 }
 
-void gen_header(const Descriptor *desc, CBString &target_dir)
+int gen_header(const Descriptor *desc, CBString &target_dir)
 {
+    int retcode = 0;
     CBString name_lower(desc->name().c_str());
     name_lower.tolower();
 
@@ -570,7 +574,7 @@ void gen_header(const Descriptor *desc, CBString &target_dir)
     if(NULL == fp)
     {
         printf("Cannot open file:%s for write.\n", (LPCSTR)filename);
-        return;
+        return 1;
     }
 
     CBString name_upper(desc->name().c_str());
@@ -745,6 +749,7 @@ void gen_header(const Descriptor *desc, CBString &target_dir)
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n#endif\n\n/* end of file */\n\n");
     fclose(fp);
+    return retcode;
 }
 
 void alloc_new_repeated_item(FILE *fp, const Descriptor *desc, const FieldDescriptor *field, LPCSTR spaces)
@@ -913,8 +918,9 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
     }
 }
 
-void gen_source(const Descriptor *desc, CBString &target_dir)
+int gen_source(const Descriptor *desc, CBString &target_dir)
 {
+    int retcode = 0;
     CBString name_lower(desc->name().c_str());
     name_lower.tolower();
 
@@ -934,7 +940,7 @@ void gen_source(const Descriptor *desc, CBString &target_dir)
     if(NULL == fp)
     {
         printf("Cannot open file:%s for write.\n", (LPCSTR)filename);
-        return;
+        return 1;
     }
 
     fprintf(fp, "#include \"%s.h\"\n", (LPCSTR)name_lower);
@@ -1698,15 +1704,19 @@ void gen_source(const Descriptor *desc, CBString &target_dir)
     fprintf(fp, "/* lint -restore */\n");
     fprintf(fp, "/* end of file */\n\n");
     fclose(fp);
+    return retcode;
 }
 
-void gen_all_from_file(const FileDescriptor *f, CBString &target_dir)
+int gen_all_from_file(const FileDescriptor *f, CBString &target_dir)
 {
+    int retcode = 0;
     for(int i=0; i<f->message_type_count(); ++i)
     {
         const Descriptor* desc = f->message_type(i);
-        gen_header(desc, target_dir);
-        gen_source(desc, target_dir);
+        retcode = gen_header(desc, target_dir);
+        if(0 == retcode){
+            retcode = gen_source(desc, target_dir);
+        }
 
         /* close option file */
         if(NULL != fp_option)
@@ -1715,6 +1725,7 @@ void gen_all_from_file(const FileDescriptor *f, CBString &target_dir)
             fp_option = NULL;
         }
     }
+    return retcode;
 }
 
 class ImporterError : public compiler::MultiFileErrorCollector
@@ -1986,6 +1997,7 @@ int main(int argc, char *argv[])
     const FileDescriptor *f;
     ImporterError errorCollector;
     compiler::DiskSourceTree sourceTree;
+    int retcode = 0;
     sourceTree.MapPath("", ".");
 
     if (argc < 3)
@@ -2028,10 +2040,8 @@ int main(int argc, char *argv[])
         ///////////////////////////////////////////////////
         if(3 == syntax)
         {
-            char no_map_filename[20];
             int fd = -1;
-
-            sprintf(no_map_filename, "/tmp/%s.XXXXXX", proto_filename);
+            sprintf(no_map_filename, "%s.tmp_XXXXXX", proto_filename);
             fd = mkstemp(no_map_filename);
             if(-1 == fd){
                 printf("Cannot create tempfile.\n");
@@ -2053,16 +2063,27 @@ int main(int argc, char *argv[])
         if (NULL == f)
         {
             printf("Cannot import file:%s", no_map_filename);
-            delete importer;
-            return 3;
+            retcode = 3;
+        } else {
+            retcode = gen_all_from_file(f, target_dir);
         }
-        gen_all_from_file(f, target_dir);
+
+        if(3 == syntax)
+        {
+            char command[256];
+            sprintf(command, "rm -f %s", no_map_filename);
+            system(command);
+            printf("tempfile %s removed.\n", no_map_filename);
+        }
         delete importer;
+
+        if(0!=retcode){
+            return retcode;
+        }
     }
 
     // common header file
-    gen_comm(target_dir);
-
-    return 0;
+    retcode = gen_comm(target_dir);
+    return retcode;
 }
 
