@@ -49,15 +49,15 @@ pbstru是Protobuf to Struct的缩写，主要完成PB码流和C语言结构间�
 #include "response.h"
 ...
 st_Response var_response;
-constru_message_Response(&var_response);  // Init struct at first.
+constru_message_Response(&var_response);  // 初始化数据结构只需要执行一次
 ...
-clear_message_Response(&var_response);  // Clear struct in loop.
-var_response.xxx = xxx;  // set value in struct var_response
+clear_message_Response(&var_response);  // 清理数据结构，在每一次重新赋值前
+var_response.xxx = xxx;  // 设置数据结构中的字段
 ...
 BYTE buffer[max_buffer_length];
-if(encode_message_Response(&var_response, NULL) <= max_buffer_length)  // First call encode_message_xxx
+if(encode_message_Response(&var_response, NULL) <= max_buffer_length)  // 第一次调用，判断长度
 {
-    size_t bytes_write = encode_message_Response(&var_response, buffer);  // second call encode_message_xxx
+    size_t bytes_write = encode_message_Response(&var_response, buffer);  // 第二次调用，实际编码
     ......
 }
 ```
@@ -73,9 +73,9 @@ if(encode_message_Response(&var_response, NULL) <= max_buffer_length)  // First 
 #include "response.h"
 ...
 st_Response var_response;
-constru_message_Response(&var_response);  // Init struct at first.
+constru_message_Response(&var_response);  // 初始化数据结构只需要执行一次
 ...
-/* NO need to call clear_message_xxx before this function */
+/* 在解码函数前无需调用clear_message_xxx()清理函数 */
 decode_message_Response(BYTE *buf, size_t buf_len, &var_response);
 ```
 
@@ -100,93 +100,3 @@ decode函数内部会首先调用clear_message_XXX清空第三个参数所指向
     3. 可以删除可选(optional)或重复(repeated)字段。
     4. 可以添加新的可选或重复字段，但是必须使用新的tag数字，必须是之前的字段所没有用过的。
     5. 新的可选消息不会在旧的消息中显示，所以你需要使用 has_ 严格的检查他们是否存在，或者在proto 文件中提供一个缺省值。如果没有缺省值，就会有一个类型相关的默认缺省值：对于字符串就是空字符串；对于布尔型则是false；对于数字类型默认为0。
-
-# 版本更新
-
-**2018-9-3 v2.9**
-
-1. 以兼容性方式支持proto3中的map关键字
-	
-	对于map定义
-	```protobuf
-	map<key_type, value_type> Field = N;
-	```
-	
-	自动转换为：
-	
-	```protobuf
-	message MapFieldEntry {
-		key_type key = 1;
-		value_type value = 2;
-	}
-	repeated MapFieldEntry Field = N;
-	```
-----
-	
-**2018-6-22 v2.8**
-
-1. 在linux下生成的可执行文件，改为静态编译，不依赖任何外部库
-2. 修改例子，在clear_message_xxx()函数前必须调用constru_message_xxx()**仅**一次
-
-----
-
-**2018-3-20 v2.7**
-
-1. 支持生成代码到指定目录
-
-	Usage: pbstru xxx.proto [xxx.proto] target_dir
-	
-	生成的源代码生成在target_dir/source目录，头文件生成在target_dir/include目录。
-	如果target_dir目录下不存在source和include目录，则尝试创建目录。
-	
-----
-
-**2018-3-16 v2.6**
-
-1. 解决UINT64解码有误的问题
-
-	在32位环境下，对于无符号64位整数的解码有问题。
-
-1. option文件中的max_count支持字符串方式的宏定义
-
-	option文件中可以将max_count定义为字符串方式的宏，这样pbstru所生成的代码可使用上层头文件中定义的宏，实现宏的单次定义多处引用。
-
-	例：以下定义将生成数组tenant_id[MAX_SLOT_NUM]
-
-```
-zte.cdb.ccc.CCAResReportRequest.tenant_id max_count:MAX_SLOT_NUM
-```
-
-----
-
-**2017-12-8 v2.5**
-
-1. 无重要更新
-
-----
-
-**2017-11-28 v2.4**
-
-1. 支持重复字段的packed属性。
-
-对于整数型的repeated字段，有两种编码方式：
-
-* 普通编码方式：数组中的每一个元素都以tag+len+content的方式出现，相同tag值的信息不需要排列在一起，但顺序需要保证；
-* 紧缩编码方式，将数组中的元素全部排列在一起，以tag+len+(content_1+...+content_n)的方式出现，所有相同tag值的信息紧密排列在一起，可减少编码后的字节数；
-
-对于基本的数字类型(varint, 32-bit, 或者64-bit) 可将repeated字段可声明成packed，其他类型的repeated字段不允许。
-
-* 在protobuf版本2中，默认支持普通编码，可设置字段的属性为[packed=true]以支持紧缩编码方式。
-* 在protobuf版本3中，默认可以开启紧缩编码方式的都自动开启，可设置字段的属性为[packed=false]以支持普通编码方式。
-
-目前pbstru的特性与protobuf版本2相同，即默认支持普通编码方式。
-在和protobuf版本3进行接口联调时，可在proto文件中将字段设置为[packed=true]，或者要求对方将相应字段设置为[packed=false]，两边需要一致即可。
-
-例：以下proto定义，可要求pbstru生成紧缩方式的码流。
-```
-message ut_test_message
-{
-    repeated uint32 pf_uint32 = 5 [packed=true];
-}
-```
-
