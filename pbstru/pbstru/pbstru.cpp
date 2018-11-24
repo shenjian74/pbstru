@@ -2,7 +2,7 @@
 //
 
 #ifndef _BUILDTIME_
-#define _BUILDTIME_ "build: 2018-11-21 11:11:09"
+#define _BUILDTIME_ "build: 2018-11-24 16:44:25"
 #endif
 
 #if defined (_MSC_VER)
@@ -64,16 +64,16 @@ int gen_comm(CBString &target_dir)
     }
     fprintf(fp, "#ifndef __PBSTRU_COMM_H__\n");
     fprintf(fp, "#define __PBSTRU_COMM_H__\n");
-
-    fprintf(fp, "\n#include <stdlib.h>\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#include <stdlib.h>\n");
     fprintf(fp, "#include <memory.h>\n");
-
-    fprintf(fp, "\n#define WIRE_TYPE_VARINT 0\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define WIRE_TYPE_VARINT 0\n");
     fprintf(fp, "#define WIRE_TYPE_FIX64 1\n");
     fprintf(fp, "#define WIRE_TYPE_LENGTH_DELIMITED 2\n");
     fprintf(fp, "#define WIRE_TYPE_FIX32 5\n");
-
-    fprintf(fp, "\n#ifdef _TEST_CODEC\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#ifdef _TEST_CODEC\n");
     fprintf(fp, "typedef unsigned char BYTE;\n");
     fprintf(fp, "typedef unsigned char *PBYTE;\n");
     fprintf(fp, "typedef char CHAR;\n");
@@ -90,15 +90,19 @@ int gen_comm(CBString &target_dir)
     fprintf(fp, "#define TRUE 1\n");
     fprintf(fp, "#define FALSE 0\n");
     fprintf(fp, "#endif\n");
-    fprintf(fp, "\n#else\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#else\n");
     fprintf(fp, "/* 包含数据类型定义 */\n");
     fprintf(fp, "#include \"tulip.h\"\n");
-    fprintf(fp, "\n#endif");
-    fprintf(fp, "\ntypedef struct {\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#endif");
+    fprintf(fp, "\n");
+    fprintf(fp, "typedef struct {\n");
     fprintf(fp, "	char *data;\n");
     fprintf(fp, "	size_t length;\n");
     fprintf(fp, "} ps_string;\n");
-    fprintf(fp, "\ntypedef struct {\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "typedef struct {\n");
     fprintf(fp, "	unsigned char *data;\n");
     fprintf(fp, "	size_t length;\n");
     fprintf(fp, "} ps_bytes;\n");
