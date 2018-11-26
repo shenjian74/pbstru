@@ -7,13 +7,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-static -pthread")
 
 aux_source_directory(./pbstru SRC_FILES)
 
-aux_source_directory("../bstrlib" SRC_FILES)
-list(REMOVE_ITEM SRC_FILES "../bstrlib/test.cpp")
-list(REMOVE_ITEM SRC_FILES "../bstrlib/testaux.c")
-list(REMOVE_ITEM SRC_FILES "../bstrlib/bstest.c")
-
 include_directories(
-	../bstrlib
 	/usr/local/include
 	/usr/local/include/google/protobuf/compiler
 	../protobuf3/src
