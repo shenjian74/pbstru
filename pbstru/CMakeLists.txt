@@ -2,7 +2,7 @@ project (pbstru)
 cmake_minimum_required (VERSION 2.6)
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_C_FLAGS "-O0 -Wall -g -ggdb")
-set(CMAKE_CXX_FLAGS "-O0 -Wall -g -ggdb")
+set(CMAKE_CXX_FLAGS "-std=c++11 -O0 -Wall -g -ggdb")
 set(CMAKE_EXE_LINKER_FLAGS "-static -pthread")
 
 aux_source_directory(./pbstru SRC_FILES)
