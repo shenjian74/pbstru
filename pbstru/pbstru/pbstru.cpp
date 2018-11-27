@@ -2,7 +2,7 @@
 //
 
 #ifndef _BUILDTIME_
-#define _BUILDTIME_ "build: 2018-11-26 20:42:06"
+#define _BUILDTIME_ "build: 2018-11-27 17:25:40"
 #endif
 
 #if defined (_MSC_VER)
@@ -339,13 +339,13 @@ string &get_struct_list_name(const FieldDescriptor *field)
         struct_list_name += string("_buffer");
         break;
     case FieldDescriptor::TYPE_MESSAGE:
-        msg_enum_name = string(field->message_type()->name().c_str());
-        msg_enum_name = tolower(msg_enum_name);
+        msg_enum_name = field->message_type()->name();
+        tolower(msg_enum_name);
         struct_list_name += string("_") + msg_enum_name;
         break;
     case FieldDescriptor::TYPE_ENUM:
-        msg_enum_name = string(field->enum_type()->name().c_str());
-        msg_enum_name = tolower(msg_enum_name);
+        msg_enum_name = field->enum_type()->name();
+        tolower(msg_enum_name);
         struct_list_name += string("_") + msg_enum_name;
         break;
     default:
@@ -639,7 +639,7 @@ int gen_header(const Descriptor *desc, string &target_dir)
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n#include \"pbstru_comm.h\"\n");
 
-    std::set<std::string> headers;
+    set<string> headers;
     headers.clear();
     for(int i=0; i<desc->field_count(); ++i)
     {
@@ -652,7 +652,7 @@ int gen_header(const Descriptor *desc, string &target_dir)
         }
     }
     // 使用set去掉重复的头文件
-    for(std::set<std::string>::iterator it=headers.begin(); it!=headers.end(); ++it)
+    for(set<string>::iterator it=headers.begin(); it!=headers.end(); ++it)
     {
         fprintf(fp, "#include \"%s.h\"\n", it->c_str());
     }
@@ -668,7 +668,7 @@ int gen_header(const Descriptor *desc, string &target_dir)
         if(field->is_repeated())
         {
             string max_count;
-            if(get_max_count(field->containing_type()->full_name().c_str(), field->name().c_str(), max_count))
+            if(get_max_count(field->containing_type()->full_name(), field->name(), max_count))
             {
                 fprintf(fp, "#define PBSTRU_MAX_%s_IN_%s %s\n",
                         field_name_upper.c_str(), field_containing_type_upper.c_str(), max_count.c_str());
@@ -2052,7 +2052,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
 int main(int argc, char *argv[])
 {
     char no_map_filename[256];
-    std::string str;
+    string str;
     const FileDescriptor *f;
     ImporterError errorCollector;
     compiler::DiskSourceTree sourceTree;
