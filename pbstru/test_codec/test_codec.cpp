@@ -11,6 +11,7 @@
 #include "response.h"
 #include "statresp.h"
 #include "ut_test_message.h"
+#include "ut_test_sub_message.h"
 
 void print_buffer(BYTE *content, size_t filelen)
 {
