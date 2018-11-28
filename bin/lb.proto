@@ -5,7 +5,7 @@ enum ReqType{
 	NORMAL_REQ = 0; // normal request
 	SUBSCRIBE_REQ = 1; // response，由HTTP协议栈丢弃响应
 }
-	
+
 message Http2IpAddr {
 	bytes ip = 1;
 	uint32 port = 2;
@@ -18,8 +18,8 @@ message Http2TransParam {
 }
 
 message Http2Jid {
-	uint32  jno = 1; 
-    uint32  comId = 2;        
+	uint32  jno = 1;
+    uint32  comId = 2;
 }
 
 message Http2AppInfo {
@@ -46,7 +46,7 @@ message App2HttpReq
 repeated MapheaderEntry header = 9;
 	Http2AppInfo appInfo = 10;
 	uint32 linkID = 11;
-    bytes userid = 12;        
+    bytes userid = 12;
 	ReqType reqType = 21;
 }
 
