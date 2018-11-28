@@ -5,7 +5,6 @@ build
 *~
 *.cache
 .libs
-pbstru/bin/codec
 Debug
 *.sdf
 *.ilk
@@ -17,7 +16,9 @@ Debug
 *.depend
 .idea
 *.swp
-/pbstru/bin/pbstru
+bin/pbstru
+bin/codec
+bin/lb
 libtool*
 automake*
 protobuf3
