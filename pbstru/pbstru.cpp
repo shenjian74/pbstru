@@ -308,15 +308,13 @@ static bool get_max_count(const string &message_name, const string &field_name, 
     return false;
 }
 
-const string &get_struct_list_name(const FieldDescriptor *field)
+void get_struct_list_name(const FieldDescriptor *field, string &struct_list_name)
 {
     string field_name_lower = field->name();
     tolower(field_name_lower);
     string field_containing_type_lower = field->containing_type()->name();
     tolower(field_containing_type_lower);
     string msg_enum_name;
-
-    static string struct_list_name;
 
     struct_list_name = field_name_lower + "_in_" + field_containing_type_lower;
     switch(field->type())
@@ -352,7 +350,6 @@ const string &get_struct_list_name(const FieldDescriptor *field)
         struct_list_name = "";
         break;
     }
-    return struct_list_name;
 }
 
 /* Check the field is unlimit repeated field. */
@@ -404,17 +401,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     case FieldDescriptor::TYPE_FIXED32:
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
                 fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
                 fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str());
+                        struct_list_name.c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
             }
         }
         else
@@ -425,17 +424,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     case FieldDescriptor::TYPE_FIXED64:
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
                 fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
                 fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str());
+                        struct_list_name.c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
             }
         }
         else
@@ -446,17 +447,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     case FieldDescriptor::TYPE_BOOL:
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
                 fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
                 fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str());
+                        struct_list_name.c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
             }
         }
         else
@@ -467,17 +470,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     case FieldDescriptor::TYPE_UINT32:
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
                 fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
                 fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str());
+                        struct_list_name.c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
             }
         }
         else
@@ -488,17 +493,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     case FieldDescriptor::TYPE_UINT64:
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
                 fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
                 fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str());
+                        struct_list_name.c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
             }
         }
         else
@@ -509,17 +516,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     case FieldDescriptor::TYPE_STRING:
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
                 fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
                 fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str());
+                        struct_list_name.c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
             }
         }
         else
@@ -530,17 +539,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     case FieldDescriptor::TYPE_BYTES:
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
                 fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
                 fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str());
+                        struct_list_name.c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
             }
         }
         else
@@ -559,17 +570,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
                 fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
                 fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str());
+                        struct_list_name.c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
             }
         }
         else
@@ -581,17 +594,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     case FieldDescriptor::TYPE_ENUM:
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
                 fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d 链表头指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
                 fprintf(fp, "    st_%s_list *var_%s_tail;  /* 链表尾指针 */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str());
+                        struct_list_name.c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
-                        get_struct_list_name(field).c_str(), field->name().c_str(), field->number());
+                        struct_list_name.c_str(), field->name().c_str(), field->number());
             }
         }
         else
@@ -714,12 +729,13 @@ int gen_header(const Descriptor *desc, string &target_dir)
             string field_containing_type_upper = field->containing_type()->name();
             toupper(field_containing_type_upper);
 
-            string struct_list_name = get_struct_list_name(field);
-            fprintf(fp, "\ntypedef struct _st_%s_list {\n", get_struct_list_name(field).c_str());
+            string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
+            fprintf(fp, "\ntypedef struct _st_%s_list {\n", struct_list_name.c_str());
 
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    struct _st_%s_list *next;\n", get_struct_list_name(field).c_str());
+                fprintf(fp, "    struct _st_%s_list *next;\n", struct_list_name.c_str());
             }
             else
             {
@@ -774,7 +790,7 @@ int gen_header(const Descriptor *desc, string &target_dir)
                         field_containing_type_upper.c_str(), field->number(), field->type_name());
             }
 
-            fprintf(fp, "} st_%s_list;\n", get_struct_list_name(field).c_str());
+            fprintf(fp, "} st_%s_list;\n", struct_list_name.c_str());
         }
     }
 
@@ -808,9 +824,11 @@ int gen_header(const Descriptor *desc, string &target_dir)
 
 void alloc_new_repeated_item(FILE *fp, const Descriptor *desc, const FieldDescriptor *field, LPCSTR spaces)
 {
+	string struct_list_name;
+	get_struct_list_name(field, struct_list_name);
     fprintf(fp, "%s            if(NULL == var_%s->var_%s){\n", spaces, desc->name().c_str(), field->name().c_str());
     fprintf(fp, "%s                var_%s->var_%s = (st_%s_list *)pbstru_malloc(sizeof(st_%s_list));\n",
-            spaces, desc->name().c_str(), field->name().c_str(), get_struct_list_name(field).c_str(), get_struct_list_name(field).c_str());
+            spaces, desc->name().c_str(), field->name().c_str(), struct_list_name.c_str(), struct_list_name.c_str());
     fprintf(fp, "%s                if(NULL == var_%s->var_%s){\n", spaces, desc->name().c_str(), field->name().c_str());
     fprintf(fp, "%s                    return FALSE;\n", spaces);
     fprintf(fp, "%s                } else {\n", spaces);
@@ -821,8 +839,7 @@ void alloc_new_repeated_item(FILE *fp, const Descriptor *desc, const FieldDescri
     fprintf(fp, "%s                }\n", spaces);
     fprintf(fp, "%s            } else {\n", spaces);
     fprintf(fp, "%s                st_%s_list *tmptr = (st_%s_list *)pbstru_malloc(sizeof(st_%s_list));\n",
-            spaces, get_struct_list_name(field).c_str(), get_struct_list_name(field).c_str(),
-            get_struct_list_name(field).c_str());
+            spaces, struct_list_name.c_str(), struct_list_name.c_str(), struct_list_name.c_str());
     fprintf(fp, "%s                if(NULL == tmptr){\n", spaces);
     fprintf(fp, "%s                    return FALSE;\n", spaces);
     fprintf(fp, "%s                } else {\n", spaces);
@@ -862,15 +879,18 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
+			string struct_list_name;
+			get_struct_list_name(field, struct_list_name);
+	
             if(is_dynamic_repeated(field))
             {
                 // Recursive clearing message
                 if(false == init)
                 {
                     fprintf(fp, "    st_%s_list *it%d=var_%s->var_%s;\n",
-                            get_struct_list_name(field).c_str(), ++it_count, desc->name().c_str(), field->name().c_str());
+                            struct_list_name.c_str(), ++it_count, desc->name().c_str(), field->name().c_str());
                     fprintf(fp, "    for(; NULL!=it%d; ) {\n", it_count);
-                    fprintf(fp, "        st_%s_list *it_tmp = it%d;\n", get_struct_list_name(field).c_str(), it_count);
+                    fprintf(fp, "        st_%s_list *it_tmp = it%d;\n", struct_list_name.c_str(), it_count);
                     fprintf(fp, "        it%d=it%d->next;\n", it_count, it_count);
                     if(FieldDescriptor::TYPE_MESSAGE == field->type())
                     {
@@ -1054,10 +1074,12 @@ int gen_source(const Descriptor *desc, string &target_dir)
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
+		string struct_list_name;
+		get_struct_list_name(field, struct_list_name);
         if(is_dynamic_repeated(field))
         {
             fprintf(fp, "    st_%s_list *it%d=var_%s->var_%s;\n",
-                    get_struct_list_name(field).c_str(), ++it_count, desc->name().c_str(), field->name().c_str());
+                    struct_list_name.c_str(), ++it_count, desc->name().c_str(), field->name().c_str());
         }
     }
 
