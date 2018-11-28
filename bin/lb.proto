@@ -1,0 +1,148 @@
+syntax = "proto3";
+package http2proxy;
+
+enum ReqType{
+	NORMAL_REQ = 0; // normal request
+	SUBSCRIBE_REQ = 1; // response，由HTTP协议栈丢弃响应
+}
+
+message Http2IpAddr {
+	bytes ip = 1;
+	uint32 port = 2;
+}
+
+message Http2TransParam {
+    Http2IpAddr local = 1;
+    Http2IpAddr remote = 2;
+	uint32 streamId = 3;
+}
+
+message Http2Jid {
+	uint32  jno = 1;
+    uint32  comId = 2;
+}
+
+message Http2AppInfo {
+	bytes  serviceAbility = 1;
+	bytes  serviceTypeName = 2;
+	uint32 serviceInst = 3;
+	bytes  scTypeName = 4;
+	uint32 userGroupId = 5;
+
+	Http2Jid jid = 6;
+}
+
+// APP至HTTP/LB，正向代理请求消息
+message App2HttpReq
+{
+	bytes url = 1; // 如http:194.168.44.2:8080/pcrfDiameterService1?ID=1345
+	bytes method = 2; // 需大写，如果GET、PUT、POST等
+	bytes data = 3;
+	bytes instance = 4;
+	bytes sessionID = 5;
+	bytes accept = 6;
+	bytes contentType = 7;
+	bool traced = 8;
+repeated MapheaderEntry header = 9;
+	Http2AppInfo appInfo = 10;
+	uint32 linkID = 11;
+    bytes userid = 12;
+	ReqType reqType = 21;
+}
+
+// APP至HTTP/LB，反向代理响应消息
+message App2HttpRes
+{
+	uint64 sequence = 1; // 反向代理生成的序列号
+	uint32 responseCode = 2;
+	bytes data = 3;
+	bytes contentType = 4;
+	bytes location = 5;
+	Http2TransParam transParam = 6;
+repeated MapheaderEntry header = 7;
+}
+
+message DispatchData
+{
+    bytes soName = 1;
+    bytes soData = 2; /* 分发需要的数据 */
+}
+
+message DispatchRule
+{
+    bytes serviceName = 1;
+    DispatchData serviceData = 2;
+}
+
+message DiscoverSC
+{
+	uint32 serviceTypeID = 1;
+	uint32 serviceInst = 2;
+	uint32 scTypeID = 3;
+}
+
+// APP至HTTP/LB，服务订阅请求消息
+message App2HttpSubscribe
+{
+	uint32 sequence = 1;
+	DiscoverSC scInfo = 2;
+	Http2AppInfo appInfo = 3;
+	repeated DispatchRule rules = 4;
+}
+
+message Http2AppAck
+{
+	Http2TransParam transParam = 1;
+	App2HttpReq req = 2;
+}
+
+// HTTP/LB至APP，反向代理请求消息
+message Http2AppReq
+{
+	bytes url = 1; // pcrfDiameterService1?ID=1345
+	bytes method = 2;
+	bytes data = 3;
+	uint64 sequence = 4; // 反向代理生成的序列号
+	bytes accept = 5;
+	bytes contentType = 6;
+	Http2TransParam transParam = 7;
+repeated MapheaderEntry header = 8;
+	Http2Jid httpJid = 9;
+}
+
+// HTTP/LB至APP，正向代理响应消息
+message Http2AppRes
+{
+	bytes url = 1;
+	bytes method = 2;
+	bytes data =3;
+	uint32 returnCode = 4;
+	bytes sessionID = 5;
+	uint32 responseCode = 6;
+	bytes contentType = 7;
+	bytes location = 8;
+	Http2TransParam transParam = 9;
+repeated MapheaderEntry header = 10;
+	ReqType reqType = 21;
+}
+
+message LoadRuleResult
+{
+	bytes serviceName = 1;
+	uint32 errorCode = 2;
+}
+
+// HTTP/LB服务订阅响应消息
+message Http2AppSubscribeAck
+{
+	uint32 sequence = 1;
+	uint32 errorCode = 2;
+	repeated LoadRuleResult results = 3;
+}
+
+
+message MapheaderEntry {
+  string key = 1;
+  bytes value = 2;
+}
+

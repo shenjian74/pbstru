@@ -1,0 +1,321 @@
+/*
+ * CDB protocol using Protobuf
+ */
+syntax = "proto2";
+package zte.cdb;
+
+enum OPTYPE {
+	OP_ADD_REQUEST      = 1;
+	OP_ADD_RESPONSE     = 2;
+	OP_QUERY_REQUEST    = 3;
+	OP_QUERY_RESPONSE   = 4;
+	OP_MODIFY_REQUEST   = 5;
+	OP_MODIFY_RESPONSE  = 6;
+	OP_DELETE_REQUEST   = 7;
+	OP_DELETE_RESPONSE  = 8;
+	OP_COMPOUND_REQUEST = 9;
+	OP_COMPOUND_RESULT_RESPONSE = 10;
+	OP_COMPOUND_DONE_RESPONSE = 11;
+	OP_NOTIFY        = 12;
+
+	OP_STAT_REQUEST  = 13;  // 查询统计值请求
+	OP_STAT_RESPONSE = 14;  // 查询统计值响应
+}
+
+/* 请求、响应包文 */
+message Response {
+	repeated Result    result     = 1;  // 对基本操作，result个数为1；对compound操作，result个数可能大于1
+
+	// 以下错误码和错误信息只针对compound响应；其他响应只有一个result，错误信息直接放在result中
+	optional uint32    retcode    = 2;
+	optional string    retmsg     = 3;
+}
+
+message AddRequest {
+	required Identifiers identifiers = 1;  // 数据标识
+	repeated Tuple tuple = 2;  // 数据
+	repeated Control control = 3;  // 控制字列表，默认为空
+	repeated SPInfo spinfo = 4;  // 存储过程信息
+}
+
+message BatchQRYPI {
+    required Identifier batch_qry_begin = 1;  // 批量查询起始PI，分页查询PI列表时用
+    required uint32 count_limit = 2;  // 单次查询的最大PI数目
+}
+
+message QueryRequest {
+    required Identifiers identifiers = 1;  // 数据标识
+    repeated Range range = 2;  // 查询范围
+    repeated Control control = 3;  // 控制字列表，默认为空
+    repeated SPInfo spinfo = 4;  // 存储过程信息
+
+    optional BatchQRYPI batch_qry_pi = 5;  // 批量查询PI参数集
+	// 查询PI列表时Range信息可以为空，故此参数不放入Range
+}
+
+message ModifyRequest {
+	required Identifiers identifiers = 1;  // 数据标识
+	repeated ModData moddata = 2;  // 数据
+	repeated Control control = 3;  // 控制字列表，默认为空
+	repeated SPInfo spinfo = 4;  // 存储过程信息
+}
+
+message DeleteRequest {
+	required Identifiers identifiers = 1;  // 数据标识
+	repeated Range range = 2;  // 删除范围
+	repeated Control control = 3;  // 控制字列表，默认为空
+	repeated SPInfo spinfo = 4;  // 存储过程信息
+}
+
+message Notify {
+	required Identifiers identifiers = 1;  // 数据标识
+	repeated NotifyData notify_data = 2;  // 范围
+	repeated SPInfo spinfo = 4;  // 存储过程信息
+}
+
+message NotifyMsg {
+	repeated Notify notify = 1;
+}
+
+message CompoundRequest {
+	repeated AnySubRequest request = 1;
+}
+
+message AnySubRequest {
+	optional AddRequest sub_add_request = 1;
+	optional QueryRequest sub_query_request = 2;
+	optional ModifyRequest sub_modify_request = 3;
+	optional DeleteRequest sub_delete_request = 4;
+	required bytes sub_msgid = 5;  // 子请求的msgid
+	required uint32 sub_slot_id = 6;  // 作为compound的子请求使用时，保存子请求对应的数据分片
+}
+
+message UserInfo {
+	required Identifiers identifiers = 1;  // 用户标识
+	repeated Tuple tuple = 2;  // 数据
+}
+
+message Result {
+	required uint32 retcode = 1;
+	optional string retmsg = 2;
+	optional Identifiers identifiers = 3;  // 数据标识
+	repeated Tuple tuple = 4;  // 数据
+
+	optional bytes msgid = 5;  // msgid，帮助客户端按照子请求定位子响应
+	optional OPTYPE op_type = 6 [default = OP_QUERY_RESPONSE];  // 子响应的消息类型
+
+    optional bool batch_qry_finished = 7;  // 如果未查询完毕，返回False; 查询完毕，则返回True;
+}
+
+message PrimaryKey{
+	required string name = 1;
+	required bytes value = 2;
+}
+
+message Field {
+	required uint32 fieldid = 1;
+	required bytes value = 2;
+}
+
+message ModField {
+	required ModOperation operation = 1;  // 字段操作类型
+	required uint32 fieldid = 2;
+	required bytes value = 3;
+	optional uint32 offset = 4;  // 按照偏移量修改数据时，给出偏移量
+}
+
+message NodifyField {
+	required uint32 fieldid = 2;
+	optional bytes old_value = 3;
+	optional bytes new_value = 4;
+}
+
+message Identifier {
+	required uint32 id_type = 1;  // 标识符类型，APP自定义。例如: 1="IMSI", 2="MSISDN"。0保留为系统信息使用，即: 0="_TID"
+	repeated bytes value = 2;
+}
+
+message Identifiers {
+	repeated Identifier primary = 1;
+	repeated Identifier non_primary = 2;
+	optional bool mod_version_flag = 3 [deprecated=true];
+	optional uint32 version = 4 [deprecated=true];  // 用户级版本号
+	optional bool mod_ttl_flag = 5 [deprecated=true];
+	optional uint32 ttl = 6 [deprecated=true];  // 用户级有效期
+}
+
+message SuperPath {
+	required uint32 tid = 1;  // 表ID，相对目录
+	repeated PrimaryKey primary_key = 2;  // 0到多个主键信息，"primary_keys":[{“PDPID”=1}, {“CONTEXTID”=1}]
+}
+
+message Path {
+	required uint32 tid = 1;  // 表ID，相对目录
+	repeated PrimaryKey primary_key = 2;  // 0到多个主键信息，"primary_keys":[{“PDPID”=1}, {“CONTEXTID”=1}]
+	repeated SuperPath super_path = 3;  // 上级路径信息
+}
+
+message Tuple {
+	required Path    path    = 1;  // 此记录所归属的表，以及所在的“树枝”
+	optional uint32  version = 2;  // 此记录的版本号
+	optional uint32  ttl     = 3;  // seconds
+	repeated Field field = 4;
+	// 此记录中除主键字段外其他字段信息, 在修改请求中，可使用ModField中的offset/len，以修改字段中部分信息；其他情况使用Field
+	optional Sysinfo sysinfo = 5;  // 附加信息
+
+	repeated uint32 stat_id = 6;
+	// 仅对Add请求有效，若成功增加tuple，则此统计项加1；
+	// 若成功删除tuple，则此统计项减1；
+	// 如果Add请求中无此信息，则不需要对统计项进行任何处理；
+	// 目前只支持1个性能统计项，另统计项最多8K
+}
+
+message Sysinfo {
+	required uint64 modtime = 1;  // 记录修改时间点
+}
+
+message ModData {
+	required Path path = 1;  // 此记录所归属的表，以及所在的“树枝”
+	optional bool mod_version_flag = 2;
+	optional uint32 version = 3;
+	optional bool mod_ttl_flag = 4;
+	optional uint32 ttl = 5;
+	repeated ModField field = 6;
+	// 此记录中除主键字段外其他字段信息, "tuple":[{"WCONTEXTID": "1"},{"WPDPTYPE": "XXX"}]
+	// 在修改请求中，可使用ModField中的offset/len，以修改字段中部分信息；其他情况使用Field
+}
+
+message NotifyData {
+	required Path path = 1;  // 此记录所归属的表，以及所在的“树枝”
+	repeated NodifyField notify_field = 2;
+	required OPTYPE op_type = 3;
+}
+
+message Filter {
+	required uint32 targetid = 1;
+	required string condition = 2;  // 过滤字符串
+}
+
+message Range {
+	required Path path = 1;  // 记录所归属的表，及其在树中的位置
+
+	enum Scope {  // 查询范围
+		BASE = 1;  // 操作路径信息所精确指定的记录
+		ONELEVEL = 2;  // 操作路径信息所精确指定的记录的直接下级记录，不包括记录本身
+		SUBTREE = 3;  // 操作路径信息所精确指定的记录，和此记录的所有下级记录
+	}
+	required Scope scope = 2;  // 查询、删除记录时，所影响到的记录范围
+	repeated uint32 field = 3;  // 查询、删除的字段名称
+	repeated Filter filter = 4;  // 过滤条件
+}
+
+message Parameter{
+	required string name = 1;
+	required bytes value = 2;
+}
+
+enum SPNO {
+	RCP_SUB_NTF = 1;
+}
+
+message SPInfo {
+	required SPNO spno = 1;
+}
+
+enum ModOperation {
+	ADD_M = 1;  // 增加字段
+	DELETE_M = 2;  // 删除字段
+	REPLACE_M = 3;  // 覆盖字段
+	// MOD_INCREMENT = 4;  // 字段值加1
+	// MOD_DECREMENT = 5;  // 字段值减1
+}
+
+enum Control {
+	QUERY_SYSINFO = 1;  // 查询时返回系统信息。未设置此控制字时，不返回附加信息
+
+	VERSION_UPGRADE = 2;  // 修改数据时，检查版本号，若原数据为老版本，现数据为新版本，则现数据覆盖原数据。本控制字与VERSION_OVERWRITE相互冲突，故请求中只能出现其一。（未设置此控制字时，若检测到数据版本冲突，CDB报异常返回）
+	VERSION_OVERWRITE = 3;  // 修改数据时，不检查原版本号，直接使用现数据覆盖原数据。本控制字与VERSION_UPGRADE相互冲突，故请求中只能出现其一。（未设置此控制字时，若检测到数据版本冲突，CDB报异常返回）
+
+	// 以下为删除操作控制字，若不带任何控制字，删除操作的处理原则为：若只带有标识信息，则只删除PI和NPI间的对应关系；若带有记录信息，则只删除数据，不删除用户标识。
+	DELETE_ALL_IF_NOTUPLE = 4;  // 删除操作时，若标识相关所有记录均被删除，则同步删除相关的所有用户标识
+
+	ADD_NPI_ALIAS_ONLY = 5;  // 增加NPI操作时，只处理NPI-PI别名表
+	DELETE_NPI_ALIAS_ONLY = 6;  // 删除NPI操作时，只处理NPI-PI别名表；（限CDB内部使用）
+	QUERY_PI_LIST_ONLY = 7;  // 按照NPI查询信息时，只返回与此NPI对应的PI列表，而不返回详细信息
+
+	INCLUDE_NPIS = 8;  // 查询数据信息时，同时带所关联的所有NPI返回
+	DELETE_ASSOCIATED_NPIS_ONLY = 9;  // 仅删除关联的NPI，不删除用户数据
+	CHECK_NPI_EXIST = 10;  // 只检查PI/NPI关联关系
+}
+
+///////////////////////////////////////////////////////////////////////////////
+message RCCTupleInfo{
+    required string path = 1;  // 此记录所归属的表，以及所在的“树枝”
+    optional fixed64 crc64 = 2;  // Version/TTL/RecordInfo/Timestatmp Checksum
+}
+
+message RCCPIInfo{
+    required Identifier pi = 1;  // 主标识
+    repeated Identifier npi = 2;  // 副标识
+    repeated RCCTupleInfo tuple = 3;
+}
+
+message CheckConsistReq {
+    required uint32 slot_id = 1;
+    required Identifier pi_begin = 2;  // 扫描起始ID
+    repeated RCCPIInfo pi_info = 3;
+    optional Identifier pi_next_scan = 4;
+	optional uint32 too_long_flag = 5;  // pi_begin的状态标志，0：正常 1：此PI相关数据超长
+}
+
+enum ConsistRetcode {
+    matched = 0;
+    pi_not_exist_2ndreplica = 1;  // PI打印到RCCResult.pi
+    pi_not_exist_1streplica = 2;  // PI打印到RCCResult.pi
+    npi_not_exist_2ndreplica = 3;  // NPI打印到RCCResult.npi
+    npi_not_exist_1streplica = 4;  // NPI打印到RCCResult.npi
+    tuple_not_exist_2ndreplica = 5;  // path打印到RCCResult.path
+    tuple_not_exist_1streplica = 6;  // path打印到RCCResult.path
+    tuple_content_unmatch = 7;  // path打印到RCCResult.path
+    tuples_too_long_1streplica = 8;
+    tuples_too_long_2ndreplica = 9;
+}
+
+message RCCResult {
+    required ConsistRetcode cr = 1;  // 不一致情况的分类错误码
+    required Identifier pi = 2;  // 不一致的用户标识（PI）
+    optional Identifier npi = 3;  // 不一致的用户标识（NPI）
+    optional string path = 4;  // 不一致的数据信息
+}
+
+message CheckConsistAck {
+    required uint32 retcode = 1;  // 错误码
+    repeated RCCResult result = 2;
+    optional Identifier pi_scan_next_min = 3;  // 调整后的扫描起始ID
+}
+
+///////////////////////////////////////////////////////////////////////////////
+message StatRequest {
+	repeated uint32 stat_id = 1;  // 待查询的所有统计项列表
+}
+
+message ItemCount {
+	required uint32 node_id = 1;  // 分节点返回统计值信息
+	repeated SingleItemCount single_count = 2;
+}
+
+message SingleItemCount {
+	required uint32 stat_id = 1;  // 统计项
+	required uint32 stat_count = 2;  // 统计值，在响应消息中返回
+}
+
+message StatResp {
+	optional uint32    retcode    = 1;
+	optional string    retmsg     = 2;
+	optional ItemCount count_stat = 3;  // 统计值信息
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// end of file
+///////////////////////////////////////////////////////////////////////////////
+
