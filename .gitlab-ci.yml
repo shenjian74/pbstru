@@ -28,6 +28,7 @@ job1:
   artifacts:
     paths:
       - bin/pbstru
+    expire_in: 1 week
   only:
     - master
 
