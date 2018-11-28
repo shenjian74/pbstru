@@ -14,6 +14,7 @@ include_directories(
 add_definitions(-D_TEST_CODEC)
 
 ####################
+message("**** CMAKE_CURRENT_SOURCE_DIR=" ${CMAKE_CURRENT_SOURCE_DIR})
 IF(WIN32)
 add_custom_target(
     auto_gen_src
