@@ -1,0 +1,545 @@
+/*
+ * CDB protocol using Protobuf
+ */
+syntax = "proto2";
+package zte.cdb.ccc;
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCA_RES_REPORT_REQ: CCA状态上报请求
+// 流水号不上报（CCA自行比较流水号），模块号不上报（由CCC从来源获取）
+message CCAResReportRequest {
+	repeated uint32 tenant_id = 1;  // 租户ID（1到多个）
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCA_RES_REPORT_RSP: CCA状态上报响应
+// 1CCA关联多个租户 – 1租户分布在多局 – 1租户在1局中对应1套流水号
+message BureauSeqInfo {
+	required uint32 bno = 1;  // 局ID
+	required uint32 state_seq = 2;  // CC状态流水号
+	required uint32 distribution_seq = 3;  // CC配置流水号
+	required uint32 global_cfg_seq = 4;
+}
+
+message TenantSeqInfo {
+	required uint32 tenant_id = 1;  // 租户ID
+	repeated BureauSeqInfo b_seq = 2;
+}
+
+message ResReportResponse {
+	repeated TenantSeqInfo t_seq = 2;  // 租户对应的状态和配置流水号
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCC2CCA_STATE_CHANGE_NTF/EV_CCC2CDN_STATE_CHANGE_NTF: 通知CCA/CDN状态变化
+message CDMFStateNotify {
+  required uint32 bno = 1;  // 本局局号
+  required uint32 tenant_id = 2;  // 租户id
+  required uint32 state_seq = 3;  // 状态流水号
+  repeated SlotState slot_state = 4;  // 分片状态
+  repeated NodeState node_state = 5;  // 节点状态 -- 20160518新增
+}
+
+message SlotState {
+  required uint32 slot_id = 1;  // 分片id
+  repeated ReplicaState replica_state = 2;
+}
+
+message ReplicaState {
+  required uint32 replica_id = 1;  // 副本id
+  optional uint32 node_id = 2;  // 副本所在模块号，仅传state信息时，不带此信息
+  required uint32 replica_state = 3;  // 副本状态
+}
+
+message NodeState{
+  required uint32 node_id = 1;
+  required CDMFState state = 4;  // 节点状态
+}
+
+enum CDMFState
+{
+	NOUSED = 0;
+	INIT = 1;
+	WAIT_DISTRIBUTION = 2;
+	NORMAL = 3;
+	OFFLINE = 4;
+	UPGRADE = 5;
+	ABNOMAL = 6;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCC2CDN_CONFIG_CHANGE_NTF/EV_CCC2CCA_CONFIG_CHANGE_NTF: 通知CCA配置变化
+// 客户端必须校验所收到的版本号：
+// 如果版本号加1，则应用增量配置/状态数据；
+// 如果版本号相等，则无动作；
+// 其他情况，则发起获取全部配置/状态数据请求；
+// 另外客户端最好在1个小时循环更新一下所有配置/状态信息；
+message CDMFDistribNotify {
+  required uint32 bno = 1;  // 局号
+  required uint32 tenant_id = 2;  // 租户id
+
+  required uint32 distribution_seq = 3;  // 配置流水号
+  required uint32 state_seq = 4;  // 状态流水号
+
+  repeated SlotState slot_state = 6;  // 分片状态
+  repeated NodeState node_state = 7;  // 节点状态
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCA_GET_CDN_STATE_REQ: CCA获取CDN节点状态数据请求
+message CDMFGetStateReq {
+	required uint32 bno = 1;  // 局号
+	required uint32 tenant_id = 2;  // 租户ID
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCA_GET_CDN_STATE_RSP: CCA获取CDN节点状态数据响应
+// 使用CDMFStateNotify
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCA_GET_CDN_CONFIG_REQ: CCA获取CDN节点配置请求
+message CDMFGetDistribReq {
+	required uint32 bno = 1;  // 局号
+	required uint32 tenant_id = 2;  // 租户ID
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCA_GET_CDN_CONFIG_RSP: CCA获取CDN节点配置响应
+// 同CDMFDistribNotify消息
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CDN_RES_REPORT_REQ: CDN状态上报请求
+// 不需要上传流水号，CDN自行判断是否需要更新
+
+enum PerfItem {
+	ADD_REQS = 1;  // 来自网元客户端的请求
+	DELETE_REQS = 2;
+	QUERY_REQS = 3;
+	MODIFY_REQS = 4;
+	COMPOUND_REQS = 5;
+
+	ADD_SUCC_ACKS = 6;  // 直接发到网元客户端的成功响应
+	DELETE_SUCC_ACKS = 7;
+	QUERY_SUCC_ACKS = 8;
+	MODIFY_SUCC_ACKS = 9;
+	COMPOUND_SUCC_ACKS = 10;
+
+	OVERLOAD_REJECT_ADD_REQS = 11;  // 因为过负荷而丢弃的请求消息
+	OVERLOAD_REJECT_DELETE_REQS = 12;
+	OVERLOAD_REJECT_QUERY_REQS = 13;
+	OVERLOAD_REJECT_MODIFY_REQS = 14;
+	OVERLOAD_REJECT_COMPOUND_REQS = 15;
+
+	TRANSFER_ADD_REQS = 16;  // 本节点无法处理，而直接转发的消息
+	TRANSFER_DELETE_REQS = 17;
+	TRANSFER_QUERY_REQS = 18;
+	TRANSFER_MODIFY_REQS = 19;
+	TRANSFER_COMPOUND_REQS = 20;
+
+	JOINT_ADD_REQS = 21;  // CDN主发的协同消息，例如增加用户时向其他节点发送增加NPI操作
+	JOINT_DELETE_REQS = 22;
+	JOINT_QUERY_REQS = 23;
+	JOINT_MODIFY_REQS = 24;
+	NOTIFY_MSGS = 25;  // 本节点主发的通知消息
+
+	DATA_RECORD_NUM = 26;   // 记录数统计
+	ALIAS_RECORD_NUM = 27;
+	REALIAS_RECORD_NUM = 28;
+
+	INSERT_TO_MODIFY_REQS = 29;
+	DELETE_NOT_EXIST_REQS = 30;
+
+	CPU_USAGE = 31;
+	MEMORY_USAGE = 32;
+
+	MAX_PERF_ITEM = 33;  // 最大性能统计项值，需注意维护
+}
+
+message Perfdata {
+	required PerfItem item = 1;
+	required uint32 count = 2;
+}
+
+message CDNResReportReq {
+  required uint32 node_id = 1;  // 节点ID
+  required uint32 node_state = 2;     // 节点状态
+	required uint32 cpu = 3;       // CPU使用率
+	required uint32 capcity = 4;   // 内存库使用率
+	repeated SlotState slot_state = 5;  // 分片状态
+	repeated Perfdata measure = 7;  // 性能统计项
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CDN_RES_REPORT_RSP: CDN状态上报响应
+// 同ResReportRsp消息
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CDN_CONFIG_CHANGE_NTF：CDN状态变化通知
+// 同CDMFDistribNotify消息
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CDN_GET_CDN_STATE_REQ: CDN获取CDN节点状态数据请求
+// 同CDMFGetStateReq消息
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CDN_GET_CDN_STATE_RSP: CDN获取CDN节点状态数据响应
+// 同CDMFDistribNotify消息
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CDN_GET_CDN_CONFIG_REQ: CDN获取CDN节点配置请求
+// 同CDMFGetDistribReq消息
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CDN_GET_CDN_CONFIG_RSP: CDN获取CDN节点配置响应
+// 同CDMFDistribNotify消息
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCC_RES_REPORT_REQ: CCC状态上报请求
+// 消息体为空？
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCC_RES_REPORT_RSP: CCC状态上报响应
+// 同ResReportRsp消息
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCC_STATE_CHANGE_NTF
+// 同CDMFStateNotify消息
+
+// EV_CCC_CONFIG_CHANGE_NTF: 通知CCC配置变化
+// 同CDMFDistribNotify消息
+
+// EV_CCC_GET_CDN_STATE_REQ: CCC获取CDN节点状态数据请求
+// 同CDMFGetStateReq消息
+
+// EV_CCC_GET_CDN_STATE_RSP: CCC获取CDN节点状态数据响应
+// 同CDMFStateNotify消息
+
+// EV_CCC_GET_CDN_CONFIG_REQ: CCC获取CDN节点配置请求
+// 同CDMFGetDistribReq消息
+
+// EV_CCC_GET_CDN_CONFIG_RSP: CCC获取CDN节点配置响应
+// 同CDMFDistribNotify消息
+
+message DynCMDReq{
+	required uint32 node_id = 1;  // 节点ID
+	required uint32 cmdcode = 2; // 命令码
+}
+
+message DynCMDRsp{
+	required uint32 node_id = 1;  // 节点ID
+	required uint32 cmdcode = 2; // 命令码
+	required uint32 retcode = 3;  // 0:success 1:failed
+}
+
+message GLOBAL_T {
+	required uint32 mdbSize = 1; /* 库大小，单位 M*/
+	required uint32 log_size = 2; /* 日志大小，单位M*/
+	required uint32 sync_time = 3; /* 复制时间，单位 S */
+	required uint32 auto_scale = 4; /* 自动弹缩，0 不弹，1：自动弹 */
+	required uint32 db_alarm_thre = 5; /* 库满告警门限 */
+	required uint32 scale_limit = 6;  /* 最小弹缩模块数，默认 2 */
+	required uint32 sub_ntf_switch = 7;  /* False: 系统不支持订阅通知功能；True：系统支持订阅通知功能 */
+
+	// 以下配置项过负荷功能使用
+	optional uint32 overload_cdn_tps_limit = 8 [default = 100000];  // CDN单节点最大TPS，超过此TPS时，CDN拒绝处理CDAP请求
+	optional uint32 overload_level1_cpu = 9 [default = 75];  // 当CPU使用率大于此门限值，进入过负荷一级处理
+	optional uint32 overload_level2_cpu = 10 [default = 80];  // 当CPU使用率大于此门限值，进入过负荷二级处理
+	optional uint32 overload_level3_cpu = 11 [default = 85];  // 当CPU使用率大于此门限值，进入过负荷三级处理
+	optional uint32 overload_level4_cpu = 12 [default = 90];  // 当CPU使用率大于此门限值，进入过负荷四级处理
+	optional uint32 overload_level5_cpu = 13 [default = 95];  // 当CPU使用率大于此门限值，进入过负荷五级处理
+	optional uint32 overload_level1_high_rate = 14 [default = 100];  // 高优先级的消息在一级过负荷状态下的处理比例
+	optional uint32 overload_level2_high_rate = 15 [default = 100];  // 高优先级的消息在二级过负荷状态下的处理比例
+	optional uint32 overload_level3_high_rate = 16 [default = 75];  // 高优先级的消息在三级过负荷状态下的处理比例
+	optional uint32 overload_level4_high_rate = 17 [default = 50];  // 高优先级的消息在四级过负荷状态下的处理比例
+	optional uint32 overload_level5_high_rate = 18 [default = 0];  // 高优先级的消息在五级过负荷状态下的处理比例
+	optional uint32 overload_level1_low_rate = 19 [default = 100];  // 低优先级的消息在一级过负荷状态下的处理比例
+	optional uint32 overload_level2_low_rate = 20 [default = 75];  // 低优先级的消息在二级过负荷状态下的处理比例
+	optional uint32 overload_level3_low_rate = 21 [default = 50];  // 低优先级的消息在三级过负荷状态下的处理比例
+	optional uint32 overload_level4_low_rate = 22 [default = 25];  // 低优先级的消息在四级过负荷状态下的处理比例
+	optional uint32 overload_level5_low_rate = 23 [default = 0];  // 低优先级的消息在五级过负荷状态下的处理比例
+	optional uint32 query_trigger_delete = 24 [default = 0];  // 奥电补丁开关
+}
+
+message TENANT_T{
+  required uint32 tenant_id = 1;
+  required string tenant_name = 2;
+  required uint32 bno1 = 3;
+  required uint32 bno2 = 4;
+}
+
+message CDB_RBCCC_T{
+  required uint32 bno = 1;
+  required uint32 ipflag = 2;  // 0:IPv4 1:IPv6
+  required string ip = 3;
+}
+
+message GlobalConfigRsp{
+ required GLOBAL_T global_val = 1;
+ repeated TENANT_T tenant = 2;
+ repeated CDB_RBCCC_T rbccc = 3;
+}
+
+////////////////////////////////////////
+// EV_CDMF_OPER_SLOT_REQ
+enum OperSlotType {
+	CCC_CREATE_SLOT = 1;
+	CCC_DEL_SLOT = 2;
+	CCC_DEL_4th_SLOT = 3;  // 删除本租户的节点上所有的第4副本。数据迁移流程防止上次有残余副本未删除干净，不需要带副本id
+	CCC_CLEAR_DB = 4;  //清除本节点内存库以及分布数据，节点状态恢复到初始态
+}
+
+message CCC2CDNOperSlotReq{
+	required uint32 oper_sn = 3;
+	required OperSlotType oper_type = 1;
+	repeated uint32 slotid_list = 2;
+}
+
+////////////////////////////////////////
+// EV_CDMF_OPER_SLOT_RSP
+message CCC2CDNOperSlotResp
+{
+    required uint32 retcode = 1;  /* 0:success, 1:failed */
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CDMF_CDN_ASYNC_CONFIRM_REQ: 确认本节点上所有分片都异步复制到其他节点
+message AsyncConfirmReq
+{
+	repeated uint32 slotid_list = 1;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CDMF_CDN_ASYNC_CONFIRM_RSP: 确认本节点上所有分片都异步复制到其他节点
+message AsyncConfirmResp
+{
+	required uint32 retcode = 1;  /* 0:success, 1:failed */
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// 探针接口定义
+message CDBMTAReq{
+	required MTAHeader header = 1;
+	optional ProbeQueryByIndexReq qbir_body = 2;
+	optional ProbePageReq pr_body = 3;  // 页面实例编号
+}
+
+message CDBMTADumpAck {
+    optional uint32 progress = 1; // 进度
+}
+
+message CDBMTARCCAck {
+	optional uint32 progress = 1;
+}
+
+message CMDFQueryUserNumAck {
+   required uint32 nodeid = 1;
+   required uint32 pi_num_1 = 2;  // 第一副本有效的pi数目
+   required uint32 pi_num_2 = 3;  // 第二副本有效的pi数目
+   required uint32 pi_num_overdate_1 = 4;  // 第一副本过期的pi数目
+   required uint32 pi_num_overdate_2 = 5;  // 第二副本过期的pi数目
+};
+
+// 错误码定义
+enum MTARetcode {
+    success = 0;  // 处理成功，"Success"
+    failed = 1;  // 处理失败，“Failed”
+    distrib_changed = 2;  // 分布信息变更，"Distribution info. changed."
+    slot_abnormal = 3;  // 数据分片状态异常， "Slot status abnormal."
+    no_dump_running = 4;  // 没有正在执行的DUMP任务，"no dump task running."
+    over_load = 5;
+    clear_dump_file_fail = 6;
+    disk_space_lack = 7;
+    mmdb_fail = 8;
+    dump_cancel = 9;
+    write_file_fail = 10;
+    already_dumping = 11;
+    no_rcc_running = 12;  // 没有正在执行的RCC任务
+    clear_rcc_file_fail = 13;
+    rcc_cancel = 14;
+    already_rccing = 15;
+	decode_error = 16;  // 编解码失败
+	data_compare_error = 17;  // 两节点数据比较结果错误
+	recv_msg_timeout = 18;  // 接受消息超时超过3次失败
+	too_many_inconsistent = 19;  // 单节点不一致记录数目过多
+}
+
+message CDBMTAAck{
+	required MTAHeader header = 1;
+	required MTARetcode retcode = 2;
+	optional string retmsg = 3;
+	repeated string title = 4;  // 供显示用的字段名称
+	repeated Line lines = 5;  // 供显示用的id-value对，其中的ID为上述字段名称的ID，ID为0表示第一个字段，依次类推
+	optional CDBMTADumpAck dump_ack = 6;
+	optional CDBMTARCCAck rcc_ack = 7;
+	optional CMDFQueryUserNumAck query_ack = 8;
+}
+// RecordInfo类型的数据只返回"页面实例编号"（可避免需要分包的情况）
+
+message MTAHeader {
+	required uint32 msgid = 1;
+	required MTAOp optype = 2;
+	optional ProbeSource probe_source = 3;
+	optional uint32 module = 4;
+	optional uint32 slotid = 5;
+}
+
+message	ProbeQueryByIndexReq {
+	required string tablename = 1;  // 表名
+	repeated KeyValue index_info = 2;  // 索引信息，如果是复合索引，则包含多个值
+}
+
+message ProbePageReq {
+	required bytes page_no = 1;  // 页面实例编号 长度为10
+}
+
+enum MTAOp {
+	QUERY_BY_INDEX_REQ = 1;  // 按照索引信息查询数据记录请求（探针）
+	QUERY_BY_INDEX_ACK = 2;  // 按照所用信息查询数据记录响应（探针）
+	QUERY_PAGE_REQ     = 3;  // 查询页面数据请求（探针）
+	QUERY_PAGE_ACK     = 4;  // 查询页面数据响应（探针）
+	DELETE_TUPLE_REQ   = 5;  // 按照索引信息删除数据记录请求（探针）
+	DELETE_TUPLE_ACK   = 6;  // 按照索引信息删除数据记录响应（探针）
+	QUERY_CDB_USER_REQ = 7;  // 查询数据记录数请求
+	QUERY_CDB_USER_ACK = 8;  // 查询数据记录数响应
+
+	BEGIN_DUMP_REQ = 9;  // 开始DUMP请求
+	BEGIN_DUMP_ACK = 10;  // 开始DUMP响应
+	QUERY_DUMP_REQ = 11;  // 查询DUMP状态请求
+	QUERY_DUMP_ACK = 12;  // 查询DUMP状态响应
+	CANCEL_DUMP_NTF = 13;  // 取消DUMP通知
+
+	BEGIN_RCC_REQ = 14;  // 开始副本一致性检查请求
+	BEGIN_RCC_ACK = 15;  // 开始副本一致性检查响应
+	QUERY_RCC_REQ = 16;  // 查询副本一致性检查结果
+	QUERY_RCC_ACK = 17;  // 查询副本一致性检查结果
+	CANCEL_RCC_NTF = 18;  // 取消副本一致性检查通知
+
+	BEGIN_QUERY_USERNUM_REQ = 19;  // 查询用户数请求
+	BEGIN_QUERY_USERNUM_ACK = 20;  // 查询用户数响应
+
+	PREPARE_CLEAR_DB_REQ = 21;  // 清库前检查请求
+	PREPARE_CLEAR_DB_ACK = 22;  // 清库前检查响应
+	CLEAR_DB_REQ = 23;  // 清库请求
+	CLEAR_DB_ACK = 24;  // 清库响应
+
+}
+
+message Line{
+	repeated IdValue values = 1;
+}
+
+message KeyValue {
+	required string name = 1;
+	required bytes value = 2;
+}
+
+message IdValue {
+	required uint32 id = 1;
+	required bytes value = 2;
+}
+
+message ProbeSource {
+	// 请求发起端
+	enum ClientType {
+        OMMServer = 1;
+        ProbeTool = 2;
+	}
+	required ClientType client_type = 1;  // 客户端类型
+	required string source_instance = 2;  // 请求发起端地址
+}
+// 探针接口定义结束
+
+///////////////////////////////////////////////////////////////////////////////
+// EV_CCC_CDMF_GET_NODEID_REQ
+message GetNodeIDReq {
+	required string	tenantid = 1;  // 服务名
+	required string	uuid = 2;  // POD UUID
+	optional string vm_pod_name = 3;  // 注意：从字段开始使用pbstru生成相关代码，nanopb相关代码则未更新
+}
+
+// EV_CCC_CDMF_GET_NODEID_RSP
+message GetNodeIDRsp {
+	required uint32	retcode = 1;  //返回值
+	required uint32	nodeid = 2;	 //节点ID
+}
+
+// EC_CCC_CDMF_DATA_INCOMPLETE_NTF
+// NULL
+
+message CCCMasterElect{
+	required string	uuid = 1;	// POD UUID
+	required string	nfid = 2;	// NF标识
+	required string	dcid = 3;	// DC标识
+	required uint32	state = 4;	// 状态
+	// 0:init, 1:slave, 2:DC Master, 3:NF Master
+	optional uint32	cdbid = 5;	// CDB标识
+}
+
+///////////////////////////////////////////////////////////////////////////////
+enum ut_test_enum {
+    CLIENT = 1;
+    SERVER = 2;
+}
+
+message ut_test_sub_message{
+	repeated uint32 d_uint32 = 1;
+}
+
+message ut_test_message
+{
+	required uint32 r_uint32 = 1;
+	optional uint32 o_uint32 = 2;
+	repeated uint32 f_uint32 = 3;
+	repeated uint32 d_uint32 = 4;
+	repeated uint32 pf_uint32 = 5 [packed=true];
+	repeated uint32 pd_uint32 = 6 [packed=true];
+
+	required uint64 r_uint64 = 11;
+	optional uint64 o_uint64 = 12;
+	repeated uint64 f_uint64 = 13;
+	repeated uint64 d_uint64 = 14;
+	repeated uint64 pf_uint64 = 15 [packed=true];
+	repeated uint64 pd_uint64 = 16 [packed=true];
+
+	required fixed32 r_fixed32 = 21;
+	optional fixed32 o_fixed32 = 22;
+	repeated fixed32 f_fixed32 = 23;
+	repeated fixed32 d_fixed32 = 24;
+	repeated fixed32 pf_fixed32 = 25 [packed=true];
+	repeated fixed32 pd_fixed32 = 26 [packed=true];
+
+	required fixed64 r_fixed64 = 31;
+	optional fixed64 o_fixed64 = 32;
+	repeated fixed64 f_fixed64 = 33;
+	repeated fixed64 d_fixed64 = 34;
+	repeated fixed64 pf_fixed64 = 35 [packed=true];
+	repeated fixed64 pd_fixed64 = 36 [packed=true];
+
+	required bool r_bool = 41;
+	optional bool o_bool = 42;
+	repeated bool f_bool = 43;
+	repeated bool d_bool = 44;
+	repeated bool pf_bool = 45 [packed=true];
+	repeated bool pd_bool = 46 [packed=true];
+
+	required string r_string = 51;
+	optional string o_string = 52;
+	repeated string f_string = 53;
+	repeated string d_string = 54;
+
+	required bytes r_bytes = 61;
+	optional bytes o_bytes = 62;
+	repeated bytes f_bytes = 63;
+	repeated bytes d_bytes = 64;
+
+	required ut_test_enum r_enum = 71;
+	optional ut_test_enum o_enum = 72;
+	repeated ut_test_enum f_enum = 73;
+	repeated ut_test_enum d_enum = 74;
+
+	required ut_test_sub_message r_message = 81;
+	optional ut_test_sub_message o_message = 82;
+	repeated ut_test_sub_message f_message = 83;
+	repeated ut_test_sub_message d_message = 84;
+}
