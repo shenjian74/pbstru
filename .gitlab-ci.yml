@@ -11,6 +11,7 @@ cache:
   paths:
     - protobuf3/
     - protobuf-all-3.5.1.tar.gz
+    - bin/
 
 before_script:
   - apt-get -y update
@@ -22,7 +23,6 @@ stages:
 job1:
   stage: build
   script:
-    - export
     - ./build.sh
     - echo "Done."
   artifacts:
