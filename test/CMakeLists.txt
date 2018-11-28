@@ -17,14 +17,20 @@ add_definitions(-D_TEST_CODEC)
 IF(WIN32)
 add_custom_target(
     auto_gen_src
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru.exe . && ${CMAKE_COMMAND} -E remove_directory codec && ${CMAKE_COMMAND} -E make_directory codec && pbstru.exe cdb.proto cdb_ccc.proto codec
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru.exe . && \
+    ${CMAKE_COMMAND} -E remove_directory codec && \
+    ${CMAKE_COMMAND} -E make_directory codec && \
+    pbstru.exe cdb.proto cdb_ccc.proto codec
 )
 ELSE()
 add_custom_target(
     auto_gen_src
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && ./gen_codec.sh
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && \
+    ${CMAKE_COMMAND} -E remove_directory codec && \
+    ${CMAKE_COMMAND} -E make_directory codec && \
+    ./pbstru cdb.proto cdb_ccc.proto codec
 )
 ENDIF()
 
