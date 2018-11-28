@@ -26,7 +26,7 @@ add_custom_target(
 ELSE()
 add_custom_target(
     auto_gen_src
-    COMMAND ls ${CMAKE_CURRENT_BINARY_DIR}/.. -l && ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && ls -l && ${CMAKE_COMMAND} -E remove_directory codec && ${CMAKE_COMMAND} -E make_directory codec && ./pbstru cdb.proto cdb_ccc.proto codec
+    COMMAND ls ${CMAKE_CURRENT_BINARY_DIR}/.. -l && ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && ls -l && ${CMAKE_COMMAND} -E remove_directory codec && ${CMAKE_COMMAND} -E make_directory codec && ./pbstru cdb.proto cdb_ccc.proto codec && ls ${CMAKE_CURRENT_SOURCE_DIR}/../bin/codec/source -l
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
 )
 ENDIF()
