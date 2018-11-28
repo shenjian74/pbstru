@@ -29,5 +29,5 @@ if [ -f "protobuf3/Makefile" ]; then
   cd ../build/test && \
   cmake ../../test && \
   make && \
-  ls -l
+  ./test_codec
 fi
