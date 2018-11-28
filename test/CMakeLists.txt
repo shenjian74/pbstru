@@ -15,6 +15,8 @@ add_definitions(-D_TEST_CODEC)
 
 ####################
 message("**** CMAKE_CURRENT_SOURCE_DIR=" ${CMAKE_CURRENT_SOURCE_DIR})
+message("**** CMAKE_CURRENT_BINARY_DIR=" ${CMAKE_CURRENT_BINARY_DIR})
+
 IF(WIN32)
 add_custom_target(
     auto_gen_src
@@ -24,7 +26,7 @@ add_custom_target(
 ELSE()
 add_custom_target(
     auto_gen_src
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && ${CMAKE_COMMAND} -E remove_directory codec && ${CMAKE_COMMAND} -E make_directory codec && ./pbstru cdb.proto cdb_ccc.proto codec
+    COMMAND ls -l && ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/../pbstru . && ${CMAKE_COMMAND} -E remove_directory codec && ${CMAKE_COMMAND} -E make_directory codec && ./pbstru cdb.proto cdb_ccc.proto codec
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin
 )
 ENDIF()
