@@ -13,6 +13,8 @@ cache:
     - protobuf-all-3.5.1.tar.gz
 
 before_script:
+  - apt-get -y update
+  - apt-get install -y cmake
   
 stages:
   - build
@@ -22,7 +24,6 @@ job1:
   script:
     - export
     - ./build.sh
-    - export
     - echo "Done."
   artifacts:
     paths:
