@@ -10,33 +10,33 @@ aux_source_directory(./pbstru SRC_FILES)
 include_directories(
 	/usr/local/include
 	/usr/local/include/google/protobuf/compiler
-	../protobuf3/src
-	../protobuf3/src/google/protobuf/compiler
+	protobuf3/src
+	protobuf3/src/google/protobuf/compiler
 )
 
-add_subdirectory("./test_codec")
+add_subdirectory("./test")
 
 IF (WIN32)
 add_custom_target(
     protobuf_lib
     COMMAND mingw32-make
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/cmake/build
 )
 ELSE()
 add_custom_target(
     protobuf_lib
     # COMMAND ./autogen.sh && ./configure && make
     COMMAND make
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/protobuf3
 )
 ENDIF()
 
 IF (WIN32)
-	message("${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build")
-	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/cmake/build" )
+	message("${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/cmake/build")
+	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/cmake/build" )
 ELSE()
         set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../protobuf3/src/.libs" )
+	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/src/.libs" )
 ENDIF()
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 
