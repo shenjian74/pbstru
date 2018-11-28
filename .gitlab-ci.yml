@@ -27,7 +27,7 @@ job1:
     - echo "Done."
   artifacts:
     paths:
-      - bin/
+      - bin/pbstru
   only:
     - master
 
