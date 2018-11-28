@@ -21,7 +21,7 @@ job1:
   stage: build
   script:
     - export
-    - build.sh
+    - ./build.sh
     - export
     - echo "Done."
   artifacts:
