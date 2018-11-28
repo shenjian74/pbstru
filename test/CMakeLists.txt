@@ -8,7 +8,7 @@ aux_source_directory("." SRC_FILES1)
 aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/../bin/codec/source" SRC_FILES1)
 
 include_directories(
-    ../bin/codec/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../bin/codec/include
 )
 
 add_definitions(-D_TEST_CODEC)
@@ -34,4 +34,4 @@ ENDIF()
 # add the executable
 add_executable(${PROJECT_NAME} ${SRC_FILES1})
 add_dependencies(${PROJECT_NAME} auto_gen_src)
-target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+# target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
