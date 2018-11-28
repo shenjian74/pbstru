@@ -16,6 +16,10 @@ include_directories(
 
 add_subdirectory("./test")
 
+####################
+message("**** CMAKE_CURRENT_SOURCE_DIR=" ${CMAKE_CURRENT_SOURCE_DIR})
+message("**** CMAKE_CURRENT_BINARY_DIR=" ${CMAKE_CURRENT_BINARY_DIR})
+
 IF (WIN32)
 add_custom_target(
     protobuf_lib
