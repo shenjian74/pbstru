@@ -10,7 +10,7 @@ variables:
 cache:
   paths:
     - protobuf3/
-    - *.tar.gz
+    - protobuf-all-3.5.1.tar.gz
 
 before_script:
   
