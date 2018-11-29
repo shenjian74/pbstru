@@ -14,7 +14,9 @@ include_directories(
 	protobuf3/src/google/protobuf/compiler
 )
 
-add_subdirectory("./test")
+####################
+message("**** CMAKE_CURRENT_SOURCE_DIR=" ${CMAKE_CURRENT_SOURCE_DIR})
+message("**** CMAKE_CURRENT_BINARY_DIR=" ${CMAKE_CURRENT_BINARY_DIR})
 
 IF (WIN32)
 add_custom_target(
@@ -35,7 +37,7 @@ IF (WIN32)
 	message("${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/cmake/build")
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/cmake/build" )
 ELSE()
-        set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/src/.libs" )
 ENDIF()
 set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
