@@ -11,8 +11,11 @@ cache:
   paths:
     - protobuf3/
     - protobuf-all-3.5.1.tar.gz
+    - bin/
 
 before_script:
+  - apt-get -y update
+  - apt-get install -y cmake
   
 stages:
   - build
@@ -20,13 +23,12 @@ stages:
 job1:
   stage: build
   script:
-    - export
-    - build.sh
-    - export
+    - ./build.sh
     - echo "Done."
   artifacts:
     paths:
-      - bin/
+      - bin/pbstru
+    expire_in: 1 week
   only:
     - tags
 

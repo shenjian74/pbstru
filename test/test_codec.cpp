@@ -797,6 +797,7 @@ int main(int argc, char* argv[])
     // printf("<Press any key to continue ...>\n");
     // getchar();
     printf("%s Done.\n", argv[0]);
+	return 0;
 }
 
 
