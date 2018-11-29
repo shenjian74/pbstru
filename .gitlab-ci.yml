@@ -28,6 +28,6 @@ job1:
     paths:
       - bin/
   only:
-    - master
+    - tags
 
     
