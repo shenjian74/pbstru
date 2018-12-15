@@ -620,7 +620,7 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     }
 }
 
-int gen_header(const Descriptor *desc, string &target_dir)
+int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &map_array_size)
 {
     int retcode = 0;
     string name_lower = desc->name();
@@ -666,6 +666,7 @@ int gen_header(const Descriptor *desc, string &target_dir)
             headers.insert(str);
         }
     }
+
     // 使用set去掉重复的头文件
     for(set<string>::iterator it=headers.begin(); it!=headers.end(); ++it)
     {
@@ -676,17 +677,12 @@ int gen_header(const Descriptor *desc, string &target_dir)
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
-        string field_name_upper = field->name();
-        toupper(field_name_upper);
-        string field_containing_type_upper = field->containing_type()->name();
-        toupper(field_containing_type_upper);
         if(field->is_repeated())
         {
             string max_count;
             if(get_max_count(field->containing_type()->full_name(), field->name(), max_count))
             {
-                fprintf(fp, "#define PBSTRU_MAX_%s_IN_%s %s\n",
-                        field_name_upper.c_str(), field_containing_type_upper.c_str(), max_count.c_str());
+                map_array_size[field->containing_type()->name() + ":" + field->name()] = max_count;
             }
         }
     }
@@ -723,12 +719,6 @@ int gen_header(const Descriptor *desc, string &target_dir)
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
-
-            string field_name_upper = field->name();
-            toupper(field_name_upper);
-            string field_containing_type_upper = field->containing_type()->name();
-            toupper(field_containing_type_upper);
-
             string struct_list_name;
 			get_struct_list_name(field, struct_list_name);
             fprintf(fp, "\ntypedef struct _st_%s_list {\n", struct_list_name.c_str());
@@ -786,8 +776,9 @@ int gen_header(const Descriptor *desc, string &target_dir)
             }
             else
             {
-                fprintf(fp, " item[PBSTRU_MAX_%s_IN_%s];  /* tag:%d type:%s */\n", field_name_upper.c_str(),
-                        field_containing_type_upper.c_str(), field->number(), field->type_name());
+                fprintf(fp, " item[%s];  /* tag:%d type:%s */\n",
+                        map_array_size[field->containing_type()->name() + ":" + field->name()].c_str(),
+                        field->number(), field->type_name());
             }
 
             fprintf(fp, "} st_%s_list;\n", struct_list_name.c_str());
@@ -856,7 +847,7 @@ void alloc_new_repeated_item(FILE *fp, const Descriptor *desc, const FieldDescri
 
 }
 
-void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
+void print_clear_message(FILE *fp, const Descriptor *desc, bool init, const map<string,string> &map_array_size)
 {
     int it_count = 0;
 
@@ -881,7 +872,7 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
         {
 			string struct_list_name;
 			get_struct_list_name(field, struct_list_name);
-	
+
             if(is_dynamic_repeated(field))
             {
                 // Recursive clearing message
@@ -906,15 +897,10 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
             {
                 if(init)
                 {
-                    string field_name_upper = field->name();
-                    toupper(field_name_upper);
-                    string field_containing_type_upper = field->containing_type()->name();
-                    toupper(field_containing_type_upper);
-
                     if(FieldDescriptor::TYPE_MESSAGE == field->type())
                     {
-                        fprintf(fp, "    for(i=0; i<PBSTRU_MAX_%s_IN_%s; ++i){\n",
-                                field_name_upper.c_str(), field_containing_type_upper.c_str());
+                        fprintf(fp, "    for(i=0; i<%s; ++i){\n",
+                                map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                         fprintf(fp, "        constru_message_%s(&(var_%s->var_%s.item[i]));\n",
                                 field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                         fprintf(fp, "    }\n");
@@ -939,7 +925,7 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
             {
                 if(FieldDescriptor::TYPE_MESSAGE == field->type())
                 {
-                    fprintf(fp, "        constru_message_%s(&(var_%s->var_%s));\n",
+                    fprintf(fp, "    constru_message_%s(&(var_%s->var_%s));\n",
                             field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                 }
             }
@@ -994,7 +980,7 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init)
     }
 }
 
-int gen_source(const Descriptor *desc, string &target_dir)
+int gen_source(const Descriptor *desc, string &target_dir, const map<string,string> &map_array_size)
 {
     int retcode = 0;
     string name_lower = desc->name();
@@ -1028,7 +1014,7 @@ int gen_source(const Descriptor *desc, string &target_dir)
     ////////////////////////////////////////
     // clear function
     fprintf(fp, "void constru_message_%s(%s *var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
-    print_clear_message(fp, desc, true);
+    print_clear_message(fp, desc, true, map_array_size);
     fprintf(fp, "}\n");
 
     ////////////////////////////////////////
@@ -1040,7 +1026,7 @@ int gen_source(const Descriptor *desc, string &target_dir)
     // clear function
     fprintf(fp, "\nvoid clear_message_%s(%s* var_%s){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
-    print_clear_message(fp, desc, false);
+    print_clear_message(fp, desc, false, map_array_size);
     fprintf(fp, "}\n");
 
     ////////////////////////////////////////
@@ -1435,11 +1421,6 @@ int gen_source(const Descriptor *desc, string &target_dir)
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
-        string field_name_upper = field->name();
-        toupper(field_name_upper);
-        string field_containing_type_upper = field->containing_type()->name();
-        toupper(field_containing_type_upper);
-
         fprintf(fp, "        /* type:%s */\n", field->type_name());
         fprintf(fp, "        case %d:\n", field->number());
         switch(field->type())
@@ -1481,9 +1462,9 @@ int gen_source(const Descriptor *desc, string &target_dir)
                         fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
                         strcpy(spaces, "        ");
                     }
-                    fprintf(fp, "%s            if(var_%s->var_%s.count >= PBSTRU_MAX_%s_IN_%s) {\n",
+                    fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
                             spaces, desc->name().c_str(), field->name().c_str(),
-                            field_name_upper.c_str(), field_containing_type_upper.c_str());
+                            map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                     fprintf(fp, "%s                return FALSE;  /* 数组超限 */\n", spaces);
                     fprintf(fp, "%s            }\n", spaces);
                     fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n",
@@ -1548,9 +1529,9 @@ int gen_source(const Descriptor *desc, string &target_dir)
                         fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
                         strcpy(spaces, "        ");
                     }
-                    fprintf(fp, "%s            if(var_%s->var_%s.count >= PBSTRU_MAX_%s_IN_%s) {\n",
+                    fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
                             spaces, desc->name().c_str(), field->name().c_str(),
-                            field_name_upper.c_str(), field_containing_type_upper.c_str());
+                            map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                     fprintf(fp, "%s                return FALSE;  /* 数组超限 */\n", spaces);
                     fprintf(fp, "%s            }\n", spaces);
                     fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((WORD64 *)(buf + offset));\n",
@@ -1617,9 +1598,9 @@ int gen_source(const Descriptor *desc, string &target_dir)
                         fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
                         strcpy(spaces, "        ");
                     }
-                    fprintf(fp, "%s            if(var_%s->var_%s.count >= PBSTRU_MAX_%s_IN_%s) {\n",
+                    fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
                             spaces, desc->name().c_str(), field->name().c_str(),
-                            field_name_upper.c_str(), field_containing_type_upper.c_str());
+                            map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                     fprintf(fp, "%s                return FALSE;  /* 数组超限 */\n", spaces);
                     fprintf(fp, "%s            }\n", spaces);
                     fprintf(fp, "%s            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n",
@@ -1659,8 +1640,8 @@ int gen_source(const Descriptor *desc, string &target_dir)
                 }
                 else
                 {
-                    fprintf(fp, "            if(var_%s->var_%s.count >= PBSTRU_MAX_%s_IN_%s) {\n", desc->name().c_str(), field->name().c_str(),
-                            field_name_upper.c_str(), field_containing_type_upper.c_str());
+                    fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
+                            map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                     fprintf(fp, "                return FALSE;  /* 数组超限 */\n");
                     fprintf(fp, "            }\n");
                     fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
@@ -1702,8 +1683,8 @@ int gen_source(const Descriptor *desc, string &target_dir)
                 }
                 else
                 {
-                    fprintf(fp, "            if(var_%s->var_%s.count >= PBSTRU_MAX_%s_IN_%s) {\n", desc->name().c_str(), field->name().c_str(),
-                            field_name_upper.c_str(), field_containing_type_upper.c_str());
+                    fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
+                            map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                     fprintf(fp, "                return FALSE;  /* 数组超限 */\n");
                     fprintf(fp, "            }\n");
                     fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
@@ -1743,8 +1724,8 @@ int gen_source(const Descriptor *desc, string &target_dir)
                 }
                 else
                 {
-                    fprintf(fp, "            if(var_%s->var_%s.count >= PBSTRU_MAX_%s_IN_%s) {\n", desc->name().c_str(), field->name().c_str(),
-                            field_name_upper.c_str(), field_containing_type_upper.c_str());
+                    fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
+                            map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                     fprintf(fp, "                return FALSE;  /* 数组超限 */\n");
                     fprintf(fp, "            }\n");
                     fprintf(fp, "            decode_varint(buf + offset, &tmp_field_len, &offset);\n");
@@ -1793,10 +1774,13 @@ int gen_all_from_file(const FileDescriptor *f, string &target_dir)
     for(int i=0; i<f->message_type_count(); ++i)
     {
         const Descriptor* desc = f->message_type(i);
-        retcode = gen_header(desc, target_dir);
+        map<string, string> map_array_size;
+
+        retcode = gen_header(desc, target_dir, map_array_size);
         if(0 == retcode){
-            retcode = gen_source(desc, target_dir);
+            retcode = gen_source(desc, target_dir, map_array_size);
         }
+        map_array_size.clear();
 
         /* close option file */
         if(NULL != fp_option)
@@ -2150,9 +2134,10 @@ int main(int argc, char *argv[])
 
         if(3 == syntax)
         {
-            char command[256];
+            /* char command[256];
             sprintf(command, "rm -f %s", no_map_filename);
-            system(command);
+            system(command); */
+            remove(no_map_filename);
             printf("tempfile %s removed.\n", no_map_filename);
         }
         delete importer;
