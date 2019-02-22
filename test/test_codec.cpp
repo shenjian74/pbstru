@@ -738,6 +738,7 @@ int main(int argc, char* argv[])
     printf("[%s:%d] spend %.0lf(us)\n", __FILE__, __LINE__, diff);
 
     printf("%s Done.\n", argv[0]);
+	return 0;
 }
 
 

@@ -22,5 +22,12 @@ if [ -f "protobuf3/Makefile" ]; then
   cd build && \
   cmake .. && \
   make && \
-  mv pbstru ../bin
+  mv pbstru ../bin && \
+  cd ../bin && \
+  ./pbstru cdb.proto cdb_ccc.proto codec && \
+  mkdir ../build/test && \
+  cd ../build/test && \
+  cmake ../../test && \
+  make && \
+  ./test_codec
 fi
