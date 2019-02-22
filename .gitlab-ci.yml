@@ -27,7 +27,8 @@ job1:
     - echo "Done."
   artifacts:
     paths:
-      - bin/
+      - bin/pbstru
+    expire_in: 1 month
   only:
     - master
 
