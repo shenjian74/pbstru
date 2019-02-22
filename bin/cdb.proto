@@ -144,15 +144,11 @@ message Identifiers {
 	optional uint32 ttl = 6 [deprecated=true];  // 用户级有效期
 }
 
-message SuperPath {
-	required uint32 tid = 1;  // 表ID，相对目录
-	repeated PrimaryKey primary_key = 2;  // 0到多个主键信息，"primary_keys":[{“PDPID”=1}, {“CONTEXTID”=1}]
-}
-
 message Path {
-	required uint32 tid = 1;  // 表ID，相对目录
-	repeated PrimaryKey primary_key = 2;  // 0到多个主键信息，"primary_keys":[{“PDPID”=1}, {“CONTEXTID”=1}]
-	repeated SuperPath super_path = 3;  // 上级路径信息
+    // required uint32 tid = 1;  // 表ID，相对目录
+    // repeated PrimaryKey primary_key = 2;  // 0到多个主键信息，"primary_keys":[{“PDPID”=1}, {“CONTEXTID”=1}]
+    // repeated SuperPath super_path = 3;  // 上级路径信息
+    optional bytes path_string = 4;
 }
 
 message Tuple {

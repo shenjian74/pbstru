@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <asyncconfirmreq.h>
+#include <sys/time.h>
 #include "addrequest.h"
 #include "compoundrequest.h"
 #include "response.h"
@@ -117,63 +118,14 @@ int main(int argc, char* argv[])
     BYTE buf[1024];
     size_t buf_len;
 
-    {
-        st_primarykey var_PrimaryKey;
-        constru_message_PrimaryKey(&var_PrimaryKey);
-
-        var_PrimaryKey.var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
-        var_PrimaryKey.var_name.length = strlen(var_PrimaryKey.var_name.data);
-        var_PrimaryKey.var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
-        var_PrimaryKey.var_value.length = strlen((char *)var_PrimaryKey.var_value.data);
-        buf_len = encode_message_PrimaryKey(&var_PrimaryKey, buf);
-        print_buffer(buf, buf_len);
-        free(var_PrimaryKey.var_name.data);
-        free(var_PrimaryKey.var_value.data);
-
-        decode_message_PrimaryKey(buf, buf_len, &var_PrimaryKey);
-        assert(0 == memcmp(var_PrimaryKey.var_name.data, "jflksajdfkljasdlkjflaksdjf", var_PrimaryKey.var_name.length));
-        assert(0 == memcmp(var_PrimaryKey.var_value.data, "732098403urouwaoeljr9749712309u4", var_PrimaryKey.var_value.length));
-    }
-
-    {
-        st_path var_Path;
-        constru_message_Path(&var_Path);
-
-        var_Path.var_tid = 1000;
-        var_Path.var_primary_key.item[0].var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
-        var_Path.var_primary_key.item[0].var_name.length = strlen(var_Path.var_primary_key.item[0].var_name.data);
-        var_Path.var_primary_key.item[0].var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
-        var_Path.var_primary_key.item[0].var_value.length = strlen((char *)var_Path.var_primary_key.item[0].var_value.data);
-        var_Path.var_primary_key.item[1].var_name.data = strdup("3u2iouflkjalskjfklasjflk");
-        var_Path.var_primary_key.item[1].var_name.length = strlen(var_Path.var_primary_key.item[1].var_name.data);
-        var_Path.var_primary_key.item[1].var_value.data = (BYTE *)strdup("324lkjakslfjlksajdfkljaslkdfj");
-        var_Path.var_primary_key.item[1].var_value.length = strlen((char *)var_Path.var_primary_key.item[1].var_value.data);
-        var_Path.var_primary_key.count = 2;
-        buf_len = encode_message_Path(&var_Path, buf);
-        print_buffer(buf, buf_len);
-
-        decode_message_Path(buf, buf_len, &var_Path);
-        assert(0 == memcmp(var_Path.var_primary_key.item[0].var_name.data, "jflksajdfkljasdlkjflaksdjf", var_Path.var_primary_key.item[0].var_name.length));
-        assert(0 == memcmp(var_Path.var_primary_key.item[0].var_value.data, "732098403urouwaoeljr9749712309u4", var_Path.var_primary_key.item[0].var_value.length));
-        assert(0 == memcmp(var_Path.var_primary_key.item[1].var_name.data, "3u2iouflkjalskjfklasjflk", var_Path.var_primary_key.item[1].var_name.length));
-        assert(0 == memcmp(var_Path.var_primary_key.item[1].var_value.data, "324lkjakslfjlksajdfkljaslkdfj", var_Path.var_primary_key.item[1].var_value.length));
-        assert(2 == var_Path.var_primary_key.count);
-        assert(var_Path.var_tid == 1000);
-    }
+    struct timeval tv_begin, tv_end;
+    gettimeofday(&tv_begin, NULL);
 
     {
         st_tuple var_Tuple;
         constru_message_Tuple(&var_Tuple);
-        var_Tuple.var_path.var_tid = 1000;
-        var_Tuple.var_path.var_primary_key.item[0].var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
-        var_Tuple.var_path.var_primary_key.item[0].var_name.length = strlen(var_Tuple.var_path.var_primary_key.item[0].var_name.data);
-        var_Tuple.var_path.var_primary_key.item[0].var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
-        var_Tuple.var_path.var_primary_key.item[0].var_value.length = strlen((char *)var_Tuple.var_path.var_primary_key.item[0].var_value.data);
-        var_Tuple.var_path.var_primary_key.item[1].var_name.data = strdup("3u2iouflkjalskjfklasjflk");
-        var_Tuple.var_path.var_primary_key.item[1].var_name.length = strlen(var_Tuple.var_path.var_primary_key.item[1].var_name.data);
-        var_Tuple.var_path.var_primary_key.item[1].var_value.data = (BYTE *)strdup("324lkjakslfjlksajdfkljaslkdfj");
-        var_Tuple.var_path.var_primary_key.item[1].var_value.length = strlen((char *)var_Tuple.var_path.var_primary_key.item[1].var_value.data);
-        var_Tuple.var_path.var_primary_key.count = 2;
+        var_Tuple.var_path.var_path_string.data = (BYTE *)strdup("/20");
+        var_Tuple.var_path.var_path_string.length = strlen((char *)var_Tuple.var_path.var_path_string.data);
         var_Tuple.has_version = true;
         var_Tuple.var_version = 2000;
         var_Tuple.has_ttl = true;
@@ -189,12 +141,7 @@ int main(int argc, char* argv[])
         print_buffer(buf, buf_len);
 
         decode_message_Tuple(buf, buf_len, &var_Tuple);
-        assert(0 == memcmp(var_Tuple.var_path.var_primary_key.item[0].var_name.data, "jflksajdfkljasdlkjflaksdjf", var_Tuple.var_path.var_primary_key.item[0].var_name.length));
-        assert(0 == memcmp(var_Tuple.var_path.var_primary_key.item[0].var_value.data, "732098403urouwaoeljr9749712309u4", var_Tuple.var_path.var_primary_key.item[0].var_value.length));
-        assert(0 == memcmp(var_Tuple.var_path.var_primary_key.item[1].var_name.data, "3u2iouflkjalskjfklasjflk", var_Tuple.var_path.var_primary_key.item[1].var_name.length));
-        assert(0 == memcmp(var_Tuple.var_path.var_primary_key.item[1].var_value.data, "324lkjakslfjlksajdfkljaslkdfj", var_Tuple.var_path.var_primary_key.item[1].var_value.length));
-        assert(2 == var_Tuple.var_path.var_primary_key.count);
-        assert(var_Tuple.var_path.var_tid == 1000);
+        assert(0 == memcmp(var_Tuple.var_path.var_path_string.data, "/20", var_Tuple.var_path.var_path_string.length));
         assert(2000 == var_Tuple.var_version);
         assert(TRUE == var_Tuple.has_version);
         assert(3000 == var_Tuple.var_ttl);
@@ -224,24 +171,13 @@ int main(int argc, char* argv[])
 
         var_AddRequest.var_tuple.count = 1;
         clear_message_Tuple(&(var_AddRequest.var_tuple.item[0]));
-        var_AddRequest.var_tuple.item[0].var_path.var_tid = 1000;
-        var_AddRequest.var_tuple.item[0].var_path.var_primary_key.count = 2;
+        var_AddRequest.var_tuple.item[0].var_path.var_path_string.data = (BYTE *)strdup("/20");
+        var_AddRequest.var_tuple.item[0].var_path.var_path_string.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_path.var_path_string.data);
+        var_AddRequest.var_tuple.item[0].var_path.has_path_string = TRUE;
 
-        st_primarykey *pk = &(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[0]);
-        pk->var_name.data = strdup("jflksajdfkljasdlkjflaksdjf");
-        pk->var_name.length = strlen(pk->var_name.data);
-        pk->var_value.data = (BYTE *)strdup("732098403urouwaoeljr9749712309u4");
-        pk->var_value.length = strlen((char *)pk->var_value.data);
-
-        pk = &(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[1]);
-        pk->var_name.data = strdup("3u2iouflkjalskjfklasjflk");
-        pk->var_name.length = strlen(pk->var_name.data);
-        pk->var_value.data = (BYTE *)strdup("324lkjakslfjlksajdfkljaslkdfj");
-        pk->var_value.length = strlen((char *)pk->var_value.data);
-
-        var_AddRequest.var_tuple.item[0].has_version = true;
+        var_AddRequest.var_tuple.item[0].has_version = TRUE;
         var_AddRequest.var_tuple.item[0].var_version = 2000;
-        var_AddRequest.var_tuple.item[0].has_ttl = true;
+        var_AddRequest.var_tuple.item[0].has_ttl = TRUE;
         var_AddRequest.var_tuple.item[0].var_ttl = 3000;
 
         var_AddRequest.var_tuple.item[0].var_field.count = 2;
@@ -256,11 +192,7 @@ int main(int argc, char* argv[])
         print_buffer(buf, buf_len);
 
         decode_message_AddRequest(buf, buf_len, &var_AddRequest);
-        assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[0].var_name.data, "jflksajdfkljasdlkjflaksdjf", var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[0].var_name.length));
-        assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[0].var_value.data, "732098403urouwaoeljr9749712309u4", var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[0].var_value.length));
-        assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[1].var_name.data, "3u2iouflkjalskjfklasjflk", var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[1].var_name.length));
-        assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[1].var_value.data, "324lkjakslfjlksajdfkljaslkdfj", var_AddRequest.var_tuple.item[0].var_path.var_primary_key.item[1].var_value.length));
-        assert(1000 == var_AddRequest.var_tuple.item[0].var_path.var_tid);
+        assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_path.var_path_string.data, "/20", var_AddRequest.var_tuple.item[0].var_path.var_path_string.length));
         assert(2000 == var_AddRequest.var_tuple.item[0].var_version);
         assert(TRUE == var_AddRequest.var_tuple.item[0].has_version);
         assert(3000 == var_AddRequest.var_tuple.item[0].var_ttl);
@@ -792,10 +724,19 @@ int main(int argc, char* argv[])
         pbstru_free(msg);
         assert(malloc_times == free_times);
     }
+    printf("sizeof(st_addrequest): %lu\n", sizeof(st_addrequest));
+    printf("sizeof(st_compountrequest): %lu\n", sizeof(st_compoundrequest));
+    printf("sizeof(st_response): %lu\n", sizeof(st_response));
+    printf("sizeof(st_tuple): %lu\n", sizeof(st_tuple));
 
     assert(malloc_times == free_times);
     // printf("<Press any key to continue ...>\n");
     // getchar();
+
+    gettimeofday(&tv_end, NULL);
+    double diff = 1000000.0 * (tv_end.tv_sec - tv_begin.tv_sec) + tv_end.tv_usec - tv_begin.tv_usec;
+    printf("[%s:%d] spend %.0lf(us)\n", __FILE__, __LINE__, diff);
+
     printf("%s Done.\n", argv[0]);
 }
 
