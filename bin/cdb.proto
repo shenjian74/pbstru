@@ -131,8 +131,9 @@ message NodifyField {
 }
 
 message Identifier {
-	required uint32 id_type = 1;  // 标识符类型，APP自定义。例如: 1="IMSI", 2="MSISDN"。0保留为系统信息使用，即: 0="_TID"
-	repeated bytes value = 2;
+    required uint32 id_type = 1;  // 标识符类型，APP自定义。例如: 1="IMSI", 2="MSISDN"。0保留为系统信息使用，即: 0="_TID"
+    repeated bytes value = 2;
+    optional uint32 timestamp = 3;  // 用户最后修改时间点
 }
 
 message Identifiers {
@@ -242,52 +243,6 @@ enum Control {
 	INCLUDE_NPIS = 8;  // 查询数据信息时，同时带所关联的所有NPI返回
 	DELETE_ASSOCIATED_NPIS_ONLY = 9;  // 仅删除关联的NPI，不删除用户数据
 	CHECK_NPI_EXIST = 10;  // 只检查PI/NPI关联关系
-}
-
-///////////////////////////////////////////////////////////////////////////////
-message RCCTupleInfo{
-    required string path = 1;  // 此记录所归属的表，以及所在的“树枝”
-    optional fixed64 crc64 = 2;  // Version/TTL/RecordInfo/Timestatmp Checksum
-}
-
-message RCCPIInfo{
-    required Identifier pi = 1;  // 主标识
-    repeated Identifier npi = 2;  // 副标识
-    repeated RCCTupleInfo tuple = 3;
-}
-
-message CheckConsistReq {
-    required uint32 slot_id = 1;
-    required Identifier pi_begin = 2;  // 扫描起始ID
-    repeated RCCPIInfo pi_info = 3;
-    optional Identifier pi_next_scan = 4;
-	optional uint32 too_long_flag = 5;  // pi_begin的状态标志，0：正常 1：此PI相关数据超长
-}
-
-enum ConsistRetcode {
-    matched = 0;
-    pi_not_exist_2ndreplica = 1;  // PI打印到RCCResult.pi
-    pi_not_exist_1streplica = 2;  // PI打印到RCCResult.pi
-    npi_not_exist_2ndreplica = 3;  // NPI打印到RCCResult.npi
-    npi_not_exist_1streplica = 4;  // NPI打印到RCCResult.npi
-    tuple_not_exist_2ndreplica = 5;  // path打印到RCCResult.path
-    tuple_not_exist_1streplica = 6;  // path打印到RCCResult.path
-    tuple_content_unmatch = 7;  // path打印到RCCResult.path
-    tuples_too_long_1streplica = 8;
-    tuples_too_long_2ndreplica = 9;
-}
-
-message RCCResult {
-    required ConsistRetcode cr = 1;  // 不一致情况的分类错误码
-    required Identifier pi = 2;  // 不一致的用户标识（PI）
-    optional Identifier npi = 3;  // 不一致的用户标识（NPI）
-    optional string path = 4;  // 不一致的数据信息
-}
-
-message CheckConsistAck {
-    required uint32 retcode = 1;  // 错误码
-    repeated RCCResult result = 2;
-    optional Identifier pi_scan_next_min = 3;  // 调整后的扫描起始ID
 }
 
 ///////////////////////////////////////////////////////////////////////////////
