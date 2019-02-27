@@ -18,6 +18,9 @@ if [ ! -f "protobuf3/Makefile" ]; then
 fi
 
 if [ -f "protobuf3/Makefile" ]; then 
+  cd protobuf3
+  make
+  cd ..
   rm -rf build && \
   mkdir build && \
   cd build && \
