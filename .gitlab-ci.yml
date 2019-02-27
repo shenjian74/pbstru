@@ -15,7 +15,7 @@ cache:
 
 before_script:
   - apt-get -y update
-  - apt-get install -y cmake=2.8
+  - apt-get install -y cmake
   
 stages:
   - build
