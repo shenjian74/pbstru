@@ -7,13 +7,17 @@
 # Install static library at first.
 # -- sudo yum install libstdc++-static glibc-static
 
-# if [ ! -f "protobuf3/Makefile" ]; then 
+if [ ! -f "protobuf3/Makefile" ]; then 
   wget --timestamping https://github.com/protocolbuffers/protobuf/releases/download/v3.5.1/protobuf-all-3.5.1.tar.gz && \
   tar xvfz protobuf-all-3.5.1.tar.gz && \
-  mv protobuf-3.5.1 protobuf3
-# fi
+  mv protobuf-3.5.1 protobuf3 && \
+  cd protobuf3 && \
+  ./autogen.sh && \
+  ./configure && \
+  cd ..
+fi
 
-# if [ -f "protobuf3/Makefile" ]; then 
+if [ -f "protobuf3/Makefile" ]; then 
   rm -rf build && \
   mkdir build && \
   cd build && \
@@ -27,4 +31,4 @@
   cmake ../../test && \
   make && \
   ./test_codec
-# fi
+fi
