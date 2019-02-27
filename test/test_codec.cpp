@@ -205,7 +205,6 @@ int main(int argc, char* argv[])
     {
         st_ut_test_message *msg = (st_ut_test_message *)pbstru_malloc(sizeof(st_ut_test_message));
         constru_message_ut_test_message(msg);
-        assert(malloc_times == free_times + 1);
 
         for(int i=0; i<3; ++i)
         {
@@ -639,7 +638,6 @@ int main(int argc, char* argv[])
         for(int i=0; i<3; ++i)
         {
             clear_message_ut_test_message(msg);
-            assert(malloc_times - 1 == free_times);
 
             fill_ut_test_sub_message(&(msg->var_r_message));
             msg->has_o_message = TRUE;
@@ -647,7 +645,6 @@ int main(int argc, char* argv[])
             msg->var_f_message.count = 2;
             fill_ut_test_sub_message(&(msg->var_f_message.item[0]));
             fill_ut_test_sub_message(&(msg->var_f_message.item[1]));
-            assert(malloc_times - 9 == free_times);
 
             msg->var_d_message = (st_d_message_in_ut_test_message_ut_test_sub_message_list *)pbstru_malloc(sizeof(st_d_message_in_ut_test_message_ut_test_sub_message_list));
             msg->var_d_message_tail = msg->var_d_message;
@@ -661,13 +658,11 @@ int main(int argc, char* argv[])
             // 刚申请的message结构需要初始化
             constru_message_ut_test_sub_message(&(msg->var_d_message_tail->value));
             fill_ut_test_sub_message(&(msg->var_d_message_tail->value));
-            assert(malloc_times - 15 == free_times);
 
             size_t size1 = encode_message_ut_test_message(msg, NULL);
             size_t size2 = encode_message_ut_test_message(msg, buf);
             assert(size1 == size2);
             decode_message_ut_test_message(buf, size2, msg);
-            assert(malloc_times - 15 == free_times);
 
             assert(verify_ut_test_sub_message(&(msg->var_r_message)));
             assert(TRUE == msg->has_o_message);
@@ -682,7 +677,6 @@ int main(int argc, char* argv[])
 
         destru_message_ut_test_message(msg);
         pbstru_free(msg);
-        assert(malloc_times == free_times);
     }
 
     {
@@ -712,7 +706,6 @@ int main(int argc, char* argv[])
 
         destru_message_ut_test_sub_message(msg);
         pbstru_free(msg);
-        assert(malloc_times == free_times);
     }
 */
     printf("sizeof(st_addrequest): %lu\n", sizeof(st_addrequest));
@@ -720,7 +713,6 @@ int main(int argc, char* argv[])
     printf("sizeof(st_response): %lu\n", sizeof(st_response));
     printf("sizeof(st_tuple): %lu\n", sizeof(st_tuple));
 
-    assert(malloc_times == free_times);
     // printf("<Press any key to continue ...>\n");
     // getchar();
 
