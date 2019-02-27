@@ -11,8 +11,8 @@
 #include "compoundrequest.h"
 #include "response.h"
 #include "statresp.h"
-#include "ut_test_message.h"
-#include "ut_test_sub_message.h"
+/* #include "ut_test_message.h"
+#include "ut_test_sub_message.h" */
 
 void print_buffer(BYTE *content, size_t filelen)
 {
@@ -67,6 +67,7 @@ void decode_varint1(BYTE *buf, WORD64 *value, size_t *offset) {
 }
 
 
+/*
 void fill_ut_test_sub_message(st_ut_test_sub_message *msg)
 {
     clear_message_ut_test_sub_message(msg);
@@ -94,6 +95,7 @@ bool verify_ut_test_sub_message(st_ut_test_sub_message *msg)
     }
     return false;
 }
+*/
 
 st_addrequest var_AddRequest;
 int main(int argc, char* argv[])
@@ -202,7 +204,7 @@ int main(int argc, char* argv[])
         assert(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.count == 1);
         assert(0 == memcmp(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data, "465789461313213646461231324654", var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length));
     }
-
+/*
     {
         st_ut_test_message *msg = (st_ut_test_message *)pbstru_malloc(sizeof(st_ut_test_message));
         constru_message_ut_test_message(msg);
@@ -708,6 +710,7 @@ int main(int argc, char* argv[])
         destru_message_ut_test_sub_message(msg);
         pbstru_free(msg);
     }
+*/
     printf("sizeof(st_addrequest): %lu\n", sizeof(st_addrequest));
     printf("sizeof(st_compountrequest): %lu\n", sizeof(st_compoundrequest));
     printf("sizeof(st_response): %lu\n", sizeof(st_response));
