@@ -15,7 +15,7 @@ cache:
 
 before_script:
   - apt-get -y update
-  - apt-get install -y cmake
+  - apt-get install -y cmake autoconf libtool
   
 stages:
   - build
