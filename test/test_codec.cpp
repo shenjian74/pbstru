@@ -112,7 +112,92 @@ int main(int argc, char* argv[])
         encode_varint(value, buf, &offset);
         assert(1 == offset);
         assert(0 == buf[0]);
-    }
+		offset = 0;
+		decode_varint(buf, &value, &offset);
+		assert(1 == offset);
+		assert(0 == value);
+
+        value = 1;
+        offset = 0;
+        encode_varint(value, buf, &offset);
+        assert(1 == offset);
+        assert(0x01 == buf[0]);
+		offset = 0;
+		decode_varint(buf, &value, &offset);
+		assert(1 == offset);
+		assert(1 == value);
+
+        value = 128;
+        offset = 0;
+        encode_varint(value, buf, &offset);
+        assert(2 == offset);
+        assert(0x80 == buf[0]);
+        assert(0x01 == buf[1]);
+		offset = 0;
+		decode_varint(buf, &value, &offset);
+		assert(2 == offset);
+		assert(128 == value);
+
+        value = 65535;
+        offset = 0;
+        encode_varint(value, buf, &offset);
+		print_buffer(buf, offset);
+        assert(2 == offset);
+        assert(0x80 == buf[0]);
+        assert(0x01 == buf[1]);
+		offset = 0;
+		decode_varint(buf, &value, &offset);
+		assert(2 == offset);
+		assert(128 == value);
+
+        value = 65536;
+        offset = 0;
+        encode_varint(value, buf, &offset);
+		print_buffer(buf, offset);
+        assert(2 == offset);
+        assert(0x80 == buf[0]);
+        assert(0x01 == buf[1]);
+		offset = 0;
+		decode_varint(buf, &value, &offset);
+		assert(2 == offset);
+		assert(128 == value);
+
+        value = 0xFFFFFFFF;
+        offset = 0;
+        encode_varint(value, buf, &offset);
+		print_buffer(buf, offset);
+        assert(2 == offset);
+        assert(0x80 == buf[0]);
+        assert(0x01 == buf[1]);
+		offset = 0;
+		decode_varint(buf, &value, &offset);
+		assert(2 == offset);
+		assert(128 == value);
+
+        long long value1 = 4294967296;
+        offset = 0;
+        encode_varint(value1, buf, &offset);
+		print_buffer(buf, offset);
+        assert(2 == offset);
+        assert(0x80 == buf[0]);
+        assert(0x01 == buf[1]);
+		offset = 0;
+		decode_varint(buf, &value1, &offset);
+		assert(2 == offset);
+		assert(128 == value1);
+
+        long long value2 = 0xFFFFFFFFFFFFFFFF;
+        offset = 0;
+        encode_varint(value2, buf, &offset);
+		print_buffer(buf, offset);
+        assert(2 == offset);
+        assert(0x80 == buf[0]);
+        assert(0x01 == buf[1]);
+		offset = 0;
+		decode_varint(buf, &value1, &offset);
+		assert(2 == offset);
+		assert(128 == value1);
+	}
 
     {
         st_tuple var_Tuple;
