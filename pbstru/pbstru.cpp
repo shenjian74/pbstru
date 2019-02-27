@@ -1,4 +1,4 @@
-// pbstru.cpp : å®šä¹‰æ§åˆ¶å°åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
+// pbstru.cpp : ¶¨Òå¿ØÖÆÌ¨Ó¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
 //
 
 #ifndef _BUILDTIME_
@@ -29,10 +29,10 @@ using namespace google::protobuf;
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
-// ç»“æ„å®šä¹‰çš„å‰ç¼€ï¼Œåœ¨CDBä¸­å¯å®šä¹‰ä¸º"cdb_"
+// ½á¹¹¶¨ÒåµÄÇ°×º£¬ÔÚCDBÖĞ¿É¶¨ÒåÎª"cdb_"
 const string struct_prefix = "st_";
 const string struct_postfix = "";
-// ç»“æ„åç§°æ˜¯å¦éœ€è¦å°å†™
+// ½á¹¹Ãû³ÆÊÇ·ñĞèÒªĞ¡Ğ´
 const bool is_struct_lowercase = true;
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -76,7 +76,7 @@ static string &toupper(string& text){
     return text;
 }
 
-// ç”Ÿæˆå…¬å…±æ–‡ä»¶pbstru_comm.hå’Œpbstru_comm.c
+// Éú³É¹«¹²ÎÄ¼şpbstru_comm.hºÍpbstru_comm.c
 int gen_comm(const string &target_dir)
 {
     int retcode = 0;
@@ -117,7 +117,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
     fprintf(fp, "#else\n");
-    fprintf(fp, "/* åŒ…å«æ•°æ®ç±»å‹å®šä¹‰ */\n");
+    fprintf(fp, "/* °üº¬Êı¾İÀàĞÍ¶¨Òå */\n");
     fprintf(fp, "#include \"tulip.h\"\n");
     fprintf(fp, "\n");
     fprintf(fp, "#endif");
@@ -135,11 +135,9 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset);\n");
     fprintf(fp, "void parse_tag_byte(const BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
     fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* buf, size_t* offset);\n");
+    fprintf(fp, "bool rewrite_varint(BYTE *buf, int varint_length, int new_value);\n");
     fprintf(fp, "\n");
-    fprintf(fp, "void *pbstru_malloc(size_t size);\n");
-    fprintf(fp, "void pbstru_free(void *buf);\n");
-    fprintf(fp, "\n");
-    fprintf(fp, "/* å¯¹varintä¿¡æ¯è¿›è¡Œç¼–ç  */\n");
+    fprintf(fp, "/* ¶ÔvarintĞÅÏ¢½øĞĞ±àÂë */\n");
     fprintf(fp, "#define encode_varint(len, buf, offset) do{ \\\n");
     fprintf(fp, "    unsigned long long remain_len = len; \\\n");
     fprintf(fp, "    size_t iloop; \\\n");
@@ -160,7 +158,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    *(offset) += 1 + iloop; \\\n");
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
-    fprintf(fp, "/* å¯¹varintä¿¡æ¯è¿›è¡Œè§£ç  */\n");
+    fprintf(fp, "/* ¶ÔvarintĞÅÏ¢½øĞĞ½âÂë */\n");
     fprintf(fp, "#define decode_varint(buf, value, offset) do{ \\\n");
     fprintf(fp, "    size_t iloop; \\\n");
     fprintf(fp, "    (*(value)) = 0; \\\n");
@@ -185,7 +183,7 @@ int gen_comm(const string &target_dir)
     }
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
     fprintf(fp, "\n");
-    fprintf(fp, "/* å¯¹tagä¿¡æ¯è¿›è¡Œç¼–ç  */\n");
+    fprintf(fp, "/* ¶ÔtagĞÅÏ¢½øĞĞ±àÂë */\n");
     fprintf(fp, "void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset) { \n");
     fprintf(fp, "    if(tag < 16) { \n");
     fprintf(fp, "        if (NULL != buf) { \n");
@@ -201,7 +199,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    } \n");
     fprintf(fp, "} \n");
     fprintf(fp, "\n");
-    fprintf(fp, "/* å¯¹tagä¿¡æ¯è¿›è¡Œè§£ç  */\n");
+    fprintf(fp, "/* ¶ÔtagĞÅÏ¢½øĞĞ½âÂë */\n");
     fprintf(fp, "void parse_tag_byte(const BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset){ \n");
     fprintf(fp, "    if((buf)[0] & 0x80) { \n");
     fprintf(fp, "        *field_num = ((buf)[0] & 0x7F) + ((buf)[1] >> 3) * 128; \n");
@@ -214,7 +212,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    } \n");
     fprintf(fp, "} \n");
     fprintf(fp, "\n");
-    fprintf(fp, "/* è·³è¿‡ä¸è®¤è¯†çš„å­—æ®µï¼Œå‘å‰å…¼å®¹ç”¨ */\n");
+    fprintf(fp, "/* Ìø¹ı²»ÈÏÊ¶µÄ×Ö¶Î£¬ÏòÇ°¼æÈİÓÃ */\n");
     fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* buf, size_t* offset) { \n");
     fprintf(fp, "    size_t tmp_field_len; \n");
     fprintf(fp, "    switch(wire_type){ \n");
@@ -234,6 +232,24 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    default: \n");
     fprintf(fp, "        break; \n");
     fprintf(fp, "    } \n");
+    fprintf(fp, "}\n");
+
+    fprintf(fp, "bool rewrite_varint(BYTE *buf, int varint_length, int new_value){\n");
+    fprintf(fp, "    int i;\n");
+    fprintf(fp, "    BYTE new_buf[20];\n");
+    fprintf(fp, "    int offset = 0;\n");
+    fprintf(fp, "    encode_varint(new_value, new_buf, &offset);\n");
+    fprintf(fp, "    if(offset > varint_length){\n");
+    fprintf(fp, "        return false;\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    memcpy(buf, new_buf, offset);\n");
+    fprintf(fp, "    if(offset < varint_length) {\n");
+    fprintf(fp, "        buf[offset-1] |= 0x80;\n");
+    fprintf(fp, "        for (i = offset; i < varint_length; ++i) {\n");
+    fprintf(fp, "            buf[i] = 0;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    return true;\n");
     fprintf(fp, "}\n");
     fprintf(fp, "/* end of file */\n\n");
     fclose(fp);
@@ -404,9 +420,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d é“¾è¡¨å¤´æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d Á´±íÍ·Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;  /* é“¾è¡¨å°¾æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* Á´±íÎ²Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str());
             }
             else
@@ -427,9 +443,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d é“¾è¡¨å¤´æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d Á´±íÍ·Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;  /* é“¾è¡¨å°¾æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* Á´±íÎ²Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str());
             }
             else
@@ -450,9 +466,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d é“¾è¡¨å¤´æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d Á´±íÍ·Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;  /* é“¾è¡¨å°¾æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* Á´±íÎ²Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str());
             }
             else
@@ -473,9 +489,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d é“¾è¡¨å¤´æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d Á´±íÍ·Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;  /* é“¾è¡¨å°¾æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* Á´±íÎ²Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str());
             }
             else
@@ -496,9 +512,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d é“¾è¡¨å¤´æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d Á´±íÍ·Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;  /* é“¾è¡¨å°¾æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* Á´±íÎ²Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str());
             }
             else
@@ -519,9 +535,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d é“¾è¡¨å¤´æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d Á´±íÍ·Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;  /* é“¾è¡¨å°¾æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* Á´±íÎ²Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str());
             }
             else
@@ -542,9 +558,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d é“¾è¡¨å¤´æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d Á´±íÍ·Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;  /* é“¾è¡¨å°¾æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* Á´±íÎ²Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str());
             }
             else
@@ -573,9 +589,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d é“¾è¡¨å¤´æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d Á´±íÍ·Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;  /* é“¾è¡¨å°¾æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* Á´±íÎ²Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str());
             }
             else
@@ -597,9 +613,9 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 			get_struct_list_name(field, struct_list_name);
             if(is_dynamic_repeated(field))
             {
-                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d é“¾è¡¨å¤´æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s;  /* tag:%d Á´±íÍ·Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str(), field->number());
-                fprintf(fp, "    st_%s_list *var_%s_tail;  /* é“¾è¡¨å°¾æŒ‡é’ˆ */\n",
+                fprintf(fp, "    st_%s_list *var_%s_tail;  /* Á´±íÎ²Ö¸Õë */\n",
                         struct_list_name.c_str(), field->name().c_str());
             }
             else
@@ -666,7 +682,7 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
         }
     }
 
-    // ä½¿ç”¨setå»æ‰é‡å¤çš„å¤´æ–‡ä»¶
+    // Ê¹ÓÃsetÈ¥µôÖØ¸´µÄÍ·ÎÄ¼ş
     for(set<string>::iterator it=headers.begin(); it!=headers.end(); ++it)
     {
         fprintf(fp, "#include \"%s.h\"\n", it->c_str());
@@ -700,7 +716,7 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
             for(int j=0; j<enum_desc->value_count(); ++j)
             {
                 fprintf(fp, "    %s_M = %d", enum_desc->value(j)->name().c_str(), enum_desc->value(j)->number());
-                // å¤„ç†æœ€åenumå€¼æ—¶ä¸åŠ é€—å·
+                // ´¦Àí×îºóenumÖµÊ±²»¼Ó¶ººÅ
                 if(j!=(enum_desc->value_count()-1))
                 {
                     fprintf(fp, ",");
@@ -712,7 +728,7 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
         }
     }
 
-    // å„ä¸ªlistçš„ç»“æ„å®šä¹‰
+    // ¸÷¸ölistµÄ½á¹¹¶¨Òå
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
@@ -850,7 +866,7 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init, const map<
 {
     int it_count = 0;
 
-    // å¿…è¦æ—¶æ‰“å°ä¸´æ—¶å˜é‡
+    // ±ØÒªÊ±´òÓ¡ÁÙÊ±±äÁ¿
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
@@ -1031,7 +1047,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     ////////////////////////////////////////
     fprintf(fp, "\nsize_t encode_message_%s(const %s* var_%s, BYTE* buf){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
-    // æœ‰åµŒå¥—messageçš„æ—¶å€™ä¼šç”¨åˆ°ç¼–ç é•¿åº¦
+    // ÓĞÇ¶Ì×messageµÄÊ±ºò»áÓÃµ½±àÂë³¤¶È
     for(int i=0; i<desc->field_count(); ++i)
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
@@ -1040,7 +1056,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             break;
         }
     }
-    // æœ‰repeatå­—æ®µçš„æ—¶å€™ä¼šç”¨åˆ°å¾ªç¯å˜é‡
+    // ÓĞrepeat×Ö¶ÎµÄÊ±ºò»áÓÃµ½Ñ­»·±äÁ¿
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
@@ -1068,7 +1084,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         }
     }
 
-    // é€ä¸ªå­—æ®µencode
+    // Öğ¸ö×Ö¶Îencode
     it_count = 0;
     for(int i=0; i<desc->field_count(); ++i)
     {
@@ -1100,7 +1116,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                     default:
                         break;
                     }
-                    fprintf(fp, "    i = 0;  /* iå¤ç”¨ä¸ºå…ƒç´ ä¸ªæ•°ä½¿ç”¨ */\n");
+                    fprintf(fp, "    i = 0;  /* i¸´ÓÃÎªÔªËØ¸öÊıÊ¹ÓÃ */\n");
                     fprintf(fp, "    for(it%d=var_%s->var_%s; NULL!=it%d; it%d=it%d->next) {\n",
                             it_count, desc->name().c_str(), field->name().c_str(), it_count, it_count, it_count);
                     fprintf(fp, "        i += 1;\n");
@@ -1400,7 +1416,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
 // Decode function
     fprintf(fp, "\nBOOL decode_message_%s(BYTE* buf, const size_t buf_len, %s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "	size_t offset = 0;\n");
-// åŒ…å«messageå­—æ®µæ—¶ï¼Œæ‰éœ€è¦ä½¿ç”¨æ­¤å˜é‡
+// °üº¬message×Ö¶ÎÊ±£¬²ÅĞèÒªÊ¹ÓÃ´Ë±äÁ¿
     for(int i=0; i<desc->field_count(); ++i)
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
@@ -1464,7 +1480,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                     fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
                             spaces, desc->name().c_str(), field->name().c_str(),
                             map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                    fprintf(fp, "%s                return FALSE;  /* æ•°ç»„è¶…é™ */\n", spaces);
+                    fprintf(fp, "%s                return FALSE;  /* Êı×é³¬ÏŞ */\n", spaces);
                     fprintf(fp, "%s            }\n", spaces);
                     fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n",
                             spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1531,7 +1547,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                     fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
                             spaces, desc->name().c_str(), field->name().c_str(),
                             map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                    fprintf(fp, "%s                return FALSE;  /* æ•°ç»„è¶…é™ */\n", spaces);
+                    fprintf(fp, "%s                return FALSE;  /* Êı×é³¬ÏŞ */\n", spaces);
                     fprintf(fp, "%s            }\n", spaces);
                     fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((WORD64 *)(buf + offset));\n",
                             spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1600,7 +1616,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                     fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
                             spaces, desc->name().c_str(), field->name().c_str(),
                             map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                    fprintf(fp, "%s                return FALSE;  /* æ•°ç»„è¶…é™ */\n", spaces);
+                    fprintf(fp, "%s                return FALSE;  /* Êı×é³¬ÏŞ */\n", spaces);
                     fprintf(fp, "%s            }\n", spaces);
                     fprintf(fp, "%s            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n",
                             spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1641,7 +1657,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 {
                     fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
                             map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                    fprintf(fp, "                return FALSE;  /* æ•°ç»„è¶…é™ */\n");
+                    fprintf(fp, "                return FALSE;  /* Êı×é³¬ÏŞ */\n");
                     fprintf(fp, "            }\n");
                     fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
                             desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1684,7 +1700,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 {
                     fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
                             map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                    fprintf(fp, "                return FALSE;  /* æ•°ç»„è¶…é™ */\n");
+                    fprintf(fp, "                return FALSE;  /* Êı×é³¬ÏŞ */\n");
                     fprintf(fp, "            }\n");
                     fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
                             desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1725,7 +1741,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 {
                     fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
                             map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                    fprintf(fp, "                return FALSE;  /* æ•°ç»„è¶…é™ */\n");
+                    fprintf(fp, "                return FALSE;  /* Êı×é³¬ÏŞ */\n");
                     fprintf(fp, "            }\n");
                     fprintf(fp, "            decode_varint(buf + offset, &tmp_field_len, &offset);\n");
                     fprintf(fp, "            decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1878,7 +1894,7 @@ int get_syntax(LPCSTR proto_filename)
                 }
                 // printf("%s\n", buf+i);
 
-                // å‘ç°"syntax"å…³é”®å­—
+                // ·¢ÏÖ"syntax"¹Ø¼ü×Ö
                 if(0 == memcmp(buf+i, "syntax", 6))
                 {
                     for(;; ++i)
@@ -1946,7 +1962,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         }
                     }
 
-                    if(0 == memcmp(buf+i, "map", 3))   // å‘ç°"map"å…³é”®å­—
+                    if(0 == memcmp(buf+i, "map", 3))   // ·¢ÏÖ"map"¹Ø¼ü×Ö
                     {
                         printf("%s", buf+i);
                         for(i=i+3;; ++i)
@@ -1965,7 +1981,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                             }
                         }
                         len = i - start;
-                        // å®šä½åˆ°key_typeä¿¡æ¯
+                        // ¶¨Î»µ½key_typeĞÅÏ¢
                         memcpy(key_type, buf + start, len);
                         key_type[len] = EOS;
                         printf("key_type:%s\n", key_type);
@@ -1986,7 +2002,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                             }
                         }
                         len = i - start;
-                        // å®šä½åˆ°key_valueä¿¡æ¯
+                        // ¶¨Î»µ½key_valueĞÅÏ¢
                         memcpy(key_value, buf + start, len);
                         key_value[len] = EOS;
                         printf("key_value:%s\n", key_value);
@@ -2031,7 +2047,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         field_no[len] = EOS;
                         printf("field_no:%s\n", field_no);
 
-                        // ä½¿ç”¨seté¿å…åŒåmapentrysé‡å¤æ’å…¥
+                        // Ê¹ÓÃset±ÜÃâÍ¬ÃûmapentrysÖØ¸´²åÈë
                         string map_entry_name = string("Map") + field_name + "Entry";
                         if(map_entrys.find(map_entry_name) == map_entrys.end())
                         {
@@ -2042,7 +2058,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         }
                         sprintf(buf, "repeated Map%sEntry %s = %s;\n", field_name, field_name, field_no);
                     }
-                    // æ²¡æœ‰"map"å…³é”®å­—çš„æƒ…å†µï¼Œåˆ™ç›´æ¥æ‹·è´
+                    // Ã»ÓĞ"map"¹Ø¼ü×ÖµÄÇé¿ö£¬ÔòÖ±½Ó¿½±´
                     fputs(buf, fpout);
                 }
             }
@@ -2091,7 +2107,7 @@ int main(int argc, char *argv[])
         proto_filename = argv[i];
         int syntax = get_syntax(proto_filename);
 
-        // å¦‚æœæ˜¯v3çš„è¯­æ³•ï¼Œåˆ™è½¬æ¢mapå…³é”®å­—
+        // Èç¹ûÊÇv3µÄÓï·¨£¬Ôò×ª»»map¹Ø¼ü×Ö
         ///////////////////////////////////////////////////
         // message MapFieldEntry {
         //   key_type key = 1;
