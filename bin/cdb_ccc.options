@@ -21,6 +21,10 @@ zte.cdb.ccc.CDBMTAAck.title max_count:128
 zte.cdb.ccc.CDBMTAAck.lines max_count:128
 zte.cdb.ccc.ProbeQueryByIndexReq.index_info max_count:8
 zte.cdb.ccc.Line.values max_count:128
+
+zte.cdb.ccc.ut_test_sub_message.d_uint32 max_count:10
+zte.cdb.ccc.ut_test_message.d_uint32 max_count:10
+zte.cdb.ccc.ut_test_message.pd_uint32 max_count:10
 zte.cdb.ccc.ut_test_message.f_uint32 max_count:10
 zte.cdb.ccc.ut_test_message.f_uint64 max_count:10
 zte.cdb.ccc.ut_test_message.f_fixed32 max_count:10
@@ -35,3 +39,15 @@ zte.cdb.ccc.ut_test_message.f_string max_count:10
 zte.cdb.ccc.ut_test_message.f_bytes max_count:10
 zte.cdb.ccc.ut_test_message.f_enum max_count:10
 zte.cdb.ccc.ut_test_message.f_message max_count:10
+zte.cdb.ccc.ut_test_message.d_uint64 max_count:10
+zte.cdb.ccc.ut_test_message.pd_uint64 max_count:10
+zte.cdb.ccc.ut_test_message.d_fixed32 max_count:10
+zte.cdb.ccc.ut_test_message.pd_fixed32 max_count:10
+zte.cdb.ccc.ut_test_message.d_fixed64 max_count:10
+zte.cdb.ccc.ut_test_message.pd_fixed64 max_count:10
+zte.cdb.ccc.ut_test_message.d_bool max_count:10
+zte.cdb.ccc.ut_test_message.pd_bool max_count:10
+zte.cdb.ccc.ut_test_message.d_string max_count:10
+zte.cdb.ccc.ut_test_message.d_bytes max_count:10
+zte.cdb.ccc.ut_test_message.d_enum max_count:10
+zte.cdb.ccc.ut_test_message.d_message max_count:10
