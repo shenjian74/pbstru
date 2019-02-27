@@ -91,6 +91,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "#define __PBSTRU_COMM_H__\n");
     fprintf(fp, "\n");
     fprintf(fp, "#include <stdlib.h>\n");
+    fprintf(fp, "#include <stdbool.h>\n");
     fprintf(fp, "#include <memory.h>\n");
     fprintf(fp, "\n");
     fprintf(fp, "#define WIRE_TYPE_VARINT 0\n");
