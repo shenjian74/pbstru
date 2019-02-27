@@ -54,23 +54,6 @@ void print_buffer(BYTE *content, size_t filelen)
     fflush(stderr);
 }
 
-size_t malloc_times = 0;
-size_t free_times = 0;
-void pbstru_free(void *buf)
-{
-    if(NULL != buf)
-    {
-        free_times += 1;
-        free(buf);
-    }
-}
-
-void *pbstru_malloc(size_t size)
-{
-    malloc_times += 1;
-    return malloc(size);
-}
-
 void decode_varint1(BYTE *buf, WORD64 *value, size_t *offset) {
     size_t iloop;
     (*(value)) = 0;
@@ -120,6 +103,14 @@ int main(int argc, char* argv[])
 
     struct timeval tv_begin, tv_end;
     gettimeofday(&tv_begin, NULL);
+
+    {
+        int value = 0;
+        int offset = 0;
+        encode_varint(value, buf, &offset);
+        assert(1 == offset);
+        assert(0 == buf[0]);
+    }
 
     {
         st_tuple var_Tuple;
