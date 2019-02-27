@@ -14,6 +14,7 @@
   cd protobuf3 && \
   ./autogen.sh && \
   ./configure
+  cd ..
 # fi
 
 # if [ -f "protobuf3/Makefile" ]; then 
