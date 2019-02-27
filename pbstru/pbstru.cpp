@@ -136,7 +136,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset);\n");
     fprintf(fp, "void parse_tag_byte(const BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
     fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* buf, size_t* offset);\n");
-    fprintf(fp, "bool rewrite_varint(BYTE *buf, int varint_length, int new_value);\n");
+    fprintf(fp, "bool rewrite_varint(BYTE *buf, int varint_length, DWORD new_value);\n");
     fprintf(fp, "\n");
     fprintf(fp, "/* 对varint信息进行编码 */\n");
     fprintf(fp, "#define encode_varint(len, buf, offset) do{ \\\n");
@@ -235,9 +235,9 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    } \n");
     fprintf(fp, "}\n");
 
-    fprintf(fp, "bool rewrite_varint(BYTE *buf, int varint_length, int new_value){\n");
+    fprintf(fp, "bool rewrite_varint(BYTE *buf, int varint_length, DWORD new_value){\n");
     fprintf(fp, "    int i;\n");
-    fprintf(fp, "    BYTE new_buf[20];\n");
+    fprintf(fp, "    BYTE new_buf[5];\n");
     fprintf(fp, "    int offset = 0;\n");
     fprintf(fp, "    encode_varint(new_value, new_buf, &offset);\n");
     fprintf(fp, "    if(offset > varint_length){\n");
@@ -246,9 +246,10 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    memcpy(buf, new_buf, offset);\n");
     fprintf(fp, "    if(offset < varint_length) {\n");
     fprintf(fp, "        buf[offset-1] |= 0x80;\n");
-    fprintf(fp, "        for (i = offset; i < varint_length; ++i) {\n");
-    fprintf(fp, "            buf[i] = 0;\n");
+    fprintf(fp, "        for (i = offset; i < varint_length-1; ++i) {\n");
+    fprintf(fp, "            buf[i] = 0x80;\n");
     fprintf(fp, "        }\n");
+    fprintf(fp, "        buf[varint_length-1] = 0;\n");
     fprintf(fp, "    }\n");
     fprintf(fp, "    return true;\n");
     fprintf(fp, "}\n");
