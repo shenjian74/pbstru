@@ -27,8 +27,8 @@ add_custom_target(
 ELSE()
 add_custom_target(
     protobuf_lib
-    # COMMAND ./autogen.sh && ./configure && make
-    COMMAND make
+    COMMAND ./autogen.sh && ./configure && make
+    # COMMAND make
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/protobuf3
 )
 ENDIF()
