@@ -139,8 +139,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset);\n");
     fprintf(fp, "void parse_tag_byte(const BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
     fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* buf, size_t* offset);\n");
-    fprintf(fp, "size_t encode_varint(DWORD value, BYTE *buf, size_t *offset);\n");
-    fprintf(fp, "BOOL rewrite_varint(BYTE *buf, size_t varint_length, DWORD new_value);\n");
+    fprintf(fp, "size_t encode_varint(unsigned long long value, BYTE *buf, size_t *offset);\n");
     fprintf(fp, "\n");
     fprintf(fp, "/* 对varint信息进行解码 */\n");
     fprintf(fp, "#define decode_varint(buf, value, offset) do{ \\\n");
@@ -219,22 +218,30 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "}\n");
 
     fprintf(fp, "/* 对varint信息进行编码 */\n");
-    fprintf(fp, "size_t encode_varint(DWORD value, BYTE *buf, size_t *offset) { \n");
+    fprintf(fp, "size_t encode_varint(unsigned long long value, BYTE *buf, size_t *offset) { \n");
     fprintf(fp, "    unsigned long long remain_len = value; \n");
     fprintf(fp, "    size_t iloop; \n");
     fprintf(fp, "    size_t written_bytes; \n");
     fprintf(fp, "\n");
     fprintf(fp, "    if (NULL == buf) {\n");
-    fprintf(fp, "        if(value > 0x0FFFFFFF){\n"); 
-    fprintf(fp, "            written_bytes = 5;\n");
-    fprintf(fp, "        } else if(value > 0x001FFFFF){\n"); 
-    fprintf(fp, "            written_bytes = 4;\n");
-    fprintf(fp, "        } else if(value > 0x00003FFF){\n"); 
-    fprintf(fp, "            written_bytes = 3;\n");
-    fprintf(fp, "        } else if(value > 0x0000007F){\n"); 
-    fprintf(fp, "            written_bytes = 2;\n");
-    fprintf(fp, "        } else {\n"); 
+    fprintf(fp, "        if(value < 0x80){\n"); 
     fprintf(fp, "            written_bytes = 1;\n");
+    fprintf(fp, "        } else if(value < 0x4000){\n"); 
+    fprintf(fp, "            written_bytes = 2;\n");
+    fprintf(fp, "        } else if(value < 0x200000){\n"); 
+    fprintf(fp, "            written_bytes = 3;\n");
+    fprintf(fp, "        } else if(value < 0x10000000){\n"); 
+    fprintf(fp, "            written_bytes = 4;\n");
+    fprintf(fp, "        } else if(value < 0x800000000){\n"); 
+    fprintf(fp, "            written_bytes = 5;\n");
+    fprintf(fp, "        } else if(value < 0x40000000000){\n"); 
+    fprintf(fp, "            written_bytes = 6;\n");
+    fprintf(fp, "        } else if(value < 0x2000000000000){\n"); 
+    fprintf(fp, "            written_bytes = 7;\n");
+    fprintf(fp, "        } else if(value < 0x100000000000000){\n"); 
+    fprintf(fp, "            written_bytes = 8;\n");
+    fprintf(fp, "        } else {\n"); 
+    fprintf(fp, "            written_bytes = 9;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    } else {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) { \n");
@@ -253,27 +260,6 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    return written_bytes;\n");
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
-
-    fprintf(fp, "BOOL rewrite_varint(BYTE *buf, size_t varint_length, DWORD new_value){\n");
-    fprintf(fp, "    int i;\n");
-    fprintf(fp, "    size_t offset;\n");
-    fprintf(fp, "    if(encode_varint(new_value, NULL, &offset) > varint_length){\n");
-    fprintf(fp, "        return FALSE;\n");
-    fprintf(fp, "    }\n");
-    fprintf(fp, "\n");
-    fprintf(fp, "    offset = 0;\n");
-    fprintf(fp, "    encode_varint(new_value, buf, &offset);\n");
-    fprintf(fp, "    if(offset < varint_length){\n");
-    fprintf(fp, "        buf[offset-1] |= 0x80;\n");
-    fprintf(fp, "        for (i = offset; i < varint_length-1; ++i) {\n");
-    fprintf(fp, "            buf[i] = 0x80;\n");
-    fprintf(fp, "        }\n");
-    fprintf(fp, "        buf[varint_length-1] = 0;\n");
-    fprintf(fp, "    }\n");
-    fprintf(fp, "    return TRUE;\n");
-    fprintf(fp, "}\n");
-    fprintf(fp, "\n/* end of file */\n\n");
-    fclose(fp);
 
     return retcode;
 }
@@ -821,7 +807,6 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
         {
             fprintf(fp, "    size_t encode_buf_len;\n");
-            fprintf(fp, "    size_t varint_len, varint_offset;\n");
             break;
         }
     }
@@ -874,7 +859,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 default:
                     break;
                 }
-                fprintf(fp, "    varint_len = encode_varint(var_%s->var_%s.count, buf, &offset);\n",
+                fprintf(fp, "    encode_varint(var_%s->var_%s.count, buf, &offset);\n",
                         desc->name().c_str(), field->name().c_str());
 
             }
@@ -1024,8 +1009,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             {
                 fprintf(fp, "%sencode_buf_len = encode_message_%s(&(var_%s->var_%s), NULL, 0);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
             }
-            fprintf(fp, "%svarint_offset = offset;\n", prefix_spaces.c_str());
-            fprintf(fp, "%svarint_len = encode_varint(encode_buf_len, NULL, &offset);\n", prefix_spaces.c_str());
+            fprintf(fp, "%sencode_varint(encode_buf_len, buf, &offset);\n", prefix_spaces.c_str());
             fprintf(fp, "%sif(NULL != buf){\n", prefix_spaces.c_str());
             if(field->is_repeated())
             {
@@ -1037,9 +1021,6 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += encode_buf_len;\n", prefix_spaces.c_str());
-            fprintf(fp, "%sif(NULL!=buf){\n", prefix_spaces.c_str());
-            fprintf(fp, "%s    rewrite_varint(buf + varint_offset, varint_len, encode_buf_len);\n", prefix_spaces.c_str());
-            fprintf(fp, "%s}\n", prefix_spaces.c_str());
             break;
 
         default:
