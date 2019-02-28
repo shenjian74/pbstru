@@ -477,7 +477,6 @@ message CCCMasterElect{
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/*
 enum ut_test_enum {
     CLIENT = 1;
     SERVER = 2;
@@ -544,4 +543,3 @@ message ut_test_message
 	repeated ut_test_sub_message f_message = 83;
 	repeated ut_test_sub_message d_message = 84;
 }
-*/
