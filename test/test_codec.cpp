@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
 
     {
         int value = 0;
-        int offset = 0;
+        size_t offset = 0;
         encode_varint(value, buf, &offset);
         assert(1 == offset);
         assert(0 == buf[0]);
