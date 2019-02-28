@@ -95,7 +95,6 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "#define __PBSTRU_COMM_H__\n");
     fprintf(fp, "\n");
     fprintf(fp, "#include <stdlib.h>\n");
-    fprintf(fp, "#include <stdbool.h>\n");
     fprintf(fp, "#include <memory.h>\n");
     fprintf(fp, "\n");
     fprintf(fp, "#define WIRE_TYPE_VARINT 0\n");
@@ -141,7 +140,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "void parse_tag_byte(const BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
     fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* buf, size_t* offset);\n");
     fprintf(fp, "size_t encode_varint(DWORD value, BYTE *buf, size_t *offset);\n");
-    fprintf(fp, "bool rewrite_varint(BYTE *buf, size_t varint_length, DWORD new_value);\n");
+    fprintf(fp, "BOOL rewrite_varint(BYTE *buf, size_t varint_length, DWORD new_value);\n");
     fprintf(fp, "\n");
     fprintf(fp, "/* 对varint信息进行解码 */\n");
     fprintf(fp, "#define decode_varint(buf, value, offset) do{ \\\n");
@@ -255,11 +254,11 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "bool rewrite_varint(BYTE *buf, size_t varint_length, DWORD new_value){\n");
+    fprintf(fp, "BOOL rewrite_varint(BYTE *buf, size_t varint_length, DWORD new_value){\n");
     fprintf(fp, "    int i;\n");
     fprintf(fp, "    size_t offset;\n");
     fprintf(fp, "    if(encode_varint(new_value, NULL, &offset) > varint_length){\n");
-    fprintf(fp, "        return false;\n");
+    fprintf(fp, "        return FALSE;\n");
     fprintf(fp, "    }\n");
     fprintf(fp, "\n");
     fprintf(fp, "    offset = 0;\n");
@@ -271,7 +270,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "        }\n");
     fprintf(fp, "        buf[varint_length-1] = 0;\n");
     fprintf(fp, "    }\n");
-    fprintf(fp, "    return true;\n");
+    fprintf(fp, "    return TRUE;\n");
     fprintf(fp, "}\n");
     fprintf(fp, "\n/* end of file */\n\n");
     fclose(fp);
@@ -1092,7 +1091,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
                         spaces, desc->name().c_str(), field->name().c_str(),
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "%s                return FALSE;  /* 数组超限 */\n", spaces);
+                fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s            }\n", spaces);
                 fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n",
                         spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
