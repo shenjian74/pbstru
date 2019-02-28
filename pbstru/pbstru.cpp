@@ -257,15 +257,14 @@ int gen_comm(const string &target_dir)
 
     fprintf(fp, "bool rewrite_varint(BYTE *buf, size_t varint_length, DWORD new_value){\n");
     fprintf(fp, "    int i;\n");
-    fprintf(fp, "    BYTE new_buf[5];\n");
-    fprintf(fp, "    size_t offset = 0;\n");
-    fprintf(fp, "\n");
-    fprintf(fp, "    encode_varint(new_value, new_buf, &offset);\n");
-    fprintf(fp, "    if(offset > varint_length){\n");
+    fprintf(fp, "    size_t offset;\n");
+    fprintf(fp, "    if(encode_varint(new_value, NULL, &offset) > varint_length){\n");
     fprintf(fp, "        return false;\n");
     fprintf(fp, "    }\n");
-    fprintf(fp, "    memcpy(buf, new_buf, offset);\n");
-    fprintf(fp, "    if(offset < varint_length) {\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "    offset = 0;\n");
+    fprintf(fp, "    encode_varint(new_value, buf, &offset);\n");
+    fprintf(fp, "    if(offset < varint_length){\n");
     fprintf(fp, "        buf[offset-1] |= 0x80;\n");
     fprintf(fp, "        for (i = offset; i < varint_length-1; ++i) {\n");
     fprintf(fp, "            buf[i] = 0x80;\n");
