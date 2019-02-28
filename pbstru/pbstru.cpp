@@ -137,7 +137,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "void parse_tag_byte(const BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
     fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* buf, size_t* offset);\n");
     fprintf(fp, "size_t encode_varint(DWORD value, BYTE *buf, size_t *offset);\n");
-    fprintf(fp, "bool rewrite_varint(BYTE *buf, int varint_length, DWORD new_value);\n");
+    fprintf(fp, "bool rewrite_varint(BYTE *buf, size_t varint_length, DWORD new_value);\n");
     fprintf(fp, "\n");
     fprintf(fp, "/* 对varint信息进行解码 */\n");
     fprintf(fp, "#define decode_varint(buf, value, offset) do{ \\\n");
@@ -242,10 +242,11 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "bool rewrite_varint(BYTE *buf, int varint_length, DWORD new_value){\n");
+    fprintf(fp, "bool rewrite_varint(BYTE *buf, size_t varint_length, DWORD new_value){\n");
     fprintf(fp, "    int i;\n");
     fprintf(fp, "    BYTE new_buf[5];\n");
     fprintf(fp, "    size_t offset = 0;\n");
+    fprintf(fp, "\n");
     fprintf(fp, "    encode_varint(new_value, new_buf, &offset);\n");
     fprintf(fp, "    if(offset > varint_length){\n");
     fprintf(fp, "        return false;\n");
@@ -834,7 +835,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             break;
         }
     }
-    fprintf(fp, "    size_t varint_len;\n");
+    fprintf(fp, "    size_t varint_len, varint_offset;\n");
 
     // 有repeat字段的时候会用到循环变量
     for(int i=0; i<desc->field_count(); ++i)
@@ -876,7 +877,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                     default:
                         break;
                     }
-                    fprintf(fp, "    varint_len = encode_varint(var_%s->var_%s.count, NULL, &offset);\n",
+                    fprintf(fp, "    varint_len = encode_varint(var_%s->var_%s.count, buf, &offset);\n",
                             desc->name().c_str(), field->name().c_str());
 
                 }
@@ -913,7 +914,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += sizeof(DWORD);\n", prefix_spaces.c_str());
-            fprintf(fp, "%srewrite_varint(buf, varint_len, sizeof(DWORD));\n", prefix_spaces.c_str());
+            fprintf(fp, "    if(NULL!=buf){\n");
+            fprintf(fp, "        rewrite_varint(buf + varint_offset, varint_len, sizeof(DWORD);\n");
+            fprintf(fp, "    }\n");
             break;
 
         case FieldDescriptor::TYPE_FIXED64:
@@ -932,7 +935,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += sizeof(WORD64);\n", prefix_spaces.c_str());
-            fprintf(fp, "%srewrite_varint(buf, varint_len, sizeof(WORD64));\n", prefix_spaces.c_str());
+            fprintf(fp, "    if(NULL!=buf){\n");
+            fprintf(fp, "        rewrite_varint(buf + varint_offset, varint_len, sizeof(WORD64));\n");
+            fprintf(fp, "    }\n");
             break;
 
         case FieldDescriptor::TYPE_BOOL:
@@ -943,19 +948,22 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             {
                 fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_VARINT, &offset);\n", prefix_spaces.c_str(), field->number());
             }
+
             if(field->is_repeated())
             {
-                    fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s.item[i], NULL, &offset);\n",
+                    fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s.item[i], buf, &offset);\n",
                             prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s, NULL, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             break;
 
         case FieldDescriptor::TYPE_STRING:
             fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
+
+            fprintf(fp, "    varint_offset = offset;\n");
             if(field->is_repeated())
             {
                     fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s.item[i].length, NULL, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
@@ -979,17 +987,22 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             if(field->is_repeated())
             {
                     fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%srewrite_varint(buf, varint_len, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());;
+            fprintf(fp, "    if(NULL!=buf){\n");
+            fprintf(fp, "        rewrite_varint(buf + varint_offset, varint_len, var_%s->var_%s.item[i].length);\n", desc->name().c_str(), field->name().c_str());;
+            fprintf(fp, "    }\n");
             }
             else
             {
                 fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%srewrite_varint(buf, varint_len, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());;
+            fprintf(fp, "    if(NULL!=buf){\n");
+            fprintf(fp, "        rewrite_varint(buf + varint_offset, varint_len, var_%s->var_%s.length);\n", desc->name().c_str(), field->name().c_str());;
+            fprintf(fp, "    }\n");
             }
             break;
 
         case FieldDescriptor::TYPE_BYTES:
             fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
+            fprintf(fp, "    varint_offset = offset;\n");
             if(field->is_repeated())
             {
                     fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s.item[i].length, NULL, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
@@ -1012,12 +1025,16 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             if(field->is_repeated())
             {
                     fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%srewrite_varint(buf, varint_len, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());;
+            fprintf(fp, "    if(NULL!=buf){\n");
+            fprintf(fp, "        rewrite_varint(buf + varint_offset, varint_len, var_%s->var_%s.item[i].length);\n", desc->name().c_str(), field->name().c_str());;
+            fprintf(fp, "    }\n");
             }
             else
             {
                 fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%srewrite_varint(buf, varint_len, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());;
+            fprintf(fp, "    if(NULL!=buf){\n");
+            fprintf(fp, "        rewrite_varint(buf + varint_offset, varint_len, var_%s->var_%s.length);\n", desc->name().c_str(), field->name().c_str());;
+            fprintf(fp, "    }\n");
             }
             break;
 
@@ -1032,6 +1049,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             {
                 fprintf(fp, "%sencode_buf_len = encode_message_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
             }
+            fprintf(fp, "    varint_offset = offset;\n");
             fprintf(fp, "%svarint_len = encode_varint(encode_buf_len, NULL, &offset);\n", prefix_spaces.c_str());
             fprintf(fp, "%sif(NULL != buf){\n", prefix_spaces.c_str());
             if(field->is_repeated())
@@ -1044,7 +1062,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += encode_buf_len;\n", prefix_spaces.c_str());
-            fprintf(fp, "%srewrite_varint(buf, varint_len, encode_buf_len);\n", prefix_spaces.c_str());;
+            fprintf(fp, "    if(NULL!=buf){\n");
+            fprintf(fp, "        rewrite_varint(buf + varint_offset, varint_len, encode_buf_len);\n");;
+            fprintf(fp, "    }\n");
             break;
 
         default:

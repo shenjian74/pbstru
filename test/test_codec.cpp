@@ -264,6 +264,8 @@ int main(int argc, char* argv[])
         var_Tuple.var_field.item[1].var_fieldid = 2;
         var_Tuple.var_field.item[1].var_value.data = (BYTE *)strdup("jflasjfu32ujfljsljkljkljljoiu");
         var_Tuple.var_field.item[1].var_value.length = strlen((char *)var_Tuple.var_field.item[1].var_value.data);
+        printf("Try to call encode function.\n");
+        fflush(stdout);
         buf_len = encode_message_Tuple(&(var_Tuple), buf);
         print_buffer(buf, buf_len);
 
