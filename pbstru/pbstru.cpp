@@ -225,23 +225,32 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    size_t iloop; \n");
     fprintf(fp, "    size_t written_bytes; \n");
     fprintf(fp, "\n");
-    fprintf(fp, "    for (iloop = 0;; ++iloop) { \n");
-    fprintf(fp, "        if ((remain_len >> 7) > 0) { \n");
-    fprintf(fp, "            if (NULL != buf) { \n");
-    fprintf(fp, "                buf[(*(offset)) + iloop] = ((BYTE)remain_len) | 0x80; \n");
+    fprintf(fp, "    if(NULL == buf){\n");
+    fprintf(fp, "        if(value > 0x0FFFFFFF){\n"); 
+    fprintf(fp, "            written_bytes = 5;\n");
+    fprintf(fp, "        } else if(value > 0x001FFFFF){\n"); 
+    fprintf(fp, "            written_bytes = 4;\n");
+    fprintf(fp, "        } else if(value > 0x00003FFF){\n"); 
+    fprintf(fp, "            written_bytes = 3;\n");
+    fprintf(fp, "        } else if(value > 0x0000007F){\n"); 
+    fprintf(fp, "            written_bytes = 2;\n");
+    fprintf(fp, "        } else {\n"); 
+    fprintf(fp, "            written_bytes = 1;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "    } else {\n");
+    fprintf(fp, "        for (iloop = 0;; ++iloop) { \n");
+    fprintf(fp, "            if ((remain_len >> 7) > 0) { \n");
+    fprintf(fp, "                buf[(*offset) + iloop] = ((BYTE)remain_len) | 0x80; \n");
+    fprintf(fp, "                remain_len = remain_len >> 7; \n");
     fprintf(fp, "            } \n");
-    fprintf(fp, "            remain_len = remain_len >> 7; \n");
-    fprintf(fp, "        } \n");
-    fprintf(fp, "        else { \n");
-    fprintf(fp, "            if (NULL != buf) { \n");
-    fprintf(fp, "                buf[(*(offset)) + iloop] = (BYTE)remain_len; \n");
+    fprintf(fp, "            else { \n");
+    fprintf(fp, "                buf[(*offset) + iloop] = (BYTE)remain_len; \n");
+    fprintf(fp, "                break; \n");
     fprintf(fp, "            } \n");
-    fprintf(fp, "            break; \n");
     fprintf(fp, "        } \n");
-    fprintf(fp, "    } \n");
-    fprintf(fp, "\n");
-    fprintf(fp, "    written_bytes = 1 + iloop;\n");
-    fprintf(fp, "    *(offset) += written_bytes; \n");
+    fprintf(fp, "        written_bytes = 1 + iloop;\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    *offset += written_bytes; \n");
     fprintf(fp, "    return written_bytes;\n");
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
@@ -265,7 +274,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    }\n");
     fprintf(fp, "    return true;\n");
     fprintf(fp, "}\n");
-    fprintf(fp, "/* end of file */\n\n");
+    fprintf(fp, "\n/* end of file */\n\n");
     fclose(fp);
 
     return retcode;
@@ -712,26 +721,8 @@ void print_clear_message(FILE *fp, const Descriptor *desc, const map<string,stri
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
-            fprintf(fp, "    size_t i;\n");
-            break;
-        }
-    }
-
-    for(int i=0; i<desc->field_count(); ++i)
-    {
-        const FieldDescriptor *field = desc->field(i);
-        if(field->is_repeated())
-        {
             string struct_list_name;
             get_struct_list_name(field, struct_list_name);
-
-            if(FieldDescriptor::TYPE_MESSAGE == field->type())
-            {
-                fprintf(fp, "    for(i=0; i<var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "        clear_message_%s(&(var_%s->var_%s.item[i]));\n",
-                        field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "    }\n");
-            }
             fprintf(fp, "    var_%s->var_%s.count = 0;\n", desc->name().c_str(), field->name().c_str());
         }
         else
@@ -817,11 +808,6 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     fprintf(fp, "\n");
 
     ////////////////////////////////////////
-    fprintf(fp, "\nvoid destru_message_%s(%s* var_%s){\n",
-            desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
-    fprintf(fp, "    clear_message_%s(var_%s);\n", desc->name().c_str(), desc->name().c_str());
-    fprintf(fp, "}\n");
-
     // clear function
     fprintf(fp, "\nvoid clear_message_%s(%s* var_%s){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
@@ -919,9 +905,6 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += sizeof(DWORD);\n", prefix_spaces.c_str());
-            fprintf(fp, "    if(NULL!=buf){\n");
-            fprintf(fp, "        rewrite_varint(buf + varint_offset, varint_len, sizeof(DWORD);\n");
-            fprintf(fp, "    }\n");
             break;
 
         case FieldDescriptor::TYPE_FIXED64:
@@ -940,9 +923,6 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += sizeof(WORD64);\n", prefix_spaces.c_str());
-            fprintf(fp, "    if(NULL!=buf){\n");
-            fprintf(fp, "        rewrite_varint(buf + varint_offset, varint_len, sizeof(WORD64));\n");
-            fprintf(fp, "    }\n");
             break;
 
         case FieldDescriptor::TYPE_BOOL:
