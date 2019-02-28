@@ -217,7 +217,7 @@ int gen_comm(const string &target_dir)
 
     fprintf(fp, "/* 对varint信息进行编码 */\n");
     fprintf(fp, "size_t encode_varint(DWORD value, BYTE *buf, size_t *offset) { \n");
-    fprintf(fp, "    unsigned long long remain_len = len; \n");
+    fprintf(fp, "    unsigned long long remain_len = value; \n");
     fprintf(fp, "    size_t iloop; \n");
     fprintf(fp, "    size_t written_bytes; \n");
     fprintf(fp, "\n");
@@ -238,14 +238,14 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "\n");
     fprintf(fp, "    written_bytes = 1 + iloop;\n");
     fprintf(fp, "    *(offset) += written_bytes; \n");
-    fprintf(fp, "    return written_bytes\n");
+    fprintf(fp, "    return written_bytes;\n");
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
     fprintf(fp, "bool rewrite_varint(BYTE *buf, int varint_length, DWORD new_value){\n");
     fprintf(fp, "    int i;\n");
     fprintf(fp, "    BYTE new_buf[5];\n");
-    fprintf(fp, "    int offset = 0;\n");
+    fprintf(fp, "    size_t offset = 0;\n");
     fprintf(fp, "    encode_varint(new_value, new_buf, &offset);\n");
     fprintf(fp, "    if(offset > varint_length){\n");
     fprintf(fp, "        return false;\n");
@@ -684,11 +684,6 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     }
     fprintf(fp, "} %s;\n", struct_name.c_str());
 
-    fprintf(fp, "\n/* construct msg when first use, call clear_message_*() internaly. */\n");
-    fprintf(fp, "void constru_message_%s(%s *msg);\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "/* destruct msg */\n");
-    fprintf(fp, "void destru_message_%s(%s *msg);\n", desc->name().c_str(), struct_name.c_str());
-
     fprintf(fp, "\n/* clear and reuse msg */\n");
     fprintf(fp, "void clear_message_%s(%s *msg);\n",
             desc->name().c_str(), struct_name.c_str());
@@ -705,42 +700,17 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     return retcode;
 }
 
-void alloc_new_repeated_item(FILE *fp, const Descriptor *desc, const FieldDescriptor *field, LPCSTR spaces)
+void print_clear_message(FILE *fp, const Descriptor *desc, const map<string,string> &map_array_size)
 {
-	string struct_list_name;
-	get_struct_list_name(field, struct_list_name);
-    fprintf(fp, "%s            if(NULL == var_%s->var_%s){\n", spaces, desc->name().c_str(), field->name().c_str());
-    fprintf(fp, "%s                var_%s->var_%s = (st_%s_list *)pbstru_malloc(sizeof(st_%s_list));\n",
-            spaces, desc->name().c_str(), field->name().c_str(), struct_list_name.c_str(), struct_list_name.c_str());
-    fprintf(fp, "%s                if(NULL == var_%s->var_%s){\n", spaces, desc->name().c_str(), field->name().c_str());
-    fprintf(fp, "%s                    return FALSE;\n", spaces);
-    fprintf(fp, "%s                } else {\n", spaces);
-    fprintf(fp, "%s                    var_%s->var_%s_tail = var_%s->var_%s;\n",
-            spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-    fprintf(fp, "%s                    var_%s->var_%s_tail->next = NULL;\n",
-            spaces, desc->name().c_str(), field->name().c_str());
-    fprintf(fp, "%s                }\n", spaces);
-    fprintf(fp, "%s            } else {\n", spaces);
-    fprintf(fp, "%s                st_%s_list *tmptr = (st_%s_list *)pbstru_malloc(sizeof(st_%s_list));\n",
-            spaces, struct_list_name.c_str(), struct_list_name.c_str(), struct_list_name.c_str());
-    fprintf(fp, "%s                if(NULL == tmptr){\n", spaces);
-    fprintf(fp, "%s                    return FALSE;\n", spaces);
-    fprintf(fp, "%s                } else {\n", spaces);
-    fprintf(fp, "%s                    var_%s->var_%s_tail->next = tmptr;\n", spaces, desc->name().c_str(), field->name().c_str());
-    fprintf(fp, "%s                    var_%s->var_%s_tail = tmptr;\n", spaces, desc->name().c_str(), field->name().c_str());
-    fprintf(fp, "%s                    var_%s->var_%s_tail->next = NULL;\n", spaces, desc->name().c_str(), field->name().c_str());
-    fprintf(fp, "%s                }\n", spaces);
-    fprintf(fp, "%s            }\n", spaces);
-    if(FieldDescriptor::TYPE_MESSAGE == field->type())
+    for(int i=0; i<desc->field_count(); ++i)
     {
-        fprintf(fp, "%s            constru_message_%s(&(var_%s->var_%s_tail->value));\n",
-                spaces, field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+        const FieldDescriptor *field = desc->field(i);
+        if(field->is_repeated()) {
+            fprintf(fp, "    size_t i;\n");
+            break;
+        }
     }
 
-}
-
-void print_clear_message(FILE *fp, const Descriptor *desc, bool init, const map<string,string> &map_array_size)
-{
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
@@ -749,19 +719,6 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init, const map<
 			string struct_list_name;
 			get_struct_list_name(field, struct_list_name);
 
-                if(init)
-                {
-                    if(FieldDescriptor::TYPE_MESSAGE == field->type())
-                    {
-                        fprintf(fp, "    for(i=0; i<%s; ++i){\n",
-                                map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                        fprintf(fp, "        constru_message_%s(&(var_%s->var_%s.item[i]));\n",
-                                field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                        fprintf(fp, "    }\n");
-                    }
-                }
-                else
-                {
                     if(FieldDescriptor::TYPE_MESSAGE == field->type())
                     {
                         fprintf(fp, "    for(i=0; i<var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
@@ -769,21 +726,10 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init, const map<
                                 field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                         fprintf(fp, "    }\n");
                     }
-                }
                 fprintf(fp, "    var_%s->var_%s.count = 0;\n", desc->name().c_str(), field->name().c_str());
         }
         else
         {
-            if(init)
-            {
-                if(FieldDescriptor::TYPE_MESSAGE == field->type())
-                {
-                    fprintf(fp, "    constru_message_%s(&(var_%s->var_%s));\n",
-                            field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                }
-            }
-            else
-            {
                 char spaces[] = "          ";
                 if(field->is_optional())
                 {
@@ -824,7 +770,7 @@ void print_clear_message(FILE *fp, const Descriptor *desc, bool init, const map<
                 {
                     fprintf(fp, "    }\n");
                 }
-            }
+
             if(field->is_optional())
             {
                 fprintf(fp, "    var_%s->has_%s = FALSE;\n", desc->name().c_str(), field->name().c_str());
@@ -865,12 +811,6 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     fprintf(fp, "\n");
 
     ////////////////////////////////////////
-    // clear function
-    fprintf(fp, "void constru_message_%s(%s *var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
-    print_clear_message(fp, desc, true, map_array_size);
-    fprintf(fp, "}\n");
-
-    ////////////////////////////////////////
     fprintf(fp, "\nvoid destru_message_%s(%s* var_%s){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "    clear_message_%s(var_%s);\n", desc->name().c_str(), desc->name().c_str());
@@ -879,7 +819,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     // clear function
     fprintf(fp, "\nvoid clear_message_%s(%s* var_%s){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
-    print_clear_message(fp, desc, false, map_array_size);
+    print_clear_message(fp, desc, map_array_size);
     fprintf(fp, "}\n");
 
     ////////////////////////////////////////
@@ -894,6 +834,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             break;
         }
     }
+    fprintf(fp, "    size_t varint_len;\n");
 
     // 有repeat字段的时候会用到循环变量
     for(int i=0; i<desc->field_count(); ++i)
@@ -935,7 +876,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                     default:
                         break;
                     }
-                    fprintf(fp, "    encode_varint(var_%s->var_%s.count, buf, &offset);\n",
+                    fprintf(fp, "    varint_len = encode_varint(var_%s->var_%s.count, NULL, &offset);\n",
                             desc->name().c_str(), field->name().c_str());
 
                 }
@@ -972,6 +913,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += sizeof(DWORD);\n", prefix_spaces.c_str());
+            fprintf(fp, "%srewrite_varint(buf, varint_len, sizeof(DWORD));\n", prefix_spaces.c_str());
             break;
 
         case FieldDescriptor::TYPE_FIXED64:
@@ -990,6 +932,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += sizeof(WORD64);\n", prefix_spaces.c_str());
+            fprintf(fp, "%srewrite_varint(buf, varint_len, sizeof(WORD64));\n", prefix_spaces.c_str());
             break;
 
         case FieldDescriptor::TYPE_BOOL:
@@ -1002,12 +945,12 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             if(field->is_repeated())
             {
-                    fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i], buf, &offset);\n",
+                    fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s.item[i], NULL, &offset);\n",
                             prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sencode_varint(var_%s->var_%s, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s, NULL, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             break;
 
@@ -1015,11 +958,11 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
             if(field->is_repeated())
             {
-                    fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s.item[i].length, NULL, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sencode_varint(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s.length, NULL, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "%sif (NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
@@ -1036,10 +979,12 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             if(field->is_repeated())
             {
                     fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%srewrite_varint(buf, varint_len, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());;
             }
             else
             {
                 fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%srewrite_varint(buf, varint_len, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());;
             }
             break;
 
@@ -1047,11 +992,11 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
             if(field->is_repeated())
             {
-                    fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s.item[i].length, NULL, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sencode_varint(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%svarint_len = encode_varint(var_%s->var_%s.length, NULL, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "%sif (NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
@@ -1067,10 +1012,12 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             if(field->is_repeated())
             {
                     fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%srewrite_varint(buf, varint_len, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());;
             }
             else
             {
                 fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%srewrite_varint(buf, varint_len, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());;
             }
             break;
 
@@ -1085,7 +1032,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             {
                 fprintf(fp, "%sencode_buf_len = encode_message_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
             }
-            fprintf(fp, "%sencode_varint(encode_buf_len, buf, &offset);\n", prefix_spaces.c_str());
+            fprintf(fp, "%svarint_len = encode_varint(encode_buf_len, NULL, &offset);\n", prefix_spaces.c_str());
             fprintf(fp, "%sif(NULL != buf){\n", prefix_spaces.c_str());
             if(field->is_repeated())
             {
@@ -1097,6 +1044,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += encode_buf_len;\n", prefix_spaces.c_str());
+            fprintf(fp, "%srewrite_varint(buf, varint_len, encode_buf_len);\n", prefix_spaces.c_str());;
             break;
 
         default:

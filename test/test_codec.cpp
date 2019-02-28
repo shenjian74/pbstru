@@ -209,10 +209,10 @@ int main(int argc, char* argv[])
         assert(5 == offset);
         assert(0xFF == buf[0]);
         assert(0x0F == buf[4]);
-		offset = 0;
-		decode_varint(buf, &value3, &offset);
-		assert(5 == offset);
-		assert(0xFFFFFFFF == value3);
+	offset = 0;
+	decode_varint(buf, &value3, &offset);
+	assert(5 == offset);
+	assert(0xFFFFFFFF == value3);
 
         assert(true == rewrite_varint(buf, offset, 0));
         offset = 0;
@@ -243,36 +243,14 @@ int main(int argc, char* argv[])
         offset = 0;
 	decode_varint(buf, &value, &offset);
 	assert(5 == offset);
-	assert(0xFFFFFFFE == value);
+	assert(0xFFFFFFFE == value); 
 
-        long long value1 = 4294967296;
-        offset = 0;
-        encode_varint(value1, buf, &offset);
-		print_buffer(buf, offset);
-        assert(5 == offset);
-        assert(0x80 == buf[0]);
-        assert(0x10 == buf[4]);
-		offset = 0;
-		decode_varint(buf, &value1, &offset);
-		assert(5 == offset);
-		assert(4294967296 == value1);
-
-        long long value2 = 0xFFFFFFFFFFFFFFFF;
-        offset = 0;
-        encode_varint(value2, buf, &offset);
-		print_buffer(buf, offset);
-        assert(10 == offset);
-        assert(0xFF == buf[0]);
-        assert(0x01 == buf[9]);
-		offset = 0;
-		decode_varint(buf, &value1, &offset);
-		assert(10 == offset);
-		assert(0xFFFFFFFFFFFFFFFF == value1);
-	}
+        printf("varint test pass.\n");
+        fflush(stdout);
+    }
 
     {
         st_tuple var_Tuple;
-        constru_message_Tuple(&var_Tuple);
         var_Tuple.var_path.var_path_string.data = (BYTE *)strdup("/20");
         var_Tuple.var_path.var_path_string.length = strlen((char *)var_Tuple.var_path.var_path_string.data);
         var_Tuple.has_version = true;
@@ -300,10 +278,12 @@ int main(int argc, char* argv[])
         assert(0 == memcmp(var_Tuple.var_field.item[0].var_value.data, "fawejlkrj1230940p1243lkjljfksldaj", var_Tuple.var_field.item[0].var_value.length));
         assert(var_Tuple.var_field.item[1].var_fieldid == 2);
         assert(0 == memcmp(var_Tuple.var_field.item[1].var_value.data, "jflasjfu32ujfljsljkljkljljoiu", var_Tuple.var_field.item[1].var_value.length));
+
+        printf("tuple test pass.\n");
+        fflush(stdout);
     }
 
     {
-        constru_message_AddRequest(&var_AddRequest);
 
         clear_message_AddRequest(&var_AddRequest);
         var_AddRequest.var_identifiers.var_primary.count = 1;
@@ -363,7 +343,6 @@ int main(int argc, char* argv[])
 /*
     {
         st_ut_test_message *msg = (st_ut_test_message *)pbstru_malloc(sizeof(st_ut_test_message));
-        constru_message_ut_test_message(msg);
 
         for(int i=0; i<3; ++i)
         {
@@ -809,13 +788,11 @@ int main(int argc, char* argv[])
             msg->var_d_message_tail = msg->var_d_message;
             msg->var_d_message->next = NULL;
             // 刚申请的message结构需要初始化
-            constru_message_ut_test_sub_message(&(msg->var_d_message->value));
             fill_ut_test_sub_message(&(msg->var_d_message->value));
             msg->var_d_message->next = (st_d_message_in_ut_test_message_ut_test_sub_message_list *)pbstru_malloc(sizeof(st_d_message_in_ut_test_message_ut_test_sub_message_list));
             msg->var_d_message_tail = msg->var_d_message->next;
             msg->var_d_message_tail->next = NULL;
             // 刚申请的message结构需要初始化
-            constru_message_ut_test_sub_message(&(msg->var_d_message_tail->value));
             fill_ut_test_sub_message(&(msg->var_d_message_tail->value));
 
             size_t size1 = encode_message_ut_test_message(msg, NULL);
@@ -834,13 +811,11 @@ int main(int argc, char* argv[])
             assert(NULL == msg->var_d_message->next->next);
         }
 
-        destru_message_ut_test_message(msg);
         pbstru_free(msg);
     }
 
     {
         st_ut_test_sub_message *msg = (st_ut_test_sub_message *)pbstru_malloc(sizeof(st_ut_test_sub_message));
-        constru_message_ut_test_sub_message(msg);
 
         for(int i=0; i<3; ++i)
         {
@@ -863,7 +838,6 @@ int main(int argc, char* argv[])
             assert(NULL == msg->var_d_uint32->next->next);
         }
 
-        destru_message_ut_test_sub_message(msg);
         pbstru_free(msg);
     }
 */
