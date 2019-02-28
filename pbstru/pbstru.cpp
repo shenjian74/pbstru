@@ -1134,7 +1134,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
                         spaces, desc->name().c_str(), field->name().c_str(),
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "%s                return FALSE;  /* 数组超限 */\n", spaces);
+                fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s            }\n", spaces);
                 fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((WORD64 *)(buf + offset));\n",
                         spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1180,7 +1180,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
                         spaces, desc->name().c_str(), field->name().c_str(),
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "%s                return FALSE;  /* 数组超限 */\n", spaces);
+                fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s            }\n", spaces);
                 fprintf(fp, "%s            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n",
                         spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1208,7 +1208,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             {
                 fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "                return FALSE;  /* 数组超限 */\n");
+                fprintf(fp, "                return FALSE;  /* out of range */\n");
                 fprintf(fp, "            }\n");
                 fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
                         desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1238,7 +1238,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             {
                 fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "                return FALSE;  /* 数组超限 */\n");
+                fprintf(fp, "                return FALSE;  /* out of range */\n");
                 fprintf(fp, "            }\n");
                 fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
                         desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1268,7 +1268,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             {
                 fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "                return FALSE;  /* 数组超限 */\n");
+                fprintf(fp, "                return FALSE;  /* out of range */\n");
                 fprintf(fp, "            }\n");
                 fprintf(fp, "            decode_varint(buf + offset, &tmp_field_len, &offset);\n");
                 fprintf(fp, "            decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
