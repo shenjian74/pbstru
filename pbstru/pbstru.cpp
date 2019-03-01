@@ -137,8 +137,8 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "} ps_bytes;\n");
     fprintf(fp, "\n");
     fprintf(fp, "void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset);\n");
-    fprintf(fp, "void parse_tag_byte(const BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
-    fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* buf, size_t* offset);\n");
+    fprintf(fp, "void parse_tag_byte(BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
+    fprintf(fp, "void deal_unknown_field(BYTE wire_type, BYTE* buf, size_t* offset);\n");
     fprintf(fp, "size_t encode_varint(unsigned long long value, BYTE *buf, size_t *offset);\n");
     fprintf(fp, "\n");
     fprintf(fp, "/* 对varint信息进行解码 */\n");
@@ -167,7 +167,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
     fprintf(fp, "\n");
     fprintf(fp, "/* 对tag信息进行编码 */\n");
-    fprintf(fp, "void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset) { \n");
+    fprintf(fp, "inline void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset) { \n");
     fprintf(fp, "    if(tag < 16) { \n");
     fprintf(fp, "        if (NULL != buf) { \n");
     fprintf(fp, "            buf[*offset] = (BYTE)(tag << 3) | wire_type; \n");
@@ -183,7 +183,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "} \n");
     fprintf(fp, "\n");
     fprintf(fp, "/* 对tag信息进行解码 */\n");
-    fprintf(fp, "void parse_tag_byte(const BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset){ \n");
+    fprintf(fp, "void parse_tag_byte(BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset){ \n");
     fprintf(fp, "    if((buf)[0] & 0x80) { \n");
     fprintf(fp, "        *field_num = ((buf)[0] & 0x7F) + ((buf)[1] >> 3) * 128; \n");
     fprintf(fp, "	 *wire_type = (buf)[1] & 0x07; \n");
@@ -196,7 +196,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "} \n");
     fprintf(fp, "\n");
     fprintf(fp, "/* 跳过不认识的字段，向前兼容用 */\n");
-    fprintf(fp, "void deal_unknown_field(const BYTE wire_type, const BYTE* buf, size_t* offset) { \n");
+    fprintf(fp, "inline void deal_unknown_field(BYTE wire_type, BYTE* buf, size_t* offset) { \n");
     fprintf(fp, "    size_t tmp_field_len; \n");
     fprintf(fp, "    switch(wire_type){ \n");
     fprintf(fp, "    case WIRE_TYPE_VARINT: \n");
@@ -218,7 +218,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "}\n");
 
     fprintf(fp, "/* 对varint信息进行编码 */\n");
-    fprintf(fp, "size_t encode_varint(unsigned long long value, BYTE *buf, size_t *offset) { \n");
+    fprintf(fp, "inline size_t encode_varint(unsigned long long value, BYTE *buf, size_t *offset) { \n");
     fprintf(fp, "    unsigned long long remain_len = value; \n");
     fprintf(fp, "    size_t iloop; \n");
     fprintf(fp, "    size_t written_bytes; \n");
@@ -693,9 +693,9 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     fprintf(fp, "\n/* clear and reuse msg */\n");
     fprintf(fp, "void clear_message_%s(%s *msg);\n",
             desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "size_t encode_message_%s(const %s* const msg, BYTE* const buf);\n",
-            desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "BOOL decode_message_%s(BYTE* const buf, const size_t buf_len, %s* const msg);\n",
+    fprintf(fp, "size_t encode_message_%s(%s* msg, BYTE* buf);\n", desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "size_t encode_message_%s_safe(%s* msg, BYTE* buf, size_t buf_size);\n", desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "BOOL decode_message_%s(BYTE* buf, size_t buf_len, %s* msg);\n",
             desc->name().c_str(), struct_name.c_str());
 
     fprintf(fp, "\n#ifdef __cplusplus\n");
@@ -804,10 +804,18 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     fprintf(fp, "\nvoid clear_message_%s(%s* var_%s){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     print_clear_message(fp, desc, map_array_size);
-    fprintf(fp, "}\n");
+    fprintf(fp, "}\n\n");
 
     ////////////////////////////////////////
-    fprintf(fp, "\nsize_t encode_message_%s(const %s* var_%s, BYTE* buf){\n",
+    fprintf(fp, "size_t encode_message_%s_safe(%s* var_%s, BYTE* buf, size_t buf_size){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "    if (encode_message_%s(var_%s, NULL) > buf_size) {\n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "        return 0;\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    return encode_message_%s(var_%s, buf);\n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "}\n\n");
+
+    ////////////////////////////////////////
+    fprintf(fp, "\nsize_t encode_message_%s(%s* var_%s, BYTE* buf){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     // 有嵌套message的时候会用到编码长度
     for(int i=0; i<desc->field_count(); ++i)
@@ -1290,8 +1298,8 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         }
     }
     fprintf(fp, "        default:\n");
-    fprintf(fp, "        	deal_unknown_field(wire_type, buf+offset, &offset);\n");
-    fprintf(fp, "         	break;\n");
+    fprintf(fp, "            deal_unknown_field(wire_type, buf+offset, &offset);\n");
+    fprintf(fp, "            break;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    }\n");
     fprintf(fp, "    return TRUE;\n");
