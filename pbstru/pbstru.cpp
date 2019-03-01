@@ -623,6 +623,11 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
+            string field_name_upper = field->name();
+            toupper(field_name_upper);
+            string field_containing_type_upper = field->containing_type()->name();
+            toupper(field_containing_type_upper);
+
             string struct_list_name;
             get_struct_list_name(field, struct_list_name);
             fprintf(fp, "\ntypedef struct _st_%s_list {\n", struct_list_name.c_str());
@@ -672,6 +677,9 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
                     field->number(), field->type_name());
 
             fprintf(fp, "} st_%s_list;\n", struct_list_name.c_str());
+            fprintf(fp, "#define PBSTRU_MAX_%s_IN_%s %s\n", 
+                field_name_upper.c_str(), field_containing_type_upper.c_str(), 
+                map_array_size[field->containing_type()->name() + ":" + field->name()].c_str());
         }
     }
 
