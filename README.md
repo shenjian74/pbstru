@@ -49,10 +49,14 @@ clear_message_Response(&var_response);  // Clear struct in loop.
 var_response.xxx = xxx;  // set value in struct var_response
 ...
 BYTE buffer[max_buffer_length];
-size_t bytes_write = encode_message_Response(&var_response, buffer, sizeof(buffer));  // call encode_message_xxx
+if(encode_message_Response(&var_response, NULL) <= max_buffer_length)  // First call encode_message_xxx
+{
+    size_t bytes_write = encode_message_Response(&var_response, buffer);  // second call encode_message_xxx
+    ......
+}
 ```
-
-如果buffer无法容纳编码后的码流，encode_message_xxx函数会返回0。
+第一次调用encode_message_xxx时，第二个入参为NULL，只估算包文长度；第二次调用时，第二个入参为有效地址，此时才实际向缓冲区输出数据。
+如果对输入有把握，不会造成缓冲区溢出，也可忽略第一次调用以提高运行效率。
 
 ## 消息解码
 
