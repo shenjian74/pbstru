@@ -693,7 +693,7 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     fprintf(fp, "\n/* clear and reuse msg */\n");
     fprintf(fp, "void clear_message_%s(%s *msg);\n",
             desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "size_t encode_message_%s(const %s* const msg, BYTE* const buf, const size_t buf_size);\n",
+    fprintf(fp, "size_t encode_message_%s(const %s* const msg, BYTE* const buf);\n",
             desc->name().c_str(), struct_name.c_str());
     fprintf(fp, "BOOL decode_message_%s(BYTE* const buf, const size_t buf_len, %s* const msg);\n",
             desc->name().c_str(), struct_name.c_str());
@@ -807,7 +807,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     fprintf(fp, "}\n");
 
     ////////////////////////////////////////
-    fprintf(fp, "\nsize_t encode_message_%s(const %s* var_%s, BYTE* buf, const size_t buf_size){\n",
+    fprintf(fp, "\nsize_t encode_message_%s(const %s* var_%s, BYTE* buf){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     // 有嵌套message的时候会用到编码长度
     for(int i=0; i<desc->field_count(); ++i)
@@ -818,14 +818,6 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             break;
         }
     }
-
-    fprintf(fp, "\n");
-    fprintf(fp, "    if (NULL != buf) {\n");
-    fprintf(fp, "        if (encode_message_%s(var_%s, NULL, 0) > buf_size) {\n", desc->name().c_str(), desc->name().c_str());
-    fprintf(fp, "            return 0;\n");
-    fprintf(fp, "        }\n");
-    fprintf(fp, "    }\n");
-    fprintf(fp, "\n");
 
     // 有repeat字段的时候会用到循环变量
     for(int i=0; i<desc->field_count(); ++i)
@@ -1012,21 +1004,21 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
             if(field->is_repeated())
             {
-                fprintf(fp, "%sencode_buf_len = encode_message_%s(&(var_%s->var_%s.item[i]), NULL, 0);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_buf_len = encode_message_%s(&(var_%s->var_%s.item[i]), NULL);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sencode_buf_len = encode_message_%s(&(var_%s->var_%s), NULL, 0);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_buf_len = encode_message_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "%sencode_varint(encode_buf_len, buf, &offset);\n", prefix_spaces.c_str());
             fprintf(fp, "%sif(NULL != buf){\n", prefix_spaces.c_str());
             if(field->is_repeated())
             {
-                fprintf(fp, "%s    encode_buf_len = encode_message_%s(&(var_%s->var_%s.item[i]), buf + offset, buf_size - offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    encode_buf_len = encode_message_%s(&(var_%s->var_%s.item[i]), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%s    encode_buf_len = encode_message_%s(&(var_%s->var_%s), buf + offset, buf_size - offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    encode_buf_len = encode_message_%s(&(var_%s->var_%s), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += encode_buf_len;\n", prefix_spaces.c_str());
