@@ -88,7 +88,7 @@ st_addrequest var_AddRequest;
 int main(int argc, char* argv[])
 {
     BYTE buf[1024];
-    size_t buf_len;
+    size_t buf_len, buf_len1, buf_len2;
 
     struct timeval tv_begin, tv_end;
     gettimeofday(&tv_begin, NULL);
@@ -171,9 +171,9 @@ int main(int argc, char* argv[])
         st_tuple var_Tuple;
         var_Tuple.var_path.var_path_string.data = (BYTE *)strdup("/20");
         var_Tuple.var_path.var_path_string.length = strlen((char *)var_Tuple.var_path.var_path_string.data);
-        var_Tuple.has_version = true;
+        var_Tuple.has_version = TRUE;
         var_Tuple.var_version = 2000;
-        var_Tuple.has_ttl = true;
+        var_Tuple.has_ttl = TRUE;
         var_Tuple.var_ttl = 3000;
         var_Tuple.var_field.count = 2;
         var_Tuple.var_field.item[0].var_fieldid = 1;
@@ -182,15 +182,17 @@ int main(int argc, char* argv[])
         var_Tuple.var_field.item[1].var_fieldid = 2;
         var_Tuple.var_field.item[1].var_value.data = (BYTE *)strdup("jflasjfu32ujfljsljkljkljljoiu");
         var_Tuple.var_field.item[1].var_value.length = strlen((char *)var_Tuple.var_field.item[1].var_value.data);
-        buf_len = encode_message_Tuple(&(var_Tuple), buf);
-        print_buffer(buf, buf_len);
+        buf_len1 = encode_message_Tuple(&var_Tuple, buf);
+        buf_len2 = encode_message_Tuple_safe(&var_Tuple, buf, sizeof(buf));
+        assert(buf_len1 == buf_len2);
+        print_buffer(buf, buf_len1);
 
-        decode_message_Tuple(buf, buf_len, &var_Tuple);
+        decode_message_Tuple(buf, buf_len1, &var_Tuple);
         assert(0 == memcmp(var_Tuple.var_path.var_path_string.data, "/20", var_Tuple.var_path.var_path_string.length));
-        assert(2000 == var_Tuple.var_version);
         assert(TRUE == var_Tuple.has_version);
-        assert(3000 == var_Tuple.var_ttl);
+        assert(2000 == var_Tuple.var_version);
         assert(TRUE == var_Tuple.has_ttl);
+        assert(3000 == var_Tuple.var_ttl);
         assert(var_Tuple.var_field.count == 2);
         assert(var_Tuple.var_field.item[0].var_fieldid == 1);
         assert(0 == memcmp(var_Tuple.var_field.item[0].var_value.data, "fawejlkrj1230940p1243lkjljfksldaj", var_Tuple.var_field.item[0].var_value.length));
@@ -236,6 +238,8 @@ int main(int argc, char* argv[])
         var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
 
         buf_len = encode_message_AddRequest(&var_AddRequest, buf);
+        buf_len1 = encode_message_AddRequest_safe(&var_AddRequest, buf, sizeof(buf));
+        assert(buf_len == buf_len1);
         print_buffer(buf, buf_len);
 
         decode_message_AddRequest(buf, buf_len, &var_AddRequest);
@@ -297,7 +301,9 @@ int main(int argc, char* argv[])
 
             size_t size1 = encode_message_ut_test_message(&msg, NULL);
             size_t size2 = encode_message_ut_test_message(&msg, buf);
+            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
             assert(size1 == size2);
+            assert(size2 == size3);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_uint32);
