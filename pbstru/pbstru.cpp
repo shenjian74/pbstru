@@ -840,31 +840,32 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         fprintf(fp, "\n");
         if(field->is_repeated())
         {
+            fprintf(fp, "    if(var_%s->var_%s.count>0){\n", desc->name().c_str(), field->name().c_str());
             if(field->is_packed())
             {
                 switch(field->type())
                 {
                 case FieldDescriptor::TYPE_FIXED32:
-                    fprintf(fp, "    encode_tag_byte(buf, %d, WIRE_TYPE_FIX32, &offset);\n", field->number());
+                    fprintf(fp, "        encode_tag_byte(buf, %d, WIRE_TYPE_FIX32, &offset);\n", field->number());
                     break;
                 case FieldDescriptor::TYPE_FIXED64:
-                    fprintf(fp, "    encode_tag_byte(buf, %d, WIRE_TYPE_FIX64, &offset);\n", field->number());
+                    fprintf(fp, "        encode_tag_byte(buf, %d, WIRE_TYPE_FIX64, &offset);\n", field->number());
                     break;
                 case FieldDescriptor::TYPE_BOOL:
                 case FieldDescriptor::TYPE_UINT32:
                 case FieldDescriptor::TYPE_UINT64:
                 case FieldDescriptor::TYPE_ENUM:
-                    fprintf(fp, "    encode_tag_byte(buf, %d, WIRE_TYPE_VARINT, &offset);\n", field->number());
+                    fprintf(fp, "        encode_tag_byte(buf, %d, WIRE_TYPE_VARINT, &offset);\n", field->number());
                     break;
                 default:
                     break;
                 }
-                fprintf(fp, "    encode_varint(var_%s->var_%s.count, buf, &offset);\n",
+                fprintf(fp, "        encode_varint(var_%s->var_%s.count, buf, &offset);\n",
                         desc->name().c_str(), field->name().c_str());
 
             }
-            fprintf(fp, "    for(i = 0; i < var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
-            prefix_spaces = "        ";
+            fprintf(fp, "        for(i = 0; i < var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
+            prefix_spaces = "            ";
         }
         else if(desc->field(i)->is_optional())
         {
@@ -1027,6 +1028,10 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
             break;
         }
+        if(desc->field(i)->is_repeated())
+        {
+            fprintf(fp, "        }\n");
+        }
         if(desc->field(i)->is_repeated() || desc->field(i)->is_optional())
         {
             fprintf(fp, "    }\n");
@@ -1038,13 +1043,13 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
 ///////////////////////////////////////////////////////////////////////////
 // Decode function
     fprintf(fp, "\nBOOL decode_message_%s(BYTE* buf, const size_t buf_len, %s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
-    fprintf(fp, "	size_t offset = 0;\n");
+    fprintf(fp, "    size_t offset = 0;\n");
 // 包含message字段时，才需要使用此变量
     for(int i=0; i<desc->field_count(); ++i)
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
         {
-            fprintf(fp, "	size_t tmp_field_len;\n");
+            fprintf(fp, "    size_t tmp_field_len;\n");
             break;
         }
     }
