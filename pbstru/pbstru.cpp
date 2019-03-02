@@ -712,18 +712,27 @@ void print_clear_message(FILE *fp, const Descriptor *desc, const map<string,stri
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
+        if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
+        {
+            fprintf(fp, "    size_t i = 0;\n");
+            break;
+        }
+    }
+
+    for(int i=0; i<desc->field_count(); ++i)
+    {
+        const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
             string struct_list_name;
             get_struct_list_name(field, struct_list_name);
             if(FieldDescriptor::TYPE_MESSAGE == field->type())
             {
-                        fprintf(fp, "    for(i=0; i<%s; ++i){\n",
-                                map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                        fprintf(fp, "        constru_message_%s(&(var_%s->var_%s.item[i]));\n",
-                                field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                        fprintf(fp, "    }\n");
-                fprintf(fp, "    var_%s->var_%s.count = 0;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "    for(i=0; i<%s; ++i){\n", map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "        clear_message_%s(&(var_%s->var_%s.item[i]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "    }\n");
+            }
+            fprintf(fp, "    var_%s->var_%s.count = 0;\n", desc->name().c_str(), field->name().c_str());
         }
         else
         {
