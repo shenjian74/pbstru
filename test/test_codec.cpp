@@ -169,6 +169,7 @@ int main(int argc, char* argv[])
 
     {
         st_tuple var_Tuple;
+        var_Tuple.var_path.has_path_string = TRUE;
         var_Tuple.var_path.var_path_string.data = (BYTE *)strdup("/20");
         var_Tuple.var_path.var_path_string.length = strlen((char *)var_Tuple.var_path.var_path_string.data);
         var_Tuple.has_version = TRUE;
@@ -182,12 +183,13 @@ int main(int argc, char* argv[])
         var_Tuple.var_field.item[1].var_fieldid = 2;
         var_Tuple.var_field.item[1].var_value.data = (BYTE *)strdup("jflasjfu32ujfljsljkljkljljoiu");
         var_Tuple.var_field.item[1].var_value.length = strlen((char *)var_Tuple.var_field.item[1].var_value.data);
-        buf_len1 = encode_message_Tuple(&var_Tuple, buf);
-        buf_len2 = encode_message_Tuple_safe(&var_Tuple, buf, sizeof(buf));
-        assert(buf_len1 == buf_len2);
-        print_buffer(buf, buf_len1);
+        buf_len2 = encode_message_Tuple(&var_Tuple, buf, sizeof(buf));
+        printf("****%u\n", buf_len2);
+        fflush(stdout);
+        assert(87 == buf_len2);
+        print_buffer(buf, buf_len2);
 
-        decode_message_Tuple(buf, buf_len1, &var_Tuple);
+        decode_message_Tuple(buf, buf_len2, &var_Tuple);
         assert(0 == memcmp(var_Tuple.var_path.var_path_string.data, "/20", var_Tuple.var_path.var_path_string.length));
         assert(TRUE == var_Tuple.has_version);
         assert(2000 == var_Tuple.var_version);
@@ -220,6 +222,7 @@ int main(int argc, char* argv[])
 
         var_AddRequest.var_tuple.count = 1;
         clear_message_Tuple(&(var_AddRequest.var_tuple.item[0]));
+        var_AddRequest.var_tuple.item[0].var_path.has_path_string = TRUE;
         var_AddRequest.var_tuple.item[0].var_path.var_path_string.data = (BYTE *)strdup("/20");
         var_AddRequest.var_tuple.item[0].var_path.var_path_string.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_path.var_path_string.data);
         var_AddRequest.var_tuple.item[0].var_path.has_path_string = TRUE;
@@ -237,12 +240,11 @@ int main(int argc, char* argv[])
         var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data = (BYTE *)strdup("jflasjfu32ujfljsljkljkljljoiu");
         var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
 
-        buf_len = encode_message_AddRequest(&var_AddRequest, buf);
-        buf_len1 = encode_message_AddRequest_safe(&var_AddRequest, buf, sizeof(buf));
-        assert(buf_len == buf_len1);
-        print_buffer(buf, buf_len);
+        buf_len1 = encode_message_AddRequest(&var_AddRequest, buf, sizeof(buf));
+        assert(160 == buf_len1);
+        print_buffer(buf, buf_len1);
 
-        decode_message_AddRequest(buf, buf_len, &var_AddRequest);
+        decode_message_AddRequest(buf, buf_len1, &var_AddRequest);
         assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_path.var_path_string.data, "/20", var_AddRequest.var_tuple.item[0].var_path.var_path_string.length));
         assert(2000 == var_AddRequest.var_tuple.item[0].var_version);
         assert(TRUE == var_AddRequest.var_tuple.item[0].has_version);
@@ -272,7 +274,7 @@ int main(int argc, char* argv[])
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(1000 == msg.var_d_uint32.item[0]);
@@ -299,12 +301,9 @@ int main(int argc, char* argv[])
             msg.var_pd_uint32.item[msg.var_pd_uint32.count++] = 16;
             msg.var_pd_uint32.item[msg.var_pd_uint32.count++] = 17;
 
-            size_t size1 = encode_message_ut_test_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
-            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-            assert(size1 == size2);
-            assert(size2 == size3);
-            decode_message_ut_test_message(buf, size2, &msg);
+            size_t size3 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
+            assert(55 == size3);
+            decode_message_ut_test_message(buf, size3, &msg);
 
             assert(10 == msg.var_r_uint32);
             assert(TRUE == msg.has_o_uint32);
@@ -358,9 +357,8 @@ int main(int argc, char* argv[])
             msg.var_pd_uint64.item[msg.var_pd_uint64.count++] = 16;
             msg.var_pd_uint64.item[msg.var_pd_uint64.count++] = 17;
 
-            size_t size1 = encode_message_ut_test_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(size1 == size2);
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
+            assert(68 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(2447866062020153618 == msg.var_r_uint64);
@@ -396,9 +394,8 @@ int main(int argc, char* argv[])
             msg.var_pd_fixed32.item[msg.var_pd_fixed32.count++] = 16;
             msg.var_pd_fixed32.item[msg.var_pd_fixed32.count++] = 17;
 
-            size_t size1 = encode_message_ut_test_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(size1 == size2);
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
+            assert(108 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed32);
@@ -434,9 +431,8 @@ int main(int argc, char* argv[])
             msg.var_pd_fixed64.item[msg.var_pd_fixed64.count++] = 16;
             msg.var_pd_fixed64.item[msg.var_pd_fixed64.count++] = 17;
 
-            size_t size1 = encode_message_ut_test_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(size1 == size2);
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
+            assert(108 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed64);
@@ -472,9 +468,8 @@ int main(int argc, char* argv[])
             msg.var_pd_bool.item[msg.var_pd_bool.count++] = TRUE;
             msg.var_pd_bool.item[msg.var_pd_bool.count++] = FALSE;
 
-            size_t size1 = encode_message_ut_test_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(size1 == size2);
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
+            assert(59 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(TRUE == msg.var_r_bool);
@@ -519,9 +514,8 @@ int main(int argc, char* argv[])
             msg.var_d_string.item[msg.var_d_string.count].length = strlen(string6);
             msg.var_d_string.count += 1;
 
-            size_t size1 = encode_message_ut_test_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(size1 == size2);
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
+            assert(96 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_string.data, string1, msg.var_r_string.length));
@@ -562,9 +556,8 @@ int main(int argc, char* argv[])
             msg.var_d_bytes.item[msg.var_d_bytes.count].length = strlen((LPCSTR)bytes6);
             msg.var_d_bytes.count += 1;
 
-            size_t size1 = encode_message_ut_test_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(size1 == size2);
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
+            assert(90 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_bytes.data, bytes1, msg.var_r_bytes.length));
@@ -590,9 +583,8 @@ int main(int argc, char* argv[])
             msg.var_d_enum.item[msg.var_d_enum.count++] = CLIENT_M;
             msg.var_d_enum.item[msg.var_d_enum.count++] = SERVER_M;
 
-            size_t size1 = encode_message_ut_test_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(size1 == size2);
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
+            assert(54 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(CLIENT_M == msg.var_r_enum);
@@ -621,9 +613,8 @@ int main(int argc, char* argv[])
             fill_ut_test_sub_message(&(msg.var_d_message.item[msg.var_d_message.count]));
             msg.var_d_message.count += 1;
 
-            size_t size1 = encode_message_ut_test_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(size1 == size2);
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
+            assert(90 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(verify_ut_test_sub_message(&(msg.var_r_message)));
@@ -646,9 +637,8 @@ int main(int argc, char* argv[])
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
-            size_t size1 = encode_message_ut_test_sub_message(&msg, NULL);
-            size_t size2 = encode_message_ut_test_sub_message(&msg, buf);
-            assert(size1 == size2);
+            size_t size2 = encode_message_ut_test_sub_message(&msg, buf, sizeof(buf));
+            assert(6 == size2);
             decode_message_ut_test_sub_message(buf, size2, &msg);
             assert(1000 == msg.var_d_uint32.item[0]);
             assert(1001 == msg.var_d_uint32.item[1]);
