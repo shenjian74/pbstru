@@ -169,6 +169,7 @@ int main(int argc, char* argv[])
 
     {
         st_tuple var_Tuple;
+        clear_message_Tuple(&var_Tuple);
         var_Tuple.var_path.has_path_string = TRUE;
         var_Tuple.var_path.var_path_string.data = (BYTE *)strdup("/20");
         var_Tuple.var_path.var_path_string.length = strlen((char *)var_Tuple.var_path.var_path_string.data);
@@ -190,6 +191,7 @@ int main(int argc, char* argv[])
         print_buffer(buf, buf_len2);
 
         decode_message_Tuple(buf, buf_len2, &var_Tuple);
+        assert(TRUE == var_Tuple.var_path.has_path_string);
         assert(0 == memcmp(var_Tuple.var_path.var_path_string.data, "/20", var_Tuple.var_path.var_path_string.length));
         assert(TRUE == var_Tuple.has_version);
         assert(2000 == var_Tuple.var_version);
@@ -245,6 +247,7 @@ int main(int argc, char* argv[])
         print_buffer(buf, buf_len1);
 
         decode_message_AddRequest(buf, buf_len1, &var_AddRequest);
+        assert(TRUE == var_AddRequest.var_tuple.item[0].var_path.has_path_string);
         assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_path.var_path_string.data, "/20", var_AddRequest.var_tuple.item[0].var_path.var_path_string.length));
         assert(2000 == var_AddRequest.var_tuple.item[0].var_version);
         assert(TRUE == var_AddRequest.var_tuple.item[0].has_version);
