@@ -224,23 +224,23 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    size_t written_bytes; \n");
     fprintf(fp, "\n");
     fprintf(fp, "    if (NULL == buf) {\n");
-    fprintf(fp, "        if(value < 0x80){\n"); 
+    fprintf(fp, "        if(value < 0x80){\n");
     fprintf(fp, "            written_bytes = 1;\n");
-    fprintf(fp, "        } else if(value < 0x4000){\n"); 
+    fprintf(fp, "        } else if(value < 0x4000){\n");
     fprintf(fp, "            written_bytes = 2;\n");
-    fprintf(fp, "        } else if(value < 0x200000){\n"); 
+    fprintf(fp, "        } else if(value < 0x200000){\n");
     fprintf(fp, "            written_bytes = 3;\n");
-    fprintf(fp, "        } else if(value < 0x10000000){\n"); 
+    fprintf(fp, "        } else if(value < 0x10000000){\n");
     fprintf(fp, "            written_bytes = 4;\n");
-    fprintf(fp, "        } else if(value < 0x800000000){\n"); 
+    fprintf(fp, "        } else if(value < 0x800000000){\n");
     fprintf(fp, "            written_bytes = 5;\n");
-    fprintf(fp, "        } else if(value < 0x40000000000){\n"); 
+    fprintf(fp, "        } else if(value < 0x40000000000){\n");
     fprintf(fp, "            written_bytes = 6;\n");
-    fprintf(fp, "        } else if(value < 0x2000000000000){\n"); 
+    fprintf(fp, "        } else if(value < 0x2000000000000){\n");
     fprintf(fp, "            written_bytes = 7;\n");
-    fprintf(fp, "        } else if(value < 0x100000000000000){\n"); 
+    fprintf(fp, "        } else if(value < 0x100000000000000){\n");
     fprintf(fp, "            written_bytes = 8;\n");
-    fprintf(fp, "        } else {\n"); 
+    fprintf(fp, "        } else {\n");
     fprintf(fp, "            written_bytes = 9;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    } else {\n");
@@ -677,8 +677,8 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
                     field->number(), field->type_name());
 
             fprintf(fp, "} st_%s_list;\n", struct_list_name.c_str());
-            fprintf(fp, "#define PBSTRU_MAX_%s_IN_%s %s\n", 
-                field_name_upper.c_str(), field_containing_type_upper.c_str(), 
+            fprintf(fp, "#define PBSTRU_MAX_%s_IN_%s %s\n",
+                field_name_upper.c_str(), field_containing_type_upper.c_str(),
                 map_array_size[field->containing_type()->name() + ":" + field->name()].c_str());
         }
     }
@@ -688,7 +688,8 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     {
         print_field_in_struct(fp, desc->field(i));
     }
-    fprintf(fp, "    DWORD _message_length;\n");
+    fprintf(fp, "    DWORD _message_length;  // The length of this message, DO NOT set it manually. \n");
+    fprintf(fp, "                            // Clearing at clear_message_xxx(). Setting and Using at internal_encode_message_xxx().\n");
     fprintf(fp, "} %s;\n", struct_name.c_str());
 
     fprintf(fp, "\n/* clear and reuse msg */\n");
@@ -1071,7 +1072,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
 // Decode function
     fprintf(fp, "\nBOOL decode_message_%s(BYTE* buf, const size_t buf_len, %s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "    size_t offset = 0;\n");
-// 包含message字段时，才需要使用此变量
+    // 包含message字段时，才需要使用此变量
     for(int i=0; i<desc->field_count(); ++i)
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
