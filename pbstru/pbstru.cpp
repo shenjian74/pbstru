@@ -708,24 +708,6 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     return retcode;
 }
 
-static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<string,string> &map_array_size)
-{
-    for(int i=0; i<desc->field_count(); ++i)
-    {
-        const FieldDescriptor *field = desc->field(i);
-        if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
-        {
-            fprintf(fp, "%ssize_t i;\n", spaces);
-            fprintf(fp, "%sfor(i=0; i<%s; ++i){\n", spaces, map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-            fprintf(fp, "%s    var_%s->var_%s.item[i]._message_len = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
-            fprintf(fp, "%s}\n", spaces);
-            break;
-        } else {
-            fprintf(fp, "%svar_%s->var_%s._message_len = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
-        }
-    }
-}
-
 static void print_clear_message(FILE *fp, const Descriptor *desc, const map<string,string> &map_array_size)
 {
     for(int i=0; i<desc->field_count(); ++i)
@@ -733,13 +715,8 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, const map<stri
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
         {
-            fprintf(fp, "%sint i;\n", spaces);
-            fprintf(fp, "%sfor(i=0; i<%s; ++i){\n", spaces, map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-            fprintf(fp, "%s    var_%s->var_%s.item[i]._message_len = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
-            fprintf(fp, "%s}\n", spaces);
+            fprintf(fp, "    size_t i = 0;\n");
             break;
-        } else {
-            fprintf(fp, "%svar_%s->var_%s._message_len = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
         }
     }
 
@@ -805,6 +782,33 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, const map<stri
             {
                 fprintf(fp, "    var_%s->has_%s = FALSE;\n", desc->name().c_str(), field->name().c_str());
             }
+        }
+    }
+}
+
+static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<string,string> &map_array_size)
+{
+    for(int i=0; i<desc->field_count(); ++i)
+    {
+        const FieldDescriptor *field = desc->field(i);
+        if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
+        {
+            fprintf(fp, "    size_t i = 0;\n");
+            break;
+        }
+    }
+
+    for(int i=0; i<desc->field_count(); ++i)
+    {
+        const FieldDescriptor *field = desc->field(i);
+        if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
+        {
+            fprintf(fp, "    for(i=0; i<%s; ++i){\n", map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+            fprintf(fp, "        var_%s->var_%s.item[i]._message_len = 0;\n", desc->name().c_str(), field->name().c_str());
+            fprintf(fp, "    }\n", spaces);
+            break;
+        } else {
+            fprintf(fp, "    var_%s->var_%s._message_len = 0;\n", desc->name().c_str(), field->name().c_str());
         }
     }
 }
