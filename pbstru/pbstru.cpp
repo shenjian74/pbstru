@@ -791,24 +791,16 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
-        if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
+        if(FieldDescriptor::TYPE_MESSAGE == field->type())
         {
-            fprintf(fp, "    size_t i = 0;\n");
-            break;
-        }
-    }
-
-    for(int i=0; i<desc->field_count(); ++i)
-    {
-        const FieldDescriptor *field = desc->field(i);
-        if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
-        {
-            fprintf(fp, "    for(i=0; i<%s; ++i){\n", map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-            fprintf(fp, "        var_%s->var_%s.item[i]._message_len = 0;\n", desc->name().c_str(), field->name().c_str());
-            fprintf(fp, "    }\n", spaces);
-            break;
-        } else {
-            fprintf(fp, "    var_%s->var_%s._message_len = 0;\n", desc->name().c_str(), field->name().c_str());
+            if(field->is_repeated())
+            {
+                fprintf(fp, "    for(i=0; i<%s; ++i){\n", map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "        var_%s->var_%s.item[i]._message_length = 0;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "    }\n");
+            } else {
+                fprintf(fp, "    var_%s->var_%s._message_length = 0;\n", desc->name().c_str(), field->name().c_str());
+            }
         }
     }
 }
@@ -849,24 +841,24 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     fprintf(fp, "\nvoid clear_message_%s(%s* var_%s){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     print_clear_message(fp, desc, map_array_size);
-    fprintf(fp, "    var_%s->_message_length = 0;\n", desc->name().c_str());
     fprintf(fp, "}\n\n");
 
     ////////////////////////////////////////
     fprintf(fp, "size_t internal_encode_message_%s(%s* var_%s, BYTE* buf){\n",
             desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
 
-    // 有repeat字段的时候会用到循环变量
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
-            fprintf(fp, "    size_t i;\n");
+            fprintf(fp, "    size_t i = 0;\n");
             break;
         }
     }
-    fprintf(fp, "    size_t offset = 0;\n");
+    fprintf(fp, "    size_t offset = 0;\n\n");
+
+    print_clear_message_len(fp, desc, map_array_size);
 
     // 逐个字段encode
     for(int i=0; i<desc->field_count(); ++i)
@@ -874,7 +866,6 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         string prefix_spaces = "    ";
         const FieldDescriptor *field = desc->field(i);
 
-        fprintf(fp, "\n");
         if(field->is_repeated())
         {
             fprintf(fp, "    if(var_%s->var_%s.count>0){\n", desc->name().c_str(), field->name().c_str());
@@ -1041,18 +1032,19 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
             if(field->is_repeated())
             {
-                fprintf(fp, "%sif (NULL == buf || var_%s->var_%s.item[i]._message_length == 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif (var_%s->var_%s.item[i]._message_length == 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s.item[i]._message_length = internal_encode_message_%s(&(var_%s->var_%s.item[i]), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i]._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sif (NULL == buf || var_%s->var_%s._message_length == 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif (var_%s->var_%s._message_length == 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s._message_length = internal_encode_message_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%sencode_varint(var_%s->var_%s._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
+
             if(field->is_repeated())
             {
                 fprintf(fp, "%sif(NULL != buf){\n", prefix_spaces.c_str());
