@@ -689,7 +689,7 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
         print_field_in_struct(fp, desc->field(i));
     }
     fprintf(fp, "    DWORD _message_length;  // The length of this message, DO NOT set it manually. \n");
-    fprintf(fp, "                            // Clearing at clear_message_xxx(). Setting and Using at internal_encode_message_xxx().\n");
+    fprintf(fp, "                            // Setting and Using at internal_encode_message_xxx().\n");
     fprintf(fp, "} %s;\n", struct_name.c_str());
 
     fprintf(fp, "\n/* clear and reuse msg */\n");
@@ -708,15 +708,38 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     return retcode;
 }
 
-void print_clear_message(FILE *fp, const Descriptor *desc, const map<string,string> &map_array_size)
+static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<string,string> &map_array_size)
 {
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
         {
-            fprintf(fp, "    size_t i = 0;\n");
+            fprintf(fp, "%ssize_t i;\n", spaces);
+            fprintf(fp, "%sfor(i=0; i<%s; ++i){\n", spaces, map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+            fprintf(fp, "%s    var_%s->var_%s.item[i]._message_len = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
+            fprintf(fp, "%s}\n", spaces);
             break;
+        } else {
+            fprintf(fp, "%svar_%s->var_%s._message_len = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
+        }
+    }
+}
+
+static void print_clear_message(FILE *fp, const Descriptor *desc, const map<string,string> &map_array_size)
+{
+    for(int i=0; i<desc->field_count(); ++i)
+    {
+        const FieldDescriptor *field = desc->field(i);
+        if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
+        {
+            fprintf(fp, "%sint i;\n", spaces);
+            fprintf(fp, "%sfor(i=0; i<%s; ++i){\n", spaces, map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+            fprintf(fp, "%s    var_%s->var_%s.item[i]._message_len = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
+            fprintf(fp, "%s}\n", spaces);
+            break;
+        } else {
+            fprintf(fp, "%svar_%s->var_%s._message_len = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
         }
     }
 
