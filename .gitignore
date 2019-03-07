@@ -22,3 +22,4 @@ bin/lb
 libtool*
 automake*
 protobuf3
+*.orig
