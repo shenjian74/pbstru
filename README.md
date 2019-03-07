@@ -45,12 +45,17 @@ pbstru是Protobuf to Struct的缩写，主要完成PB码流和C语言结构间�
 #include "response.h"
 ...
 st_Response var_response;
-clear_message_Response(&var_response);  // Clear struct in loop.
+constru_message_Response(&var_response);  // Clear all of message, just like memset, call it once.
+...
+clear_message_Response(&var_response);  // Clear used fields in struct, call it before encoding.
 var_response.xxx = xxx;  // set value in struct var_response
 ...
 BYTE buffer[max_buffer_length];
 size_t bytes_write = encode_message_Response_safe(&var_response, buffer, sizeof(buffer));  // encode message
 ```
+
+初始化消息结构的函数constru_message_*()只需要在结构定义后执行一次即可，有点类似memset，但速度比memset要快。
+而clear_message_*()函数只清除消息中已经赋值的内容，速度较快，在静态结构重新赋值前需要使用此函数清空结构。
 
 ## 消息解码
 
