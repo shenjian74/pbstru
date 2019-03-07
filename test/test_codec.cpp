@@ -68,7 +68,7 @@ void decode_varint1(BYTE *buf, WORD64 *value, size_t *offset) {
 
 void fill_ut_test_sub_message(st_ut_test_sub_message *msg)
 {
-    clear_message_ut_test_sub_message(msg);
+    constru_message_ut_test_sub_message(msg);
     msg->var_d_uint32.item[msg->var_d_uint32.count++] = 1000;
     msg->var_d_uint32.item[msg->var_d_uint32.count++] = 1001;
 }
@@ -169,7 +169,7 @@ int main(int argc, char* argv[])
 
     {
         st_tuple var_Tuple;
-        clear_message_Tuple(&var_Tuple);
+        constru_message_Tuple(&var_Tuple);
         var_Tuple.var_path.has_path_string = TRUE;
         var_Tuple.var_path.var_path_string.data = (BYTE *)strdup("/20");
         var_Tuple.var_path.var_path_string.length = strlen((char *)var_Tuple.var_path.var_path_string.data);
@@ -209,7 +209,7 @@ int main(int argc, char* argv[])
 
     {
 
-        clear_message_AddRequest(&var_AddRequest);
+        constru_message_AddRequest(&var_AddRequest);
         var_AddRequest.var_identifiers.var_primary.count = 1;
         var_AddRequest.var_identifiers.var_primary.item[0].var_id_type = 1;
         var_AddRequest.var_identifiers.var_primary.item[0].var_value.count = 1;
@@ -223,7 +223,7 @@ int main(int argc, char* argv[])
         var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length = strlen((char *)var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data);
 
         var_AddRequest.var_tuple.count = 1;
-        clear_message_Tuple(&(var_AddRequest.var_tuple.item[0]));
+        constru_message_Tuple(&(var_AddRequest.var_tuple.item[0]));
         var_AddRequest.var_tuple.item[0].var_path.has_path_string = TRUE;
         var_AddRequest.var_tuple.item[0].var_path.var_path_string.data = (BYTE *)strdup("/20");
         var_AddRequest.var_tuple.item[0].var_path.var_path_string.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_path.var_path_string.data);
@@ -273,7 +273,7 @@ int main(int argc, char* argv[])
 
         for(int i=0; i<3; ++i)
         {
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
@@ -287,7 +287,7 @@ int main(int argc, char* argv[])
 
         for(int i=0; i<3; ++i)
         {
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
             msg.var_r_uint32 = 10;
             msg.has_o_uint32 = TRUE;
             msg.var_o_uint32 = 11;
@@ -334,14 +334,7 @@ int main(int argc, char* argv[])
             decode_varint(buf, &var_int64, &offset);
             assert(20360023315404117 == var_int64);
 
-            offset = 0;
-            encode_varint(2447866062020153618, buf, &offset);
-            print_buffer(buf, offset);
-            offset = 0;
-            decode_varint(buf, &var_int64, &offset);
-            assert(2447866062020153618 == var_int64);
-
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
             msg.var_r_uint64 = 2447866062020153618;
 
             msg.has_o_uint64 = TRUE;
@@ -380,7 +373,7 @@ int main(int argc, char* argv[])
 
         for(int i=0; i<3; ++i)
         {
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
             msg.var_r_fixed32 = 10;
             msg.has_o_fixed32 = TRUE;
             msg.var_o_fixed32 = 11;
@@ -417,7 +410,7 @@ int main(int argc, char* argv[])
 
         for(int i=0; i<3; ++i)
         {
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
             msg.var_r_fixed64 = 10;
             msg.has_o_fixed64 = TRUE;
             msg.var_o_fixed64 = 11;
@@ -454,7 +447,7 @@ int main(int argc, char* argv[])
 
         for(int i=0; i<3; ++i)
         {
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
             msg.var_r_bool = TRUE;
             msg.has_o_bool = TRUE;
             msg.var_o_bool = FALSE;
@@ -498,7 +491,7 @@ int main(int argc, char* argv[])
             char string5[] = "string5";
             char string6[] = "string6";
 
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
             msg.var_r_string.data = string1;
             msg.var_r_string.length = strlen(string1);
             msg.has_o_string = TRUE;
@@ -540,7 +533,7 @@ int main(int argc, char* argv[])
             BYTE bytes5[] = "bytes5";
             BYTE bytes6[] = "bytes6";
 
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
             msg.var_r_bytes.data = bytes1;
             msg.var_r_bytes.length = strlen((LPCSTR)bytes1);
             msg.has_o_bytes = TRUE;
@@ -575,7 +568,7 @@ int main(int argc, char* argv[])
 
         for(int i=0; i<3; ++i)
         {
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
             msg.var_r_enum = CLIENT_M;
             msg.has_o_enum = TRUE;
             msg.var_o_enum = SERVER_M;
@@ -602,7 +595,7 @@ int main(int argc, char* argv[])
 
         for(int i=0; i<3; ++i)
         {
-            clear_message_ut_test_message(&msg);
+            constru_message_ut_test_message(&msg);
 
             fill_ut_test_sub_message(&(msg.var_r_message));
             msg.has_o_message = TRUE;
@@ -636,7 +629,7 @@ int main(int argc, char* argv[])
 
         for(int i=0; i<3; ++i)
         {
-            clear_message_ut_test_sub_message(&msg);
+            constru_message_ut_test_sub_message(&msg);
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
