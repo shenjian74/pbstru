@@ -49,7 +49,7 @@ clear_message_Response(&var_response);  // Clear struct in loop.
 var_response.xxx = xxx;  // set value in struct var_response
 ...
 BYTE buffer[max_buffer_length];
-size_t bytes_write = encode_message_Response(&var_response, buffer, sizeof(buffer));  // encode message
+size_t bytes_write = encode_message_Response_safe(&var_response, buffer, sizeof(buffer));  // encode message
 ```
 
 ## 消息解码
