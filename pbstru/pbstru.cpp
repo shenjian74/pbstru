@@ -695,7 +695,8 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     fprintf(fp, "\n/* clear and reuse msg */\n");
     fprintf(fp, "void clear_message_%s(%s *msg);\n",
             desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "size_t encode_message_%s(%s* msg, BYTE* buf, size_t buf_size);\n", desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "#define encode_message_%s(msg,buf) encode_message_%s_safe((msg),(buf),sizeof(buf))\n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "size_t encode_message_%s_safe(%s* msg, BYTE* buf, size_t buf_size);\n", desc->name().c_str(), struct_name.c_str());
     fprintf(fp, "size_t internal_encode_message_%s(%s* msg, BYTE* buf);\n", desc->name().c_str(), struct_name.c_str());
     fprintf(fp, "BOOL decode_message_%s(BYTE* buf, size_t buf_len, %s* msg);\n",
             desc->name().c_str(), struct_name.c_str());
@@ -1080,7 +1081,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     fprintf(fp, "}\n\n");
 
     ////////////////////////////////////////
-    fprintf(fp, "size_t encode_message_%s(%s* var_%s, BYTE* buf, size_t buf_size){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "size_t encode_message_%s_safe(%s* var_%s, BYTE* buf, size_t buf_size){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "    if (internal_encode_message_%s(var_%s, NULL) > buf_size) {\n", desc->name().c_str(), desc->name().c_str());
     fprintf(fp, "        return 0;\n");
     fprintf(fp, "    }\n");
