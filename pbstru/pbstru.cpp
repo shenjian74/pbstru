@@ -199,7 +199,7 @@ int gen_comm(const string &target_dir)
 
     fprintf(fp, "/* 对varint信息进行解码 */\n");
     fprintf(fp, "#define decode_varint(buf, value, offset) do{ \\\n");
-    fprintf(fp, "    size_t iloop; \\\n");
+    fprintf(fp, "    register size_t iloop; \\\n");
     fprintf(fp, "    (*(value)) = 0; \\\n");
     fprintf(fp, "    for(iloop=0;;++iloop){ \\\n");
     fprintf(fp, "        (*(value)) += ((unsigned long long)((buf)[iloop] & 0x7F)) << (7*iloop); \\\n");
@@ -715,7 +715,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
         {
-            fprintf(fp, "    size_t i = 0;\n");
+            fprintf(fp, "    size_t i = 0;\n\n");
             break;
         }
     }
@@ -801,7 +801,7 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc)
         {
             if(field->is_repeated())
             {
-                fprintf(fp, "size_t i;\n");
+                fprintf(fp, "    size_t i;\n\n");
                 break;
             }
         }
@@ -857,15 +857,15 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
 
     ////////////////////////////////////////
     // clear function
-    fprintf(fp, "\nvoid constru_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "void constru_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     print_clear_message(fp, desc, true, map_array_size);
     fprintf(fp, "}\n\n");
 
-    fprintf(fp, "\nvoid clear_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "void clear_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     print_clear_message(fp, desc, false, map_array_size);
     fprintf(fp, "}\n\n");
 
-    fprintf(fp, "\nvoid clear_message_%s_len(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "void clear_message_%s_len(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     print_clear_message_len(fp, desc);
     fprintf(fp, "}\n\n");
 
@@ -1099,13 +1099,14 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         {
             fprintf(fp, "    }\n");
         }
+        fprintf(fp, "\n");
     }
     fprintf(fp, "    return offset;\n");
     fprintf(fp, "}\n\n");
 
     ////////////////////////////////////////
     fprintf(fp, "size_t encode_message_%s_safe(%s* var_%s, BYTE* buf, size_t buf_size){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
-    fprintf(fp, "    clear_message_%s_len(var_%s); \n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "    clear_message_%s_len(var_%s); \n\n", desc->name().c_str(), desc->name().c_str());
     fprintf(fp, "    if (internal_encode_message_%s(var_%s, NULL) > buf_size) {\n", desc->name().c_str(), desc->name().c_str());
     fprintf(fp, "        return 0;\n");
     fprintf(fp, "    }\n");
