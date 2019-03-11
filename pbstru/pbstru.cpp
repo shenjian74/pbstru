@@ -151,23 +151,26 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "/* 对tag信息进行编码 */\n");
     fprintf(fp, "#define encode_tag_byte(buf, tag, wire_type, offset) do { \\\n");
     fprintf(fp, "    if((tag) < 16) { \\\n");
-    fprintf(fp, "        if (NULL != (buf)) { \\\n");
-    fprintf(fp, "            (buf)[(*(offset))++] = (BYTE)((tag) << 3) | (wire_type); \\\n");
-    fprintf(fp, "        } else {\\\n");
+    fprintf(fp, "        if (NULL == (buf)) { \\\n");
     fprintf(fp, "            (*(offset)) += 1; \\\n");
+    fprintf(fp, "        } else {\\\n");
+    fprintf(fp, "            (buf)[(*(offset))++] = (BYTE)((tag) << 3) | (wire_type); \\\n");
     fprintf(fp, "        } \\\n");
     fprintf(fp, "    } else { \\\n");
-    fprintf(fp, "        if (NULL != (buf)) { \\\n");
+    fprintf(fp, "        if (NULL == (buf)) { \\\n");
+    fprintf(fp, "            (*(offset)) += 2; \\\n");
+    fprintf(fp, "        } else { \\\n");
     fprintf(fp, "            (buf)[(*(offset))++] = ((BYTE)(tag)) | 0x80; \\\n");
     fprintf(fp, "            (buf)[(*(offset))++] = ((BYTE)((tag) >> 4) & 0x78) | (wire_type); \\\n");
-    fprintf(fp, "        } else { \\\n");
-    fprintf(fp, "            (*(offset)) += 2; \\\n");
     fprintf(fp, "        } \\\n");
     fprintf(fp, "    } \\\n");
     fprintf(fp, "} while(0) \n");
+    fprintf(fp, "\n");
 
     fprintf(fp, "void parse_tag_byte(BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
+    fprintf(fp, "\n");
     fprintf(fp, "void deal_unknown_field(BYTE wire_type, BYTE* buf, size_t* offset);\n");
+    fprintf(fp, "\n");
 
     // fprintf(fp, "size_t encode_varint(unsigned long long value, BYTE *buf, size_t *offset);\n");
     fprintf(fp, "/* 对varint信息进行编码 */\n");
@@ -210,7 +213,8 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    (*(offset)) += 1 + iloop; \\\n");
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
-    fprintf(fp, "\n#endif\n\n/* end of file */\n\n");
+    fprintf(fp, "\n#endif\n\n/* end of file */\n");
+    fprintf(fp, "\n");
     fclose(fp);
 
     filename = target_dir + "source" + path_sep + "pbstru_comm.c";
