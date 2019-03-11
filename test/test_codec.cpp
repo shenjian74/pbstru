@@ -88,7 +88,7 @@ st_addrequest var_AddRequest;
 int main(int argc, char* argv[])
 {
     BYTE buf[1024];
-    size_t buf_len, buf_len1, buf_len2;
+    size_t buf_len1, buf_len2;
 
     struct timeval tv_begin, tv_end;
     gettimeofday(&tv_begin, NULL);
