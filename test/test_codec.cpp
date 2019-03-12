@@ -185,7 +185,7 @@ int main(int argc, char* argv[])
         var_Tuple.var_field.item[1].var_value.data = (BYTE *)strdup("jflasjfu32ujfljsljkljkljljoiu");
         var_Tuple.var_field.item[1].var_value.length = strlen((char *)var_Tuple.var_field.item[1].var_value.data);
         buf_len2 = encode_message_Tuple(&var_Tuple, buf);
-        printf("****%u\n", buf_len2);
+        printf("****%lu\n", buf_len2);
         fflush(stdout);
         assert(87 == buf_len2);
         print_buffer(buf, buf_len2);

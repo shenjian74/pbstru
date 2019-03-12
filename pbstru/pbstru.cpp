@@ -21,35 +21,34 @@
 typedef const char *LPCSTR;
 typedef char *LPSTR;
 typedef bool BOOL;
+#ifndef TRUE
 #define TRUE 1
 #define FALSE 0
+#endif
 #define EOS ('\0')
 
 using namespace google::protobuf;
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
-// 结构定义的前缀，在CDB中可定义为"cdb_"
 const string struct_prefix = "st_";
 const string struct_postfix = "";
-// 结构名称是否需要小写
-const bool is_struct_lowercase = true;
 ///////////////////////////////////////////////////////////////////////////////
 
 const char __THIS_FILE__[] = "pbstru.cpp";
 #ifdef _WIN32
 const char path_sep = '\\';
 #else
-const char path_sep = '/';
+const char path_sep[] = "/";
 #endif
 
-typedef enum
+/* typedef enum
 {
     PS_SUCCESS,  // 0
     PS_FAIL,
     NO_SUCH_ITEM = 10,
     NO_MAX_COUNT_IN_FILE
-} e_error_code;
+} e_error_code; */
 
 static string& trim(string& text)
 {
@@ -75,7 +74,7 @@ static string &toupper(string& text)
 {
     for(auto it=text.begin(); it!=text.end(); it++)
     {
-        *it = toupper(*it);
+        *it = (char) toupper(*it);
     }
     return text;
 }
@@ -488,10 +487,7 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     case FieldDescriptor::TYPE_MESSAGE:
     {
         string message_type_name = field->message_type()->name();
-        if(is_struct_lowercase)
-        {
-            tolower(message_type_name);
-        }
+        tolower(message_type_name);
         string struct_name = struct_prefix + message_type_name + struct_postfix;
 
         if(field->is_repeated())
@@ -531,16 +527,7 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     int retcode = 0;
     string name_lower = desc->name();
     tolower(name_lower);
-
-    string struct_name;
-    if(is_struct_lowercase)
-    {
-        struct_name = struct_prefix + name_lower + struct_postfix;
-    }
-    else
-    {
-        struct_name = struct_prefix + desc->name() + struct_postfix;
-    }
+    string struct_name = struct_prefix + name_lower + struct_postfix;
 
     string filename = target_dir + "include" + path_sep + name_lower;
     filename += ".h";
@@ -655,15 +642,11 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
             case FieldDescriptor::TYPE_BYTES:
                 fprintf(fp, "    ps_bytes");
                 break;
-            case FieldDescriptor::TYPE_MESSAGE:
-            {
+            case FieldDescriptor::TYPE_MESSAGE: {
                 string message_type_name = field->message_type()->name();
-                if(is_struct_lowercase)
-                {
-                    tolower(message_type_name);
-                }
-                string struct_name = struct_prefix + message_type_name + struct_postfix;
-                fprintf(fp, "    %s", struct_name.c_str());
+                tolower(message_type_name);
+                string struct_name1 = struct_prefix + message_type_name + struct_postfix;
+                fprintf(fp, "    %s", struct_name1.c_str());
             }
             break;
             case FieldDescriptor::TYPE_ENUM:
@@ -833,16 +816,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     int retcode = 0;
     string name_lower = desc->name();
     tolower(name_lower);
-
-    string struct_name;
-    if(is_struct_lowercase)
-    {
-        struct_name = struct_prefix + name_lower + struct_postfix;
-    }
-    else
-    {
-        struct_name = struct_prefix + desc->name().c_str() + struct_postfix;
-    }
+    string struct_name = struct_prefix + name_lower + struct_postfix;
 
     string filename = target_dir + "source" + path_sep + name_lower;
     filename += ".c";
@@ -1432,7 +1406,7 @@ static inline void freep(char **p)
 int create_path(string &path)
 {
     _cleanup_free_ char* dir_name = (char *)malloc(path.length() + 10);
-    if(path[path.length()-1] != path_sep)
+    if(path[path.length()-1] != path_sep[0])
     {
         path += path_sep;
     }
@@ -1441,7 +1415,7 @@ int create_path(string &path)
     size_t len = path.length();
     for(size_t i=1; i<len; i++)
     {
-        if(dir_name[i] == path_sep)
+        if(dir_name[i] == path_sep[0])
         {
             dir_name[i] = EOS;
             if(access(dir_name, 0))
@@ -1456,7 +1430,7 @@ int create_path(string &path)
                     return -1;
                 }
             }
-            dir_name[i] = path_sep;
+            dir_name[i] = path_sep[0];
         }
     }
     return 0;
@@ -1511,7 +1485,7 @@ int get_syntax(LPCSTR proto_filename)
                             break;
                         }
                     }
-                    memcpy(str_syntax, buf+start, len);
+                    memcpy(str_syntax, buf+start, (size_t) len);
                     str_syntax[len] = EOS;
                     syntax = atoi(str_syntax);
                     break;
@@ -1548,9 +1522,9 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                 }
                 else
                 {
-                    int i = 0;
-                    int start = 0;
-                    int len = 0;
+                    size_t i = 0;
+                    size_t start = 0;
+                    size_t len = 0;
 
                     for(;; ++i)
                     {
@@ -1670,7 +1644,6 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
 int main(int argc, char *argv[])
 {
     char no_map_filename[256];
-    string str;
     const FileDescriptor *f;
     ImporterError errorCollector;
     compiler::DiskSourceTree sourceTree;
