@@ -146,7 +146,6 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "} ps_bytes;\n");
     fprintf(fp, "\n");
 
-    // fprintf(fp, "void encode_tag_byte(BYTE *buf, WORD tag, BYTE wire_type, size_t *offset);\n");
     fprintf(fp, "/* 对tag信息进行编码 */\n");
     fprintf(fp, "#define encode_tag_byte(buf, tag, wire_type, offset) do { \\\n");
     fprintf(fp, "    if((tag) < 16) { \\\n");
@@ -171,7 +170,6 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "void deal_unknown_field(BYTE wire_type, BYTE* buf, size_t* offset);\n");
     fprintf(fp, "\n");
 
-    // fprintf(fp, "size_t encode_varint(unsigned long long value, BYTE *buf, size_t *offset);\n");
     fprintf(fp, "/* 对varint信息进行编码 */\n");
     fprintf(fp, "#define encode_varint(value, buf, offset) do { \\\n");
     fprintf(fp, "    register unsigned long long remain_len = (value); \\\n");
@@ -212,6 +210,43 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "    (*(offset)) += 1 + iloop; \\\n");
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
+
+    fprintf(fp, "/* 对tag信息进行解码 */\n");
+    fprintf(fp, "#define parse_tag_byte(buf, field_num, wire_type, offset) do{ \\\n");
+    fprintf(fp, "    if((buf)[0] & 0x80) { \\\n");
+    fprintf(fp, "        *(field_num) = ((buf)[0] & 0x7F) + ((buf)[1] >> 3) * 128; \\\n");
+    fprintf(fp, "	 *(wire_type) = (buf)[1] & 0x07; \\\n");
+    fprintf(fp, "	 *(offset) += 2; \\\n");
+    fprintf(fp, "    } else { \\\n");
+    fprintf(fp, "        *(field_num) = (buf)[0] >> 3; \\\n");
+    fprintf(fp, "        *(wire_type) = (buf)[0] & 0x07; \\\n");
+    fprintf(fp, "	 *(offset) += 1; \\\n");
+    fprintf(fp, "    } \\\n");
+    fprintf(fp, "} while(0)\n");
+    fprintf(fp, "\n");
+
+    fprintf(fp, "/* 跳过不认识的字段，向前兼容用 */\n");
+    fprintf(fp, "#define deal_unknown_field(wire_type, buf, offset) do{\\\n");
+    fprintf(fp, "    size_t tmp_field_len; \\\n");
+    fprintf(fp, "    switch(wire_type){ \\\n");
+    fprintf(fp, "    case WIRE_TYPE_VARINT: \\\n");
+    fprintf(fp, "        decode_varint((buf), &tmp_field_len, (offset)); \\\n");
+    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "    case WIRE_TYPE_FIX64: \\\n");
+    fprintf(fp, "        *(offset) += 8; \\\n");
+    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \\\n");
+    fprintf(fp, "        decode_varint((buf), &tmp_field_len, (offset)); \\\n");
+    fprintf(fp, "        *(offset) += tmp_field_len; \\\n");
+    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "    case WIRE_TYPE_FIX32: \\\n");
+    fprintf(fp, "        *(offset) += 4; \\\n");
+    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "    default: \\\n");
+    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "    } \\\n");
+    fprintf(fp, "} while(0)\n");
+
     fprintf(fp, "\n#endif\n\n/* end of file */\n");
     fprintf(fp, "\n");
     fclose(fp);
@@ -223,44 +258,10 @@ int gen_comm(const string &target_dir)
         printf("Cannot open file:%s for write.\n", filename.c_str());
         return 1;
     }
+
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
     fprintf(fp, "\n");
-    fprintf(fp, "/* 对tag信息进行解码 */\n");
-    fprintf(fp, "void parse_tag_byte(BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset){ \n");
-    fprintf(fp, "    if((buf)[0] & 0x80) { \n");
-    fprintf(fp, "        *field_num = ((buf)[0] & 0x7F) + ((buf)[1] >> 3) * 128; \n");
-    fprintf(fp, "	 *wire_type = (buf)[1] & 0x07; \n");
-    fprintf(fp, "	 (*(offset)) += 2; \n");
-    fprintf(fp, "    } else { \n");
-    fprintf(fp, "        *field_num = (buf)[0] >> 3; \n");
-    fprintf(fp, "        *wire_type = (buf)[0] & 0x07; \n");
-    fprintf(fp, "	 (*(offset)) += 1; \n");
-    fprintf(fp, "    } \n");
-    fprintf(fp, "} \n");
-    fprintf(fp, "\n");
-    fprintf(fp, "/* 跳过不认识的字段，向前兼容用 */\n");
-    fprintf(fp, "forceinline void deal_unknown_field(BYTE wire_type, BYTE* buf, size_t* offset) { \n");
-    fprintf(fp, "    size_t tmp_field_len; \n");
-    fprintf(fp, "    switch(wire_type){ \n");
-    fprintf(fp, "    case WIRE_TYPE_VARINT: \n");
-    fprintf(fp, "        decode_varint(buf, &tmp_field_len, offset); \n");
-    fprintf(fp, "        break; \n");
-    fprintf(fp, "    case WIRE_TYPE_FIX64: \n");
-    fprintf(fp, "        (*(offset)) += 8; \n");
-    fprintf(fp, "        break; \n");
-    fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \n");
-    fprintf(fp, "        decode_varint(buf, &tmp_field_len, offset); \n");
-    fprintf(fp, "        (*(offset)) += tmp_field_len; \n");
-    fprintf(fp, "        break; \n");
-    fprintf(fp, "    case WIRE_TYPE_FIX32: \n");
-    fprintf(fp, "        (*(offset)) += 4; \n");
-    fprintf(fp, "        break; \n");
-    fprintf(fp, "    default: \n");
-    fprintf(fp, "        break; \n");
-    fprintf(fp, "    } \n");
-    fprintf(fp, "}\n");
-
-    fprintf(fp, "\n");
+    fprintf(fp, "/* end of file */\n");
 
     return retcode;
 }
@@ -677,14 +678,15 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     fprintf(fp, "                            // Setting and Using at internal_encode_message_xxx().\n");
     fprintf(fp, "} %s;\n", struct_name.c_str());
 
+    fprintf(fp, "\n/* construct msg, DO NOT use it high frequency. */\n");
+    fprintf(fp, "void constru_message_%s(%s *msg);\n\n", desc->name().c_str(), struct_name.c_str());
     fprintf(fp, "\n/* clear and reuse msg */\n");
-    fprintf(fp, "void constru_message_%s(%s *msg);\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "void clear_message_%s(%s *msg);\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "void clear_message_%s_len(%s *msg);\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "#define encode_message_%s(msg,buf) encode_message_%s_safe((msg),(buf),sizeof(buf))\n", desc->name().c_str(), desc->name().c_str());
-    fprintf(fp, "size_t encode_message_%s_safe(%s* msg, BYTE* buf, size_t buf_size);\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "size_t internal_encode_message_%s(%s* msg, BYTE* buf);\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "BOOL decode_message_%s(BYTE* buf, size_t buf_len, %s* msg);\n",
+    fprintf(fp, "void clear_message_%s(%s *msg);\n\n", desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "void clear_message_%s_len(%s *msg);\n\n", desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "#define encode_message_%s(msg,buf) encode_message_%s_safe((msg),(buf),sizeof(buf))\n\n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "size_t encode_message_%s_safe(%s* msg, BYTE* buf, size_t buf_size);\n\n", desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "size_t internal_encode_message_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "BOOL decode_message_%s(BYTE* buf, size_t buf_len, %s* msg);\n\n",
             desc->name().c_str(), struct_name.c_str());
 
     fprintf(fp, "\n#ifdef __cplusplus\n");
@@ -700,32 +702,10 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
-        if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
-        {
-            fprintf(fp, "    size_t i = 0;\n\n");
-            break;
-        }
-    }
-
-    for(int i=0; i<desc->field_count(); ++i)
-    {
-        const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
             string struct_list_name;
             get_struct_list_name(field, struct_list_name);
-            if(FieldDescriptor::TYPE_MESSAGE == field->type())
-            {
-                if(init){
-                    fprintf(fp, "    for(i=0; i<%s; ++i){\n", map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                    fprintf(fp, "        constru_message_%s(&(var_%s->var_%s.item[i]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                    fprintf(fp, "    }\n");
-                } else {
-                    fprintf(fp, "    for(i=0; i<var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
-                    fprintf(fp, "        clear_message_%s(&(var_%s->var_%s.item[i]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                    fprintf(fp, "    }\n");
-                }
-            }
             fprintf(fp, "    var_%s->var_%s.count = 0;\n", desc->name().c_str(), field->name().c_str());
         }
         else
@@ -835,15 +815,15 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
 
     ////////////////////////////////////////
     // clear function
-    fprintf(fp, "void constru_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "forceinline void constru_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     print_clear_message(fp, desc, true, map_array_size);
     fprintf(fp, "}\n\n");
 
-    fprintf(fp, "void clear_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "forceinline void clear_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     print_clear_message(fp, desc, false, map_array_size);
     fprintf(fp, "}\n\n");
 
-    fprintf(fp, "void clear_message_%s_len(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "forceinline void clear_message_%s_len(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
     print_clear_message_len(fp, desc);
     fprintf(fp, "}\n\n");
 
