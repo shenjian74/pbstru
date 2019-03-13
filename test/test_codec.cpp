@@ -14,7 +14,18 @@
 #include "ut_test_message.h"
 #include "ut_test_sub_message.h"
 
-void print_buffer(BYTE *content, size_t filelen)
+char hex2asc(int hex)
+{
+    if (hex >= 0 && hex < 10) {
+        return hex + 0x30;
+    } else if (hex < 16) {
+        return 'a' + hex - 10;
+    } else {
+        return '.';
+    }
+}
+
+void print_buffer(BYTE * content, size_t filelen)
 {
     size_t i;
     size_t line;
@@ -23,57 +34,44 @@ void print_buffer(BYTE *content, size_t filelen)
 
     total_len = filelen;
     total_line = total_len / 16;
-    fprintf(stderr, "\n");
-    for (line = 0; line < total_line; line++)
-    {
-        for (i = 0; i < 16; i++)
-        {
-            fprintf(stderr, "%02x ", content[16 * line + i]);
+    fputs("\n", stderr);
+    for (line = 0; line < total_line; line++) {
+        for (i = 0; i < 16; i++) {
+            fputc(hex2asc(content[16 * line + i] / 16), stderr);
+            fputc(hex2asc(content[16 * line + i] % 16), stderr);
+            fputc(' ', stderr);
         }
-        fprintf(stderr, "    ");
-        for (i = 0; i < 16; i++)
-        {
-            fprintf(stderr, "%c", isprint(content[16 * line + i]) ? content[16 * line + i] : '.');
+        fputs("    ", stderr);
+        for (i = 0; i < 16; i++) {
+            fputc(isprint(content[16 * line + i]) ? content[16 * line + i] : '.', stderr);
         }
-        fprintf(stderr, "\n");
+        fputc('\n', stderr);
     }
-    for (i = 0; i < total_len % 16; i++)
-    {
-        fprintf(stderr, "%02x ", content[16 * total_line + i]);
+    for (i = 0; i < total_len % 16; i++) {
+        fputc(hex2asc(content[16 * total_line + i] / 16), stderr);
+        fputc(hex2asc(content[16 * total_line + i] % 16), stderr);
+        fputc(' ', stderr);
     }
-    for (i = total_len % 16; i < 16; i++)
-    {
-        fprintf(stderr, "   ");
+    for (i = total_len % 16; i < 16; i++) {
+        fputs("   ", stderr);
     }
-    fprintf(stderr, "    ");
-    for (i = 0; i < total_len % 16; i++)
-    {
-        fprintf(stderr, "%c", isprint(content[16 * total_line + i])?content[16 * total_line + i] : '.');
+    fputs("    ", stderr);
+    for (i = 0; i < total_len % 16; i++) {
+        fputc(isprint(content[16 * total_line + i]) ? content[16 * total_line + i] : '.', stderr);
     }
-    fprintf(stderr, "\n");
+    fputc('\n', stderr);
     fflush(stderr);
 }
 
-void decode_varint1(BYTE *buf, WORD64 *value, size_t *offset) {
-    size_t iloop;
-    (*(value)) = 0;
-    for(iloop=0;;++iloop) {
-        (*(value)) += ((unsigned long long)((buf)[iloop] & 0x7F)) << (7*iloop);
-        if(0 == ((buf)[iloop] & 0x80)){
-            break;
-        }
-    }
-    (*(offset)) += 1 + iloop;
-}
-
-void fill_ut_test_sub_message(st_ut_test_sub_message *msg)
+void fill_ut_test_sub_message(st_ut_test_sub_message * msg)
 {
     constru_message_ut_test_sub_message(msg);
     msg->var_d_uint32.item[msg->var_d_uint32.count++] = 1000;
     msg->var_d_uint32.item[msg->var_d_uint32.count++] = 1001;
 }
 
-bool verify_ut_test_sub_message(st_ut_test_sub_message *msg) {
+bool verify_ut_test_sub_message(st_ut_test_sub_message * msg)
+{
     if (1000 == msg->var_d_uint32.item[0]) {
         if (1001 == msg->var_d_uint32.item[1]) {
             if (2 == msg->var_d_uint32.count) {
@@ -85,7 +83,7 @@ bool verify_ut_test_sub_message(st_ut_test_sub_message *msg) {
 }
 
 st_addrequest var_AddRequest;
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     BYTE buf[1024];
     size_t buf_len1, buf_len2;
@@ -99,20 +97,20 @@ int main(int argc, char* argv[])
         encode_varint(value, buf, &offset);
         assert(1 == offset);
         assert(0 == buf[0]);
-		offset = 0;
-		decode_varint(buf, &value, &offset);
-		assert(1 == offset);
-		assert(0 == value);
+        offset = 0;
+        decode_varint(buf, &value, &offset);
+        assert(1 == offset);
+        assert(0 == value);
 
         value = 1;
         offset = 0;
         encode_varint(value, buf, &offset);
         assert(1 == offset);
         assert(0x01 == buf[0]);
-		offset = 0;
-		decode_varint(buf, &value, &offset);
-		assert(1 == offset);
-		assert(1 == value);
+        offset = 0;
+        decode_varint(buf, &value, &offset);
+        assert(1 == offset);
+        assert(1 == value);
 
         value = 128;
         offset = 0;
@@ -120,50 +118,49 @@ int main(int argc, char* argv[])
         assert(2 == offset);
         assert(0x80 == buf[0]);
         assert(0x01 == buf[1]);
-		offset = 0;
-		decode_varint(buf, &value, &offset);
-		assert(2 == offset);
-		assert(128 == value);
+        offset = 0;
+        decode_varint(buf, &value, &offset);
+        assert(2 == offset);
+        assert(128 == value);
 
         value = 65535;
         offset = 0;
         encode_varint(value, buf, &offset);
-	print_buffer(buf, offset);
+        print_buffer(buf, offset);
         assert(3 == offset);
         assert(0xFF == buf[0]);
         assert(0xFF == buf[1]);
         assert(0x03 == buf[2]);
-		offset = 0;
-		decode_varint(buf, &value, &offset);
-		assert(3 == offset);
-		assert(65535 == value);
+        offset = 0;
+        decode_varint(buf, &value, &offset);
+        assert(3 == offset);
+        assert(65535 == value);
 
         value = 65536;
         offset = 0;
         encode_varint(value, buf, &offset);
-		print_buffer(buf, offset);
+        print_buffer(buf, offset);
         assert(3 == offset);
         assert(0x80 == buf[0]);
         assert(0x80 == buf[1]);
         assert(0x04 == buf[2]);
-		offset = 0;
-		decode_varint(buf, &value, &offset);
-		assert(3 == offset);
-		assert(65536 == value);
+        offset = 0;
+        decode_varint(buf, &value, &offset);
+        assert(3 == offset);
+        assert(65536 == value);
 
         long long value3 = 0xFFFFFFFF;
         offset = 0;
         encode_varint(value3, buf, &offset);
-	print_buffer(buf, offset);
+        print_buffer(buf, offset);
         assert(5 == offset);
         assert(0xFF == buf[0]);
         assert(0x0F == buf[4]);
-	offset = 0;
-	decode_varint(buf, &value3, &offset);
-	assert(5 == offset);
-	assert(0xFFFFFFFF == value3);
+        offset = 0;
+        decode_varint(buf, &value3, &offset);
+        assert(5 == offset);
+        assert(0xFFFFFFFF == value3);
 
-        printf("varint test pass.\n");
         fflush(stdout);
     }
 
@@ -171,21 +168,20 @@ int main(int argc, char* argv[])
         st_tuple var_Tuple;
         constru_message_Tuple(&var_Tuple);
         var_Tuple.var_path.has_path_string = TRUE;
-        var_Tuple.var_path.var_path_string.data = (BYTE *)strdup("/20");
-        var_Tuple.var_path.var_path_string.length = strlen((char *)var_Tuple.var_path.var_path_string.data);
+        var_Tuple.var_path.var_path_string.data = (BYTE *) strdup("/20");
+        var_Tuple.var_path.var_path_string.length = strlen((char *) var_Tuple.var_path.var_path_string.data);
         var_Tuple.has_version = TRUE;
         var_Tuple.var_version = 2000;
         var_Tuple.has_ttl = TRUE;
         var_Tuple.var_ttl = 3000;
         var_Tuple.var_field.count = 2;
         var_Tuple.var_field.item[0].var_fieldid = 1;
-        var_Tuple.var_field.item[0].var_value.data = (BYTE *)strdup("fawejlkrj1230940p1243lkjljfksldaj");
-        var_Tuple.var_field.item[0].var_value.length = strlen((char *)var_Tuple.var_field.item[0].var_value.data);
+        var_Tuple.var_field.item[0].var_value.data = (BYTE *) strdup("fawejlkrj1230940p1243lkjljfksldaj");
+        var_Tuple.var_field.item[0].var_value.length = strlen((char *) var_Tuple.var_field.item[0].var_value.data);
         var_Tuple.var_field.item[1].var_fieldid = 2;
-        var_Tuple.var_field.item[1].var_value.data = (BYTE *)strdup("jflasjfu32ujfljsljkljkljljoiu");
-        var_Tuple.var_field.item[1].var_value.length = strlen((char *)var_Tuple.var_field.item[1].var_value.data);
+        var_Tuple.var_field.item[1].var_value.data = (BYTE *) strdup("jflasjfu32ujfljsljkljkljljoiu");
+        var_Tuple.var_field.item[1].var_value.length = strlen((char *) var_Tuple.var_field.item[1].var_value.data);
         buf_len2 = encode_message_Tuple(&var_Tuple, buf);
-        printf("****%lu\n", buf_len2);
         fflush(stdout);
         assert(87 == buf_len2);
         print_buffer(buf, buf_len2);
@@ -203,7 +199,6 @@ int main(int argc, char* argv[])
         assert(var_Tuple.var_field.item[1].var_fieldid == 2);
         assert(0 == memcmp(var_Tuple.var_field.item[1].var_value.data, "jflasjfu32ujfljsljkljkljljoiu", var_Tuple.var_field.item[1].var_value.length));
 
-        printf("tuple test pass.\n");
         fflush(stdout);
     }
 
@@ -212,19 +207,19 @@ int main(int argc, char* argv[])
         var_AddRequest.var_identifiers.var_primary.count = 1;
         var_AddRequest.var_identifiers.var_primary.item[0].var_id_type = 1;
         var_AddRequest.var_identifiers.var_primary.item[0].var_value.count = 1;
-        var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data = (BYTE *)strdup("465749674123167465431674613");
-        var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].length = strlen((char *)var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data);
+        var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data = (BYTE *) strdup("465749674123167465431674613");
+        var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].length = strlen((char *) var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data);
 
         var_AddRequest.var_identifiers.var_non_primary.count = 1;
         var_AddRequest.var_identifiers.var_non_primary.item[0].var_id_type = 1;
         var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.count = 1;
-        var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data = (BYTE *)strdup("465789461313213646461231324654");
-        var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length = strlen((char *)var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data);
+        var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data = (BYTE *) strdup("465789461313213646461231324654");
+        var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length = strlen((char *) var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data);
 
         var_AddRequest.var_tuple.count = 1;
         var_AddRequest.var_tuple.item[0].var_path.has_path_string = TRUE;
-        var_AddRequest.var_tuple.item[0].var_path.var_path_string.data = (BYTE *)strdup("/20");
-        var_AddRequest.var_tuple.item[0].var_path.var_path_string.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_path.var_path_string.data);
+        var_AddRequest.var_tuple.item[0].var_path.var_path_string.data = (BYTE *) strdup("/20");
+        var_AddRequest.var_tuple.item[0].var_path.var_path_string.length = strlen((char *) var_AddRequest.var_tuple.item[0].var_path.var_path_string.data);
         var_AddRequest.var_tuple.item[0].var_path.has_path_string = TRUE;
 
         var_AddRequest.var_tuple.item[0].has_version = TRUE;
@@ -234,11 +229,11 @@ int main(int argc, char* argv[])
 
         var_AddRequest.var_tuple.item[0].var_field.count = 2;
         var_AddRequest.var_tuple.item[0].var_field.item[0].var_fieldid = 1;
-        var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data = (BYTE *)strdup("fawejlkrj1230940p1243lkjljfksldaj");
-        var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data);
+        var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data = (BYTE *) strdup("fawejlkrj1230940p1243lkjljfksldaj");
+        var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.length = strlen((char *) var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data);
         var_AddRequest.var_tuple.item[0].var_field.item[1].var_fieldid = 2;
-        var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data = (BYTE *)strdup("jflasjfu32ujfljsljkljkljljoiu");
-        var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen((char *)var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
+        var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data = (BYTE *) strdup("jflasjfu32ujfljsljkljkljljoiu");
+        var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen((char *) var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
 
         buf_len1 = encode_message_AddRequest(&var_AddRequest, buf);
         assert(160 == buf_len1);
@@ -269,8 +264,7 @@ int main(int argc, char* argv[])
     {
         st_ut_test_message msg;
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             constru_message_ut_test_message(&msg);
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
@@ -283,8 +277,7 @@ int main(int argc, char* argv[])
             assert(2 == msg.var_d_uint32.count);
         }
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             constru_message_ut_test_message(&msg);
             msg.var_r_uint32 = 10;
             msg.has_o_uint32 = TRUE;
@@ -320,8 +313,7 @@ int main(int argc, char* argv[])
             assert(17 == msg.var_pd_uint32.item[1]);
         }
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             BYTE buf[128];
             size_t offset = 0;
             WORD64 var_int64;
@@ -369,8 +361,7 @@ int main(int argc, char* argv[])
             assert(17 == msg.var_pd_uint64.item[1]);
         }
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             constru_message_ut_test_message(&msg);
             msg.var_r_fixed32 = 10;
             msg.has_o_fixed32 = TRUE;
@@ -406,8 +397,7 @@ int main(int argc, char* argv[])
             assert(17 == msg.var_pd_fixed32.item[1]);
         }
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             constru_message_ut_test_message(&msg);
             msg.var_r_fixed64 = 10;
             msg.has_o_fixed64 = TRUE;
@@ -443,8 +433,7 @@ int main(int argc, char* argv[])
             assert(17 == msg.var_pd_fixed64.item[1]);
         }
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             constru_message_ut_test_message(&msg);
             msg.var_r_bool = TRUE;
             msg.has_o_bool = TRUE;
@@ -480,8 +469,7 @@ int main(int argc, char* argv[])
             assert(FALSE == msg.var_pd_bool.item[1]);
         }
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             char string1[] = "string1";
             char string2[] = "string2";
             char string3[] = "string3";
@@ -522,8 +510,7 @@ int main(int argc, char* argv[])
             assert(0 == memcmp(msg.var_d_string.item[1].data, string6, msg.var_d_string.item[1].length));
         }
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             BYTE bytes1[] = "bytes1";
             BYTE bytes2[] = "bytes2";
             BYTE bytes3[] = "bytes3";
@@ -533,21 +520,21 @@ int main(int argc, char* argv[])
 
             constru_message_ut_test_message(&msg);
             msg.var_r_bytes.data = bytes1;
-            msg.var_r_bytes.length = strlen((LPCSTR)bytes1);
+            msg.var_r_bytes.length = strlen((LPCSTR) bytes1);
             msg.has_o_bytes = TRUE;
             msg.var_o_bytes.data = bytes2;
-            msg.var_o_bytes.length = strlen((LPCSTR)bytes2);
+            msg.var_o_bytes.length = strlen((LPCSTR) bytes2);
             msg.var_f_bytes.count = 2;
             msg.var_f_bytes.item[0].data = bytes3;
-            msg.var_f_bytes.item[0].length = strlen((LPCSTR)bytes3);
+            msg.var_f_bytes.item[0].length = strlen((LPCSTR) bytes3);
             msg.var_f_bytes.item[1].data = bytes4;
-            msg.var_f_bytes.item[1].length = strlen((LPCSTR)bytes4);
+            msg.var_f_bytes.item[1].length = strlen((LPCSTR) bytes4);
 
             msg.var_d_bytes.item[msg.var_d_bytes.count].data = bytes5;
-            msg.var_d_bytes.item[msg.var_d_bytes.count].length = strlen((LPCSTR)bytes5);
+            msg.var_d_bytes.item[msg.var_d_bytes.count].length = strlen((LPCSTR) bytes5);
             msg.var_d_bytes.count += 1;
             msg.var_d_bytes.item[msg.var_d_bytes.count].data = bytes6;
-            msg.var_d_bytes.item[msg.var_d_bytes.count].length = strlen((LPCSTR)bytes6);
+            msg.var_d_bytes.item[msg.var_d_bytes.count].length = strlen((LPCSTR) bytes6);
             msg.var_d_bytes.count += 1;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
@@ -564,8 +551,7 @@ int main(int argc, char* argv[])
             assert(0 == memcmp(msg.var_d_bytes.item[1].data, bytes6, msg.var_d_bytes.item[1].length));
         }
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             constru_message_ut_test_message(&msg);
             msg.var_r_enum = CLIENT_M;
             msg.has_o_enum = TRUE;
@@ -591,8 +577,7 @@ int main(int argc, char* argv[])
             assert(SERVER_M == msg.var_d_enum.item[1]);
         }
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             constru_message_ut_test_message(&msg);
 
             fill_ut_test_sub_message(&(msg.var_r_message));
@@ -625,8 +610,7 @@ int main(int argc, char* argv[])
     {
         st_ut_test_sub_message msg;
 
-        for(int i=0; i<3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             constru_message_ut_test_sub_message(&msg);
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
@@ -652,9 +636,5 @@ int main(int argc, char* argv[])
     printf("[%s:%d] spend %.0lf(us)\n", __FILE__, __LINE__, diff);
 
     printf("%s Done.\n", argv[0]);
-	return 0;
+    return 0;
 }
-
-
-
-
