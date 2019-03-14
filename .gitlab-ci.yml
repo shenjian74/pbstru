@@ -1,6 +1,6 @@
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
-# image: python:latest
+# image: python:3
 
 variables:
 # Change pip's cache directory to be inside the project directory since we can
@@ -13,7 +13,7 @@ cache:
 
 before_script:
   - apt-get -y update
-  - apt-get install -y cmake autoconf libtool
+  - apt-get install -y gcc g++ cmake autoconf libtool
   
 stages:
   - build
