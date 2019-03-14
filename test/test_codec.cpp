@@ -269,6 +269,14 @@ int main(int argc, char *argv[])
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -295,8 +303,18 @@ int main(int argc, char *argv[])
             msg.var_pd_uint32.item[msg.var_pd_uint32.count++] = 16;
             msg.var_pd_uint32.item[msg.var_pd_uint32.count++] = 17;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
             size_t size3 = encode_message_ut_test_message(&msg, buf);
-            assert(55 == size3);
+            print_buffer(buf, size3);
+            printf("%u", size3);
+            assert(128 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(10 == msg.var_r_uint32);
@@ -343,8 +361,16 @@ int main(int argc, char *argv[])
             msg.var_pd_uint64.item[msg.var_pd_uint64.count++] = 16;
             msg.var_pd_uint64.item[msg.var_pd_uint64.count++] = 17;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(68 == size2);
+            assert(131 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(2447866062020153618 == msg.var_r_uint64);
@@ -379,8 +405,16 @@ int main(int argc, char *argv[])
             msg.var_pd_fixed32.item[msg.var_pd_fixed32.count++] = 16;
             msg.var_pd_fixed32.item[msg.var_pd_fixed32.count++] = 17;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(108 == size2);
+            assert(153 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed32);
@@ -415,8 +449,16 @@ int main(int argc, char *argv[])
             msg.var_pd_fixed64.item[msg.var_pd_fixed64.count++] = 16;
             msg.var_pd_fixed64.item[msg.var_pd_fixed64.count++] = 17;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(108 == size2);
+            assert(181 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed64);
@@ -451,8 +493,16 @@ int main(int argc, char *argv[])
             msg.var_pd_bool.item[msg.var_pd_bool.count++] = TRUE;
             msg.var_pd_bool.item[msg.var_pd_bool.count++] = FALSE;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(59 == size2);
+            assert(129 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(TRUE == msg.var_r_bool);
@@ -496,8 +546,14 @@ int main(int argc, char *argv[])
             msg.var_d_string.item[msg.var_d_string.count].length = strlen(string6);
             msg.var_d_string.count += 1;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(96 == size2);
+            assert(148 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_string.data, string1, msg.var_r_string.length));
@@ -537,8 +593,14 @@ int main(int argc, char *argv[])
             msg.var_d_bytes.item[msg.var_d_bytes.count].length = strlen((LPCSTR) bytes6);
             msg.var_d_bytes.count += 1;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(90 == size2);
+            assert(142 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_bytes.data, bytes1, msg.var_r_bytes.length));
@@ -563,8 +625,15 @@ int main(int argc, char *argv[])
             msg.var_d_enum.item[msg.var_d_enum.count++] = CLIENT_M;
             msg.var_d_enum.item[msg.var_d_enum.count++] = SERVER_M;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(54 == size2);
+            assert(127 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(CLIENT_M == msg.var_r_enum);
@@ -592,8 +661,15 @@ int main(int argc, char *argv[])
             fill_ut_test_sub_message(&(msg.var_d_message.item[msg.var_d_message.count]));
             msg.var_d_message.count += 1;
 
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_enum = CLIENT_M;
+
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            assert(90 == size2);
+            assert(163 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(verify_ut_test_sub_message(&(msg.var_r_message)));
@@ -623,10 +699,10 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("sizeof(st_addrequest): %lu\n", sizeof(st_addrequest));
-    printf("sizeof(st_compountrequest): %lu\n", sizeof(st_compoundrequest));
-    printf("sizeof(st_response): %lu\n", sizeof(st_response));
-    printf("sizeof(st_tuple): %lu\n", sizeof(st_tuple));
+    printf("sizeof(st_addrequest): %u\n", sizeof(st_addrequest));
+    printf("sizeof(st_compountrequest): %u\n", sizeof(st_compoundrequest));
+    printf("sizeof(st_response): %u\n", sizeof(st_response));
+    printf("sizeof(st_tuple): %u\n", sizeof(st_tuple));
 
     // printf("<Press any key to continue ...>\n");
     // getchar();
