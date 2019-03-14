@@ -699,10 +699,10 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("sizeof(st_addrequest): %u\n", sizeof(st_addrequest));
-    printf("sizeof(st_compountrequest): %u\n", sizeof(st_compoundrequest));
-    printf("sizeof(st_response): %u\n", sizeof(st_response));
-    printf("sizeof(st_tuple): %u\n", sizeof(st_tuple));
+    printf("sizeof(st_addrequest): %lu\n", sizeof(st_addrequest));
+    printf("sizeof(st_compountrequest): %lu\n", sizeof(st_compoundrequest));
+    printf("sizeof(st_response): %lu\n", sizeof(st_response));
+    printf("sizeof(st_tuple): %lu\n", sizeof(st_tuple));
 
     // printf("<Press any key to continue ...>\n");
     // getchar();
