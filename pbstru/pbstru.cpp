@@ -37,7 +37,7 @@ const string struct_postfix = "";
 
 const char __THIS_FILE__[] = "pbstru.cpp";
 #ifdef _WIN32
-const char path_sep = '\\';
+const char path_sep[] = "\\";
 #else
 const char path_sep[] = "/";
 #endif
