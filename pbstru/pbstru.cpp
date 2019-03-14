@@ -947,65 +947,43 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             break;
 
         case FieldDescriptor::TYPE_STRING:
-            fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
-
             if(field->is_repeated())
             {
+                fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
                 fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            else
-            {
-                fprintf(fp, "%sencode_varint(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-            }
-
-            fprintf(fp, "%sif (NULL != buf) {\n", prefix_spaces.c_str());
-            if(field->is_repeated())
-            {
+                fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            else
-            {
-                fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            fprintf(fp, "%s}\n", prefix_spaces.c_str());
-
-            if(field->is_repeated())
-            {
+                fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
+                fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
+                fprintf(fp, "%sencode_varint(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             break;
 
         case FieldDescriptor::TYPE_BYTES:
-            fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
             if(field->is_repeated())
             {
+                fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
                 fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            else
-            {
-                fprintf(fp, "%sencode_varint(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            fprintf(fp, "%sif (NULL != buf) {\n", prefix_spaces.c_str());
-            if(field->is_repeated())
-            {
+                fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            else
-            {
-                fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.data, var_%s->var_%s.length);\n",
-                        prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            fprintf(fp, "%s}\n", prefix_spaces.c_str());
-            if(field->is_repeated())
-            {
+                fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
+                fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
+                fprintf(fp, "%sencode_varint(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             break;
