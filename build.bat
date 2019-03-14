@@ -15,7 +15,7 @@ if %errorlevel%==0 goto makefile_found
 if %errorlevel%==1 goto makefile_not_found
 
 :makefile_not_found
-del /S /Q /F build
+del /S /Q /F build >nul
 rd /S /Q build
 md build
 cd build
@@ -26,7 +26,7 @@ cd ..
 cd build
 mingw32-make
 cd ..\..\..
-del /S /Q /F build
+del /S /Q /F build >nul
 rd /S /Q build
 md build
 cd build
@@ -35,7 +35,7 @@ move pbstru.exe ..\bin\
 cd ..\bin
 pbstru.exe cdb.proto cdb_ccc.proto codec
 cd ..\test
-del /S /Q /F build
+del /S /Q /F build >nul
 rd /S /Q build
 md build
 cd build
