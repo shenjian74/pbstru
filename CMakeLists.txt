@@ -15,8 +15,8 @@ include_directories(
 )
 
 ####################
-message("**** CMAKE_CURRENT_SOURCE_DIR=" ${CMAKE_CURRENT_SOURCE_DIR})
-message("**** CMAKE_CURRENT_BINARY_DIR=" ${CMAKE_CURRENT_BINARY_DIR})
+message("**** {CMAKE_CURRENT_SOURCE_DIR}=" ${CMAKE_CURRENT_SOURCE_DIR})
+message("**** {CMAKE_CURRENT_BINARY_DIR}=" ${CMAKE_CURRENT_BINARY_DIR})
 
 IF (WIN32)
 add_custom_target(
@@ -33,8 +33,15 @@ add_custom_target(
 )
 ENDIF()
 
+message("**** {CMAKE_SOURCE_DIR}=" ${CMAKE_SOURCE_DIR})
+message("**** {CMAKE_COMMAND}=" ${CMAKE_COMMAND})
+add_custom_target(
+    auto_increment_version
+    COMMAND ${CMAKE_COMMAND} -D VERSION_FILE=${CMAKE_SOURCE_DIR}/pbstru/version.h -P ${CMAKE_SOURCE_DIR}/AutoVersion.cmake
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+
 IF (WIN32)
-	message("${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/cmake/build")
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/cmake/build" )
 ELSE()
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
@@ -46,3 +53,4 @@ set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 add_executable(pbstru ${SRC_FILES})
 target_link_libraries (pbstru  ${EXTRA_LIBS})
 add_dependencies(pbstru protobuf_lib)
+add_dependencies(pbstru auto_increment_version)
