@@ -31,9 +31,10 @@ rd /S /Q build
 md build
 cd build
 "C:\Program Files\CMake\bin\cmake.exe" -G "CodeBlocks - MinGW Makefiles" ..
+mingw32-make
 move pbstru.exe ..\bin\
 cd ..\bin
-pbstru.exe cdb.proto cdb_ccc.proto codec
+call gen_codec.bat
 cd ..\test
 del /S /Q /F build >nul
 rd /S /Q build
