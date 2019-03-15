@@ -31,15 +31,13 @@ add_custom_target(
     COMMAND make
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/protobuf3
 )
-ENDIF()
-
-message("**** {CMAKE_SOURCE_DIR}=" ${CMAKE_SOURCE_DIR})
-message("**** {CMAKE_COMMAND}=" ${CMAKE_COMMAND})
 add_custom_target(
     auto_increment_version
     COMMAND ${CMAKE_COMMAND} -D VERSION_FILE=${CMAKE_SOURCE_DIR}/pbstru/version.h -P ${CMAKE_SOURCE_DIR}/AutoVersion.cmake
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
+ENDIF()
+
 
 IF (WIN32)
 	find_library(PROTOBUF_LIB NAMES protobuf HINTS "${CMAKE_CURRENT_SOURCE_DIR}/protobuf3/cmake/build" )
@@ -52,5 +50,10 @@ set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUF_LIB})
 # add the executable
 add_executable(pbstru ${SRC_FILES})
 target_link_libraries (pbstru  ${EXTRA_LIBS})
+
+IF (WIN32)
+add_dependencies(pbstru protobuf_lib)
+ELSE()
 add_dependencies(pbstru protobuf_lib)
 add_dependencies(pbstru auto_increment_version)
+ENDIF()
