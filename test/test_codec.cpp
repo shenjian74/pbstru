@@ -335,7 +335,7 @@ int main(int argc, char *argv[])
             assert(16 == msg.var_pd_uint32.item[0]);
             assert(17 == msg.var_pd_uint32.item[1]);
         }
-
+/*
         for (int i = 0; i < 3; ++i) {
             BYTE buf[128];
             size_t offset = 0;
@@ -713,7 +713,7 @@ int main(int argc, char *argv[])
             assert(1001 == msg.var_d_uint32.item[1]);
         }
     }
-
+*/
     printf("sizeof(st_addrequest): %zu\n", sizeof(st_addrequest));
     printf("sizeof(st_compountrequest): %zu\n", sizeof(st_compoundrequest));
     printf("sizeof(st_response): %zu\n", sizeof(st_response));
