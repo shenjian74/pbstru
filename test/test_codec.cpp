@@ -335,7 +335,7 @@ int main(int argc, char *argv[])
             assert(16 == msg.var_pd_uint32.item[0]);
             assert(17 == msg.var_pd_uint32.item[1]);
         }
-/*
+
         for (int i = 0; i < 3; ++i) {
             BYTE buf[128];
             size_t offset = 0;
@@ -376,7 +376,7 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             printf("size2:%zu\n", size2);
-            assert(110 == size2);
+            assert(106 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(2447866062020153618 == msg.var_r_uint64);
@@ -421,7 +421,7 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             printf("size2:%zu\n", size2);
-            assert(150 == size2);
+            assert(118 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed32);
@@ -466,7 +466,7 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             printf("size2:%zu\n", size2);
-            assert(150 == size2);
+            assert(146 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed64);
@@ -511,7 +511,7 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             printf("size2:%zu\n", size2);
-            assert(101 == size2);
+            assert(97 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(TRUE == msg.var_r_bool);
@@ -563,7 +563,7 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             printf("size2:%zu\n", size2);
-            assert(117 == size2);
+            assert(113 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_string.data, string1, msg.var_r_string.length));
@@ -611,7 +611,7 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             printf("size2:%zu\n", size2);
-            assert(111 == size2);
+            assert(107 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_bytes.data, bytes1, msg.var_r_bytes.length));
@@ -645,7 +645,7 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             printf("size2:%zu\n", size2);
-            assert(96 == size2);
+            assert(92 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(CLIENT_M == msg.var_r_enum);
@@ -683,7 +683,7 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             printf("size2:%zu\n", size2);
             fflush(stdout);
-            assert(132 == size2);
+            assert(128 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(verify_ut_test_sub_message(&(msg.var_r_message)));
@@ -695,9 +695,8 @@ int main(int argc, char *argv[])
             assert(verify_ut_test_sub_message(&(msg.var_d_message.item[0])));
             assert(verify_ut_test_sub_message(&(msg.var_d_message.item[1])));
         }
-*/
     }
-/*
+
     {
         st_ut_test_sub_message msg;
 
@@ -714,7 +713,7 @@ int main(int argc, char *argv[])
             assert(1001 == msg.var_d_uint32.item[1]);
         }
     }
-*/
+
     printf("sizeof(st_addrequest): %zu\n", sizeof(st_addrequest));
     printf("sizeof(st_compountrequest): %zu\n", sizeof(st_compoundrequest));
     printf("sizeof(st_response): %zu\n", sizeof(st_response));
