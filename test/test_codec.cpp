@@ -695,8 +695,9 @@ int main(int argc, char *argv[])
             assert(verify_ut_test_sub_message(&(msg.var_d_message.item[0])));
             assert(verify_ut_test_sub_message(&(msg.var_d_message.item[1])));
         }
+*/
     }
-
+/*
     {
         st_ut_test_sub_message msg;
 
