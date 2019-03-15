@@ -65,7 +65,7 @@ void print_buffer(BYTE * content, size_t filelen)
 
 void fill_ut_test_sub_message(st_ut_test_sub_message * msg)
 {
-    memset(&msg, 0xCD, sizeof(st_ut_test_sub_message));
+    memset(msg, 0xCD, sizeof(st_ut_test_sub_message));
     constru_message_ut_test_sub_message(msg);
     msg->var_d_uint32.item[msg->var_d_uint32.count++] = 1000;
     msg->var_d_uint32.item[msg->var_d_uint32.count++] = 1001;
@@ -682,7 +682,8 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             printf("size2:%lu\n", size2);
-            assert(163 == size2);
+            fflush(stdout);
+            assert(132 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(verify_ut_test_sub_message(&(msg.var_r_message)));
