@@ -1,3 +1,3 @@
-#define VERSION "0.1-26-8f49b5a"
+#define VERSION "3.0-2-92f6672"
 
 //some other junk
