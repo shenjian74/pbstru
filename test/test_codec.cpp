@@ -319,7 +319,7 @@ int main(int argc, char *argv[])
             size_t size3 = encode_message_ut_test_message(&msg, buf);
             print_buffer(buf, size3);
             printf("buf_len:%zu\n", size3);
-            assert(97 == size3);
+            assert(93 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(10 == msg.var_r_uint32);
