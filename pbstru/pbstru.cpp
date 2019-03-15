@@ -878,9 +878,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
 
         if(field->is_repeated())
         {
-            fprintf(fp, "    if(var_%s->var_%s.count>0){\n", desc->name().c_str(), field->name().c_str());
             if(field->is_packed())
             {
+                fprintf(fp, "    if(var_%s->var_%s.count>0){\n", desc->name().c_str(), field->name().c_str());
                 switch(field->type())
                 {
                 case FieldDescriptor::TYPE_FIXED32:
@@ -900,10 +900,12 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 }
                 fprintf(fp, "        encode_varint(var_%s->var_%s.count, buf, &offset);\n",
                         desc->name().c_str(), field->name().c_str());
-
+                fprintf(fp, "        for(i = 0; i < var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
+                prefix_spaces = "            ";
+            } else {
+                fprintf(fp, "    for(i = 0; i < var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
+                prefix_spaces = "        ";
             }
-            fprintf(fp, "        for(i = 0; i < var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
-            prefix_spaces = "            ";
         }
         else if(desc->field(i)->is_optional())
         {
@@ -1055,7 +1057,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
             break;
         }
-        if(desc->field(i)->is_repeated())
+        if(desc->field(i)->is_repeated() && desc->field(i)->is_packed())
         {
             fprintf(fp, "        }\n");
         }
