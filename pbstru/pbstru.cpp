@@ -705,7 +705,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
         {
-            fprintf(fp, "    size_t i = 0;\n\n");
+            fprintf(fp, "    register size_t i = 0;\n\n");
             break;
         }
     }
@@ -796,7 +796,7 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc)
         {
             if(field->is_repeated())
             {
-                fprintf(fp, "    size_t i;\n\n");
+                fprintf(fp, "    register size_t i;\n\n");
                 break;
             }
         }
@@ -864,7 +864,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
-            fprintf(fp, "    size_t i = 0;\n");
+            fprintf(fp, "    register size_t i = 0;\n");
             break;
         }
     }
@@ -1116,7 +1116,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 if(field->is_packed())
                 {
                     fprintf(fp, "            {\n");
-                    fprintf(fp, "                size_t i = 0;\n");
+                    fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf + offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
@@ -1159,7 +1159,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 if(field->is_packed())
                 {
                     fprintf(fp, "            {\n");
-                    fprintf(fp, "                size_t i = 0;\n");
+                    fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf + offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
@@ -1205,7 +1205,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 if(field->is_packed())
                 {
                     fprintf(fp, "            {\n");
-                    fprintf(fp, "                size_t i = 0;\n");
+                    fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf + offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
