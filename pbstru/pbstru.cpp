@@ -1,10 +1,3 @@
-// pbstru.cpp : 定义控制台应用程序的入口点。
-//
-
-#ifndef _BUILDTIME_
-#define _BUILDTIME_ "build: 2018-11-28 11:10:36"
-#endif
-
 #if defined (_MSC_VER)
 # define _CRT_SECURE_NO_WARNINGS
 # pragma warning(disable: 4482)
@@ -20,11 +13,6 @@
 
 typedef const char *LPCSTR;
 typedef char *LPSTR;
-typedef bool BOOL;
-#ifndef TRUE
-#define TRUE 1
-#define FALSE 0
-#endif
 #define EOS ('\0')
 
 using namespace google::protobuf;
@@ -41,14 +29,6 @@ const char path_sep[] = "\\";
 #else
 const char path_sep[] = "/";
 #endif
-
-/* typedef enum
-{
-    PS_SUCCESS,  // 0
-    PS_FAIL,
-    NO_SUCH_ITEM = 10,
-    NO_MAX_COUNT_IN_FILE
-} e_error_code; */
 
 static string& trim(string& text)
 {
