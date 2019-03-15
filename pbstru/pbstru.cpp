@@ -734,7 +734,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
         else
         {
             char spaces[] = "          ";
-            if(field->is_optional())
+            if(field->is_optional() && (!init))
             {
                 fprintf(fp, "    if(TRUE == var_%s->has_%s){\n", desc->name().c_str(), field->name().c_str());
                 spaces[8] = '\0';
@@ -774,7 +774,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
                 fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
                 break;
             }
-            if(field->is_optional())
+            if(field->is_optional() && (!init))
             {
                 fprintf(fp, "    }\n");
             }
