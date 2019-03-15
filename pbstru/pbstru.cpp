@@ -1,10 +1,3 @@
-// pbstru.cpp : 定义控制台应用程序的入口点。
-//
-
-#ifndef _BUILDTIME_
-#define _BUILDTIME_ "build: 2018-11-28 11:10:36"
-#endif
-
 #if defined (_MSC_VER)
 # define _CRT_SECURE_NO_WARNINGS
 # pragma warning(disable: 4482)
@@ -20,11 +13,6 @@
 
 typedef const char *LPCSTR;
 typedef char *LPSTR;
-typedef bool BOOL;
-#ifndef TRUE
-#define TRUE 1
-#define FALSE 0
-#endif
 #define EOS ('\0')
 
 using namespace google::protobuf;
@@ -41,14 +29,6 @@ const char path_sep[] = "\\";
 #else
 const char path_sep[] = "/";
 #endif
-
-/* typedef enum
-{
-    PS_SUCCESS,  // 0
-    PS_FAIL,
-    NO_SUCH_ITEM = 10,
-    NO_MAX_COUNT_IN_FILE
-} e_error_code; */
 
 static string& trim(string& text)
 {
@@ -705,7 +685,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
         {
-            fprintf(fp, "    size_t i = 0;\n\n");
+            fprintf(fp, "    register size_t i = 0;\n\n");
             break;
         }
     }
@@ -734,7 +714,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
         else
         {
             char spaces[] = "          ";
-            if(field->is_optional())
+            if(field->is_optional() && (!init))
             {
                 fprintf(fp, "    if(TRUE == var_%s->has_%s){\n", desc->name().c_str(), field->name().c_str());
                 spaces[8] = '\0';
@@ -774,7 +754,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
                 fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
                 break;
             }
-            if(field->is_optional())
+            if(field->is_optional() && (!init))
             {
                 fprintf(fp, "    }\n");
             }
@@ -796,7 +776,7 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc)
         {
             if(field->is_repeated())
             {
-                fprintf(fp, "    size_t i;\n\n");
+                fprintf(fp, "    register size_t i;\n\n");
                 break;
             }
         }
@@ -864,7 +844,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
-            fprintf(fp, "    size_t i = 0;\n");
+            fprintf(fp, "    register size_t i = 0;\n");
             break;
         }
     }
@@ -878,9 +858,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
 
         if(field->is_repeated())
         {
-            fprintf(fp, "    if(var_%s->var_%s.count>0){\n", desc->name().c_str(), field->name().c_str());
             if(field->is_packed())
             {
+                fprintf(fp, "    if(var_%s->var_%s.count>0){\n", desc->name().c_str(), field->name().c_str());
                 switch(field->type())
                 {
                 case FieldDescriptor::TYPE_FIXED32:
@@ -900,10 +880,12 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 }
                 fprintf(fp, "        encode_varint(var_%s->var_%s.count, buf, &offset);\n",
                         desc->name().c_str(), field->name().c_str());
-
+                fprintf(fp, "        for(i = 0; i < var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
+                prefix_spaces = "            ";
+            } else {
+                fprintf(fp, "    for(i = 0; i < var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
+                prefix_spaces = "        ";
             }
-            fprintf(fp, "        for(i = 0; i < var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
-            prefix_spaces = "            ";
         }
         else if(desc->field(i)->is_optional())
         {
@@ -1055,7 +1037,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
             break;
         }
-        if(desc->field(i)->is_repeated())
+        if(desc->field(i)->is_repeated() && desc->field(i)->is_packed())
         {
             fprintf(fp, "        }\n");
         }
@@ -1114,7 +1096,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 if(field->is_packed())
                 {
                     fprintf(fp, "            {\n");
-                    fprintf(fp, "                size_t i = 0;\n");
+                    fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf + offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
@@ -1157,7 +1139,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 if(field->is_packed())
                 {
                     fprintf(fp, "            {\n");
-                    fprintf(fp, "                size_t i = 0;\n");
+                    fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf + offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
@@ -1203,7 +1185,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 if(field->is_packed())
                 {
                     fprintf(fp, "            {\n");
-                    fprintf(fp, "                size_t i = 0;\n");
+                    fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf + offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
