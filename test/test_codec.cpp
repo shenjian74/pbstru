@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
         var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen((char *) var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
 
         buf_len1 = encode_message_AddRequest(&var_AddRequest, buf);
-        printf("buf_len:%lu\n", buf_len1);
+        printf("buf_len:%zu\n", buf_len1);
         assert(160 == buf_len1);
         print_buffer(buf, buf_len1);
 
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
 
             size_t size3 = encode_message_ut_test_message(&msg, buf);
             print_buffer(buf, size3);
-            printf("buf_len:%lu\n", size3);
+            printf("buf_len:%zu\n", size3);
             assert(97 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
@@ -375,7 +375,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%lu\n", size2);
+            printf("size2:%zu\n", size2);
             assert(110 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -420,7 +420,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%lu\n", size2);
+            printf("size2:%zu\n", size2);
             assert(150 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -465,7 +465,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%lu\n", size2);
+            printf("size2:%zu\n", size2);
             assert(150 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -510,7 +510,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%lu\n", size2);
+            printf("size2:%zu\n", size2);
             assert(101 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -562,7 +562,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%lu\n", size2);
+            printf("size2:%zu\n", size2);
             assert(117 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -610,7 +610,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%lu\n", size2);
+            printf("size2:%zu\n", size2);
             assert(111 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -644,7 +644,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%lu\n", size2);
+            printf("size2:%zu\n", size2);
             assert(96 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -681,7 +681,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%lu\n", size2);
+            printf("size2:%zu\n", size2);
             fflush(stdout);
             assert(132 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
@@ -706,7 +706,7 @@ int main(int argc, char *argv[])
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
             size_t size2 = encode_message_ut_test_sub_message(&msg, buf);
-            printf("size2:%lu\n", size2);
+            printf("size2:%zu\n", size2);
             assert(6 == size2);
             decode_message_ut_test_sub_message(buf, size2, &msg);
             assert(1000 == msg.var_d_uint32.item[0]);
@@ -714,10 +714,10 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("sizeof(st_addrequest): %lu\n", sizeof(st_addrequest));
-    printf("sizeof(st_compountrequest): %lu\n", sizeof(st_compoundrequest));
-    printf("sizeof(st_response): %lu\n", sizeof(st_response));
-    printf("sizeof(st_tuple): %lu\n", sizeof(st_tuple));
+    printf("sizeof(st_addrequest): %zu\n", sizeof(st_addrequest));
+    printf("sizeof(st_compountrequest): %zu\n", sizeof(st_compoundrequest));
+    printf("sizeof(st_response): %zu\n", sizeof(st_response));
+    printf("sizeof(st_tuple): %zu\n", sizeof(st_tuple));
 
     // printf("<Press any key to continue ...>\n");
     // getchar();
