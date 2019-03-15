@@ -1,6 +1,3 @@
-// test_codec.cpp : �������̨Ӧ�ó������ڵ㡣
-//
-
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
@@ -161,8 +158,6 @@ int main(int argc, char *argv[])
         decode_varint(buf, &value3, &offset);
         assert(5 == offset);
         assert(0xFFFFFFFF == value3);
-
-        fflush(stdout);
     }
 
     {
@@ -184,7 +179,6 @@ int main(int argc, char *argv[])
         var_Tuple.var_field.item[1].var_value.data = (BYTE *) strdup("jflasjfu32ujfljsljkljkljljoiu");
         var_Tuple.var_field.item[1].var_value.length = strlen((char *) var_Tuple.var_field.item[1].var_value.data);
         buf_len2 = encode_message_Tuple(&var_Tuple, buf);
-        fflush(stdout);
         assert(87 == buf_len2);
         print_buffer(buf, buf_len2);
 
@@ -201,7 +195,6 @@ int main(int argc, char *argv[])
         assert(var_Tuple.var_field.item[1].var_fieldid == 2);
         assert(0 == memcmp(var_Tuple.var_field.item[1].var_value.data, "jflasjfu32ujfljsljkljkljljoiu", var_Tuple.var_field.item[1].var_value.length));
 
-        fflush(stdout);
     }
 
     {
@@ -239,7 +232,7 @@ int main(int argc, char *argv[])
         var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen((char *) var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
 
         buf_len1 = encode_message_AddRequest(&var_AddRequest, buf);
-        printf("buf_len:%zu\n", buf_len1);
+        // printf("buf_len:%zu\n", buf_len1);
         assert(160 == buf_len1);
         print_buffer(buf, buf_len1);
 
@@ -318,7 +311,7 @@ int main(int argc, char *argv[])
 
             size_t size3 = encode_message_ut_test_message(&msg, buf);
             print_buffer(buf, size3);
-            printf("buf_len:%zu\n", size3);
+            // printf("buf_len:%zu\n", size3);
             assert(93 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
@@ -375,7 +368,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%zu\n", size2);
+            // printf("size2:%zu\n", size2);
             assert(106 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -420,7 +413,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%zu\n", size2);
+            // printf("size2:%zu\n", size2);
             assert(118 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -465,7 +458,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%zu\n", size2);
+            // printf("size2:%zu\n", size2);
             assert(146 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -510,7 +503,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%zu\n", size2);
+            // printf("size2:%zu\n", size2);
             assert(97 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -562,7 +555,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%zu\n", size2);
+            // printf("size2:%zu\n", size2);
             assert(113 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -610,7 +603,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%zu\n", size2);
+            // printf("size2:%zu\n", size2);
             assert(107 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -644,7 +637,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%zu\n", size2);
+            // printf("size2:%zu\n", size2);
             assert(92 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -681,8 +674,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message(&msg, buf);
-            printf("size2:%zu\n", size2);
-            fflush(stdout);
+            // printf("size2:%zu\n", size2);
             assert(128 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
@@ -706,7 +698,7 @@ int main(int argc, char *argv[])
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
             size_t size2 = encode_message_ut_test_sub_message(&msg, buf);
-            printf("size2:%zu\n", size2);
+            // printf("size2:%zu\n", size2);
             assert(6 == size2);
             decode_message_ut_test_sub_message(buf, size2, &msg);
             assert(1000 == msg.var_d_uint32.item[0]);
