@@ -761,8 +761,13 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
                 fprintf(fp, "%svar_%s->var_%s.data = NULL;\n", spaces, desc->name().c_str(), field->name().c_str());
                 break;
             case FieldDescriptor::TYPE_MESSAGE:
-                fprintf(fp, "%sclear_message_%s(&(var_%s->var_%s));\n", spaces,
-                        field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                if(init){
+                    fprintf(fp, "%sconstru_message_%s(&(var_%s->var_%s));\n", spaces,
+                            field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                } else {
+                    fprintf(fp, "%sclear_message_%s(&(var_%s->var_%s));\n", spaces,
+                            field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                }
                 break;
             default:
                 fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
