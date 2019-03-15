@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 
         buf_len1 = encode_message_AddRequest(&var_AddRequest, buf);
         printf("buf_len:%lu\n", buf_len1);
-        assert(206 == buf_len1);
+        assert(160 == buf_len1);
         print_buffer(buf, buf_len1);
 
         decode_message_AddRequest(buf, buf_len1, &var_AddRequest);
