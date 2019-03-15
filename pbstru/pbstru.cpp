@@ -1063,7 +1063,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         {
             fprintf(fp, "    }\n");
         }
-        fprintf(fp, "printf(\"[%%s:%%d] offset:%%u\\n\", __FILE__, __LINE__, offset);\n");
+        // fprintf(fp, "printf(\"[%%s:%%d] offset:%%u\\n\", __FILE__, __LINE__, offset);\n");
         fprintf(fp, "\n");
     }
     fprintf(fp, "    return offset;\n");
