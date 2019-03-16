@@ -19,7 +19,7 @@ del /S /Q /F build >nul
 rd /S /Q build
 md build
 cd build
-"C:\Program Files\CMake\bin\cmake.exe" -G "CodeBlocks - MinGW Makefiles" ..
+"C:\Program Files\CMake\bin\cmake.exe" -G "CodeBlocks - MinGW Makefiles" -DCMAKE_C_FLAGS="-Wno-narrowing" -DCMAKE_CXX_FLAGS="-Wno-narrowing" ..
 cd ..
 
 :makefile_found
