@@ -1,9 +1,15 @@
 project (pbstru)
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_C_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 set(CMAKE_EXE_LINKER_FLAGS "-static -pthread")
+
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+endif(CCACHE_FOUND)
 
 aux_source_directory(./pbstru SRC_FILES)
 
