@@ -20,13 +20,13 @@ fi
 
 if [ -f "protobuf3/Makefile" ]; then 
   cd protobuf3
-  make -j
+  make
   cd ..
   rm -rf build && \
   mkdir build && \
   cd build && \
   cmake .. && \
-  make -j && \
+  make && \
   mv pbstru ../bin && \
   cd ../bin && \
   rm -rf codec &&\
@@ -34,6 +34,6 @@ if [ -f "protobuf3/Makefile" ]; then
   mkdir ../build/test && \
   cd ../build/test && \
   cmake ../../test && \
-  make -j && \
+  make && \
   ./test_codec
 fi
