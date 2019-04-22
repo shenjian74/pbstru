@@ -14,7 +14,7 @@ if [ ! -f "protobuf3/Makefile" ]; then
   mv protobuf-3.5.1 protobuf3 && \
   cd protobuf3 && \
   ./autogen.sh && \
-  ./configure && \
+  ./configure --disable-shared && \
   cd ..
 fi
 
