@@ -150,9 +150,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "} while(0) \n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void parse_tag_byte(BYTE* buf, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
-    fprintf(fp, "\n");
-    fprintf(fp, "void deal_unknown_field(BYTE wire_type, BYTE* buf, size_t* offset);\n");
+    fprintf(fp, "BOOL parse_tag_byte(BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
     fprintf(fp, "\n");
 
     fprintf(fp, "/* 对varint信息进行编码 */\n");
@@ -183,10 +181,14 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "\n");
 
     fprintf(fp, "/* 对varint信息进行解码 */\n");
-    fprintf(fp, "#define decode_varint(buf, value, offset) do{ \\\n");
+    fprintf(fp, "#define decode_varint(buf, buflen, value, offset) do{ \\\n");
     fprintf(fp, "    register size_t iloop; \\\n");
+    fprintf(fp, "    size_t max_iloop = (buflen); \\\n");
     fprintf(fp, "    (*(value)) = 0; \\\n");
     fprintf(fp, "    for(iloop=0;;++iloop){ \\\n");
+    fprintf(fp, "        if(iloop>=max_iloop) { \\\n");
+    fprintf(fp, "            return FALSE; \\\n");
+    fprintf(fp, "        } \\\n");
     fprintf(fp, "        (*(value)) += ((unsigned long long)((buf)[iloop] & 0x7F)) << (7*iloop); \\\n");
     fprintf(fp, "        if(0 == ((buf)[iloop] & 0x80)){ \\\n");
     fprintf(fp, "            break; \\\n");
@@ -196,32 +198,18 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "/* 对tag信息进行解码 */\n");
-    fprintf(fp, "#define parse_tag_byte(buf, field_num, wire_type, offset) do{ \\\n");
-    fprintf(fp, "    if((buf)[0] & 0x80) { \\\n");
-    fprintf(fp, "        *(field_num) = ((buf)[0] & 0x7F) + ((buf)[1] >> 3) * 128; \\\n");
-    fprintf(fp, "	 *(wire_type) = (buf)[1] & 0x07; \\\n");
-    fprintf(fp, "	 *(offset) += 2; \\\n");
-    fprintf(fp, "    } else { \\\n");
-    fprintf(fp, "        *(field_num) = (buf)[0] >> 3; \\\n");
-    fprintf(fp, "        *(wire_type) = (buf)[0] & 0x07; \\\n");
-    fprintf(fp, "	 *(offset) += 1; \\\n");
-    fprintf(fp, "    } \\\n");
-    fprintf(fp, "} while(0)\n");
-    fprintf(fp, "\n");
-
     fprintf(fp, "/* 跳过不认识的字段，向前兼容用 */\n");
-    fprintf(fp, "#define deal_unknown_field(wire_type, buf, offset) do{\\\n");
+    fprintf(fp, "#define deal_unknown_field(wire_type, buf, buflen, offset) do{\\\n");
     fprintf(fp, "    size_t tmp_field_len; \\\n");
     fprintf(fp, "    switch(wire_type){ \\\n");
     fprintf(fp, "    case WIRE_TYPE_VARINT: \\\n");
-    fprintf(fp, "        decode_varint((buf), &tmp_field_len, (offset)); \\\n");
+    fprintf(fp, "        decode_varint((buf), (buflen), &tmp_field_len, (offset)); \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX64: \\\n");
     fprintf(fp, "        *(offset) += 8; \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \\\n");
-    fprintf(fp, "        decode_varint((buf), &tmp_field_len, (offset)); \\\n");
+    fprintf(fp, "        decode_varint((buf), (buflen), &tmp_field_len, (offset)); \\\n");
     fprintf(fp, "        *(offset) += tmp_field_len; \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX32: \\\n");
@@ -247,6 +235,28 @@ int gen_comm(const string &target_dir)
     fprintf(fp, genbypbstru);
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
     fprintf(fp, "\n");
+
+    fprintf(fp, "/* 对tag信息进行解码 */\n");
+    fprintf(fp, "BOOL parse_tag_byte(BYTE *buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset) {\n");
+    fprintf(fp, "    if(buf[0] & 0x80) {\n");
+    fprintf(fp, "        if(buflen<2) {\n");
+    fprintf(fp, "            return FALSE;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "        *field_num = (buf[0] & 0x7F) + (buf[1] >> 3) * 128;\n");
+    fprintf(fp, "        *wire_type = buf[1] & 0x07;\n");
+    fprintf(fp, "        *offset += 2;\n");
+    fprintf(fp, "    } else {\n");
+    fprintf(fp, "        if(buflen<1) {\n");
+    fprintf(fp, "            return FALSE;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "        *field_num = buf[0] >> 3;\n");
+    fprintf(fp, "        *wire_type = buf[0] & 0x07;\n");
+    fprintf(fp, "        *offset += 1;\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    return TRUE;\n");
+    fprintf(fp, "}\n");
+    fprintf(fp, "\n");
+
     fprintf(fp, "/* end of file */\n");
 
     return retcode;
@@ -254,10 +264,8 @@ int gen_comm(const string &target_dir)
 
 LPSTR proto_filename;
 FILE *fp_option = NULL;
-
-// Get the max size of a repeated field.
-static bool get_max_count(const string &message_name, const string &field_name, string& max_count)
-{
+// Get the max size of a repeated field.  
+static bool get_max_count(const string &message_name, const string &field_name, string& max_count) {
     char str1[128];
     char str2[64];
     static string option_filename;
@@ -1086,7 +1094,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             desc->name().c_str(), desc->name().c_str());
 
     fprintf(fp, "    for(;offset < buf_len;){\n");
-    fprintf(fp, "        parse_tag_byte(buf + offset, &field_num, &wire_type, &offset);\n");
+    fprintf(fp, "        if(FALSE == parse_tag_byte(buf+offset, buf_len-offset, &field_num, &wire_type, &offset)) {\n");
+    fprintf(fp, "            return FALSE;\n");
+    fprintf(fp, "        }\n");
     fprintf(fp, "        switch(field_num){\n");
     for(int i=0; i<desc->field_count(); ++i)
     {
@@ -1105,7 +1115,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                     fprintf(fp, "            {\n");
                     fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                decode_varint(buf + offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
                     strcpy(spaces, "        ");
                 }
@@ -1148,7 +1158,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                     fprintf(fp, "            {\n");
                     fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                decode_varint(buf + offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
                     strcpy(spaces, "        ");
                 }
@@ -1194,7 +1204,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                     fprintf(fp, "            {\n");
                     fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                decode_varint(buf + offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i){\n");
                     strcpy(spaces, "        ");
                 }
@@ -1203,7 +1213,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s            }\n", spaces);
-                fprintf(fp, "%s            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n",
+                fprintf(fp, "%s            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n",
                         spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s            var_%s->var_%s.count += 1;\n",
                         spaces, desc->name().c_str(), field->name().c_str());
@@ -1215,12 +1225,12 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "            break;\n");
             break;
@@ -1231,7 +1241,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "                return FALSE;  /* out of range */\n");
                 fprintf(fp, "            }\n");
-                fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
                         desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->var_%s.item[var_%s->var_%s.count].data = (char *)(buf + offset);\n",
                         desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1241,14 +1251,14 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
@@ -1261,7 +1271,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "                return FALSE;  /* out of range */\n");
                 fprintf(fp, "            }\n");
-                fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
                         desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->var_%s.item[var_%s->var_%s.count].data = buf + offset;\n",
                         desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1271,14 +1281,14 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            decode_varint(buf + offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
@@ -1291,22 +1301,28 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "                return FALSE;  /* out of range */\n");
                 fprintf(fp, "            }\n");
-                fprintf(fp, "            decode_varint(buf + offset, &tmp_field_len, &offset);\n");
-                fprintf(fp, "            decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "            if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            offset += tmp_field_len;\n");
                 fprintf(fp, "            var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            decode_varint(buf + offset, &tmp_field_len, &offset);\n");
-                fprintf(fp, "            decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "            if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            offset += tmp_field_len;\n");
                 fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            decode_varint(buf + offset, &tmp_field_len, &offset);\n");
-                fprintf(fp, "            decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "            if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            offset += tmp_field_len;\n");
             }
             fprintf(fp, "            break;\n");
@@ -1317,7 +1333,7 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         }
     }
     fprintf(fp, "        default:\n");
-    fprintf(fp, "            deal_unknown_field(wire_type, buf+offset, &offset);\n");
+    fprintf(fp, "            deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
     fprintf(fp, "            break;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    }\n");
