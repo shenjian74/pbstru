@@ -669,7 +669,7 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     {
         print_field_in_struct(fp, desc->field(i));
     }
-    fprintf(fp, "    DWORD _message_length;  // The length of this message, DO NOT set it manually. \n");
+    fprintf(fp, "\n    size_t _message_length;  // The length of this message, DO NOT set it manually. \n");
     fprintf(fp, "                            // Setting and Using at internal_encode_message_xxx().\n");
     fprintf(fp, "} %s;\n", struct_name.c_str());
 
@@ -1017,14 +1017,14 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             fprintf(fp, "%sencode_tag_byte(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), field->number());
             if(field->is_repeated())
             {
-                fprintf(fp, "%sif (var_%s->var_%s.item[i]._message_length == 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif (0 == var_%s->var_%s.item[i]._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s.item[i]._message_length = internal_encode_message_%s(&(var_%s->var_%s.item[i]), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i]._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sif (var_%s->var_%s._message_length == 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif (0 == var_%s->var_%s._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s._message_length = internal_encode_message_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%sencode_varint(var_%s->var_%s._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
