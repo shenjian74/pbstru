@@ -94,9 +94,10 @@ int main(int argc, char *argv[])
         size_t offset = 0;
         encode_varint(value, buf, &offset);
         assert(1 == offset);
+        buf_len1 = offset;
         assert(0 == buf[0]);
         offset = 0;
-        decode_varint(buf, &value, &offset);
+        decode_varint(buf, buf_len1, &value, &offset);
         assert(1 == offset);
         assert(0 == value);
 
@@ -104,9 +105,10 @@ int main(int argc, char *argv[])
         offset = 0;
         encode_varint(value, buf, &offset);
         assert(1 == offset);
+        buf_len1 = offset;
         assert(0x01 == buf[0]);
         offset = 0;
-        decode_varint(buf, &value, &offset);
+        decode_varint(buf, buf_len1, &value, &offset);
         assert(1 == offset);
         assert(1 == value);
 
@@ -114,10 +116,11 @@ int main(int argc, char *argv[])
         offset = 0;
         encode_varint(value, buf, &offset);
         assert(2 == offset);
+        buf_len1 = offset;
         assert(0x80 == buf[0]);
         assert(0x01 == buf[1]);
         offset = 0;
-        decode_varint(buf, &value, &offset);
+        decode_varint(buf, buf_len1, &value, &offset);
         assert(2 == offset);
         assert(128 == value);
 
@@ -126,11 +129,12 @@ int main(int argc, char *argv[])
         encode_varint(value, buf, &offset);
         print_buffer(buf, offset);
         assert(3 == offset);
+        buf_len1 = offset;
         assert(0xFF == buf[0]);
         assert(0xFF == buf[1]);
         assert(0x03 == buf[2]);
         offset = 0;
-        decode_varint(buf, &value, &offset);
+        decode_varint(buf, buf_len1, &value, &offset);
         assert(3 == offset);
         assert(65535 == value);
 
@@ -139,11 +143,12 @@ int main(int argc, char *argv[])
         encode_varint(value, buf, &offset);
         print_buffer(buf, offset);
         assert(3 == offset);
+        buf_len1 = offset;
         assert(0x80 == buf[0]);
         assert(0x80 == buf[1]);
         assert(0x04 == buf[2]);
         offset = 0;
-        decode_varint(buf, &value, &offset);
+        decode_varint(buf, buf_len1, &value, &offset);
         assert(3 == offset);
         assert(65536 == value);
 
@@ -152,10 +157,11 @@ int main(int argc, char *argv[])
         encode_varint(value3, buf, &offset);
         print_buffer(buf, offset);
         assert(5 == offset);
+        buf_len1 = offset;
         assert(0xFF == buf[0]);
         assert(0x0F == buf[4]);
         offset = 0;
-        decode_varint(buf, &value3, &offset);
+        decode_varint(buf, buf_len1, &value3, &offset);
         assert(5 == offset);
         assert(0xFFFFFFFF == value3);
     }
@@ -336,8 +342,9 @@ int main(int argc, char *argv[])
 
             encode_varint(20360023315404117, buf, &offset);
             print_buffer(buf, offset);
+            buf_len1 = offset;
             offset = 0;
-            decode_varint(buf, &var_int64, &offset);
+            decode_varint(buf, buf_len1, &var_int64, &offset);
             assert(20360023315404117 == var_int64);
 
             constru_message_ut_test_message(&msg);
