@@ -188,7 +188,8 @@ int main(int argc, char *argv[])
         assert(87 == buf_len2);
         print_buffer(buf, buf_len2);
 
-        decode_message_Tuple(buf, buf_len2, &var_Tuple);
+        BOOL bret = decode_message_Tuple(buf, buf_len2, &var_Tuple);
+        assert(TRUE == bret);
         assert(TRUE == var_Tuple.var_path.has_path_string);
         assert(0 == memcmp(var_Tuple.var_path.var_path_string.data, "/20", var_Tuple.var_path.var_path_string.length));
         assert(TRUE == var_Tuple.has_version);

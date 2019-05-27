@@ -206,13 +206,22 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "        decode_varint((buf), (buflen), &tmp_field_len, (offset)); \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX64: \\\n");
+    fprintf(fp, "        if(((*(offset)) + sizeof(WORD64)) >= (buf_len)) {\\\n");
+    fprintf(fp, "            return FALSE;\\\n");
+    fprintf(fp, "        }\\\n");
     fprintf(fp, "        *(offset) += 8; \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \\\n");
     fprintf(fp, "        decode_varint((buf), (buflen), &tmp_field_len, (offset)); \\\n");
+    fprintf(fp, "        if(((*(offset)) + tmp_field_len) >= (buf_len)) {\\\n");
+    fprintf(fp, "            return FALSE;\\\n");
+    fprintf(fp, "        }\\\n");
     fprintf(fp, "        *(offset) += tmp_field_len; \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX32: \\\n");
+    fprintf(fp, "        if(((*(offset)) + sizeof(DWORD)) >= (buf_len)) {\\\n");
+    fprintf(fp, "            return FALSE;\\\n");
+    fprintf(fp, "        }\\\n");
     fprintf(fp, "        *(offset) += 4; \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    default: \\\n");
@@ -1124,8 +1133,10 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s            }\n", spaces);
-                fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n",
-                        spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s            if((offset + sizeof(DWORD)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                return FALSE;\n", spaces);
+                fprintf(fp, "%s            }\n", spaces);
+                fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s            offset += sizeof(DWORD);\n", spaces);
                 fprintf(fp, "%s            var_%s->var_%s.count += 1;\n",
                         spaces, desc->name().c_str(), field->name().c_str());
@@ -1137,12 +1148,18 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             else if(field->is_optional())
             {
+                fprintf(fp, "            if((offset + sizeof(DWORD)) > buf_len) {\n");
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += sizeof(DWORD);\n");
                 fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
+                fprintf(fp, "            if((offset + sizeof(DWORD)) > buf_len) {\n");
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += sizeof(DWORD);\n");
             }
@@ -1167,6 +1184,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s            }\n", spaces);
+                fprintf(fp, "%s            if((offset + sizeof(WORD64)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                return FALSE;\n", spaces);
+                fprintf(fp, "%s            }\n", spaces);
                 fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((WORD64 *)(buf + offset));\n",
                         spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s            offset += sizeof(WORD64);\n", spaces);
@@ -1180,12 +1200,18 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             }
             else if(field->is_optional())
             {
+                fprintf(fp, "            if((offset + sizeof(WORD64)) > buf_len) {\n");
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += sizeof(WORD64);\n");
                 fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
+                fprintf(fp, "            if((offset + sizeof(WORD64)) > buf_len) {\n");
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += sizeof(WORD64);\n");
             }
@@ -1241,17 +1267,20 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "                return FALSE;  /* out of range */\n");
                 fprintf(fp, "            }\n");
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
-                        desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            var_%s->var_%s.item[var_%s->var_%s.count].data = (char *)(buf + offset);\n",
-                        desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += var_%s->var_%s.item[var_%s->var_%s.count].length;\n",
-                        desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
+                fprintf(fp, "            var_%s->var_%s.item[var_%s->var_%s.count].data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            offset += var_%s->var_%s.item[var_%s->var_%s.count].length;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
             }
             else if(field->is_optional())
             {
                 fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
@@ -1259,6 +1288,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             else
             {
                 fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
@@ -1271,17 +1303,20 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "                return FALSE;  /* out of range */\n");
                 fprintf(fp, "            }\n");
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n",
-                        desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            var_%s->var_%s.item[var_%s->var_%s.count].data = buf + offset;\n",
-                        desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += var_%s->var_%s.item[var_%s->var_%s.count].length;\n",
-                        desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
+                fprintf(fp, "            var_%s->var_%s.item[var_%s->var_%s.count].data = buf + offset;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            offset += var_%s->var_%s.item[var_%s->var_%s.count].length;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
             }
             else if(field->is_optional())
             {
                 fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
@@ -1289,6 +1324,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             else
             {
                 fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
