@@ -206,14 +206,14 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "        decode_varint((buf), (buflen), &tmp_field_len, (offset)); \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX64: \\\n");
-    fprintf(fp, "        if(((*(offset)) + sizeof(WORD64)) >= (buf_len)) {\\\n");
+    fprintf(fp, "        if(((*(offset)) + sizeof(WORD64)) > (buf_len)) {\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
     fprintf(fp, "        *(offset) += 8; \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \\\n");
     fprintf(fp, "        decode_varint((buf), (buflen), &tmp_field_len, (offset)); \\\n");
-    fprintf(fp, "        if(((*(offset)) + tmp_field_len) >= (buf_len)) {\\\n");
+    fprintf(fp, "        if(((*(offset)) + tmp_field_len) > (buf_len)) {\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
     fprintf(fp, "        *(offset) += tmp_field_len; \\\n");
@@ -1098,9 +1098,11 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
         }
     }
     fprintf(fp, "    WORD field_num;\n");
-    fprintf(fp, "    BYTE wire_type;\n");
-    fprintf(fp, "\n    clear_message_%s(var_%s);\n\n",
-            desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "    BYTE wire_type;\n\n");
+    fprintf(fp, "    if(0 == buf_len) {\n");
+    fprintf(fp, "        return FALSE;\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    clear_message_%s(var_%s);\n\n", desc->name().c_str(), desc->name().c_str());
 
     fprintf(fp, "    for(;offset < buf_len;){\n");
     fprintf(fp, "        if(FALSE == parse_tag_byte(buf+offset, buf_len-offset, &field_num, &wire_type, &offset)) {\n");
@@ -1340,6 +1342,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
                 fprintf(fp, "                return FALSE;  /* out of range */\n");
                 fprintf(fp, "            }\n");
                 fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "            if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                return FALSE;\n");
                 fprintf(fp, "            }\n");
@@ -1349,6 +1354,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             else if(field->is_optional())
             {
                 fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "            if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                return FALSE;\n");
                 fprintf(fp, "            }\n");
@@ -1358,6 +1366,9 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
             else
             {
                 fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "            if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
                 fprintf(fp, "            if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                return FALSE;\n");
                 fprintf(fp, "            }\n");
