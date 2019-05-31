@@ -684,7 +684,32 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_message(&msg, buf);
             // printf("size2:%zu\n", size2);
             assert(128 == size2);
-            decode_message_ut_test_message(buf, size2, &msg);
+            BOOL bret;
+            for(size_t size3=0; size3<size2-1; ++size3){
+                bret = decode_message_ut_test_message(buf, size3, &msg);
+                switch (size3) {
+                    case 2:
+                    case 4:
+                    case 10:
+                    case 20:
+                    case 23:
+                    case 47:
+                    case 71:
+                    case 74:
+                    case 83:
+                    case 92:
+                    case 101:
+                    case 110:
+                    case 119:
+                        assert(TRUE == bret);
+                        break;
+                    default:
+                        assert(FALSE == bret);
+                        break;
+                }
+            }
+            bret = decode_message_ut_test_message(buf, size2, &msg);
+            assert(TRUE == bret);
 
             assert(verify_ut_test_sub_message(&(msg.var_r_message)));
             assert(TRUE == msg.has_o_message);
