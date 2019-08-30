@@ -46,7 +46,7 @@ static string& trim(string& text)
 
 static string &tolower(string& text)
 {
-    for(auto it=text.begin(); it!=text.end(); it++)
+    for(string::iterator it=text.begin(); it!=text.end(); it++)
     {
         *it = tolower(*it);
     }
@@ -55,7 +55,7 @@ static string &tolower(string& text)
 
 static string &toupper(string& text)
 {
-    for(auto it=text.begin(); it!=text.end(); it++)
+    for(string::iterator it=text.begin(); it!=text.end(); it++)
     {
         *it = (char) toupper(*it);
     }
@@ -687,7 +687,8 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
     fprintf(fp, "\n/* clear and reuse msg */\n");
     fprintf(fp, "void clear_message_%s(%s *msg);\n\n", desc->name().c_str(), struct_name.c_str());
     fprintf(fp, "void clear_message_%s_len(%s *msg);\n\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "#define encode_message_%s(msg,buf) encode_message_%s_safe((msg),(buf),sizeof(buf))\n\n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "/* encode_message_*() is unsafe, DO not use it in the future. */\n");
+    fprintf(fp, "#define encode_message_%s(msg,buf) encode_message_%s_safe((msg), (buf), 2*1024*1024)\n", desc->name().c_str(), desc->name().c_str());
     fprintf(fp, "size_t encode_message_%s_safe(%s* msg, BYTE* buf, size_t buf_size);\n\n", desc->name().c_str(), struct_name.c_str());
     fprintf(fp, "size_t internal_encode_message_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), struct_name.c_str());
     fprintf(fp, "BOOL decode_message_%s(BYTE* buf, size_t buf_len, %s* msg);\n\n",
@@ -1099,10 +1100,10 @@ int gen_source(const Descriptor *desc, string &target_dir, const map<string,stri
     }
     fprintf(fp, "    WORD field_num;\n");
     fprintf(fp, "    BYTE wire_type;\n\n");
+    fprintf(fp, "    clear_message_%s(var_%s);\n", desc->name().c_str(), desc->name().c_str());
     fprintf(fp, "    if(0 == buf_len) {\n");
-    fprintf(fp, "        return FALSE;\n");
-    fprintf(fp, "    }\n");
-    fprintf(fp, "    clear_message_%s(var_%s);\n\n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "        return TRUE;\n");
+    fprintf(fp, "    }\n\n");
 
     fprintf(fp, "    for(;offset < buf_len;){\n");
     fprintf(fp, "        if(FALSE == parse_tag_byte(buf+offset, buf_len-offset, &field_num, &wire_type, &offset)) {\n");

@@ -688,6 +688,7 @@ int main(int argc, char *argv[])
             for(size_t size3=0; size3<size2-1; ++size3){
                 bret = decode_message_ut_test_message(buf, size3, &msg);
                 switch (size3) {
+                    case 0:
                     case 2:
                     case 4:
                     case 10:
