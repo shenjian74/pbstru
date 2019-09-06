@@ -132,24 +132,7 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "\n");
 
     fprintf(fp, "/* 对tag信息进行编码 */\n");
-    fprintf(fp, "#define encode_tag_byte(buf, tag, wire_type, offset) do { \\\n");
-    fprintf(fp, "    if((tag) < 16) { \\\n");
-    fprintf(fp, "        if (NULL == (buf)) { \\\n");
-    fprintf(fp, "            (*(offset)) += 1; \\\n");
-    fprintf(fp, "        } else {\\\n");
-    fprintf(fp, "            (buf)[(*(offset))++] = (BYTE)((tag) << 3) | (wire_type); \\\n");
-    fprintf(fp, "        } \\\n");
-    fprintf(fp, "    } else { \\\n");
-    fprintf(fp, "        if (NULL == (buf)) { \\\n");
-    fprintf(fp, "            (*(offset)) += 2; \\\n");
-    fprintf(fp, "        } else { \\\n");
-    fprintf(fp, "            (buf)[(*(offset))++] = ((BYTE)(tag)) | 0x80; \\\n");
-    fprintf(fp, "            (buf)[(*(offset))++] = ((BYTE)((tag) >> 4) & 0x78) | (wire_type); \\\n");
-    fprintf(fp, "        } \\\n");
-    fprintf(fp, "    } \\\n");
-    fprintf(fp, "} while(0) \n");
-    fprintf(fp, "\n");
-
+    fprintf(fp, "void encode_tag_byte(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset);\n");
     fprintf(fp, "BOOL parse_tag_byte(BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset);\n");
     fprintf(fp, "\n");
 
@@ -263,6 +246,22 @@ int gen_comm(const string &target_dir)
     fprintf(fp, "        *offset += 1;\n");
     fprintf(fp, "    }\n");
     fprintf(fp, "    return TRUE;\n");
+    fprintf(fp, "}\n");
+    fprintf(fp, "\n");
+
+    fprintf(fp, "void encode_tag_byte(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset) {\n");
+    fprintf(fp, "    if(tag < 16) {\n");
+    fprintf(fp, "        if (NULL != buf) {\n");
+    fprintf(fp, "            buf[*offset] = (BYTE)(tag << 3) | wire_type;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "        *offset += 1;\n");
+    fprintf(fp, "    } else {\n");
+    fprintf(fp, "        if (NULL != buf) {\n");
+    fprintf(fp, "            buf[*offset] = tag | 0x80;\n");
+    fprintf(fp, "            buf[*offset+1] = ((BYTE)(tag/16) & 0x78) | wire_type;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "        *offset += 2;\n");
+    fprintf(fp, "    }\n");
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
@@ -563,6 +562,8 @@ int gen_header(const Descriptor *desc, string &target_dir, map<string, string> &
             tolower(str);
             headers.insert(str);
         }
+        // tag must less than 256
+        assert(field->number()<256);
     }
 
     // 使用set去掉重复的头文件
