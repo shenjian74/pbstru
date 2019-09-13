@@ -30,10 +30,10 @@ if [ -f "protobuf3/Makefile" ]; then
   mv pbstru ../bin && \
   cd ../bin && \
   rm -rf codec &&\
-  ./pbstru cdb.proto cdb_ccc.proto codec && \
+  ./pbstru cudr cdb.proto cdb_ccc.proto codec && \
   mkdir ../build/test && \
   cd ../build/test && \
   cmake ../../test && \
   make && \
-  ./test_codec
+  time ./test_codec
 fi
