@@ -180,9 +180,9 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "\n");
 
     fprintf(fp, "/* 对tag信息进行编码 */\n");
-    fprintf(fp, "#define %s_encode_tag_byte(buf, tag, wire_type, offset) %s_encode_tag_byte_%s(buf, tag, wire_type, offset)\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "#define %s_encode_tag_byte(buf, tag, wire_type, offset) %s_encode_tag_byte_%s((buf), (tag), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
-    fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s(buf, buflen, field_num, wire_type, offset)\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
 
@@ -734,16 +734,19 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "} %s;\n", struct_name.c_str());
 
     fprintf(fp, "\n/* construct msg, DO NOT use it high frequency. */\n");
-    fprintf(fp, "void constru_message_%s(%s *msg);\n\n", desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "#define constru_message_%s(msg) constru_message_%s_%s(msg)\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
+    fprintf(fp, "void constru_message_%s_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "\n/* clear and reuse msg */\n");
-    fprintf(fp, "void clear_message_%s(%s *msg);\n\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "void _clear_message_%s_len(%s *msg);\n\n", desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "#define clear_message_%s(msg) clear_message_%s_%s(msg)\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
+    fprintf(fp, "void clear_message_%s_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
+    fprintf(fp, "void _clear_message_%s_len_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "/* encode_message_*() is unsafe, DO not use it in the future. */\n");
     fprintf(fp, "#define encode_message_%s(msg,buf) encode_message_%s_safe((msg), (buf), 2*1024*1024)\n", desc->name().c_str(), desc->name().c_str());
-    fprintf(fp, "size_t encode_message_%s_safe(%s* msg, BYTE* buf, size_t buf_size);\n\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "size_t _internal_encode_message_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), struct_name.c_str());
-    fprintf(fp, "BOOL decode_message_%s(BYTE* buf, size_t buf_len, %s* msg);\n\n",
-            desc->name().c_str(), struct_name.c_str());
+    fprintf(fp, "#define encode_message_%s_safe(msg, buf, buf_size) encode_message_%s_safe_%s((msg), (buf), (buf_size))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
+    fprintf(fp, "size_t encode_message_%s_safe_%s(%s* msg, BYTE* buf, size_t buf_size);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
+    fprintf(fp, "size_t _internal_encode_message_%s_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
+    fprintf(fp, "#define decode_message_%s(buf, buf_len, msg) decode_message_%s_%s((buf), (buf_len), (msg))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
+    fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, size_t buf_len, %s* msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
 
     fprintf(fp, "\n#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
@@ -864,10 +867,10 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc)
             if(field->is_repeated())
             {
                 fprintf(fp, "    for(i=0; i<var_%s->var_%s.count; ++i){\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "        _clear_message_%s_len(&(var_%s->var_%s.item[i]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "        _clear_message_%s_len_%s(&(var_%s->var_%s.item[i]));\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "    }\n");
             } else {
-                fprintf(fp, "    _clear_message_%s_len(&(var_%s->var_%s));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "    _clear_message_%s_len_%s(&(var_%s->var_%s));\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
         }
     }
@@ -899,21 +902,20 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
     ////////////////////////////////////////
     // clear function
-    fprintf(fp, "void constru_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "void constru_message_%s_%s(%s* var_%s){\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
     print_clear_message(fp, desc, true, map_array_size);
     fprintf(fp, "}\n\n");
 
-    fprintf(fp, "void clear_message_%s(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "void clear_message_%s_%s(%s* var_%s){\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
     print_clear_message(fp, desc, false, map_array_size);
     fprintf(fp, "}\n\n");
 
-    fprintf(fp, "void _clear_message_%s_len(%s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "void _clear_message_%s_len_%s(%s* var_%s){\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
     print_clear_message_len(fp, desc);
     fprintf(fp, "}\n\n");
 
     ////////////////////////////////////////
-    fprintf(fp, "size_t _internal_encode_message_%s(%s* var_%s, BYTE* buf){\n",
-            desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "size_t _internal_encode_message_%s_%s(%s* var_%s, BYTE* buf){\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
 
     for(int i=0; i<desc->field_count(); ++i)
     {
@@ -1079,14 +1081,14 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             if(field->is_repeated())
             {
                 fprintf(fp, "%sif (0 == var_%s->var_%s.item[i]._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    var_%s->var_%s.item[i]._message_length = _internal_encode_message_%s(&(var_%s->var_%s.item[i]), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    var_%s->var_%s.item[i]._message_length = _internal_encode_message_%s_%s(&(var_%s->var_%s.item[i]), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i]._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "%sif (0 == var_%s->var_%s._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    var_%s->var_%s._message_length = _internal_encode_message_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    var_%s->var_%s._message_length = _internal_encode_message_%s_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%sencode_varint(var_%s->var_%s._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
@@ -1094,7 +1096,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             if(field->is_repeated())
             {
                 fprintf(fp, "%sif(NULL != buf){\n", prefix_spaces.c_str());
-                fprintf(fp, "%s    offset += _internal_encode_message_%s(&(var_%s->var_%s.item[i]), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    offset += _internal_encode_message_%s_%s(&(var_%s->var_%s.item[i]), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
                 fprintf(fp, "%s    offset += var_%s->var_%s.item[i]._message_length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1102,7 +1104,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "%sif(NULL != buf){\n", prefix_spaces.c_str());
-                fprintf(fp, "%s    offset += _internal_encode_message_%s(&(var_%s->var_%s), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    offset += _internal_encode_message_%s_%s(&(var_%s->var_%s), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
                 fprintf(fp, "%s    offset += var_%s->var_%s._message_length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1128,17 +1130,17 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "}\n\n");
 
     ////////////////////////////////////////
-    fprintf(fp, "size_t encode_message_%s_safe(%s* var_%s, BYTE* buf, size_t buf_size){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
-    fprintf(fp, "    _clear_message_%s_len(var_%s); \n\n", desc->name().c_str(), desc->name().c_str());
-    fprintf(fp, "    if (_internal_encode_message_%s(var_%s, NULL) > buf_size) {\n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "size_t encode_message_%s_safe_%s(%s* var_%s, BYTE* buf, size_t buf_size){\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "    _clear_message_%s_len_%s(var_%s); \n\n", desc->name().c_str(), _BUILD_TIME_, desc->name().c_str());
+    fprintf(fp, "    if (_internal_encode_message_%s_%s(var_%s, NULL) > buf_size) {\n", desc->name().c_str(), _BUILD_TIME_, desc->name().c_str());
     fprintf(fp, "        return 0;\n");
     fprintf(fp, "    }\n");
-    fprintf(fp, "    return _internal_encode_message_%s(var_%s, buf);\n", desc->name().c_str(), desc->name().c_str());
+    fprintf(fp, "    return _internal_encode_message_%s_%s(var_%s, buf);\n", desc->name().c_str(), _BUILD_TIME_, desc->name().c_str());
     fprintf(fp, "}\n\n");
 
 ///////////////////////////////////////////////////////////////////////////
 // Decode function
-    fprintf(fp, "\nBOOL decode_message_%s(BYTE* buf, const size_t buf_len, %s* var_%s){\n", desc->name().c_str(), struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "\nBOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* var_%s){\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "    size_t offset = 0;\n");
     // 包含message字段时，才需要使用此变量
     for(int i=0; i<desc->field_count(); ++i)
