@@ -35,5 +35,5 @@ if [ -f "protobuf3/Makefile" ]; then
   cd ../build/test && \
   cmake ../../test && \
   make && \
-  time ./test_codec
+  ./test_codec
 fi
