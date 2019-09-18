@@ -1,8 +1,5 @@
-#ifndef _PBSTRU_VERSION_H_
-#define _PBSTRU_VERSION_H_
+#pragma once
 
-#define VERSION "3.1-90-ceee442"
-
-#endif
+#define VERSION "3.1-98-c9e4420"
 
 //some other junk
