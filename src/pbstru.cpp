@@ -132,8 +132,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
         return 1;
     }
     fprintf(fp, genbypbstru);
-    fprintf(fp, "#ifndef __PBSTRU_COMM_H__\n");
-    fprintf(fp, "#define __PBSTRU_COMM_H__\n");
+    fprintf(fp, "#pragma once\n");
     fprintf(fp, "\n");
     fprintf(fp, "#include <stdlib.h>\n");
     fprintf(fp, "#include <memory.h>\n");
@@ -262,7 +261,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    } \\\n");
     fprintf(fp, "} while(0)\n");
 
-    fprintf(fp, "\n#endif\n\n/* end of file */\n");
+    fprintf(fp, "\n/* end of file */\n");
     fprintf(fp, "\n");
     fclose(fp);
 
@@ -594,9 +593,9 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, genbypbstru);
     string name_upper = desc->name();
     toupper(name_upper);
-    fprintf(fp, "#ifndef __PBSTRU_%s_H__\n", name_upper.c_str());
-    fprintf(fp, "#define __PBSTRU_%s_H__\n", name_upper.c_str());
-    fprintf(fp, "\n#ifdef __cplusplus\n");
+    fprintf(fp, "#pragma once\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "extern \"C\" {\n");
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n#include \"pbstru_comm.h\"\n");
@@ -748,10 +747,10 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "#define decode_message_%s(buf, buf_len, msg) decode_message_%s_%s((buf), (buf_len), (msg))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
     fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, size_t buf_len, %s* msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
 
-    fprintf(fp, "\n#ifdef __cplusplus\n");
+    fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
     fprintf(fp, "#endif\n");
-    fprintf(fp, "\n#endif\n\n/* end of file */\n\n");
+    fprintf(fp, "\n/* end of file */\n\n");
     fclose(fp);
     return retcode;
 }
