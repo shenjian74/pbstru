@@ -181,6 +181,8 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "/* 对tag信息进行编码 */\n");
     fprintf(fp, "#define %s_encode_tag_byte(buf, tag, wire_type, offset) %s_encode_tag_byte_%s((buf), (tag), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "\n");
+
     fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
@@ -739,8 +741,6 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "#define clear_message_%s(msg) clear_message_%s_%s(msg)\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
     fprintf(fp, "void clear_message_%s_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "void _clear_message_%s_len_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
-    fprintf(fp, "/* encode_message_*() is unsafe, DO not use it in the future. */\n");
-    fprintf(fp, "#define encode_message_%s(msg,buf) encode_message_%s_safe((msg), (buf), 2*1024*1024)\n", desc->name().c_str(), desc->name().c_str());
     fprintf(fp, "#define encode_message_%s_safe(msg, buf, buf_size) encode_message_%s_safe_%s((msg), (buf), (buf_size))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
     fprintf(fp, "size_t encode_message_%s_safe_%s(%s* msg, BYTE* buf, size_t buf_size);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "size_t _internal_encode_message_%s_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
