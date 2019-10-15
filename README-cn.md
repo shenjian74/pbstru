@@ -63,8 +63,8 @@ BYTE buffer[max_buffer_length];
 size_t bytes_write = encode_message_Response_safe(&var_response, buffer, sizeof(buffer));  // encode message
 ```
 
-初始化消息结构的函数constru_message_*()只需要在结构定义后执行一次即可，有点类似memset，但速度比memset要快。
-而clear_message_*()函数只清除消息中已经赋值的内容，速度较快，在静态结构重新赋值前需要使用此函数清空结构。
+初始化消息结构的函数constru_message_\*()只需要在结构定义后执行一次即可，有点类似memset，但速度比memset要快。
+而clear_message_\*()函数只清除消息中已经赋值的内容，速度较快，在静态结构重新赋值前需要使用此函数清空结构。
 
 ### 消息解码
 
@@ -72,6 +72,7 @@ size_t bytes_write = encode_message_Response_safe(&var_response, buffer, sizeof(
 #include "response.h"
 ...
 st_Response var_response;
+constru_message_Response(&var_response);  // Clear all of message, just like memset, call it once.
 ...
 /* NO need to call clear_message_xxx before this function */
 decode_message_Response(BYTE *buf, size_t buf_len, &var_response);
@@ -92,8 +93,8 @@ decode函数内部会首先调用clear_message_XXX清空第三个参数所指向
 
 * protobuf兼容性原则（重要）
 
-    1. 不可以改变已经存在的标签的tag值。
-    1. 不可以增加或删除required字段。
-    1. 可以删除可选(optional)或重复(repeated)字段。
-    1. 可以添加新的可选或重复字段，但是必须使用新的tag数字，必须是之前的字段所没有用过的。
-    1. 新的可选消息不会在旧的消息中显示，所以你需要使用 has_ 严格的检查他们是否存在，或者在proto 文件中提供一个缺省值。如果没有缺省值，就会有一个类型相关的默认缺省值：对于字符串就是空字符串；对于布尔型则是false；对于数字类型默认为0。
+1. 不可以改变已经存在的标签的tag值。
+1. 不可以增加或删除required字段。
+1. 可以删除可选(optional)或重复(repeated)字段。
+1. 可以添加新的可选或重复字段，但是必须使用新的tag数字，必须是之前的字段所没有用过的。
+1. 新的可选消息不会在旧的消息中显示，所以你需要使用 has_ 严格的检查他们是否存在，或者在proto 文件中提供一个缺省值。如果没有缺省值，就会有一个类型相关的默认缺省值：对于字符串就是空字符串；对于布尔型则是false；对于数字类型默认为0。
