@@ -65,6 +65,7 @@ size_t bytes_write = encode_message_Response_safe(&var_response, buffer, sizeof(
 #include "response.h"
 ...
 st_Response var_response;
+constru_message_Response(&var_response);  // Clear all of message, just like memset, call it once.
 ...
 /* NO need to call clear_message_xxx before this function */
 decode_message_Response(BYTE *buf, size_t buf_len, &var_response);
@@ -80,8 +81,8 @@ decode_message_Response(BYTE *buf, size_t buf_len, &var_response);
 
 * PROTOBUF compatibility principles（Important）
 
-    1. Do not Change the tag already existed.
-    1. Do not add or delete required field.
-    1. Optional or repeated field can be deleted.
-    1. Use a new tag to add new optional or repeated field。
-    1. Use has_xxx macro to check the new added optional field.
+1. Do not Change the tag already existed.
+1. Do not add or delete required field.
+1. Optional or repeated field can be deleted.
+1. Use a new tag to add new optional or repeated field。
+1. Use has_xxx macro to check the new added optional field.
