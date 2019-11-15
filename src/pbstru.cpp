@@ -1165,8 +1165,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
-        fprintf(fp, "        /* type:%s */\n", field->type_name());
-        fprintf(fp, "        case %d:\n", field->number());
+        fprintf(fp, "        case %d:  /* type:%s */\n", field->number(), field->type_name());
         switch(field->type())
         {
         case FieldDescriptor::TYPE_FIXED32:
@@ -1218,7 +1217,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "            var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += sizeof(DWORD);\n");
             }
-            fprintf(fp, "            break;\n");
             break;
         case FieldDescriptor::TYPE_FIXED64:
             if(field->is_repeated())
@@ -1270,7 +1268,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "            var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += sizeof(WORD64);\n");
             }
-            fprintf(fp, "            break;\n");
             break;
         case FieldDescriptor::TYPE_BOOL:
         case FieldDescriptor::TYPE_UINT32:
@@ -1313,7 +1310,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
             }
-            fprintf(fp, "            break;\n");
             break;
         case FieldDescriptor::TYPE_STRING:
             if(field->is_repeated())
@@ -1349,7 +1345,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "            var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
-            fprintf(fp, "            break;\n");
             break;
         case FieldDescriptor::TYPE_BYTES:
             if(field->is_repeated())
@@ -1385,7 +1380,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "            var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
-            fprintf(fp, "            break;\n");
             break;
         case FieldDescriptor::TYPE_MESSAGE:
             if(field->is_repeated())
@@ -1427,12 +1421,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "            }\n");
                 fprintf(fp, "            offset += tmp_field_len;\n");
             }
-            fprintf(fp, "            break;\n");
             break;
         default:
             fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
             break;
         }
+        fprintf(fp, "            break;\n\n");
     }
     fprintf(fp, "        default:\n");
     fprintf(fp, "            deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
