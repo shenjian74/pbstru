@@ -178,6 +178,10 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "} ps_bytes;\n");
     fprintf(fp, "\n");
 
+    fprintf(fp, "#ifdef __cplusplus\n");
+    fprintf(fp, "extern \"C\" {\n");
+    fprintf(fp, "#endif\n");
+    fprintf(fp, "\n");
     fprintf(fp, "/* 对tag信息进行编码 */\n");
     fprintf(fp, "#define %s_encode_tag_byte(buf, tag, wire_type, offset) %s_encode_tag_byte_%s((buf), (tag), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
@@ -185,6 +189,10 @@ int gen_comm(const string& nf_name, const string &target_dir)
 
     fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "\n");
+    fprintf(fp, "#ifdef __cplusplus\n");
+    fprintf(fp, "}\n");
+    fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
 
     fprintf(fp, "/* 对varint信息进行编码 */\n");
