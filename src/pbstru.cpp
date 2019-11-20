@@ -186,33 +186,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
-
-    fprintf(fp, "/* 对varint信息进行编码 */\n");
-    fprintf(fp, "#define encode_varint(value, buf, offset) do { \\\n");
-    fprintf(fp, "    register unsigned long long remain_len = (value); \\\n");
-    fprintf(fp, "    register size_t iloop; \\\n");
-    fprintf(fp, "\\\n");
-    fprintf(fp, "    if (NULL == (buf)) {\\\n");
-    fprintf(fp, "        for (iloop = 0;; ++iloop) { \\\n");
-    fprintf(fp, "            remain_len = remain_len >> 7; \\\n");
-    fprintf(fp, "            if (0 == remain_len) { \\\n");
-    fprintf(fp, "                break; \\\n");
-    fprintf(fp, "            } \\\n");
-    fprintf(fp, "        } \\\n");
-    fprintf(fp, "    } else { \\\n");
-    fprintf(fp, "        for (iloop = 0;; ++iloop) { \\\n");
-    fprintf(fp, "            if ((remain_len >> 7) > 0) { \\\n");
-    fprintf(fp, "                (buf)[(*(offset)) + iloop] = ((BYTE)remain_len) | 0x80; \\\n");
-    fprintf(fp, "                remain_len = remain_len >> 7; \\\n");
-    fprintf(fp, "            } else { \\\n");
-    fprintf(fp, "                (buf)[(*(offset)) + iloop] = (BYTE)remain_len; \\\n");
-    fprintf(fp, "                break; \\\n");
-    fprintf(fp, "            } \\\n");
-    fprintf(fp, "        } \\\n");
-    fprintf(fp, "    } \\\n");
-    fprintf(fp, "    (*(offset)) += 1 + iloop; \\\n");
-    fprintf(fp, "} while(0)\n");
-    fprintf(fp, "\n");
+    fprintf(fp, "void encode_varint(unsigned long long value, BYTE *buf, size_t *offset);\n");
 
     fprintf(fp, "/* 对varint信息进行解码 */\n");
     fprintf(fp, "#define decode_varint(buf, buflen, value, offset) do{ \\\n");
@@ -316,6 +290,33 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
+    fprintf(fp, "/* 对varint信息进行编码 */\n");
+    fprintf(fp, "inline void encode_varint(unsigned long long value, BYTE *buf, size_t *offset) {\n");
+    fprintf(fp, "    register unsigned long long remain_len = value;\n");
+    fprintf(fp, "    register size_t iloop;\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "    if (NULL == buf) {\n");
+    fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
+    fprintf(fp, "            remain_len = remain_len >> 7;\n");
+    fprintf(fp, "            if (0 == remain_len) {\n");
+    fprintf(fp, "                break;\n");
+    fprintf(fp, "            }\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "    } else {\n");
+    fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
+    fprintf(fp, "            if ((remain_len >> 7) > 0) {\n");
+    fprintf(fp, "                (buf)[(*(offset)) + iloop] = ((BYTE)remain_len) | 0x80;\n");
+    fprintf(fp, "                remain_len = remain_len >> 7;\n");
+    fprintf(fp, "            } else {\n");
+    fprintf(fp, "                (buf)[(*(offset)) + iloop] = (BYTE)remain_len;\n");
+    fprintf(fp, "                break;\n");
+    fprintf(fp, "            }\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    (*(offset)) += 1 + iloop;\n");
+    fprintf(fp, "}\n");
+    fprintf(fp, "\n");
+
     fprintf(fp, "/* end of file */\n");
 
     return retcode;
@@ -399,6 +400,9 @@ void get_struct_list_name(const FieldDescriptor *field, string &struct_list_name
     case FieldDescriptor::TYPE_FIXED32:
     case FieldDescriptor::TYPE_UINT32:
         struct_list_name += string("_uint32");
+        break;
+    case FieldDescriptor::TYPE_INT32:
+        struct_list_name += string("_int32");
         break;
     case FieldDescriptor::TYPE_FIXED64:
     case FieldDescriptor::TYPE_UINT64:
@@ -484,6 +488,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         else
         {
             fprintf(fp, "    BOOL var_%s;  /* tag:%d */\n", field->name().c_str(), field->number());
+        }
+        break;
+    case FieldDescriptor::TYPE_INT32:
+        if(field->is_repeated())
+        {
+            string struct_list_name;
+            get_struct_list_name(field, struct_list_name);
+            fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
+                    struct_list_name.c_str(), field->name().c_str(), field->number());
+        }
+        else
+        {
+            fprintf(fp, "    long var_%s;  /* tag:%d */\n", field->name().c_str(), field->number());
         }
         break;
     case FieldDescriptor::TYPE_UINT32:
@@ -686,6 +703,9 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
             case FieldDescriptor::TYPE_UINT32:
                 fprintf(fp, "    DWORD");
                 break;
+            case FieldDescriptor::TYPE_INT32:
+                fprintf(fp, "    long");
+                break;
             case FieldDescriptor::TYPE_FIXED64:
             case FieldDescriptor::TYPE_UINT64:
                 fprintf(fp, "    WORD64");
@@ -806,6 +826,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
             case FieldDescriptor::TYPE_FIXED64:
             case FieldDescriptor::TYPE_UINT32:
             case FieldDescriptor::TYPE_UINT64:
+            case FieldDescriptor::TYPE_INT32:
                 fprintf(fp, "%svar_%s->var_%s = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
                 break;
             case FieldDescriptor::TYPE_BOOL:
@@ -950,6 +971,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 case FieldDescriptor::TYPE_UINT32:
                 case FieldDescriptor::TYPE_UINT64:
                 case FieldDescriptor::TYPE_ENUM:
+                case FieldDescriptor::TYPE_INT32:
                     fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_VARINT, &offset);\n", nf_name.c_str(), _BUILD_TIME_, field->number());
                     break;
                 default:
@@ -1018,6 +1040,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         case FieldDescriptor::TYPE_UINT32:
         case FieldDescriptor::TYPE_UINT64:
         case FieldDescriptor::TYPE_ENUM:
+        case FieldDescriptor::TYPE_INT32:
             if(!field->is_packed())
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_VARINT, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
@@ -1273,6 +1296,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         case FieldDescriptor::TYPE_UINT32:
         case FieldDescriptor::TYPE_UINT64:
         case FieldDescriptor::TYPE_ENUM:
+        case FieldDescriptor::TYPE_INT32:
             if(field->is_repeated())
             {
                 char spaces[100];

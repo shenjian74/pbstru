@@ -26,11 +26,16 @@ zte.cdb.ccc.ut_test_sub_message.d_uint32 max_count:10
 zte.cdb.ccc.ut_test_message.d_uint32 max_count:10
 zte.cdb.ccc.ut_test_message.pd_uint32 max_count:10
 zte.cdb.ccc.ut_test_message.f_uint32 max_count:10
+zte.cdb.ccc.ut_test_message.pf_uint32 max_count:10
+zte.cdb.ccc.ut_test_message.d_int32 max_count:10
+zte.cdb.ccc.ut_test_message.pd_int32 max_count:10
+zte.cdb.ccc.ut_test_message.f_int32 max_count:10
+zte.cdb.ccc.ut_test_message.pf_int32 max_count:10
+
 zte.cdb.ccc.ut_test_message.f_uint64 max_count:10
 zte.cdb.ccc.ut_test_message.f_fixed32 max_count:10
 zte.cdb.ccc.ut_test_message.f_fixed64 max_count:10
 zte.cdb.ccc.ut_test_message.f_bool max_count:10
-zte.cdb.ccc.ut_test_message.pf_uint32 max_count:10
 zte.cdb.ccc.ut_test_message.pf_uint64 max_count:10
 zte.cdb.ccc.ut_test_message.pf_fixed32 max_count:10
 zte.cdb.ccc.ut_test_message.pf_fixed64 max_count:10
