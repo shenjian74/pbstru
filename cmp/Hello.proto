@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+message Hello {
+  required int32 id = 1;
+  required float flt = 2;
+  required string str = 3;
+  optional int32 opt = 4;
+}
