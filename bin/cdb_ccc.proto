@@ -543,7 +543,6 @@ message ut_test_message
 	repeated ut_test_sub_message f_message = 83;
 	repeated ut_test_sub_message d_message = 84;
 
-	required int32 r_int32 = 85;
 	optional int32 o_int32 = 86;
 	repeated int32 f_int32 = 87;
 	repeated int32 d_int32 = 88;
