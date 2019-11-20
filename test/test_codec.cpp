@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <math.h>
 #include <asyncconfirmreq.h>
 #include <sys/time.h>
 #include "addrequest.h"
@@ -131,7 +132,7 @@ int main(int argc, char *argv[])
         value = 65535;
         offset = 0;
         encode_varint(value, buf, &offset);
-        print_buffer(buf, offset);
+        // print_buffer(buf, offset);
         assert(3 == offset);
         buf_len1 = offset;
         assert(0xFF == buf[0]);
@@ -145,7 +146,7 @@ int main(int argc, char *argv[])
         value = 65536;
         offset = 0;
         encode_varint(value, buf, &offset);
-        print_buffer(buf, offset);
+        // print_buffer(buf, offset);
         assert(3 == offset);
         buf_len1 = offset;
         assert(0x80 == buf[0]);
@@ -159,7 +160,7 @@ int main(int argc, char *argv[])
         long long value3 = 0xFFFFFFFF;
         offset = 0;
         encode_varint(value3, buf, &offset);
-        print_buffer(buf, offset);
+        // print_buffer(buf, offset);
         assert(5 == offset);
         buf_len1 = offset;
         assert(0xFF == buf[0]);
@@ -190,7 +191,7 @@ int main(int argc, char *argv[])
         var_Tuple.var_field.item[1].var_value.length = strlen((char *) var_Tuple.var_field.item[1].var_value.data);
         buf_len2 = encode_message_Tuple_safe(&var_Tuple, buf, sizeof(buf));
         assert(87 == buf_len2);
-        print_buffer(buf, buf_len2);
+        // print_buffer(buf, buf_len2);
 
         BOOL bret = decode_message_Tuple(buf, buf_len2, &var_Tuple);
         assert(TRUE == bret);
@@ -245,7 +246,7 @@ int main(int argc, char *argv[])
         buf_len1 = encode_message_AddRequest_safe(&var_AddRequest, buf, sizeof(buf));
         // printf("buf_len:%zu\n", buf_len1);
         assert(160 == buf_len1);
-        print_buffer(buf, buf_len1);
+        // print_buffer(buf, buf_len1);
 
         decode_message_AddRequest(buf, buf_len1, &var_AddRequest);
         assert(TRUE == var_AddRequest.var_tuple.item[0].var_path.has_path_string);
@@ -748,7 +749,7 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-            print_buffer(buf, size3);
+            // print_buffer(buf, size3);
             assert(125 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
@@ -765,6 +766,46 @@ int main(int argc, char *argv[])
             assert(-17 == msg.var_pd_int32.item[1]);
         }
 
+        for (int i = 0; i < 3; ++i) {
+            constru_message_ut_test_message(&msg);
+            msg.has_o_float = TRUE;
+            msg.var_o_float = 0.0;
+            msg.var_f_float.count = 2.1;
+            msg.var_f_float.item[0] = -1.2;
+            msg.var_f_float.item[1] = 13.3;
+            msg.var_d_float.item[msg.var_d_float.count++] = 1000.4;
+            msg.var_d_float.item[msg.var_d_float.count++] = -1001.5;
+            msg.var_pf_float.item[0] = 14.6;
+            msg.var_pf_float.item[1] = -15.7;
+            msg.var_pd_float.item[msg.var_pd_float.count++] = 16.8;
+            msg.var_pd_float.item[msg.var_pd_float.count++] = -17.9;
+
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
+            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            // print_buffer(buf, size3);
+            assert(118 == size3);
+            decode_message_ut_test_message(buf, size3, &msg);
+
+            assert(TRUE == msg.has_o_float);
+            assert((msg.var_o_float-0.0)<0.001);
+            assert((msg.var_o_float-0.0)>-0.001);
+            assert(2 == msg.var_f_float.count);
+            assert(fabs(msg.var_f_float.item[0]+1.2)<0.001);
+            assert(fabs(msg.var_f_float.item[1]-13.3)<0.001);
+            assert(fabs(msg.var_d_float.item[0]-1000.4)<0.001);
+            assert(fabs(msg.var_d_float.item[1]+1001.5)<0.001);
+            assert(fabs(msg.var_pf_float.item[0]-14.6)<0.001);
+            assert(fabs(msg.var_pf_float.item[1]+15.7)<0.001);
+            assert(fabs(msg.var_pd_float.item[0]-16.8)<0.001);
+            assert(fabs(msg.var_pd_float.item[1]+17.9)<0.001);
+        }
     }
 
     {

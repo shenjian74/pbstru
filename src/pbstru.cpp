@@ -404,6 +404,9 @@ void get_struct_list_name(const FieldDescriptor *field, string &struct_list_name
     case FieldDescriptor::TYPE_INT32:
         struct_list_name += string("_int32");
         break;
+    case FieldDescriptor::TYPE_FLOAT:
+        struct_list_name += string("_float");
+        break;
     case FieldDescriptor::TYPE_FIXED64:
     case FieldDescriptor::TYPE_UINT64:
         struct_list_name += string("_uint64");
@@ -501,6 +504,19 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         else
         {
             fprintf(fp, "    long var_%s;  /* tag:%d */\n", field->name().c_str(), field->number());
+        }
+        break;
+    case FieldDescriptor::TYPE_FLOAT:
+        if(field->is_repeated())
+        {
+            string struct_list_name;
+            get_struct_list_name(field, struct_list_name);
+            fprintf(fp, "    st_%s_list var_%s;  /* tag:%d */\n",
+                    struct_list_name.c_str(), field->name().c_str(), field->number());
+        }
+        else
+        {
+            fprintf(fp, "    float var_%s;  /* tag:%d */\n", field->name().c_str(), field->number());
         }
         break;
     case FieldDescriptor::TYPE_UINT32:
@@ -706,6 +722,9 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
             case FieldDescriptor::TYPE_INT32:
                 fprintf(fp, "    long");
                 break;
+            case FieldDescriptor::TYPE_FLOAT:
+                fprintf(fp, "    float");
+                break;
             case FieldDescriptor::TYPE_FIXED64:
             case FieldDescriptor::TYPE_UINT64:
                 fprintf(fp, "    WORD64");
@@ -828,6 +847,9 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
             case FieldDescriptor::TYPE_UINT64:
             case FieldDescriptor::TYPE_INT32:
                 fprintf(fp, "%svar_%s->var_%s = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
+                break;
+            case FieldDescriptor::TYPE_FLOAT:
+                fprintf(fp, "%svar_%s->var_%s = 0.0;\n", spaces, desc->name().c_str(), field->name().c_str());
                 break;
             case FieldDescriptor::TYPE_BOOL:
                 fprintf(fp, "%svar_%s->var_%s = FALSE;\n", spaces, desc->name().c_str(), field->name().c_str());
@@ -962,6 +984,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 switch(field->type())
                 {
                 case FieldDescriptor::TYPE_FIXED32:
+                case FieldDescriptor::TYPE_FLOAT:
                     fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset);\n", nf_name.c_str(), _BUILD_TIME_, field->number());
                     break;
                 case FieldDescriptor::TYPE_FIXED64:
@@ -1016,6 +1039,25 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += sizeof(DWORD);\n", prefix_spaces.c_str());
+            break;
+
+        case FieldDescriptor::TYPE_FLOAT:
+            if(!field->is_packed())
+            {
+                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+            }
+            fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
+            if(field->is_repeated())
+            {
+                fprintf(fp, "%s    *((float *)(buf + offset)) = var_%s->var_%s.item[i];\n",
+                        prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+            }
+            else
+            {
+                fprintf(fp, "%s    *((float *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+            }
+            fprintf(fp, "%s}\n", prefix_spaces.c_str());
+            fprintf(fp, "%soffset += sizeof(float);\n", prefix_spaces.c_str());
             break;
 
         case FieldDescriptor::TYPE_FIXED64:
@@ -1239,6 +1281,56 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "            }\n");
                 fprintf(fp, "            var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "            offset += sizeof(DWORD);\n");
+            }
+            break;
+        case FieldDescriptor::TYPE_FLOAT:
+            if(field->is_repeated())
+            {
+                char spaces[100];
+                spaces[0] = '\0';
+                if(field->is_packed())
+                {
+                    fprintf(fp, "            {\n");
+                    fprintf(fp, "                register size_t i = 0;\n");
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                for(i=0; i<array_size; ++i) {\n");
+                    strcpy(spaces, "        ");
+                }
+                fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
+                        spaces, desc->name().c_str(), field->name().c_str(),
+                        map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
+                fprintf(fp, "%s            }\n", spaces);
+                fprintf(fp, "%s            if((offset + sizeof(float)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                return FALSE;\n", spaces);
+                fprintf(fp, "%s            }\n", spaces);
+                fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((float *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s            offset += sizeof(float);\n", spaces);
+                fprintf(fp, "%s            var_%s->var_%s.count += 1;\n",
+                        spaces, desc->name().c_str(), field->name().c_str());
+                if(field->is_packed())
+                {
+                    fprintf(fp, "                }\n");
+                    fprintf(fp, "            }\n");
+                }
+            }
+            else if(field->is_optional())
+            {
+                fprintf(fp, "            if((offset + sizeof(float)) > buf_len) {\n");
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
+                fprintf(fp, "            var_%s->var_%s = *((float *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            offset += sizeof(float);\n");
+                fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+            }
+            else
+            {
+                fprintf(fp, "            if((offset + sizeof(float)) > buf_len) {\n");
+                fprintf(fp, "                return FALSE;\n");
+                fprintf(fp, "            }\n");
+                fprintf(fp, "            var_%s->var_%s = *((float *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "            offset += sizeof(float);\n");
             }
             break;
         case FieldDescriptor::TYPE_FIXED64:
