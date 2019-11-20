@@ -548,4 +548,10 @@ message ut_test_message
 	repeated int32 d_int32 = 88;
 	repeated int32 pf_int32 = 89 [packed=true];
 	repeated int32 pd_int32 = 90 [packed=true];
+
+	optional float o_float = 91;
+	repeated float f_float = 92;
+	repeated float d_float = 93;
+	repeated float pf_float = 94 [packed=true];
+	repeated float pd_float = 95 [packed=true];
 }
