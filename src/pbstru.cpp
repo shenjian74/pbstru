@@ -186,7 +186,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
-    fprintf(fp, "void encode_varint(unsigned long long value, BYTE *buf, size_t *offset);\n");
+    fprintf(fp, "inline void encode_varint(unsigned long long value, BYTE *buf, size_t *offset) __attribute__((always_inline));\n");
 
     fprintf(fp, "/* 对varint信息进行解码 */\n");
     fprintf(fp, "#define decode_varint(buf, buflen, value, offset) do{ \\\n");
@@ -305,15 +305,15 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    } else {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
     fprintf(fp, "            if ((remain_len >> 7) > 0) {\n");
-    fprintf(fp, "                (buf)[(*(offset)) + iloop] = ((BYTE)remain_len) | 0x80;\n");
+    fprintf(fp, "                buf[*offset + iloop] = ((BYTE)remain_len) | 0x80;\n");
     fprintf(fp, "                remain_len = remain_len >> 7;\n");
     fprintf(fp, "            } else {\n");
-    fprintf(fp, "                (buf)[(*(offset)) + iloop] = (BYTE)remain_len;\n");
+    fprintf(fp, "                buf[*offset + iloop] = (BYTE)remain_len;\n");
     fprintf(fp, "                break;\n");
     fprintf(fp, "            }\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    }\n");
-    fprintf(fp, "    (*(offset)) += 1 + iloop;\n");
+    fprintf(fp, "    *offset += 1 + iloop;\n");
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
@@ -324,7 +324,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
 
 LPSTR proto_filename;
 FILE *fp_option = NULL;
-// Get the max size of a repeated field.  
+// Get the max size of a repeated field.
 static bool get_max_count(const string &message_name, const string &field_name, string& max_count) {
     char str1[128];
     char str2[64];

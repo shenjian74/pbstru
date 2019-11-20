@@ -33,7 +33,7 @@ void print_buffer(BYTE * content, size_t filelen)
     total_len = filelen;
     total_line = total_len / 16;
     fputs("\n", stderr);
-    sprintf(buffer, "[Total %lu bytes]\n", filelen);
+    sprintf(buffer, "[Total %zu bytes]\n", filelen);
     fputs(buffer, stderr);
 
     for (line = 0; line < total_line; line++) {
@@ -321,9 +321,9 @@ int main(int argc, char *argv[])
             msg.var_r_enum = CLIENT_M;
 
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-            print_buffer(buf, size3);
+            // print_buffer(buf, size3);
             // printf("buf_len:%zu\n", size3);
-            assert(96 == size3);
+            assert(93 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(10 == msg.var_r_uint32);
@@ -338,48 +338,6 @@ int main(int argc, char *argv[])
             assert(15 == msg.var_pf_uint32.item[1]);
             assert(16 == msg.var_pd_uint32.item[0]);
             assert(17 == msg.var_pd_uint32.item[1]);
-        }
-
-        for (int i = 0; i < 3; ++i) {
-            constru_message_ut_test_message(&msg);
-            msg.var_r_int32 = 10;
-            msg.has_o_int32 = TRUE;
-            msg.var_o_int32 = 0;
-            msg.var_f_int32.count = 2;
-            msg.var_f_int32.item[0] = -1;
-            msg.var_f_int32.item[1] = 13;
-            msg.var_d_int32.item[msg.var_d_int32.count++] = 1000;
-            msg.var_d_int32.item[msg.var_d_int32.count++] = -1001;
-            msg.var_pf_int32.item[0] = 14;
-            msg.var_pf_int32.item[1] = -15;
-            msg.var_pd_int32.item[msg.var_pd_int32.count++] = 16;
-            msg.var_pd_int32.item[msg.var_pd_int32.count++] = -17;
-
-            char value12[] = "u4ojlfsjalfjaio;sjfl";
-            msg.var_r_string.data = value12;
-            msg.var_r_string.length = sizeof(value12);
-            msg.var_r_bytes.data = (BYTE *)value12;
-            msg.var_r_bytes.length = sizeof(value12);
-            msg.var_r_message.var_d_uint32.count = 0;
-            msg.var_r_enum = CLIENT_M;
-
-            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-            print_buffer(buf, size3);
-            assert(128 == size3);
-            decode_message_ut_test_message(buf, size3, &msg);
-
-            assert(10 == msg.var_r_int32);
-            assert(TRUE == msg.has_o_int32);
-            assert(0 == msg.var_o_int32);
-            assert(2 == msg.var_f_int32.count);
-            assert(-1 == msg.var_f_int32.item[0]);
-            assert(13 == msg.var_f_int32.item[1]);
-            assert(1000 == msg.var_d_int32.item[0]);
-            assert(-1001 == msg.var_d_int32.item[1]);
-            assert(14 == msg.var_pf_int32.item[0]);
-            assert(-15 == msg.var_pf_int32.item[1]);
-            assert(16 == msg.var_pd_int32.item[0]);
-            assert(-17 == msg.var_pd_int32.item[1]);
         }
 
         for (int i = 0; i < 3; ++i) {
@@ -423,7 +381,7 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
             // printf("size2:%zu\n", size2);
-            assert(128 == size2);
+            assert(106 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(2447866062020153618 == msg.var_r_uint64);
@@ -766,6 +724,47 @@ int main(int argc, char *argv[])
             assert(verify_ut_test_sub_message(&(msg.var_d_message.item[0])));
             assert(verify_ut_test_sub_message(&(msg.var_d_message.item[1])));
         }
+
+        for (int i = 0; i < 3; ++i) {
+            constru_message_ut_test_message(&msg);
+            msg.has_o_int32 = TRUE;
+            msg.var_o_int32 = 0;
+            msg.var_f_int32.count = 2;
+            msg.var_f_int32.item[0] = -1;
+            msg.var_f_int32.item[1] = 13;
+            msg.var_d_int32.item[msg.var_d_int32.count++] = 1000;
+            msg.var_d_int32.item[msg.var_d_int32.count++] = -1001;
+            msg.var_pf_int32.item[0] = 14;
+            msg.var_pf_int32.item[1] = -15;
+            msg.var_pd_int32.item[msg.var_pd_int32.count++] = 16;
+            msg.var_pd_int32.item[msg.var_pd_int32.count++] = -17;
+
+            char value12[] = "u4ojlfsjalfjaio;sjfl";
+            msg.var_r_string.data = value12;
+            msg.var_r_string.length = sizeof(value12);
+            msg.var_r_bytes.data = (BYTE *)value12;
+            msg.var_r_bytes.length = sizeof(value12);
+            msg.var_r_message.var_d_uint32.count = 0;
+            msg.var_r_enum = CLIENT_M;
+
+            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            print_buffer(buf, size3);
+            assert(125 == size3);
+            decode_message_ut_test_message(buf, size3, &msg);
+
+            assert(TRUE == msg.has_o_int32);
+            assert(0 == msg.var_o_int32);
+            assert(2 == msg.var_f_int32.count);
+            assert(-1 == msg.var_f_int32.item[0]);
+            assert(13 == msg.var_f_int32.item[1]);
+            assert(1000 == msg.var_d_int32.item[0]);
+            assert(-1001 == msg.var_d_int32.item[1]);
+            assert(14 == msg.var_pf_int32.item[0]);
+            assert(-15 == msg.var_pf_int32.item[1]);
+            assert(16 == msg.var_pd_int32.item[0]);
+            assert(-17 == msg.var_pd_int32.item[1]);
+        }
+
     }
 
     {
