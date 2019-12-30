@@ -1065,7 +1065,11 @@ static int gen_source(const Descriptor *desc, string &target_dir, const map<stri
         case FieldDescriptor::TYPE_FIXED64:
             if(!field->is_packed())
             {
+<<<<<<< HEAD
                 fprintf(fp, "%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, field->number());
+=======
+                fprintf(fp, "%sencode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, field->number());
+>>>>>>> 7a04bab0fdf87c733bd2e66836223d11ac34d928
             }
             fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
