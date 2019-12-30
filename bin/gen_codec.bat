@@ -1,2 +1,2 @@
-pbstru.exe CDB cdb.proto cdb_ccc.proto codec
-pbstru.exe LB lb.proto lb
+pbstru.exe cdb.proto cdb_ccc.proto codec
+pbstru.exe lb.proto lb
