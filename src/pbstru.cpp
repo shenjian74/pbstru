@@ -120,7 +120,7 @@ static string &toupper(string& text)
     return text;
 }
 
-// 生成公共文件pbstru_comm.h和pbstru_comm.c
+// Generate public file pbstru_comm.h and pbstru_comm.c
 int gen_comm(const string& nf_name, const string &target_dir)
 {
     int retcode = 0;
@@ -162,7 +162,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
     fprintf(fp, "#else\n");
-    fprintf(fp, "/* 包含数据类型定义 */\n");
+    fprintf(fp, "/* include data type definitions */\n");
     fprintf(fp, "#include \"tulip.h\"\n");
     fprintf(fp, "\n");
     fprintf(fp, "#endif\n");
@@ -182,7 +182,6 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "extern \"C\" {\n");
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
-    fprintf(fp, "/* 对tag信息进行编码 */\n");
     fprintf(fp, "#define %s_encode_tag_byte(buf, tag, wire_type, offset) %s_encode_tag_byte_%s((buf), (tag), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
@@ -195,7 +194,6 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "/* 对varint信息进行编码 */\n");
     fprintf(fp, "#define encode_varint(value, buf, offset) do { \\\n");
     fprintf(fp, "    register unsigned long long remain_len = (value); \\\n");
     fprintf(fp, "    register size_t iloop; \\\n");
@@ -222,7 +220,6 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "/* 对varint信息进行解码 */\n");
     fprintf(fp, "#define decode_varint(buf, buflen, value, offset) do{ \\\n");
     fprintf(fp, "    register size_t iloop; \\\n");
     fprintf(fp, "    size_t max_iloop = (buflen); \\\n");
@@ -240,7 +237,6 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "/* 跳过不认识的字段，向前兼容用 */\n");
     fprintf(fp, "#define deal_unknown_field(wire_type, buf, buflen, offset) do {\\\n");
     fprintf(fp, "    size_t tmp_field_len; \\\n");
     fprintf(fp, "    switch(wire_type){ \\\n");
@@ -287,7 +283,6 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "/* 对tag信息进行解码 */\n");
     fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE *buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset) {\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "    if(buf[0] & 0x80) {\n");
     fprintf(fp, "        if(buflen<2) {\n");
@@ -657,7 +652,7 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
         assert(field->number()<256);
     }
 
-    // 使用set去掉重复的头文件
+    // use std::set to delete duplicate header files
     for(set<string>::iterator it=headers.begin(); it!=headers.end(); ++it)
     {
         fprintf(fp, "#include \"%s.h\"\n", it->c_str());
@@ -691,7 +686,7 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
             for(int j=0; j<enum_desc->value_count(); ++j)
             {
                 fprintf(fp, "    %s_M = %d", enum_desc->value(j)->name().c_str(), enum_desc->value(j)->number());
-                // 处理最后enum值时不加逗号
+                // the last enum value has no comma
                 if(j!=(enum_desc->value_count()-1))
                 {
                     fprintf(fp, ",");
@@ -703,7 +698,7 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
         }
     }
 
-    // 各个list的结构定义
+    // the struct definition of every list
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
@@ -977,7 +972,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     }
     fprintf(fp, "    size_t offset = 0;\n\n");
 
-    // 逐个字段encode
+    // encode every fields
     for(int i=0; i<desc->field_count(); ++i)
     {
         string prefix_spaces = "    ";
@@ -1213,7 +1208,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 // Decode function
     fprintf(fp, "\nBOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* var_%s) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "    size_t offset = 0;\n");
-    // 包含message字段时，才需要使用此变量
+    // use this variable if has a sub-message
     for(int i=0; i<desc->field_count(); ++i)
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
@@ -1675,9 +1670,7 @@ int get_syntax(LPCSTR proto_filename)
                         break;
                     }
                 }
-                // printf("%s\n", buf+i);
 
-                // 发现"syntax"关键字
                 if(0 == memcmp(buf+i, "syntax", 6))
                 {
                     for(;; ++i)
@@ -1745,7 +1738,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         }
                     }
 
-                    if(0 == memcmp(buf+i, "map", 3))   // 发现"map"关键字
+                    if(0 == memcmp(buf+i, "map", 3))
                     {
                         printf("%s", buf+i);
                         for(i=i+3;; ++i)
@@ -1785,7 +1778,6 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                             }
                         }
                         len = i - start;
-                        // 定位到key_value信息
                         memcpy(key_value, buf + start, len);
                         key_value[len] = EOS;
                         printf("key_value:%s\n", key_value);
@@ -1830,7 +1822,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         field_no[len] = EOS;
                         printf("field_no:%s\n", field_no);
 
-                        // 使用set避免同名mapentrys重复插入
+                        // use std::set to prevent same name mapentrys
                         string map_entry_name = string("Map") + field_name + "Entry";
                         if(map_entrys.find(map_entry_name) == map_entrys.end())
                         {
@@ -1841,7 +1833,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         }
                         sprintf(buf, "repeated Map%sEntry %s = %s;\n", field_name, field_name, field_no);
                     }
-                    // 没有"map"关键字的情况，则直接拷贝
+                    // if no map keywork, direct copy
                     fputs(buf, fpout);
                 }
             }
@@ -1891,7 +1883,7 @@ int main(int argc, char *argv[])
         proto_filename = argv[i];
         int syntax = get_syntax(proto_filename);
 
-        // 如果是v3的语法，则转换map关键字
+        // if use proto3, convert map keyword.
         ///////////////////////////////////////////////////
         // message MapFieldEntry {
         //   key_type key = 1;
