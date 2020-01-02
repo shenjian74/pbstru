@@ -288,7 +288,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        if(buflen<2) {\n");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
-    fprintf(fp, "        *field_num = buf[1] * 16 + ((buf[0] & 0x7F) >> 3));\n");
+    fprintf(fp, "        *field_num = buf[1] * 16 + ((buf[0] & 0x7F) >> 3);\n");
     fprintf(fp, "        *wire_type = buf[0] & 0x07;\n");
     fprintf(fp, "        *offset += 2;\n");
     fprintf(fp, "    } else {\n");
@@ -312,7 +312,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    } else {\n");
     fprintf(fp, "        if (NULL != buf) {\n");
     fprintf(fp, "            buf[*offset] = (tag << 3) | 0x80 | wire_type;\n");
-    fprintf(fp, "            buf[*offset+1] = (BYTE)(tag/16) & 0x78;\n");
+    fprintf(fp, "            buf[*offset+1] = (BYTE)(tag/16) & 0x7F;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "        *offset += 2;\n");
     fprintf(fp, "    }\n");

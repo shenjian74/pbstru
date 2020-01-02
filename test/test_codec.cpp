@@ -298,8 +298,10 @@ int main(int argc, char *argv[])
         for (int i = 0; i < 3; ++i) {
             constru_message_ut_test_message(&msg);
             msg.var_r_uint32 = 10;
+
             msg.has_o_uint32 = TRUE;
             msg.var_o_uint32 = 11;
+
             msg.var_f_uint32.count = 2;
             msg.var_f_uint32.item[0] = 12;
             msg.var_f_uint32.item[1] = 13;
@@ -329,6 +331,7 @@ int main(int argc, char *argv[])
 
             assert(10 == msg.var_r_uint32);
             assert(TRUE == msg.has_o_uint32);
+            printf("msg.var_o_uint32:%d\n", msg.var_o_uint32);
             assert(11 == msg.var_o_uint32);
             assert(2 == msg.var_f_uint32.count);
             assert(12 == msg.var_f_uint32.item[0]);
