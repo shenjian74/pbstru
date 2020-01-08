@@ -21,6 +21,7 @@ fi
 if [ -f "protobuf3/Makefile" ]; then 
   cd protobuf3
   make
+  cp src/protoc ../bin
   cd ..
   rm -rf build && \
   mkdir build && \
@@ -35,5 +36,7 @@ if [ -f "protobuf3/Makefile" ]; then
   cd ../build/test && \
   cmake ../../test && \
   make && \
+  mv test_codec ../../bin && \
+  cd ../../bin && \
   ./test_codec
 fi

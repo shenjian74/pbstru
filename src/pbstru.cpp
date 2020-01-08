@@ -1860,6 +1860,7 @@ int main(int argc, char *argv[])
     }
 
     string nf_name = string(argv[1]);
+    cout << "nf_name is " << nf_name << endl;
 
     string target_dir = string(argv[argc-1]);
     if(create_path(target_dir))
@@ -1882,6 +1883,7 @@ int main(int argc, char *argv[])
         compiler::Importer *importer = new compiler::Importer(&sourceTree, &errorCollector);
         proto_filename = argv[i];
         int syntax = get_syntax(proto_filename);
+        printf("Proto v%d\n", syntax);
 
         // if use proto3, convert map keyword.
         ///////////////////////////////////////////////////
