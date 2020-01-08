@@ -25,6 +25,7 @@ cd ..
 :makefile_found
 cd build
 mingw32-make
+copy protoc.exe ..\..\..\bin
 cd ..\..\..
 del /S /Q /F build >nul
 rd /S /Q build
