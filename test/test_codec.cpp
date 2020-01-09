@@ -10,6 +10,7 @@
 #include "compoundrequest.h"
 #include "response.h"
 #include "statresp.h"
+#include "global_t.h"
 #include "ut_test_message.h"
 #include "ut_test_sub_message.h"
 
@@ -76,7 +77,7 @@ void write_buffer_file(const char *filename, BYTE * buf, size_t buf_len2)
     fclose(fp);
 }
 
-bool verify_pb_buffer(BYTE * buf, size_t buf_len2, const char *proto_filename, const char *message_type, const char *verify_string)
+std::string get_pb_string(BYTE * buf, size_t buf_len2, const char *proto_filename, const char *message_type)
 {
     char command[256];
     std::string result;
@@ -92,7 +93,7 @@ bool verify_pb_buffer(BYTE * buf, size_t buf_len2, const char *proto_filename, c
 	result += line;
     printf("result:[\n%s\n]\n", result.c_str());
     // print_buffer((BYTE *) result.c_str(), result.length());
-    return (0 == strcmp(verify_string, result.c_str()));
+    return result;
 }
 
 void fill_ut_test_sub_message(st_ut_test_sub_message * msg)
@@ -202,6 +203,103 @@ int main(int argc, char *argv[])
     }
 
     {
+	st_global_t var_global;
+	constru_message_GLOBAL_T(&var_global);
+
+        var_global.var_mdbSize = 1;  /* tag:1 */
+        var_global.var_log_size = 2;  /* tag:2 */
+        var_global.var_sync_time = 3;  /* tag:3 */
+        var_global.var_auto_scale = 4;  /* tag:4 */
+        var_global.var_db_alarm_thre = 5;  /* tag:5 */
+        var_global.var_scale_limit = 6;  /* tag:6 */
+        var_global.var_sub_ntf_switch = 7;  /* tag:7 */
+        var_global.has_overload_cdn_tps_limit = TRUE;
+        var_global.var_overload_cdn_tps_limit = 8;  /* tag:8 */
+        var_global.has_overload_level1_cpu = TRUE;
+        var_global.var_overload_level1_cpu = 9;  /* tag:9 */
+        var_global.has_overload_level2_cpu = TRUE;
+        var_global.var_overload_level2_cpu = 10;  /* tag:10 */
+        var_global.has_overload_level3_cpu = TRUE;
+        var_global.var_overload_level3_cpu = 11;  /* tag:11 */
+        var_global.has_overload_level4_cpu = TRUE;
+        var_global.var_overload_level4_cpu = 12;  /* tag:12 */
+        var_global.has_overload_level5_cpu = TRUE;
+        var_global.var_overload_level5_cpu = 13;  /* tag:13 */
+        var_global.has_overload_level1_high_rate = TRUE;
+        var_global.var_overload_level1_high_rate = 14;  /* tag:14 */
+        var_global.has_overload_level2_high_rate = TRUE;
+        var_global.var_overload_level2_high_rate = 15;  /* tag:15 */
+        var_global.has_overload_level3_high_rate = TRUE;
+        var_global.var_overload_level3_high_rate = 16;  /* tag:16 */
+        var_global.has_overload_level4_high_rate = TRUE;
+        var_global.var_overload_level4_high_rate = 17;  /* tag:17 */
+        var_global.has_overload_level5_high_rate = TRUE;
+        var_global.var_overload_level5_high_rate = 18;  /* tag:18 */
+        var_global.has_overload_level1_low_rate = TRUE;
+        var_global.var_overload_level1_low_rate = 19;  /* tag:19 */
+        var_global.has_overload_level2_low_rate = TRUE;
+        var_global.var_overload_level2_low_rate = 20;  /* tag:20 */
+        var_global.has_overload_level3_low_rate = TRUE;
+        var_global.var_overload_level3_low_rate = 21;  /* tag:21 */
+        var_global.has_overload_level4_low_rate = TRUE;
+        var_global.var_overload_level4_low_rate = 22;  /* tag:22 */
+        var_global.has_overload_level5_low_rate = TRUE;
+        var_global.var_overload_level5_low_rate = 23;  /* tag:23 */
+        var_global.has_query_trigger_delete = TRUE;
+        var_global.var_query_trigger_delete = 24;  /* tag:24 */
+
+	buf_len2 = encode_message_GLOBAL_T_safe(&var_global, buf, sizeof(buf));
+	print_buffer(buf, buf_len2);
+	assert(57 == buf_len2);
+        std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GLOBAL_T"); 
+	BOOL bret = decode_message_GLOBAL_T(buf, buf_len2, &var_global);
+	assert(TRUE == bret);
+
+        assert(1 == var_global.var_mdbSize);  /* tag:1 */
+        assert(2 == var_global.var_log_size);  /* tag:2 */
+        assert(3 == var_global.var_sync_time);  /* tag:3 */
+        assert(4 == var_global.var_auto_scale);  /* tag:4 */
+        assert(5 == var_global.var_db_alarm_thre);  /* tag:5 */
+        assert(6 == var_global.var_scale_limit);  /* tag:6 */
+        assert(7 == var_global.var_sub_ntf_switch);  /* tag:7 */
+        assert(TRUE == var_global.has_overload_cdn_tps_limit);
+        assert(8 == var_global.var_overload_cdn_tps_limit);  /* tag:8 */
+        assert(TRUE == var_global.has_overload_level1_cpu);
+        assert(9 == var_global.var_overload_level1_cpu);  /* tag:9 */
+        assert(TRUE == var_global.has_overload_level2_cpu);
+        assert(10 == var_global.var_overload_level2_cpu);  /* tag:10 */
+        assert(TRUE == var_global.has_overload_level3_cpu);
+        assert(11 == var_global.var_overload_level3_cpu);  /* tag:11 */
+        assert(TRUE == var_global.has_overload_level4_cpu);
+        assert(12 == var_global.var_overload_level4_cpu);  /* tag:12 */
+        assert(TRUE == var_global.has_overload_level5_cpu);
+        assert(13 == var_global.var_overload_level5_cpu);  /* tag:13 */
+        assert(TRUE == var_global.has_overload_level1_high_rate);
+        assert(14 == var_global.var_overload_level1_high_rate);  /* tag:14 */
+        assert(TRUE == var_global.has_overload_level2_high_rate);
+        assert(15 == var_global.var_overload_level2_high_rate);  /* tag:15 */
+        assert(TRUE == var_global.has_overload_level3_high_rate);
+        assert(16 == var_global.var_overload_level3_high_rate);  /* tag:16 */
+        assert(TRUE == var_global.has_overload_level4_high_rate);
+        assert(17 == var_global.var_overload_level4_high_rate);  /* tag:17 */
+        assert(TRUE == var_global.has_overload_level5_high_rate);
+        assert(18 == var_global.var_overload_level5_high_rate);  /* tag:18 */
+        assert(TRUE == var_global.has_overload_level1_low_rate);
+        assert(19 == var_global.var_overload_level1_low_rate);  /* tag:19 */
+        assert(TRUE == var_global.has_overload_level2_low_rate);
+        assert(20 == var_global.var_overload_level2_low_rate);  /* tag:20 */
+        assert(TRUE == var_global.has_overload_level3_low_rate);
+        assert(21 == var_global.var_overload_level3_low_rate);  /* tag:21 */
+        assert(TRUE == var_global.has_overload_level4_low_rate);
+        assert(22 == var_global.var_overload_level4_low_rate);  /* tag:22 */
+        assert(TRUE == var_global.has_overload_level5_low_rate);
+        assert(23 == var_global.var_overload_level5_low_rate);  /* tag:23 */
+        assert(NULL != strstr(pb_string.c_str(), "overload_level5_low_rate: 23"));
+        assert(TRUE == var_global.has_query_trigger_delete);
+        assert(24 == var_global.var_query_trigger_delete);  /* tag:24 */
+    }
+
+    {
 	st_tuple var_Tuple;
 	memset(&var_Tuple, 0xCD, sizeof(st_tuple));
 	constru_message_Tuple(&var_Tuple);
@@ -222,14 +320,16 @@ int main(int argc, char *argv[])
 	buf_len2 = encode_message_Tuple_safe(&var_Tuple, buf, sizeof(buf));
 	assert(87 == buf_len2);
 	// print_buffer(buf, buf_len2);
-	assert(true ==
+        std::string pb_string = get_pb_string(buf, buf_len2, "cdb.proto", "zte.cdb.Tuple"); 
+	/* assert(true ==
 	       verify_pb_buffer(buf, buf_len2, "cdb.proto",
 				"zte.cdb.Tuple",
 				"path {\n" 
                                 "  path_string: \"/20\"\n" 
                                 "}\n"
 				"version: 2000\n" 
-                                "ttl: 3000\n" "field {\n"
+                                "ttl: 3000\n" 
+                                "field {\n"
 				"  fieldid: 1\n"
 				"  value: \"fawejlkrj1230940p1243lkjljfksldaj\"\n"
 				"}\n" 
@@ -237,21 +337,25 @@ int main(int argc, char *argv[])
                                 "  fieldid: 2\n"
 				"  value: \"jflasjfu32ujfljsljkljkljljoiu\"\n"
 				"}\n"));
-
+        */
 	BOOL bret = decode_message_Tuple(buf, buf_len2, &var_Tuple);
 	assert(TRUE == bret);
 	assert(TRUE == var_Tuple.var_path.has_path_string);
         assert(0 == memcmp(var_Tuple.var_path.var_path_string.data, "/20", var_Tuple.var_path.var_path_string.length));
+        assert(NULL != strstr(pb_string.c_str(), "path_string: \"/20\""));
 	assert(TRUE == var_Tuple.has_version);
 	assert(2000 == var_Tuple.var_version);
+        assert(NULL != strstr(pb_string.c_str(), "version: 2000"));
 	assert(TRUE == var_Tuple.has_ttl);
 	assert(3000 == var_Tuple.var_ttl);
+        assert(NULL != strstr(pb_string.c_str(), "ttl: 3000"));
 	assert(var_Tuple.var_field.count == 2);
 	assert(var_Tuple.var_field.item[0].var_fieldid == 1);
         assert(0 == memcmp(var_Tuple.var_field.item[0].var_value.data, "fawejlkrj1230940p1243lkjljfksldaj", var_Tuple.var_field.item[0].var_value.length));
+        assert(NULL != strstr(pb_string.c_str(), "value: \"fawejlkrj1230940p1243lkjljfksldaj\""));
 	assert(var_Tuple.var_field.item[1].var_fieldid == 2);
         assert(0 == memcmp(var_Tuple.var_field.item[1].var_value.data, "jflasjfu32ujfljsljkljkljljoiu", var_Tuple.var_field.item[1].var_value.length));
-
+        assert(NULL != strstr(pb_string.c_str(), "value: \"jflasjfu32ujfljsljkljkljljoiu\""));
     }
 
     {
