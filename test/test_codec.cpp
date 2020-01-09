@@ -46,8 +46,7 @@ void print_buffer(BYTE * content, size_t filelen)
 	}
 	fputs("    ", stderr);
 	for (i = 0; i < 16; i++) {
-	    fputc(isprint(content[16 * line + i]) ? content[16 * line + i]
-		  : '.', stderr);
+            fputc(isprint(content[16 * line + i]) ? content[16 * line + i] : '.', stderr);
 	}
 	fputc('\n', stderr);
     }
@@ -61,8 +60,7 @@ void print_buffer(BYTE * content, size_t filelen)
     }
     fputs("    ", stderr);
     for (i = 0; i < total_len % 16; i++) {
-	fputc(isprint(content[16 * total_line + i]) ?
-	      content[16 * total_line + i] : '.', stderr);
+        fputc(isprint(content[16 * total_line + i]) ? content[16 * total_line + i] : '.', stderr);
     }
     fputc('\n', stderr);
     fflush(stderr);
@@ -209,23 +207,18 @@ int main(int argc, char *argv[])
 	constru_message_Tuple(&var_Tuple);
 	var_Tuple.var_path.has_path_string = TRUE;
 	var_Tuple.var_path.var_path_string.data = (BYTE *) strdup("/20");
-	var_Tuple.var_path.var_path_string.length =
-	    strlen((char *) var_Tuple.var_path.var_path_string.data);
+        var_Tuple.var_path.var_path_string.length = strlen((char *) var_Tuple.var_path.var_path_string.data);
 	var_Tuple.has_version = TRUE;
 	var_Tuple.var_version = 2000;
 	var_Tuple.has_ttl = TRUE;
 	var_Tuple.var_ttl = 3000;
 	var_Tuple.var_field.count = 2;
 	var_Tuple.var_field.item[0].var_fieldid = 1;
-	var_Tuple.var_field.item[0].var_value.data =
-	    (BYTE *) strdup("fawejlkrj1230940p1243lkjljfksldaj");
-	var_Tuple.var_field.item[0].var_value.length =
-	    strlen((char *) var_Tuple.var_field.item[0].var_value.data);
+        var_Tuple.var_field.item[0].var_value.data = (BYTE *) strdup("fawejlkrj1230940p1243lkjljfksldaj");
+        var_Tuple.var_field.item[0].var_value.length = strlen((char *) var_Tuple.var_field.item[0].var_value.data);
 	var_Tuple.var_field.item[1].var_fieldid = 2;
-	var_Tuple.var_field.item[1].var_value.data =
-	    (BYTE *) strdup("jflasjfu32ujfljsljkljkljljoiu");
-	var_Tuple.var_field.item[1].var_value.length =
-	    strlen((char *) var_Tuple.var_field.item[1].var_value.data);
+        var_Tuple.var_field.item[1].var_value.data = (BYTE *) strdup("jflasjfu32ujfljsljkljkljljoiu");
+        var_Tuple.var_field.item[1].var_value.length = strlen((char *) var_Tuple.var_field.item[1].var_value.data);
 	buf_len2 = encode_message_Tuple_safe(&var_Tuple, buf, sizeof(buf));
 	assert(87 == buf_len2);
 	// print_buffer(buf, buf_len2);
@@ -248,24 +241,16 @@ int main(int argc, char *argv[])
 	BOOL bret = decode_message_Tuple(buf, buf_len2, &var_Tuple);
 	assert(TRUE == bret);
 	assert(TRUE == var_Tuple.var_path.has_path_string);
-	assert(0 ==
-	       memcmp(var_Tuple.var_path.var_path_string.data, "/20",
-		      var_Tuple.var_path.var_path_string.length));
+        assert(0 == memcmp(var_Tuple.var_path.var_path_string.data, "/20", var_Tuple.var_path.var_path_string.length));
 	assert(TRUE == var_Tuple.has_version);
 	assert(2000 == var_Tuple.var_version);
 	assert(TRUE == var_Tuple.has_ttl);
 	assert(3000 == var_Tuple.var_ttl);
 	assert(var_Tuple.var_field.count == 2);
 	assert(var_Tuple.var_field.item[0].var_fieldid == 1);
-	assert(0 ==
-	       memcmp(var_Tuple.var_field.item[0].var_value.data,
-		      "fawejlkrj1230940p1243lkjljfksldaj",
-		      var_Tuple.var_field.item[0].var_value.length));
+        assert(0 == memcmp(var_Tuple.var_field.item[0].var_value.data, "fawejlkrj1230940p1243lkjljfksldaj", var_Tuple.var_field.item[0].var_value.length));
 	assert(var_Tuple.var_field.item[1].var_fieldid == 2);
-	assert(0 ==
-	       memcmp(var_Tuple.var_field.item[1].var_value.data,
-		      "jflasjfu32ujfljsljkljkljljoiu",
-		      var_Tuple.var_field.item[1].var_value.length));
+        assert(0 == memcmp(var_Tuple.var_field.item[1].var_value.data, "jflasjfu32ujfljsljkljkljljoiu", var_Tuple.var_field.item[1].var_value.length));
 
     }
 
@@ -274,35 +259,20 @@ int main(int argc, char *argv[])
 	constru_message_AddRequest(&var_AddRequest);
 	var_AddRequest.var_identifiers.var_primary.count = 1;
 	var_AddRequest.var_identifiers.var_primary.item[0].var_id_type = 1;
-	var_AddRequest.var_identifiers.var_primary.item[0].var_value.
-	    count = 1;
-	var_AddRequest.var_identifiers.var_primary.item[0].var_value.
-	    item[0].data = (BYTE *) strdup("465749674123167465431674613");
-	var_AddRequest.var_identifiers.var_primary.item[0].var_value.
-	    item[0].length =
-	    strlen((char *) var_AddRequest.var_identifiers.var_primary.
-		   item[0].var_value.item[0].data);
+        var_AddRequest.var_identifiers.var_primary.item[0].var_value.count = 1;
+        var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data = (BYTE *) strdup("465749674123167465431674613");
+        var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].length = strlen((char *) var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data);
 
 	var_AddRequest.var_identifiers.var_non_primary.count = 1;
-	var_AddRequest.var_identifiers.var_non_primary.item[0].
-	    var_id_type = 1;
-	var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.
-	    count = 1;
-	var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.
-	    item[0].data =
-	    (BYTE *) strdup("465789461313213646461231324654");
-	var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.
-	    item[0].length =
-	    strlen((char *) var_AddRequest.var_identifiers.var_non_primary.
-		   item[0].var_value.item[0].data);
+        var_AddRequest.var_identifiers.var_non_primary.item[0].var_id_type = 1;
+        var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.count = 1;
+        var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data = (BYTE *) strdup("465789461313213646461231324654");
+        var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length = strlen((char *) var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data);
 
 	var_AddRequest.var_tuple.count = 1;
 	var_AddRequest.var_tuple.item[0].var_path.has_path_string = TRUE;
-	var_AddRequest.var_tuple.item[0].var_path.var_path_string.data =
-	    (BYTE *) strdup("/20");
-	var_AddRequest.var_tuple.item[0].var_path.var_path_string.length =
-	    strlen((char *) var_AddRequest.var_tuple.item[0].
-		   var_path.var_path_string.data);
+        var_AddRequest.var_tuple.item[0].var_path.var_path_string.data = (BYTE *) strdup("/20");
+        var_AddRequest.var_tuple.item[0].var_path.var_path_string.length = strlen((char *) var_AddRequest.var_tuple.item[0].var_path.var_path_string.data);
 	var_AddRequest.var_tuple.item[0].var_path.has_path_string = TRUE;
 
 	var_AddRequest.var_tuple.item[0].has_version = TRUE;
@@ -312,78 +282,37 @@ int main(int argc, char *argv[])
 
 	var_AddRequest.var_tuple.item[0].var_field.count = 2;
 	var_AddRequest.var_tuple.item[0].var_field.item[0].var_fieldid = 1;
-	var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data =
-	    (BYTE *) strdup("fawejlkrj1230940p1243lkjljfksldaj");
-	var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.
-	    length =
-	    strlen((char *) var_AddRequest.var_tuple.item[0].var_field.
-		   item[0].var_value.data);
+        var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data = (BYTE *) strdup("fawejlkrj1230940p1243lkjljfksldaj");
+        var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.length = strlen((char *) var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data);
 	var_AddRequest.var_tuple.item[0].var_field.item[1].var_fieldid = 2;
-	var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data =
-	    (BYTE *) strdup("jflasjfu32ujfljsljkljkljljoiu");
-	var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.
-	    length =
-	    strlen((char *) var_AddRequest.var_tuple.item[0].var_field.
-		   item[1].var_value.data);
+        var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data = (BYTE *) strdup("jflasjfu32ujfljsljkljkljljoiu");
+        var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen((char *) var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
 
-	buf_len1 =
-	    encode_message_AddRequest_safe(&var_AddRequest, buf,
-					   sizeof(buf));
+        buf_len1 = encode_message_AddRequest_safe(&var_AddRequest, buf, sizeof(buf));
 	// printf("buf_len:%zu\n", buf_len1);
 	assert(160 == buf_len1);
 	// print_buffer(buf, buf_len1);
 
 	decode_message_AddRequest(buf, buf_len1, &var_AddRequest);
-	assert(TRUE ==
-	       var_AddRequest.var_tuple.item[0].var_path.has_path_string);
-	assert(0 ==
-	       memcmp(var_AddRequest.var_tuple.item[0].var_path.
-		      var_path_string.data, "/20",
-		      var_AddRequest.var_tuple.item[0].var_path.
-		      var_path_string.length));
+        assert(TRUE == var_AddRequest.var_tuple.item[0].var_path.has_path_string);
+        assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_path.var_path_string.data, "/20", var_AddRequest.var_tuple.item[0].var_path.var_path_string.length));
 	assert(2000 == var_AddRequest.var_tuple.item[0].var_version);
 	assert(TRUE == var_AddRequest.var_tuple.item[0].has_version);
 	assert(3000 == var_AddRequest.var_tuple.item[0].var_ttl);
 	assert(TRUE == var_AddRequest.var_tuple.item[0].has_ttl);
 
-	assert(var_AddRequest.var_tuple.item[0].var_field.item[0].
-	       var_fieldid == 1);
-	assert(0 ==
-	       memcmp(var_AddRequest.var_tuple.item[0].var_field.
-		      item[0].var_value.data,
-		      "fawejlkrj1230940p1243lkjljfksldaj",
-		      var_AddRequest.var_tuple.item[0].var_field.
-		      item[0].var_value.length));
-	assert(var_AddRequest.var_tuple.item[0].var_field.item[1].
-	       var_fieldid == 2);
-	assert(0 ==
-	       memcmp(var_AddRequest.var_tuple.item[0].var_field.
-		      item[1].var_value.data,
-		      "jflasjfu32ujfljsljkljkljljoiu",
-		      var_AddRequest.var_tuple.item[0].var_field.
-		      item[1].var_value.length));
+        assert(var_AddRequest.var_tuple.item[0].var_field.item[0].var_fieldid == 1);
+        assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data, "fawejlkrj1230940p1243lkjljfksldaj", var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.length));
+        assert(var_AddRequest.var_tuple.item[0].var_field.item[1].var_fieldid == 2);
+        assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data, "jflasjfu32ujfljsljkljkljljoiu", var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length));
 
-	assert(var_AddRequest.var_identifiers.var_primary.item[0].
-	       var_id_type == 1);
-	assert(var_AddRequest.var_identifiers.var_primary.item[0].
-	       var_value.count == 1);
-	assert(0 ==
-	       memcmp(var_AddRequest.var_identifiers.var_primary.
-		      item[0].var_value.item[0].data,
-		      "465749674123167465431674613",
-		      var_AddRequest.var_identifiers.var_primary.
-		      item[0].var_value.item[0].length));
+        assert(var_AddRequest.var_identifiers.var_primary.item[0].var_id_type == 1);
+        assert(var_AddRequest.var_identifiers.var_primary.item[0].var_value.count == 1);
+        assert(0 == memcmp(var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data, "465749674123167465431674613", var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].length));
 
-	assert(var_AddRequest.var_identifiers.var_non_primary.
-	       item[0].var_id_type == 1);
-	assert(var_AddRequest.var_identifiers.var_non_primary.item[0].
-	       var_value.count == 1);
-	assert(0 ==
-	       memcmp(var_AddRequest.var_identifiers.var_non_primary.
-		      item[0].var_value.item[0].data,
-		      "465789461313213646461231324654",
-		      var_AddRequest.var_identifiers.var_non_primary.
-		      item[0].var_value.item[0].length));
+        assert(var_AddRequest.var_identifiers.var_non_primary.item[0].var_id_type == 1);
+        assert(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.count == 1);
+        assert(0 == memcmp(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data, "465789461313213646461231324654", var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length));
     }
 
     {
@@ -403,9 +332,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size2 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    decode_message_ut_test_message(buf, size2, &msg);
 
 	    assert(1000 == msg.var_d_uint32.item[0]);
@@ -439,9 +366,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size3 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size3);
 	    // printf("buf_len:%zu\n", size3);
 	    assert(93 == size3);
@@ -500,9 +425,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size2 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(106 == size2);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -547,9 +470,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size2 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(118 == size2);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -594,9 +515,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size2 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(146 == size2);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -641,9 +560,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size2 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(97 == size2);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -683,12 +600,10 @@ int main(int argc, char *argv[])
 	    msg.var_f_string.item[1].length = strlen(string4);
 
 	    msg.var_d_string.item[msg.var_d_string.count].data = string5;
-	    msg.var_d_string.item[msg.var_d_string.count].length =
-		strlen(string5);
+            msg.var_d_string.item[msg.var_d_string.count].length = strlen(string5);
 	    msg.var_d_string.count += 1;
 	    msg.var_d_string.item[msg.var_d_string.count].data = string6;
-	    msg.var_d_string.item[msg.var_d_string.count].length =
-		strlen(string6);
+            msg.var_d_string.item[msg.var_d_string.count].length = strlen(string6);
 	    msg.var_d_string.count += 1;
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
@@ -697,33 +612,19 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size2 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(113 == size2);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
-	    assert(0 ==
-		   memcmp(msg.var_r_string.data, string1,
-			  msg.var_r_string.length));
+            assert(0 == memcmp(msg.var_r_string.data, string1, msg.var_r_string.length));
 	    assert(TRUE == msg.has_o_string);
-	    assert(0 ==
-		   memcmp(msg.var_o_string.data, string2,
-			  msg.var_o_string.length));
+            assert(0 == memcmp(msg.var_o_string.data, string2, msg.var_o_string.length));
 	    assert(2 == msg.var_f_string.count);
-	    assert(0 ==
-		   memcmp(msg.var_f_string.item[0].data, string3,
-			  msg.var_f_string.item[0].length));
-	    assert(0 ==
-		   memcmp(msg.var_f_string.item[1].data, string4,
-			  msg.var_f_string.item[1].length));
-	    assert(0 ==
-		   memcmp(msg.var_d_string.item[0].data, string5,
-			  msg.var_d_string.item[0].length));
-	    assert(0 ==
-		   memcmp(msg.var_d_string.item[1].data, string6,
-			  msg.var_d_string.item[1].length));
+            assert(0 == memcmp(msg.var_f_string.item[0].data, string3, msg.var_f_string.item[0].length));
+            assert(0 == memcmp(msg.var_f_string.item[1].data, string4, msg.var_f_string.item[1].length));
+            assert(0 == memcmp(msg.var_d_string.item[0].data, string5, msg.var_d_string.item[0].length));
+            assert(0 == memcmp(msg.var_d_string.item[1].data, string6, msg.var_d_string.item[1].length));
 	}
 
 	for (int i = 0; i < 3; ++i) {
@@ -747,12 +648,10 @@ int main(int argc, char *argv[])
 	    msg.var_f_bytes.item[1].length = strlen((LPCSTR) bytes4);
 
 	    msg.var_d_bytes.item[msg.var_d_bytes.count].data = bytes5;
-	    msg.var_d_bytes.item[msg.var_d_bytes.count].length =
-		strlen((LPCSTR) bytes5);
+            msg.var_d_bytes.item[msg.var_d_bytes.count].length = strlen((LPCSTR) bytes5);
 	    msg.var_d_bytes.count += 1;
 	    msg.var_d_bytes.item[msg.var_d_bytes.count].data = bytes6;
-	    msg.var_d_bytes.item[msg.var_d_bytes.count].length =
-		strlen((LPCSTR) bytes6);
+            msg.var_d_bytes.item[msg.var_d_bytes.count].length = strlen((LPCSTR) bytes6);
 	    msg.var_d_bytes.count += 1;
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
@@ -761,33 +660,19 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size2 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(107 == size2);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
-	    assert(0 ==
-		   memcmp(msg.var_r_bytes.data, bytes1,
-			  msg.var_r_bytes.length));
+            assert(0 == memcmp(msg.var_r_bytes.data, bytes1, msg.var_r_bytes.length));
 	    assert(TRUE == msg.has_o_bytes);
-	    assert(0 ==
-		   memcmp(msg.var_o_bytes.data, bytes2,
-			  msg.var_o_bytes.length));
+            assert(0 == memcmp(msg.var_o_bytes.data, bytes2, msg.var_o_bytes.length));
 	    assert(2 == msg.var_f_bytes.count);
-	    assert(0 ==
-		   memcmp(msg.var_f_bytes.item[0].data, bytes3,
-			  msg.var_f_bytes.item[0].length));
-	    assert(0 ==
-		   memcmp(msg.var_f_bytes.item[1].data, bytes4,
-			  msg.var_f_bytes.item[1].length));
-	    assert(0 ==
-		   memcmp(msg.var_d_bytes.item[0].data, bytes5,
-			  msg.var_d_bytes.item[0].length));
-	    assert(0 ==
-		   memcmp(msg.var_d_bytes.item[1].data, bytes6,
-			  msg.var_d_bytes.item[1].length));
+            assert(0 == memcmp(msg.var_f_bytes.item[0].data, bytes3, msg.var_f_bytes.item[0].length));
+            assert(0 == memcmp(msg.var_f_bytes.item[1].data, bytes4, msg.var_f_bytes.item[1].length));
+            assert(0 == memcmp(msg.var_d_bytes.item[0].data, bytes5, msg.var_d_bytes.item[0].length));
+            assert(0 == memcmp(msg.var_d_bytes.item[1].data, bytes6, msg.var_d_bytes.item[1].length));
 	}
 
 	for (int i = 0; i < 3; ++i) {
@@ -809,9 +694,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_bytes.length = sizeof(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 
-	    size_t size2 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(92 == size2);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -835,15 +718,9 @@ int main(int argc, char *argv[])
 	    msg.var_f_message.count = 2;
 	    fill_ut_test_sub_message(&(msg.var_f_message.item[0]));
 	    fill_ut_test_sub_message(&(msg.var_f_message.item[1]));
-	    fill_ut_test_sub_message(&
-				     (msg.
-				      var_d_message.item[msg.var_d_message.
-							 count]));
+            fill_ut_test_sub_message(&(msg.var_d_message.item[msg.var_d_message.count]));
 	    msg.var_d_message.count += 1;
-	    fill_ut_test_sub_message(&
-				     (msg.
-				      var_d_message.item[msg.var_d_message.
-							 count]));
+            fill_ut_test_sub_message(&(msg.var_d_message.item[msg.var_d_message.count]));
 	    msg.var_d_message.count += 1;
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
@@ -853,9 +730,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_bytes.length = sizeof(value12);
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size2 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(128 == size2);
 	    BOOL bret;
@@ -890,14 +765,10 @@ int main(int argc, char *argv[])
 	    assert(TRUE == msg.has_o_message);
 	    assert(verify_ut_test_sub_message(&(msg.var_o_message)));
 	    assert(2 == msg.var_f_message.count);
-	    assert(verify_ut_test_sub_message
-		   (&(msg.var_f_message.item[0])));
-	    assert(verify_ut_test_sub_message
-		   (&(msg.var_f_message.item[1])));
-	    assert(verify_ut_test_sub_message
-		   (&(msg.var_d_message.item[0])));
-	    assert(verify_ut_test_sub_message
-		   (&(msg.var_d_message.item[1])));
+            assert(verify_ut_test_sub_message(&(msg.var_f_message.item[0])));
+            assert(verify_ut_test_sub_message(&(msg.var_f_message.item[1])));
+            assert(verify_ut_test_sub_message(&(msg.var_d_message.item[0])));
+            assert(verify_ut_test_sub_message(&(msg.var_d_message.item[1])));
 	}
 
 	for (int i = 0; i < 3; ++i) {
@@ -922,9 +793,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size3 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size3);
 	    assert(125 == size3);
 	    decode_message_ut_test_message(buf, size3, &msg);
@@ -964,9 +833,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
-	    size_t size3 =
-		encode_message_ut_test_message_safe(&msg, buf,
-						    sizeof(buf));
+            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size3);
 	    assert(118 == size3);
 	    decode_message_ut_test_message(buf, size3, &msg);
@@ -994,9 +861,7 @@ int main(int argc, char *argv[])
 	    msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
 	    msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
-	    size_t size2 =
-		encode_message_ut_test_sub_message_safe(&msg, buf,
-							sizeof(buf));
+            size_t size2 = encode_message_ut_test_sub_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(6 == size2);
 	    decode_message_ut_test_sub_message(buf, size2, &msg);
@@ -1006,8 +871,7 @@ int main(int argc, char *argv[])
     }
 
     printf("sizeof(st_addrequest): %zu\n", sizeof(st_addrequest));
-    printf("sizeof(st_compountrequest): %zu\n",
-	   sizeof(st_compoundrequest));
+    printf("sizeof(st_compountrequest): %zu\n", sizeof(st_compoundrequest));
     printf("sizeof(st_response): %zu\n", sizeof(st_response));
     printf("sizeof(st_tuple): %zu\n", sizeof(st_tuple));
 
@@ -1015,9 +879,7 @@ int main(int argc, char *argv[])
     // getchar();
 
     gettimeofday(&tv_end, NULL);
-    double diff =
-	1000000.0 * (tv_end.tv_sec - tv_begin.tv_sec) + tv_end.tv_usec -
-	tv_begin.tv_usec;
+    double diff = 1000000.0 * (tv_end.tv_sec - tv_begin.tv_sec) + tv_end.tv_usec - tv_begin.tv_usec;
     printf("[%s:%d] spend %.0lf(us)\n", __FILE__, __LINE__, diff);
 
     printf("%s Done.\n", argv[0]);
