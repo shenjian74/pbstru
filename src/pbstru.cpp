@@ -823,10 +823,15 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
             if(FieldDescriptor::TYPE_MESSAGE == field->type())
             {
                 if(init){
-                    fprintf(fp, "    for(i=0; i<%s; ++i) {\n", map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                    string array_name = field->containing_type()->name() + ":" + field->name();
+                    fprintf(fp, "    for(i=0; i<%s; ++i) {\n", map_array_size.at(array_name).c_str());
                     fprintf(fp, "        constru_message_%s(&(var_%s->var_%s.item[i]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                     fprintf(fp, "    }\n");
                 } else {
+                    string array_name = field->containing_type()->name() + ":" + field->name();
+                    fprintf(fp, "    if(var_%s->var_%s.count > %s) {\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(array_name).c_str());
+                    fprintf(fp, "        var_%s->var_%s.count = %s; /* prevent write overflow */\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(array_name).c_str());
+                    fprintf(fp, "    }\n");
                     fprintf(fp, "    for(i=0; i<var_%s->var_%s.count; ++i) {\n", desc->name().c_str(), field->name().c_str());
                     fprintf(fp, "        clear_message_%s(&(var_%s->var_%s.item[i]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                     fprintf(fp, "    }\n");
@@ -894,7 +899,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
     }
 }
 
-static void print_clear_message_len(FILE *fp, const Descriptor *desc)
+static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<string, string> &map_array_size)
 {
     for(int i=0; i<desc->field_count(); ++i)
     {
@@ -915,6 +920,11 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc)
         {
             if(field->is_repeated())
             {
+                string array_name = field->containing_type()->name() + ":" + field->name();
+                fprintf(fp, "    if(var_%s->var_%s.count > %s) {\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(array_name).c_str());
+                fprintf(fp, "        var_%s->var_%s.count = %s; /* prevent write overflow */\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(array_name).c_str());
+                fprintf(fp, "    }\n");
+
                 fprintf(fp, "    for(i=0; i<var_%s->var_%s.count; ++i) {\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "        _clear_message_%s_len_%s(&(var_%s->var_%s.item[i]));\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "    }\n");
@@ -960,7 +970,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "}\n\n");
 
     fprintf(fp, "void _clear_message_%s_len_%s(%s* var_%s) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
-    print_clear_message_len(fp, desc);
+    print_clear_message_len(fp, desc, map_array_size);
     fprintf(fp, "}\n\n");
 
     ////////////////////////////////////////
