@@ -824,11 +824,13 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
             {
                 if(init){
                     string array_name = field->containing_type()->name() + ":" + field->name();
+                    fprintf(fp, "\n");
                     fprintf(fp, "    for(i=0; i<%s; ++i) {\n", map_array_size.at(array_name).c_str());
                     fprintf(fp, "        constru_message_%s(&(var_%s->var_%s.item[i]));\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
                     fprintf(fp, "    }\n");
                 } else {
                     string array_name = field->containing_type()->name() + ":" + field->name();
+                    fprintf(fp, "\n");
                     fprintf(fp, "    if(var_%s->var_%s.count > %s) {\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(array_name).c_str());
                     fprintf(fp, "        var_%s->var_%s.count = %s; /* prevent write overflow */\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(array_name).c_str());
                     fprintf(fp, "    }\n");
@@ -921,6 +923,7 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<
             if(field->is_repeated())
             {
                 string array_name = field->containing_type()->name() + ":" + field->name();
+                fprintf(fp, "\n");
                 fprintf(fp, "    if(var_%s->var_%s.count > %s) {\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(array_name).c_str());
                 fprintf(fp, "        var_%s->var_%s.count = %s; /* prevent write overflow */\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(array_name).c_str());
                 fprintf(fp, "    }\n");
@@ -1251,309 +1254,323 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         switch(field->type())
         {
         case FieldDescriptor::TYPE_FIXED32:
+            fprintf(fp, "            if(WIRE_TYPE_FIX32 == wire_type) {\n");
             if(field->is_repeated())
             {
                 char spaces[100];
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "            {\n");
                     fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i) {\n");
-                    strcpy(spaces, "        ");
+                    strcpy(spaces, "    ");
                 }
-                fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
+                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n",
                         spaces, desc->name().c_str(), field->name().c_str(),
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
-                fprintf(fp, "%s            }\n", spaces);
-                fprintf(fp, "%s            if((offset + sizeof(DWORD)) > buf_len) {\n", spaces);
-                fprintf(fp, "%s                return FALSE;\n", spaces);
-                fprintf(fp, "%s            }\n", spaces);
-                fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s            offset += sizeof(DWORD);\n", spaces);
-                fprintf(fp, "%s            var_%s->var_%s.count += 1;\n",
+                fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
+                fprintf(fp, "%s                }\n", spaces);
+                fprintf(fp, "%s                if((offset + sizeof(DWORD)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                    return FALSE;\n", spaces);
+                fprintf(fp, "%s                }\n", spaces);
+                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                offset += sizeof(DWORD);\n", spaces);
+                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n",
                         spaces, desc->name().c_str(), field->name().c_str());
                 if(field->is_packed())
                 {
                     fprintf(fp, "                }\n");
-                    fprintf(fp, "            }\n");
                 }
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            if((offset + sizeof(DWORD)) > buf_len) {\n");
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += sizeof(DWORD);\n");
-                fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len) {\n");
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += sizeof(DWORD);\n");
+                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            if((offset + sizeof(DWORD)) > buf_len) {\n");
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += sizeof(DWORD);\n");
+                fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len) {\n");
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += sizeof(DWORD);\n");
             }
+            fprintf(fp, "            } else {\n");
+            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "            }\n");
             break;
+
         case FieldDescriptor::TYPE_FLOAT:
+            fprintf(fp, "            if(WIRE_TYPE_FIX32 == wire_type) {\n");
             if(field->is_repeated())
             {
                 char spaces[100];
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "            {\n");
                     fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i) {\n");
-                    strcpy(spaces, "        ");
+                    strcpy(spaces, "    ");
                 }
-                fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
-                        spaces, desc->name().c_str(), field->name().c_str(),
-                        map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
-                fprintf(fp, "%s            }\n", spaces);
-                fprintf(fp, "%s            if((offset + sizeof(float)) > buf_len) {\n", spaces);
-                fprintf(fp, "%s                return FALSE;\n", spaces);
-                fprintf(fp, "%s            }\n", spaces);
-                fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((float *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s            offset += sizeof(float);\n", spaces);
-                fprintf(fp, "%s            var_%s->var_%s.count += 1;\n",
-                        spaces, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
+                fprintf(fp, "%s                }\n", spaces);
+                fprintf(fp, "%s                if((offset + sizeof(float)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                    return FALSE;\n", spaces);
+                fprintf(fp, "%s                }\n", spaces);
+                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = *((float *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                offset += sizeof(float);\n", spaces);
+                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
                 if(field->is_packed())
                 {
                     fprintf(fp, "                }\n");
-                    fprintf(fp, "            }\n");
                 }
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            if((offset + sizeof(float)) > buf_len) {\n");
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s = *((float *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += sizeof(float);\n");
-                fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + sizeof(float)) > buf_len) {\n");
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s = *((float *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += sizeof(float);\n");
+                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            if((offset + sizeof(float)) > buf_len) {\n");
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s = *((float *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += sizeof(float);\n");
+                fprintf(fp, "                if((offset + sizeof(float)) > buf_len) {\n");
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s = *((float *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += sizeof(float);\n");
             }
+            fprintf(fp, "            } else {\n");
+            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "            }\n");
             break;
+
         case FieldDescriptor::TYPE_FIXED64:
+            fprintf(fp, "            if(WIRE_TYPE_FIX64 == wire_type) {\n");
             if(field->is_repeated())
             {
                 char spaces[100];
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "            {\n");
                     fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i) {\n");
-                    strcpy(spaces, "        ");
+                    strcpy(spaces, "    ");
                 }
-                fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
-                        spaces, desc->name().c_str(), field->name().c_str(),
-                        map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
-                fprintf(fp, "%s            }\n", spaces);
-                fprintf(fp, "%s            if((offset + sizeof(WORD64)) > buf_len) {\n", spaces);
-                fprintf(fp, "%s                return FALSE;\n", spaces);
-                fprintf(fp, "%s            }\n", spaces);
-                fprintf(fp, "%s            var_%s->var_%s.item[var_%s->var_%s.count] = *((WORD64 *)(buf + offset));\n",
-                        spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s            offset += sizeof(WORD64);\n", spaces);
-                fprintf(fp, "%s            var_%s->var_%s.count += 1;\n",
-                        spaces, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
+                fprintf(fp, "%s                }\n", spaces);
+                fprintf(fp, "%s                if((offset + sizeof(WORD64)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                    return FALSE;\n", spaces);
+                fprintf(fp, "%s                }\n", spaces);
+                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = *((WORD64 *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                offset += sizeof(WORD64);\n", spaces);
+                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
                 if(field->is_packed())
                 {
                     fprintf(fp, "                }\n");
-                    fprintf(fp, "            }\n");
                 }
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            if((offset + sizeof(WORD64)) > buf_len) {\n");
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += sizeof(WORD64);\n");
-                fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len) {\n");
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += sizeof(WORD64);\n");
+                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            if((offset + sizeof(WORD64)) > buf_len) {\n");
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += sizeof(WORD64);\n");
+                fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len) {\n");
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += sizeof(WORD64);\n");
             }
+            fprintf(fp, "            } else {\n");
+            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "            }\n");
             break;
+
         case FieldDescriptor::TYPE_BOOL:
         case FieldDescriptor::TYPE_UINT32:
         case FieldDescriptor::TYPE_UINT64:
         case FieldDescriptor::TYPE_ENUM:
         case FieldDescriptor::TYPE_INT32:
+            fprintf(fp, "            if(WIRE_TYPE_VARINT == wire_type) {\n");
             if(field->is_repeated())
             {
                 char spaces[100];
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "            {\n");
                     fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(i=0; i<array_size; ++i) {\n");
-                    strcpy(spaces, "        ");
+                    strcpy(spaces, "    ");
                 }
-                fprintf(fp, "%s            if(var_%s->var_%s.count >= %s) {\n",
-                        spaces, desc->name().c_str(), field->name().c_str(),
-                        map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "%s                return FALSE;  /* out of range */\n", spaces);
-                fprintf(fp, "%s            }\n", spaces);
-                fprintf(fp, "%s            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n",
-                        spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s            var_%s->var_%s.count += 1;\n",
-                        spaces, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
+                fprintf(fp, "%s                }\n", spaces);
+                fprintf(fp, "%s                decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
                 if(field->is_packed())
                 {
                     fprintf(fp, "                }\n");
-                    fprintf(fp, "            }\n");
                 }
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
             }
+            fprintf(fp, "            } else {\n");
+            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "            }\n");
             break;
+
         case FieldDescriptor::TYPE_STRING:
+            fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
             if(field->is_repeated())
             {
-                fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
-                        map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "                return FALSE;  /* out of range */\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s.item[var_%s->var_%s.count].data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += var_%s->var_%s.item[var_%s->var_%s.count].length;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "                    return FALSE;  /* out of range */\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s.item[var_%s->var_%s.count].data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += var_%s->var_%s.item[var_%s->var_%s.count].length;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
+            fprintf(fp, "            } else {\n");
+            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "            }\n");
             break;
+
         case FieldDescriptor::TYPE_BYTES:
+            fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
             if(field->is_repeated())
             {
-                fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
+                fprintf(fp, "                if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "                return FALSE;  /* out of range */\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s.item[var_%s->var_%s.count].data = buf + offset;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += var_%s->var_%s.item[var_%s->var_%s.count].length;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;  /* out of range */\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s.item[var_%s->var_%s.count].data = buf + offset;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += var_%s->var_%s.item[var_%s->var_%s.count].length;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "            offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
+            fprintf(fp, "            } else {\n");
+            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "            }\n");
             break;
+
         case FieldDescriptor::TYPE_MESSAGE:
+            fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
             if(field->is_repeated())
             {
-                fprintf(fp, "            if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
+                fprintf(fp, "                if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "                return FALSE;  /* out of range */\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
-                fprintf(fp, "            if(offset + tmp_field_len > buf_len) {\n");
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            offset += tmp_field_len;\n");
-                fprintf(fp, "            var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;  /* out of range */\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                offset += tmp_field_len;\n");
+                fprintf(fp, "                var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
-                fprintf(fp, "            if(offset + tmp_field_len > buf_len) {\n");
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            offset += tmp_field_len;\n");
-                fprintf(fp, "            var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                offset += tmp_field_len;\n");
+                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "            decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
-                fprintf(fp, "            if(offset + tmp_field_len > buf_len) {\n");
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                return FALSE;\n");
-                fprintf(fp, "            }\n");
-                fprintf(fp, "            offset += tmp_field_len;\n");
+                fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    return FALSE;\n");
+                fprintf(fp, "                }\n");
+                fprintf(fp, "                offset += tmp_field_len;\n");
             }
+            fprintf(fp, "            } else {\n");
+            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "            }\n");
             break;
         default:
             fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
