@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
 	buf_len2 = encode_message_GLOBAL_T_safe(&var_global, buf, sizeof(buf));
 	print_buffer(buf, buf_len2);
 	assert(57 == buf_len2);
-        std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GLOBAL_T"); 
+        // std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GLOBAL_T"); 
 	BOOL bret = decode_message_GLOBAL_T(buf, buf_len2, &var_global);
 	assert(TRUE == bret);
 
@@ -294,7 +294,7 @@ int main(int argc, char *argv[])
         assert(22 == var_global.var_overload_level4_low_rate);  /* tag:22 */
         assert(TRUE == var_global.has_overload_level5_low_rate);
         assert(23 == var_global.var_overload_level5_low_rate);  /* tag:23 */
-        assert(NULL != strstr(pb_string.c_str(), "overload_level5_low_rate: 23"));
+        // assert(NULL != strstr(pb_string.c_str(), "overload_level5_low_rate: 23"));
         assert(TRUE == var_global.has_query_trigger_delete);
         assert(24 == var_global.var_query_trigger_delete);  /* tag:24 */
     }
