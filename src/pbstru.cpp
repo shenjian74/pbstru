@@ -182,12 +182,14 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "extern \"C\" {\n");
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
-    fprintf(fp, "#define %s_encode_tag_byte(buf, tag, wire_type, offset) %s_encode_tag_byte_%s((buf), (tag), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
-    fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "#define %s_encode_tag_byte(buf, tag, wire_type, offset) %s_encode_tag_byte_%s((buf), (tag), (wire_type), (offset), FALSE)\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "/* encode tag and wire_type value */\n");
+    fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
 
-    fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset))\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
-    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset);\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset), FALSE)\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "/* parse tag and wire_type value */\n");
+    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
     fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
@@ -283,12 +285,12 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE *buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset) {\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE *buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL old_version) {\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "    if(buf[0] & 0x80) {\n");
     fprintf(fp, "        if(buflen<2) {\n");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
-    fprintf(fp, "        if(buf[1] == 0x00) { // Compatible with error tag codes in the old version. -- sj@200109\n");
+    fprintf(fp, "        if(TRUE == old_version) {\n");
     fprintf(fp, "            *field_num = buf[0] & 0x7F;\n");
     fprintf(fp, "            *wire_type = buf[1] & 0x07;\n");
     fprintf(fp, "        } else {\n");
@@ -308,7 +310,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset) {\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset, BOOL old_version) {\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "    if(tag < 16) {\n");
     fprintf(fp, "        if (NULL != buf) {\n");
     fprintf(fp, "            buf[*offset] = (tag << 3) | wire_type;\n");
@@ -316,8 +318,13 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        *offset += 1;\n");
     fprintf(fp, "    } else {\n");
     fprintf(fp, "        if (NULL != buf) {\n");
-    fprintf(fp, "            buf[*offset] = (tag << 3) | wire_type | 0x80;\n");
-    fprintf(fp, "            buf[*offset+1] = (tag >> 4);\n");
+    fprintf(fp, "            if (TRUE == old_version) {\n");
+    fprintf(fp, "                buf[*offset] = tag | 0x80;\n");
+    fprintf(fp, "                buf[*offset+1] = wire_type & 0x07;\n");
+    fprintf(fp, "            } else {\n");
+    fprintf(fp, "                buf[*offset] = (tag << 3) | (wire_type & 0x07) | 0x80;\n");
+    fprintf(fp, "                buf[*offset+1] = (tag >> 4);\n");
+    fprintf(fp, "            }\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "        *offset += 2;\n");
     fprintf(fp, "    }\n");
@@ -939,7 +946,7 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<
     fprintf(fp, "    var_%s->_message_length = 0;\n", desc->name().c_str());
 }
 
-static int gen_source(const string& nf_name, const Descriptor *desc, string &target_dir, const map<string,string> &map_array_size)
+static int gen_source(const string& nf_name, const Descriptor *desc, string &target_dir, const map<string,string> &map_array_size, bool use_old_version)
 {
     int retcode = 0;
     string name_lower = desc->name();
@@ -1005,17 +1012,17 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                 case FieldDescriptor::TYPE_FIXED32:
                 case FieldDescriptor::TYPE_FLOAT:
-                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset);\n", nf_name.c_str(), _BUILD_TIME_, field->number());
+                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                     break;
                 case FieldDescriptor::TYPE_FIXED64:
-                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset);\n", nf_name.c_str(), _BUILD_TIME_, field->number());
+                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                     break;
                 case FieldDescriptor::TYPE_BOOL:
                 case FieldDescriptor::TYPE_UINT32:
                 case FieldDescriptor::TYPE_UINT64:
                 case FieldDescriptor::TYPE_ENUM:
                 case FieldDescriptor::TYPE_INT32:
-                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_VARINT, &offset);\n", nf_name.c_str(), _BUILD_TIME_, field->number());
+                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_VARINT, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                     break;
                 default:
                     break;
@@ -1045,7 +1052,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         case FieldDescriptor::TYPE_FIXED32:
             if(!field->is_packed())
             {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             }
             fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
@@ -1064,7 +1071,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         case FieldDescriptor::TYPE_FLOAT:
             if(!field->is_packed())
             {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             }
             fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
@@ -1083,7 +1090,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         case FieldDescriptor::TYPE_FIXED64:
             if(!field->is_packed())
             {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             }
             fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
@@ -1105,7 +1112,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         case FieldDescriptor::TYPE_INT32:
             if(!field->is_packed())
             {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_VARINT, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_VARINT, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             }
 
             if(field->is_repeated())
@@ -1121,7 +1128,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         case FieldDescriptor::TYPE_STRING:
             if(field->is_repeated())
             {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1130,7 +1137,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else
             {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_varint(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1142,7 +1149,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         case FieldDescriptor::TYPE_BYTES:
             if(field->is_repeated())
             {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_varint(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1151,7 +1158,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else
             {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_varint(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1161,7 +1168,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             break;
 
         case FieldDescriptor::TYPE_MESSAGE:
-            fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number());
+            fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             if(field->is_repeated())
             {
                 fprintf(fp, "%sif (0 == var_%s->var_%s.item[i]._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
@@ -1243,7 +1250,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "    }\n\n");
 
     fprintf(fp, "    for(;offset < buf_len;) {\n");
-    fprintf(fp, "        if(FALSE == %s_parse_tag_byte_%s(buf+offset, buf_len-offset, &field_num, &wire_type, &offset)) {\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "        if(FALSE == %s_parse_tag_byte_%s(buf+offset, buf_len-offset, &field_num, &wire_type, &offset, %s)) {\n", nf_name.c_str(), _BUILD_TIME_, use_old_version?"TRUE":"FALSE");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "        switch(field_num) {\n");
@@ -1597,13 +1604,18 @@ int gen_all_from_file(const string& nf_name, const FileDescriptor *f, string &ta
     int retcode = 0;
     for(int i=0; i<f->message_type_count(); ++i)
     {
+        bool use_old_version = false;
         const Descriptor* desc = f->message_type(i);
+        if(desc->name()=="GLOBAL_T"){
+            printf("Info: message type is %s, use old version to encode tag info.\n", desc->name().c_str());
+            use_old_version = true;
+        }
         map<string, string> map_array_size;
 
         retcode = gen_header(nf_name, desc, target_dir, map_array_size);
         if(0 == retcode)
         {
-            retcode = gen_source(nf_name, desc, target_dir, map_array_size);
+            retcode = gen_source(nf_name, desc, target_dir, map_array_size, use_old_version);
         }
         map_array_size.clear();
 
