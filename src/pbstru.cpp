@@ -995,6 +995,16 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             break;
         }
     }
+    for(int i=0; i<desc->field_count(); ++i)
+    {
+        const FieldDescriptor *field = desc->field(i);
+        if(field->is_repeated() && field->is_packed())
+        {
+            fprintf(fp, "    size_t packed_bytes_size = 0;\n");
+            fprintf(fp, "    BYTE *packed_bytes = NULL;\n");
+            break;
+        }
+    }
     fprintf(fp, "    size_t offset = 0;\n\n");
 
     // encode every fields
@@ -1012,23 +1022,28 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                 case FieldDescriptor::TYPE_FIXED32:
                 case FieldDescriptor::TYPE_FLOAT:
-                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
+                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
+                    fprintf(fp, "        encode_varint(var_%s->var_%s.count*sizeof(DWORD), buf, &offset);\n", desc->name().c_str(), field->name().c_str());
                     break;
                 case FieldDescriptor::TYPE_FIXED64:
-                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
+                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
+                    fprintf(fp, "        encode_varint(var_%s->var_%s.count*sizeof(WORD64), buf, &offset);\n", desc->name().c_str(), field->name().c_str());
                     break;
                 case FieldDescriptor::TYPE_BOOL:
                 case FieldDescriptor::TYPE_UINT32:
                 case FieldDescriptor::TYPE_UINT64:
                 case FieldDescriptor::TYPE_ENUM:
                 case FieldDescriptor::TYPE_INT32:
-                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_VARINT, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
+                    fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
+                    fprintf(fp, "        packed_bytes_size = 0;\n");
+                    fprintf(fp, "        for(i = 0; i < var_%s->var_%s.count; ++i) {\n", desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "            encode_varint(var_%s->var_%s.item[i], packed_bytes, &packed_bytes_size);\n", desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "        }\n");
+                    fprintf(fp, "        encode_varint(packed_bytes_size, buf, &offset);\n");
                     break;
                 default:
                     break;
                 }
-                fprintf(fp, "        encode_varint(var_%s->var_%s.count, buf, &offset);\n",
-                        desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "        for(i = 0; i < var_%s->var_%s.count; ++i) {\n", desc->name().c_str(), field->name().c_str());
                 prefix_spaces = "            ";
             } else {
@@ -1261,17 +1276,22 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         switch(field->type())
         {
         case FieldDescriptor::TYPE_FIXED32:
-            fprintf(fp, "            if(WIRE_TYPE_FIX32 == wire_type) {\n");
+            if(field->is_packed()) {
+                fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
+            } else {
+                fprintf(fp, "            if(WIRE_TYPE_FIX32 == wire_type) {\n");
+            }
             if(field->is_repeated())
             {
                 char spaces[100];
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
-                    fprintf(fp, "                for(i=0; i<array_size; ++i) {\n");
+                    fprintf(fp, "                data_offset = offset;\n");
+                    fprintf(fp, "                for(;(offset-data_offset)<array_size;) {\n");
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n",
@@ -1314,17 +1334,23 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             break;
 
         case FieldDescriptor::TYPE_FLOAT:
-            fprintf(fp, "            if(WIRE_TYPE_FIX32 == wire_type) {\n");
+            if(field->is_packed()) {
+                fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
+            } else {
+                fprintf(fp, "            if(WIRE_TYPE_FIX32 == wire_type) {\n");
+            }
             if(field->is_repeated())
             {
                 char spaces[100];
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                register size_t i = 0;\n");
+                    // fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
-                    fprintf(fp, "                for(i=0; i<array_size; ++i) {\n");
+                    fprintf(fp, "                data_offset = offset;\n");
+                    fprintf(fp, "                for(;(offset-data_offset)<array_size;) {\n");
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
@@ -1364,17 +1390,23 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             break;
 
         case FieldDescriptor::TYPE_FIXED64:
-            fprintf(fp, "            if(WIRE_TYPE_FIX64 == wire_type) {\n");
+            if(field->is_packed()) {
+                fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
+            } else {
+                fprintf(fp, "            if(WIRE_TYPE_FIX64 == wire_type) {\n");
+            }
             if(field->is_repeated())
             {
                 char spaces[100];
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                register size_t i = 0;\n");
+                    // fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
-                    fprintf(fp, "                for(i=0; i<array_size; ++i) {\n");
+                    fprintf(fp, "                data_offset = offset;\n");
+                    fprintf(fp, "                for(;(offset-data_offset)<array_size;) {\n");
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
@@ -1418,17 +1450,23 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         case FieldDescriptor::TYPE_UINT64:
         case FieldDescriptor::TYPE_ENUM:
         case FieldDescriptor::TYPE_INT32:
-            fprintf(fp, "            if(WIRE_TYPE_VARINT == wire_type) {\n");
+            if(field->is_packed()) {
+                fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
+            } else {
+                fprintf(fp, "            if(WIRE_TYPE_VARINT == wire_type) {\n");
+            }
             if(field->is_repeated())
             {
                 char spaces[100];
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                register size_t i = 0;\n");
+                    // fprintf(fp, "                register size_t i = 0;\n");
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint(buf+offset, buf_len-offset, &(array_size), &offset);\n");
-                    fprintf(fp, "                for(i=0; i<array_size; ++i) {\n");
+                    fprintf(fp, "                data_offset = offset;\n");
+                    fprintf(fp, "                for(;(offset-data_offset)<array_size;) {\n");
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());

@@ -24,6 +24,16 @@ class HelloDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<Hello>
       _instance;
 } _Hello_default_instance_;
+class ut_test_sub_messageDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<ut_test_sub_message>
+      _instance;
+} _ut_test_sub_message_default_instance_;
+class ut_test_messageDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<ut_test_message>
+      _instance;
+} _ut_test_message_default_instance_;
 namespace protobuf_Hello_2eproto {
 void InitDefaultsHelloImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -46,7 +56,51 @@ void InitDefaultsHello() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsHelloImpl);
 }
 
-::google::protobuf::Metadata file_level_metadata[1];
+void InitDefaultsut_test_sub_messageImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::_ut_test_sub_message_default_instance_;
+    new (ptr) ::ut_test_sub_message();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::ut_test_sub_message::InitAsDefaultInstance();
+}
+
+void InitDefaultsut_test_sub_message() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsut_test_sub_messageImpl);
+}
+
+void InitDefaultsut_test_messageImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_Hello_2eproto::InitDefaultsut_test_sub_message();
+  {
+    void* ptr = &::_ut_test_message_default_instance_;
+    new (ptr) ::ut_test_message();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::ut_test_message::InitAsDefaultInstance();
+}
+
+void InitDefaultsut_test_message() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsut_test_messageImpl);
+}
+
+::google::protobuf::Metadata file_level_metadata[3];
+const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[1];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::Hello, _has_bits_),
@@ -62,13 +116,141 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   2,
   0,
   3,
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_sub_message, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_sub_message, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_sub_message, d_uint32_),
+  ~0u,
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, r_uint32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_uint32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_uint32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_uint32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pf_uint32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pd_uint32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, r_uint64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_uint64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_uint64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_uint64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pf_uint64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pd_uint64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, r_fixed32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_fixed32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_fixed32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_fixed32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pf_fixed32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pd_fixed32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, r_fixed64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_fixed64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_fixed64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_fixed64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pf_fixed64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pd_fixed64_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, r_bool_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_bool_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_bool_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_bool_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pf_bool_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pd_bool_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, r_string_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_string_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_string_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_string_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, r_bytes_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_bytes_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_bytes_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_bytes_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, r_enum_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_enum_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_enum_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_enum_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, r_message_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_message_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_message_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_message_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_int32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_int32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_int32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pf_int32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pd_int32_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, o_float_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, f_float_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, d_float_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pf_float_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::ut_test_message, pd_float_),
+  6,
+  7,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  8,
+  9,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  10,
+  11,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  12,
+  13,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  14,
+  15,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  0,
+  1,
+  ~0u,
+  ~0u,
+  2,
+  3,
+  ~0u,
+  ~0u,
+  18,
+  19,
+  ~0u,
+  ~0u,
+  4,
+  5,
+  ~0u,
+  ~0u,
+  16,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
+  17,
+  ~0u,
+  ~0u,
+  ~0u,
+  ~0u,
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 9, sizeof(::Hello)},
+  { 13, 19, sizeof(::ut_test_sub_message)},
+  { 20, 81, sizeof(::ut_test_message)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::_Hello_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_ut_test_sub_message_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_ut_test_message_default_instance_),
 };
 
 void protobuf_AssignDescriptors() {
@@ -76,7 +258,7 @@ void protobuf_AssignDescriptors() {
   ::google::protobuf::MessageFactory* factory = NULL;
   AssignDescriptors(
       "Hello.proto", schemas, file_default_instances, TableStruct::offsets, factory,
-      file_level_metadata, NULL, NULL);
+      file_level_metadata, file_level_enum_descriptors, NULL);
 }
 
 void protobuf_AssignDescriptorsOnce() {
@@ -87,17 +269,50 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 1);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 3);
 }
 
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
       "\n\013Hello.proto\":\n\005Hello\022\n\n\002id\030\001 \002(\005\022\013\n\003fl"
-      "t\030\002 \002(\002\022\013\n\003str\030\003 \002(\t\022\013\n\003opt\030\004 \001(\005"
+      "t\030\002 \002(\002\022\013\n\003str\030\003 \002(\t\022\013\n\003opt\030\004 \001(\005\"\'\n\023ut_"
+      "test_sub_message\022\020\n\010d_uint32\030\001 \003(\r\"\311\t\n\017u"
+      "t_test_message\022\020\n\010r_uint32\030\001 \002(\r\022\020\n\010o_ui"
+      "nt32\030\002 \001(\r\022\020\n\010f_uint32\030\003 \003(\r\022\020\n\010d_uint32"
+      "\030\004 \003(\r\022\025\n\tpf_uint32\030\005 \003(\rB\002\020\001\022\025\n\tpd_uint"
+      "32\030\006 \003(\rB\002\020\001\022\020\n\010r_uint64\030\013 \002(\004\022\020\n\010o_uint"
+      "64\030\014 \001(\004\022\020\n\010f_uint64\030\r \003(\004\022\020\n\010d_uint64\030\016"
+      " \003(\004\022\025\n\tpf_uint64\030\017 \003(\004B\002\020\001\022\025\n\tpd_uint64"
+      "\030\020 \003(\004B\002\020\001\022\021\n\tr_fixed32\030\025 \002(\007\022\021\n\to_fixed"
+      "32\030\026 \001(\007\022\021\n\tf_fixed32\030\027 \003(\007\022\021\n\td_fixed32"
+      "\030\030 \003(\007\022\026\n\npf_fixed32\030\031 \003(\007B\002\020\001\022\026\n\npd_fix"
+      "ed32\030\032 \003(\007B\002\020\001\022\021\n\tr_fixed64\030\037 \002(\006\022\021\n\to_f"
+      "ixed64\030  \001(\006\022\021\n\tf_fixed64\030! \003(\006\022\021\n\td_fix"
+      "ed64\030\" \003(\006\022\026\n\npf_fixed64\030# \003(\006B\002\020\001\022\026\n\npd"
+      "_fixed64\030$ \003(\006B\002\020\001\022\016\n\006r_bool\030) \002(\010\022\016\n\006o_"
+      "bool\030* \001(\010\022\016\n\006f_bool\030+ \003(\010\022\016\n\006d_bool\030, \003"
+      "(\010\022\023\n\007pf_bool\030- \003(\010B\002\020\001\022\023\n\007pd_bool\030. \003(\010"
+      "B\002\020\001\022\020\n\010r_string\0303 \002(\t\022\020\n\010o_string\0304 \001(\t"
+      "\022\020\n\010f_string\0305 \003(\t\022\020\n\010d_string\0306 \003(\t\022\017\n\007"
+      "r_bytes\030= \002(\014\022\017\n\007o_bytes\030> \001(\014\022\017\n\007f_byte"
+      "s\030\? \003(\014\022\017\n\007d_bytes\030@ \003(\014\022\035\n\006r_enum\030G \002(\016"
+      "2\r.ut_test_enum\022\035\n\006o_enum\030H \001(\0162\r.ut_tes"
+      "t_enum\022\035\n\006f_enum\030I \003(\0162\r.ut_test_enum\022\035\n"
+      "\006d_enum\030J \003(\0162\r.ut_test_enum\022\'\n\tr_messag"
+      "e\030Q \002(\0132\024.ut_test_sub_message\022\'\n\to_messa"
+      "ge\030R \001(\0132\024.ut_test_sub_message\022\'\n\tf_mess"
+      "age\030S \003(\0132\024.ut_test_sub_message\022\'\n\td_mes"
+      "sage\030T \003(\0132\024.ut_test_sub_message\022\017\n\007o_in"
+      "t32\030V \001(\005\022\017\n\007f_int32\030W \003(\005\022\017\n\007d_int32\030X "
+      "\003(\005\022\024\n\010pf_int32\030Y \003(\005B\002\020\001\022\024\n\010pd_int32\030Z "
+      "\003(\005B\002\020\001\022\017\n\007o_float\030[ \001(\002\022\017\n\007f_float\030\\ \003("
+      "\002\022\017\n\007d_float\030] \003(\002\022\024\n\010pf_float\030^ \003(\002B\002\020\001"
+      "\022\024\n\010pd_float\030_ \003(\002B\002\020\001*&\n\014ut_test_enum\022\n"
+      "\n\006CLIENT\020\001\022\n\n\006SERVER\020\002"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 73);
+      descriptor, 1382);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "Hello.proto", &protobuf_RegisterTypes);
 }
@@ -113,6 +328,20 @@ struct StaticDescriptorInitializer {
   }
 } static_descriptor_initializer;
 }  // namespace protobuf_Hello_2eproto
+const ::google::protobuf::EnumDescriptor* ut_test_enum_descriptor() {
+  protobuf_Hello_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_Hello_2eproto::file_level_enum_descriptors[0];
+}
+bool ut_test_enum_IsValid(int value) {
+  switch (value) {
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 // ===================================================================
 
@@ -519,6 +748,3210 @@ void Hello::InternalSwap(Hello* other) {
 }
 
 ::google::protobuf::Metadata Hello::GetMetadata() const {
+  protobuf_Hello_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_Hello_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void ut_test_sub_message::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ut_test_sub_message::kDUint32FieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ut_test_sub_message::ut_test_sub_message()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_Hello_2eproto::InitDefaultsut_test_sub_message();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ut_test_sub_message)
+}
+ut_test_sub_message::ut_test_sub_message(const ut_test_sub_message& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_),
+      _cached_size_(0),
+      d_uint32_(from.d_uint32_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:ut_test_sub_message)
+}
+
+void ut_test_sub_message::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+ut_test_sub_message::~ut_test_sub_message() {
+  // @@protoc_insertion_point(destructor:ut_test_sub_message)
+  SharedDtor();
+}
+
+void ut_test_sub_message::SharedDtor() {
+}
+
+void ut_test_sub_message::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ut_test_sub_message::descriptor() {
+  ::protobuf_Hello_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_Hello_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const ut_test_sub_message& ut_test_sub_message::default_instance() {
+  ::protobuf_Hello_2eproto::InitDefaultsut_test_sub_message();
+  return *internal_default_instance();
+}
+
+ut_test_sub_message* ut_test_sub_message::New(::google::protobuf::Arena* arena) const {
+  ut_test_sub_message* n = new ut_test_sub_message;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ut_test_sub_message::Clear() {
+// @@protoc_insertion_point(message_clear_start:ut_test_sub_message)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  d_uint32_.Clear();
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool ut_test_sub_message::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ut_test_sub_message)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated uint32 d_uint32 = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 8u, input, this->mutable_d_uint32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_d_uint32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ut_test_sub_message)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ut_test_sub_message)
+  return false;
+#undef DO_
+}
+
+void ut_test_sub_message::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ut_test_sub_message)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated uint32 d_uint32 = 1;
+  for (int i = 0, n = this->d_uint32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      1, this->d_uint32(i), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ut_test_sub_message)
+}
+
+::google::protobuf::uint8* ut_test_sub_message::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:ut_test_sub_message)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated uint32 d_uint32 = 1;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteUInt32ToArray(1, this->d_uint32_, target);
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ut_test_sub_message)
+  return target;
+}
+
+size_t ut_test_sub_message::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ut_test_sub_message)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  // repeated uint32 d_uint32 = 1;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt32Size(this->d_uint32_);
+    total_size += 1 *
+                  ::google::protobuf::internal::FromIntSize(this->d_uint32_size());
+    total_size += data_size;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ut_test_sub_message::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ut_test_sub_message)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ut_test_sub_message* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ut_test_sub_message>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ut_test_sub_message)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ut_test_sub_message)
+    MergeFrom(*source);
+  }
+}
+
+void ut_test_sub_message::MergeFrom(const ut_test_sub_message& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ut_test_sub_message)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  d_uint32_.MergeFrom(from.d_uint32_);
+}
+
+void ut_test_sub_message::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ut_test_sub_message)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ut_test_sub_message::CopyFrom(const ut_test_sub_message& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ut_test_sub_message)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ut_test_sub_message::IsInitialized() const {
+  return true;
+}
+
+void ut_test_sub_message::Swap(ut_test_sub_message* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ut_test_sub_message::InternalSwap(ut_test_sub_message* other) {
+  using std::swap;
+  d_uint32_.InternalSwap(&other->d_uint32_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata ut_test_sub_message::GetMetadata() const {
+  protobuf_Hello_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_Hello_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void ut_test_message::InitAsDefaultInstance() {
+  ::_ut_test_message_default_instance_._instance.get_mutable()->r_message_ = const_cast< ::ut_test_sub_message*>(
+      ::ut_test_sub_message::internal_default_instance());
+  ::_ut_test_message_default_instance_._instance.get_mutable()->o_message_ = const_cast< ::ut_test_sub_message*>(
+      ::ut_test_sub_message::internal_default_instance());
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ut_test_message::kRUint32FieldNumber;
+const int ut_test_message::kOUint32FieldNumber;
+const int ut_test_message::kFUint32FieldNumber;
+const int ut_test_message::kDUint32FieldNumber;
+const int ut_test_message::kPfUint32FieldNumber;
+const int ut_test_message::kPdUint32FieldNumber;
+const int ut_test_message::kRUint64FieldNumber;
+const int ut_test_message::kOUint64FieldNumber;
+const int ut_test_message::kFUint64FieldNumber;
+const int ut_test_message::kDUint64FieldNumber;
+const int ut_test_message::kPfUint64FieldNumber;
+const int ut_test_message::kPdUint64FieldNumber;
+const int ut_test_message::kRFixed32FieldNumber;
+const int ut_test_message::kOFixed32FieldNumber;
+const int ut_test_message::kFFixed32FieldNumber;
+const int ut_test_message::kDFixed32FieldNumber;
+const int ut_test_message::kPfFixed32FieldNumber;
+const int ut_test_message::kPdFixed32FieldNumber;
+const int ut_test_message::kRFixed64FieldNumber;
+const int ut_test_message::kOFixed64FieldNumber;
+const int ut_test_message::kFFixed64FieldNumber;
+const int ut_test_message::kDFixed64FieldNumber;
+const int ut_test_message::kPfFixed64FieldNumber;
+const int ut_test_message::kPdFixed64FieldNumber;
+const int ut_test_message::kRBoolFieldNumber;
+const int ut_test_message::kOBoolFieldNumber;
+const int ut_test_message::kFBoolFieldNumber;
+const int ut_test_message::kDBoolFieldNumber;
+const int ut_test_message::kPfBoolFieldNumber;
+const int ut_test_message::kPdBoolFieldNumber;
+const int ut_test_message::kRStringFieldNumber;
+const int ut_test_message::kOStringFieldNumber;
+const int ut_test_message::kFStringFieldNumber;
+const int ut_test_message::kDStringFieldNumber;
+const int ut_test_message::kRBytesFieldNumber;
+const int ut_test_message::kOBytesFieldNumber;
+const int ut_test_message::kFBytesFieldNumber;
+const int ut_test_message::kDBytesFieldNumber;
+const int ut_test_message::kREnumFieldNumber;
+const int ut_test_message::kOEnumFieldNumber;
+const int ut_test_message::kFEnumFieldNumber;
+const int ut_test_message::kDEnumFieldNumber;
+const int ut_test_message::kRMessageFieldNumber;
+const int ut_test_message::kOMessageFieldNumber;
+const int ut_test_message::kFMessageFieldNumber;
+const int ut_test_message::kDMessageFieldNumber;
+const int ut_test_message::kOInt32FieldNumber;
+const int ut_test_message::kFInt32FieldNumber;
+const int ut_test_message::kDInt32FieldNumber;
+const int ut_test_message::kPfInt32FieldNumber;
+const int ut_test_message::kPdInt32FieldNumber;
+const int ut_test_message::kOFloatFieldNumber;
+const int ut_test_message::kFFloatFieldNumber;
+const int ut_test_message::kDFloatFieldNumber;
+const int ut_test_message::kPfFloatFieldNumber;
+const int ut_test_message::kPdFloatFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ut_test_message::ut_test_message()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_Hello_2eproto::InitDefaultsut_test_message();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ut_test_message)
+}
+ut_test_message::ut_test_message(const ut_test_message& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_),
+      _cached_size_(0),
+      f_uint32_(from.f_uint32_),
+      d_uint32_(from.d_uint32_),
+      pf_uint32_(from.pf_uint32_),
+      pd_uint32_(from.pd_uint32_),
+      f_uint64_(from.f_uint64_),
+      d_uint64_(from.d_uint64_),
+      pf_uint64_(from.pf_uint64_),
+      pd_uint64_(from.pd_uint64_),
+      f_fixed32_(from.f_fixed32_),
+      d_fixed32_(from.d_fixed32_),
+      pf_fixed32_(from.pf_fixed32_),
+      pd_fixed32_(from.pd_fixed32_),
+      f_fixed64_(from.f_fixed64_),
+      d_fixed64_(from.d_fixed64_),
+      pf_fixed64_(from.pf_fixed64_),
+      pd_fixed64_(from.pd_fixed64_),
+      f_bool_(from.f_bool_),
+      d_bool_(from.d_bool_),
+      pf_bool_(from.pf_bool_),
+      pd_bool_(from.pd_bool_),
+      f_string_(from.f_string_),
+      d_string_(from.d_string_),
+      f_bytes_(from.f_bytes_),
+      d_bytes_(from.d_bytes_),
+      f_enum_(from.f_enum_),
+      d_enum_(from.d_enum_),
+      f_message_(from.f_message_),
+      d_message_(from.d_message_),
+      f_int32_(from.f_int32_),
+      d_int32_(from.d_int32_),
+      pf_int32_(from.pf_int32_),
+      pd_int32_(from.pd_int32_),
+      f_float_(from.f_float_),
+      d_float_(from.d_float_),
+      pf_float_(from.pf_float_),
+      pd_float_(from.pd_float_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  r_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_r_string()) {
+    r_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.r_string_);
+  }
+  o_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_o_string()) {
+    o_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.o_string_);
+  }
+  r_bytes_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_r_bytes()) {
+    r_bytes_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.r_bytes_);
+  }
+  o_bytes_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_o_bytes()) {
+    o_bytes_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.o_bytes_);
+  }
+  if (from.has_r_message()) {
+    r_message_ = new ::ut_test_sub_message(*from.r_message_);
+  } else {
+    r_message_ = NULL;
+  }
+  if (from.has_o_message()) {
+    o_message_ = new ::ut_test_sub_message(*from.o_message_);
+  } else {
+    o_message_ = NULL;
+  }
+  ::memcpy(&r_uint32_, &from.r_uint32_,
+    static_cast<size_t>(reinterpret_cast<char*>(&o_enum_) -
+    reinterpret_cast<char*>(&r_uint32_)) + sizeof(o_enum_));
+  // @@protoc_insertion_point(copy_constructor:ut_test_message)
+}
+
+void ut_test_message::SharedCtor() {
+  _cached_size_ = 0;
+  r_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  o_string_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  r_bytes_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  o_bytes_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&r_message_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&o_float_) -
+      reinterpret_cast<char*>(&r_message_)) + sizeof(o_float_));
+  r_enum_ = 1;
+  o_enum_ = 1;
+}
+
+ut_test_message::~ut_test_message() {
+  // @@protoc_insertion_point(destructor:ut_test_message)
+  SharedDtor();
+}
+
+void ut_test_message::SharedDtor() {
+  r_string_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  o_string_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  r_bytes_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  o_bytes_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) delete r_message_;
+  if (this != internal_default_instance()) delete o_message_;
+}
+
+void ut_test_message::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ut_test_message::descriptor() {
+  ::protobuf_Hello_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_Hello_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const ut_test_message& ut_test_message::default_instance() {
+  ::protobuf_Hello_2eproto::InitDefaultsut_test_message();
+  return *internal_default_instance();
+}
+
+ut_test_message* ut_test_message::New(::google::protobuf::Arena* arena) const {
+  ut_test_message* n = new ut_test_message;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ut_test_message::Clear() {
+// @@protoc_insertion_point(message_clear_start:ut_test_message)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  f_uint32_.Clear();
+  d_uint32_.Clear();
+  pf_uint32_.Clear();
+  pd_uint32_.Clear();
+  f_uint64_.Clear();
+  d_uint64_.Clear();
+  pf_uint64_.Clear();
+  pd_uint64_.Clear();
+  f_fixed32_.Clear();
+  d_fixed32_.Clear();
+  pf_fixed32_.Clear();
+  pd_fixed32_.Clear();
+  f_fixed64_.Clear();
+  d_fixed64_.Clear();
+  pf_fixed64_.Clear();
+  pd_fixed64_.Clear();
+  f_bool_.Clear();
+  d_bool_.Clear();
+  pf_bool_.Clear();
+  pd_bool_.Clear();
+  f_string_.Clear();
+  d_string_.Clear();
+  f_bytes_.Clear();
+  d_bytes_.Clear();
+  f_enum_.Clear();
+  d_enum_.Clear();
+  f_message_.Clear();
+  d_message_.Clear();
+  f_int32_.Clear();
+  d_int32_.Clear();
+  pf_int32_.Clear();
+  pd_int32_.Clear();
+  f_float_.Clear();
+  d_float_.Clear();
+  pf_float_.Clear();
+  pd_float_.Clear();
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 63u) {
+    if (cached_has_bits & 0x00000001u) {
+      GOOGLE_DCHECK(!r_string_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
+      (*r_string_.UnsafeRawStringPointer())->clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      GOOGLE_DCHECK(!o_string_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
+      (*o_string_.UnsafeRawStringPointer())->clear();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      GOOGLE_DCHECK(!r_bytes_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
+      (*r_bytes_.UnsafeRawStringPointer())->clear();
+    }
+    if (cached_has_bits & 0x00000008u) {
+      GOOGLE_DCHECK(!o_bytes_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
+      (*o_bytes_.UnsafeRawStringPointer())->clear();
+    }
+    if (cached_has_bits & 0x00000010u) {
+      GOOGLE_DCHECK(r_message_ != NULL);
+      r_message_->Clear();
+    }
+    if (cached_has_bits & 0x00000020u) {
+      GOOGLE_DCHECK(o_message_ != NULL);
+      o_message_->Clear();
+    }
+  }
+  if (cached_has_bits & 192u) {
+    ::memset(&r_uint32_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&o_uint32_) -
+        reinterpret_cast<char*>(&r_uint32_)) + sizeof(o_uint32_));
+  }
+  if (cached_has_bits & 65280u) {
+    ::memset(&r_uint64_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&o_bool_) -
+        reinterpret_cast<char*>(&r_uint64_)) + sizeof(o_bool_));
+  }
+  if (cached_has_bits & 983040u) {
+    ::memset(&o_int32_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&o_float_) -
+        reinterpret_cast<char*>(&o_int32_)) + sizeof(o_float_));
+    r_enum_ = 1;
+    o_enum_ = 1;
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool ut_test_message::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ut_test_message)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(16383u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 r_uint32 = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+          set_has_r_uint32();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &r_uint32_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional uint32 o_uint32 = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          set_has_o_uint32();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &o_uint32_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint32 f_uint32 = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 24u, input, this->mutable_f_uint32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_f_uint32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint32 d_uint32 = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 32u, input, this->mutable_d_uint32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_d_uint32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint32 pf_uint32 = 5 [packed = true];
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_pf_uint32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 42u, input, this->mutable_pf_uint32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint32 pd_uint32 = 6 [packed = true];
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_pd_uint32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(48u /* 48 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 50u, input, this->mutable_pd_uint32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required uint64 r_uint64 = 11;
+      case 11: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(88u /* 88 & 0xFF */)) {
+          set_has_r_uint64();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &r_uint64_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional uint64 o_uint64 = 12;
+      case 12: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(96u /* 96 & 0xFF */)) {
+          set_has_o_uint64();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &o_uint64_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint64 f_uint64 = 13;
+      case 13: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 104 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 1, 104u, input, this->mutable_f_uint64())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(106u /* 106 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, this->mutable_f_uint64())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint64 d_uint64 = 14;
+      case 14: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u /* 112 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 1, 112u, input, this->mutable_d_uint64())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(114u /* 114 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, this->mutable_d_uint64())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint64 pf_uint64 = 15 [packed = true];
+      case 15: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(122u /* 122 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, this->mutable_pf_uint64())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(120u /* 120 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 1, 122u, input, this->mutable_pf_uint64())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint64 pd_uint64 = 16 [packed = true];
+      case 16: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(130u /* 130 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, this->mutable_pd_uint64())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(128u /* 128 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 2, 130u, input, this->mutable_pd_uint64())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required fixed32 r_fixed32 = 21;
+      case 21: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(173u /* 173 & 0xFF */)) {
+          set_has_r_fixed32();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 input, &r_fixed32_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional fixed32 o_fixed32 = 22;
+      case 22: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(181u /* 181 & 0xFF */)) {
+          set_has_o_fixed32();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 input, &o_fixed32_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated fixed32 f_fixed32 = 23;
+      case 23: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(189u /* 189 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 2, 189u, input, this->mutable_f_fixed32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(186u /* 186 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 input, this->mutable_f_fixed32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated fixed32 d_fixed32 = 24;
+      case 24: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(197u /* 197 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 2, 197u, input, this->mutable_d_fixed32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(194u /* 194 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 input, this->mutable_d_fixed32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated fixed32 pf_fixed32 = 25 [packed = true];
+      case 25: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(202u /* 202 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 input, this->mutable_pf_fixed32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(205u /* 205 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 2, 202u, input, this->mutable_pf_fixed32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated fixed32 pd_fixed32 = 26 [packed = true];
+      case 26: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(210u /* 210 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 input, this->mutable_pd_fixed32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(213u /* 213 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 2, 210u, input, this->mutable_pd_fixed32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required fixed64 r_fixed64 = 31;
+      case 31: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(249u /* 249 & 0xFF */)) {
+          set_has_r_fixed64();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 input, &r_fixed64_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional fixed64 o_fixed64 = 32;
+      case 32: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(1u /* 257 & 0xFF */)) {
+          set_has_o_fixed64();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 input, &o_fixed64_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated fixed64 f_fixed64 = 33;
+      case 33: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9u /* 265 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 2, 265u, input, this->mutable_f_fixed64())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 266 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 input, this->mutable_f_fixed64())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated fixed64 d_fixed64 = 34;
+      case 34: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(17u /* 273 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 2, 273u, input, this->mutable_d_fixed64())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 274 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 input, this->mutable_d_fixed64())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated fixed64 pf_fixed64 = 35 [packed = true];
+      case 35: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 282 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 input, this->mutable_pf_fixed64())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(25u /* 281 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 2, 282u, input, this->mutable_pf_fixed64())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated fixed64 pd_fixed64 = 36 [packed = true];
+      case 36: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u /* 290 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 input, this->mutable_pd_fixed64())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(33u /* 289 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED64>(
+                 2, 290u, input, this->mutable_pd_fixed64())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required bool r_bool = 41;
+      case 41: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 328 & 0xFF */)) {
+          set_has_r_bool();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &r_bool_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bool o_bool = 42;
+      case 42: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 336 & 0xFF */)) {
+          set_has_o_bool();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &o_bool_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated bool f_bool = 43;
+      case 43: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(88u /* 344 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 2, 344u, input, this->mutable_f_bool())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(90u /* 346 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, this->mutable_f_bool())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated bool d_bool = 44;
+      case 44: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(96u /* 352 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 2, 352u, input, this->mutable_d_bool())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(98u /* 354 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, this->mutable_d_bool())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated bool pf_bool = 45 [packed = true];
+      case 45: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(106u /* 362 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, this->mutable_pf_bool())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(104u /* 360 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 2, 362u, input, this->mutable_pf_bool())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated bool pd_bool = 46 [packed = true];
+      case 46: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(114u /* 370 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, this->mutable_pd_bool())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(112u /* 368 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 2, 370u, input, this->mutable_pd_bool())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required string r_string = 51;
+      case 51: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(154u /* 410 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_r_string()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->r_string().data(), static_cast<int>(this->r_string().length()),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "ut_test_message.r_string");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional string o_string = 52;
+      case 52: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(162u /* 418 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_o_string()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->o_string().data(), static_cast<int>(this->o_string().length()),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "ut_test_message.o_string");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated string f_string = 53;
+      case 53: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(170u /* 426 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_f_string()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->f_string(this->f_string_size() - 1).data(),
+            static_cast<int>(this->f_string(this->f_string_size() - 1).length()),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "ut_test_message.f_string");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated string d_string = 54;
+      case 54: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(178u /* 434 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_d_string()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->d_string(this->d_string_size() - 1).data(),
+            static_cast<int>(this->d_string(this->d_string_size() - 1).length()),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "ut_test_message.d_string");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required bytes r_bytes = 61;
+      case 61: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(234u /* 490 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_r_bytes()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes o_bytes = 62;
+      case 62: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(242u /* 498 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_o_bytes()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated bytes f_bytes = 63;
+      case 63: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(250u /* 506 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->add_f_bytes()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated bytes d_bytes = 64;
+      case 64: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(2u /* 514 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->add_d_bytes()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required .ut_test_enum r_enum = 71;
+      case 71: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(56u /* 568 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::ut_test_enum_IsValid(value)) {
+            set_r_enum(static_cast< ::ut_test_enum >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(
+                71, static_cast< ::google::protobuf::uint64>(value));
+          }
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional .ut_test_enum o_enum = 72;
+      case 72: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(64u /* 576 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::ut_test_enum_IsValid(value)) {
+            set_o_enum(static_cast< ::ut_test_enum >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(
+                72, static_cast< ::google::protobuf::uint64>(value));
+          }
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .ut_test_enum f_enum = 73;
+      case 73: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(72u /* 584 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::ut_test_enum_IsValid(value)) {
+            add_f_enum(static_cast< ::ut_test_enum >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(
+                73, static_cast< ::google::protobuf::uint64>(value));
+          }
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(74u /* 586 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormat::ReadPackedEnumPreserveUnknowns(
+                 input,
+                 73,
+                 ::ut_test_enum_IsValid,
+                 mutable_unknown_fields(),
+                 this->mutable_f_enum())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .ut_test_enum d_enum = 74;
+      case 74: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(80u /* 592 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::ut_test_enum_IsValid(value)) {
+            add_d_enum(static_cast< ::ut_test_enum >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(
+                74, static_cast< ::google::protobuf::uint64>(value));
+          }
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(82u /* 594 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormat::ReadPackedEnumPreserveUnknowns(
+                 input,
+                 74,
+                 ::ut_test_enum_IsValid,
+                 mutable_unknown_fields(),
+                 this->mutable_d_enum())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // required .ut_test_sub_message r_message = 81;
+      case 81: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(138u /* 650 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_r_message()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional .ut_test_sub_message o_message = 82;
+      case 82: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(146u /* 658 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_o_message()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .ut_test_sub_message f_message = 83;
+      case 83: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(154u /* 666 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_f_message()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .ut_test_sub_message d_message = 84;
+      case 84: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(162u /* 674 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(input, add_d_message()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional int32 o_int32 = 86;
+      case 86: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(176u /* 688 & 0xFF */)) {
+          set_has_o_int32();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &o_int32_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated int32 f_int32 = 87;
+      case 87: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(184u /* 696 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 2, 696u, input, this->mutable_f_int32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(186u /* 698 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, this->mutable_f_int32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated int32 d_int32 = 88;
+      case 88: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(192u /* 704 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 2, 704u, input, this->mutable_d_int32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(194u /* 706 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, this->mutable_d_int32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated int32 pf_int32 = 89 [packed = true];
+      case 89: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(202u /* 714 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, this->mutable_pf_int32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(200u /* 712 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 2, 714u, input, this->mutable_pf_int32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated int32 pd_int32 = 90 [packed = true];
+      case 90: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(210u /* 722 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, this->mutable_pd_int32())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(208u /* 720 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 2, 722u, input, this->mutable_pd_int32())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional float o_float = 91;
+      case 91: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(221u /* 733 & 0xFF */)) {
+          set_has_o_float();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &o_float_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated float f_float = 92;
+      case 92: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(229u /* 741 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 2, 741u, input, this->mutable_f_float())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(226u /* 738 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, this->mutable_f_float())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated float d_float = 93;
+      case 93: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(237u /* 749 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 2, 749u, input, this->mutable_d_float())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(234u /* 746 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, this->mutable_d_float())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated float pf_float = 94 [packed = true];
+      case 94: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(242u /* 754 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, this->mutable_pf_float())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(245u /* 757 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 2, 754u, input, this->mutable_pf_float())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated float pd_float = 95 [packed = true];
+      case 95: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(250u /* 762 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, this->mutable_pd_float())));
+        } else if (
+            static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(253u /* 765 & 0xFF */)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 2, 762u, input, this->mutable_pd_float())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ut_test_message)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ut_test_message)
+  return false;
+#undef DO_
+}
+
+void ut_test_message::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ut_test_message)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required uint32 r_uint32 = 1;
+  if (cached_has_bits & 0x00000040u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->r_uint32(), output);
+  }
+
+  // optional uint32 o_uint32 = 2;
+  if (cached_has_bits & 0x00000080u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->o_uint32(), output);
+  }
+
+  // repeated uint32 f_uint32 = 3;
+  for (int i = 0, n = this->f_uint32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      3, this->f_uint32(i), output);
+  }
+
+  // repeated uint32 d_uint32 = 4;
+  for (int i = 0, n = this->d_uint32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      4, this->d_uint32(i), output);
+  }
+
+  // repeated uint32 pf_uint32 = 5 [packed = true];
+  if (this->pf_uint32_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(5, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pf_uint32_cached_byte_size_));
+  }
+  for (int i = 0, n = this->pf_uint32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32NoTag(
+      this->pf_uint32(i), output);
+  }
+
+  // repeated uint32 pd_uint32 = 6 [packed = true];
+  if (this->pd_uint32_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(6, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pd_uint32_cached_byte_size_));
+  }
+  for (int i = 0, n = this->pd_uint32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32NoTag(
+      this->pd_uint32(i), output);
+  }
+
+  // required uint64 r_uint64 = 11;
+  if (cached_has_bits & 0x00000100u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(11, this->r_uint64(), output);
+  }
+
+  // optional uint64 o_uint64 = 12;
+  if (cached_has_bits & 0x00000200u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(12, this->o_uint64(), output);
+  }
+
+  // repeated uint64 f_uint64 = 13;
+  for (int i = 0, n = this->f_uint64_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(
+      13, this->f_uint64(i), output);
+  }
+
+  // repeated uint64 d_uint64 = 14;
+  for (int i = 0, n = this->d_uint64_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(
+      14, this->d_uint64(i), output);
+  }
+
+  // repeated uint64 pf_uint64 = 15 [packed = true];
+  if (this->pf_uint64_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(15, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pf_uint64_cached_byte_size_));
+  }
+  for (int i = 0, n = this->pf_uint64_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64NoTag(
+      this->pf_uint64(i), output);
+  }
+
+  // repeated uint64 pd_uint64 = 16 [packed = true];
+  if (this->pd_uint64_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(16, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pd_uint64_cached_byte_size_));
+  }
+  for (int i = 0, n = this->pd_uint64_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64NoTag(
+      this->pd_uint64(i), output);
+  }
+
+  // required fixed32 r_fixed32 = 21;
+  if (cached_has_bits & 0x00000400u) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed32(21, this->r_fixed32(), output);
+  }
+
+  // optional fixed32 o_fixed32 = 22;
+  if (cached_has_bits & 0x00000800u) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed32(22, this->o_fixed32(), output);
+  }
+
+  // repeated fixed32 f_fixed32 = 23;
+  for (int i = 0, n = this->f_fixed32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed32(
+      23, this->f_fixed32(i), output);
+  }
+
+  // repeated fixed32 d_fixed32 = 24;
+  for (int i = 0, n = this->d_fixed32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed32(
+      24, this->d_fixed32(i), output);
+  }
+
+  // repeated fixed32 pf_fixed32 = 25 [packed = true];
+  if (this->pf_fixed32_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(25, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pf_fixed32_cached_byte_size_));
+    ::google::protobuf::internal::WireFormatLite::WriteFixed32Array(
+      this->pf_fixed32().data(), this->pf_fixed32_size(), output);
+  }
+
+  // repeated fixed32 pd_fixed32 = 26 [packed = true];
+  if (this->pd_fixed32_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(26, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pd_fixed32_cached_byte_size_));
+    ::google::protobuf::internal::WireFormatLite::WriteFixed32Array(
+      this->pd_fixed32().data(), this->pd_fixed32_size(), output);
+  }
+
+  // required fixed64 r_fixed64 = 31;
+  if (cached_has_bits & 0x00001000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed64(31, this->r_fixed64(), output);
+  }
+
+  // optional fixed64 o_fixed64 = 32;
+  if (cached_has_bits & 0x00002000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed64(32, this->o_fixed64(), output);
+  }
+
+  // repeated fixed64 f_fixed64 = 33;
+  for (int i = 0, n = this->f_fixed64_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed64(
+      33, this->f_fixed64(i), output);
+  }
+
+  // repeated fixed64 d_fixed64 = 34;
+  for (int i = 0, n = this->d_fixed64_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed64(
+      34, this->d_fixed64(i), output);
+  }
+
+  // repeated fixed64 pf_fixed64 = 35 [packed = true];
+  if (this->pf_fixed64_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(35, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pf_fixed64_cached_byte_size_));
+    ::google::protobuf::internal::WireFormatLite::WriteFixed64Array(
+      this->pf_fixed64().data(), this->pf_fixed64_size(), output);
+  }
+
+  // repeated fixed64 pd_fixed64 = 36 [packed = true];
+  if (this->pd_fixed64_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(36, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pd_fixed64_cached_byte_size_));
+    ::google::protobuf::internal::WireFormatLite::WriteFixed64Array(
+      this->pd_fixed64().data(), this->pd_fixed64_size(), output);
+  }
+
+  // required bool r_bool = 41;
+  if (cached_has_bits & 0x00004000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(41, this->r_bool(), output);
+  }
+
+  // optional bool o_bool = 42;
+  if (cached_has_bits & 0x00008000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(42, this->o_bool(), output);
+  }
+
+  // repeated bool f_bool = 43;
+  for (int i = 0, n = this->f_bool_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(
+      43, this->f_bool(i), output);
+  }
+
+  // repeated bool d_bool = 44;
+  for (int i = 0, n = this->d_bool_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(
+      44, this->d_bool(i), output);
+  }
+
+  // repeated bool pf_bool = 45 [packed = true];
+  if (this->pf_bool_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(45, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pf_bool_cached_byte_size_));
+    ::google::protobuf::internal::WireFormatLite::WriteBoolArray(
+      this->pf_bool().data(), this->pf_bool_size(), output);
+  }
+
+  // repeated bool pd_bool = 46 [packed = true];
+  if (this->pd_bool_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(46, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pd_bool_cached_byte_size_));
+    ::google::protobuf::internal::WireFormatLite::WriteBoolArray(
+      this->pd_bool().data(), this->pd_bool_size(), output);
+  }
+
+  // required string r_string = 51;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->r_string().data(), static_cast<int>(this->r_string().length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "ut_test_message.r_string");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      51, this->r_string(), output);
+  }
+
+  // optional string o_string = 52;
+  if (cached_has_bits & 0x00000002u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->o_string().data(), static_cast<int>(this->o_string().length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "ut_test_message.o_string");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      52, this->o_string(), output);
+  }
+
+  // repeated string f_string = 53;
+  for (int i = 0, n = this->f_string_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->f_string(i).data(), static_cast<int>(this->f_string(i).length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "ut_test_message.f_string");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      53, this->f_string(i), output);
+  }
+
+  // repeated string d_string = 54;
+  for (int i = 0, n = this->d_string_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->d_string(i).data(), static_cast<int>(this->d_string(i).length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "ut_test_message.d_string");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      54, this->d_string(i), output);
+  }
+
+  // required bytes r_bytes = 61;
+  if (cached_has_bits & 0x00000004u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      61, this->r_bytes(), output);
+  }
+
+  // optional bytes o_bytes = 62;
+  if (cached_has_bits & 0x00000008u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      62, this->o_bytes(), output);
+  }
+
+  // repeated bytes f_bytes = 63;
+  for (int i = 0, n = this->f_bytes_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+      63, this->f_bytes(i), output);
+  }
+
+  // repeated bytes d_bytes = 64;
+  for (int i = 0, n = this->d_bytes_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+      64, this->d_bytes(i), output);
+  }
+
+  // required .ut_test_enum r_enum = 71;
+  if (cached_has_bits & 0x00040000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      71, this->r_enum(), output);
+  }
+
+  // optional .ut_test_enum o_enum = 72;
+  if (cached_has_bits & 0x00080000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      72, this->o_enum(), output);
+  }
+
+  // repeated .ut_test_enum f_enum = 73;
+  for (int i = 0, n = this->f_enum_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      73, this->f_enum(i), output);
+  }
+
+  // repeated .ut_test_enum d_enum = 74;
+  for (int i = 0, n = this->d_enum_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      74, this->d_enum(i), output);
+  }
+
+  // required .ut_test_sub_message r_message = 81;
+  if (cached_has_bits & 0x00000010u) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      81, *this->r_message_, output);
+  }
+
+  // optional .ut_test_sub_message o_message = 82;
+  if (cached_has_bits & 0x00000020u) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      82, *this->o_message_, output);
+  }
+
+  // repeated .ut_test_sub_message f_message = 83;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->f_message_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      83, this->f_message(static_cast<int>(i)), output);
+  }
+
+  // repeated .ut_test_sub_message d_message = 84;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->d_message_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      84, this->d_message(static_cast<int>(i)), output);
+  }
+
+  // optional int32 o_int32 = 86;
+  if (cached_has_bits & 0x00010000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(86, this->o_int32(), output);
+  }
+
+  // repeated int32 f_int32 = 87;
+  for (int i = 0, n = this->f_int32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(
+      87, this->f_int32(i), output);
+  }
+
+  // repeated int32 d_int32 = 88;
+  for (int i = 0, n = this->d_int32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(
+      88, this->d_int32(i), output);
+  }
+
+  // repeated int32 pf_int32 = 89 [packed = true];
+  if (this->pf_int32_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(89, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pf_int32_cached_byte_size_));
+  }
+  for (int i = 0, n = this->pf_int32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32NoTag(
+      this->pf_int32(i), output);
+  }
+
+  // repeated int32 pd_int32 = 90 [packed = true];
+  if (this->pd_int32_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(90, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pd_int32_cached_byte_size_));
+  }
+  for (int i = 0, n = this->pd_int32_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32NoTag(
+      this->pd_int32(i), output);
+  }
+
+  // optional float o_float = 91;
+  if (cached_has_bits & 0x00020000u) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(91, this->o_float(), output);
+  }
+
+  // repeated float f_float = 92;
+  for (int i = 0, n = this->f_float_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(
+      92, this->f_float(i), output);
+  }
+
+  // repeated float d_float = 93;
+  for (int i = 0, n = this->d_float_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(
+      93, this->d_float(i), output);
+  }
+
+  // repeated float pf_float = 94 [packed = true];
+  if (this->pf_float_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(94, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pf_float_cached_byte_size_));
+    ::google::protobuf::internal::WireFormatLite::WriteFloatArray(
+      this->pf_float().data(), this->pf_float_size(), output);
+  }
+
+  // repeated float pd_float = 95 [packed = true];
+  if (this->pd_float_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(95, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
+        _pd_float_cached_byte_size_));
+    ::google::protobuf::internal::WireFormatLite::WriteFloatArray(
+      this->pd_float().data(), this->pd_float_size(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ut_test_message)
+}
+
+::google::protobuf::uint8* ut_test_message::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:ut_test_message)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // required uint32 r_uint32 = 1;
+  if (cached_has_bits & 0x00000040u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->r_uint32(), target);
+  }
+
+  // optional uint32 o_uint32 = 2;
+  if (cached_has_bits & 0x00000080u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->o_uint32(), target);
+  }
+
+  // repeated uint32 f_uint32 = 3;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteUInt32ToArray(3, this->f_uint32_, target);
+
+  // repeated uint32 d_uint32 = 4;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteUInt32ToArray(4, this->d_uint32_, target);
+
+  // repeated uint32 pf_uint32 = 5 [packed = true];
+  if (this->pf_uint32_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      5,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pf_uint32_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32NoTagToArray(this->pf_uint32_, target);
+  }
+
+  // repeated uint32 pd_uint32 = 6 [packed = true];
+  if (this->pd_uint32_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      6,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pd_uint32_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32NoTagToArray(this->pd_uint32_, target);
+  }
+
+  // required uint64 r_uint64 = 11;
+  if (cached_has_bits & 0x00000100u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(11, this->r_uint64(), target);
+  }
+
+  // optional uint64 o_uint64 = 12;
+  if (cached_has_bits & 0x00000200u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(12, this->o_uint64(), target);
+  }
+
+  // repeated uint64 f_uint64 = 13;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteUInt64ToArray(13, this->f_uint64_, target);
+
+  // repeated uint64 d_uint64 = 14;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteUInt64ToArray(14, this->d_uint64_, target);
+
+  // repeated uint64 pf_uint64 = 15 [packed = true];
+  if (this->pf_uint64_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      15,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pf_uint64_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt64NoTagToArray(this->pf_uint64_, target);
+  }
+
+  // repeated uint64 pd_uint64 = 16 [packed = true];
+  if (this->pd_uint64_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      16,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pd_uint64_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt64NoTagToArray(this->pd_uint64_, target);
+  }
+
+  // required fixed32 r_fixed32 = 21;
+  if (cached_has_bits & 0x00000400u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFixed32ToArray(21, this->r_fixed32(), target);
+  }
+
+  // optional fixed32 o_fixed32 = 22;
+  if (cached_has_bits & 0x00000800u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFixed32ToArray(22, this->o_fixed32(), target);
+  }
+
+  // repeated fixed32 f_fixed32 = 23;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteFixed32ToArray(23, this->f_fixed32_, target);
+
+  // repeated fixed32 d_fixed32 = 24;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteFixed32ToArray(24, this->d_fixed32_, target);
+
+  // repeated fixed32 pf_fixed32 = 25 [packed = true];
+  if (this->pf_fixed32_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      25,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pf_fixed32_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteFixed32NoTagToArray(this->pf_fixed32_, target);
+  }
+
+  // repeated fixed32 pd_fixed32 = 26 [packed = true];
+  if (this->pd_fixed32_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      26,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pd_fixed32_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteFixed32NoTagToArray(this->pd_fixed32_, target);
+  }
+
+  // required fixed64 r_fixed64 = 31;
+  if (cached_has_bits & 0x00001000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFixed64ToArray(31, this->r_fixed64(), target);
+  }
+
+  // optional fixed64 o_fixed64 = 32;
+  if (cached_has_bits & 0x00002000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFixed64ToArray(32, this->o_fixed64(), target);
+  }
+
+  // repeated fixed64 f_fixed64 = 33;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteFixed64ToArray(33, this->f_fixed64_, target);
+
+  // repeated fixed64 d_fixed64 = 34;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteFixed64ToArray(34, this->d_fixed64_, target);
+
+  // repeated fixed64 pf_fixed64 = 35 [packed = true];
+  if (this->pf_fixed64_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      35,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pf_fixed64_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteFixed64NoTagToArray(this->pf_fixed64_, target);
+  }
+
+  // repeated fixed64 pd_fixed64 = 36 [packed = true];
+  if (this->pd_fixed64_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      36,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pd_fixed64_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteFixed64NoTagToArray(this->pd_fixed64_, target);
+  }
+
+  // required bool r_bool = 41;
+  if (cached_has_bits & 0x00004000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(41, this->r_bool(), target);
+  }
+
+  // optional bool o_bool = 42;
+  if (cached_has_bits & 0x00008000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(42, this->o_bool(), target);
+  }
+
+  // repeated bool f_bool = 43;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteBoolToArray(43, this->f_bool_, target);
+
+  // repeated bool d_bool = 44;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteBoolToArray(44, this->d_bool_, target);
+
+  // repeated bool pf_bool = 45 [packed = true];
+  if (this->pf_bool_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      45,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pf_bool_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteBoolNoTagToArray(this->pf_bool_, target);
+  }
+
+  // repeated bool pd_bool = 46 [packed = true];
+  if (this->pd_bool_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      46,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pd_bool_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteBoolNoTagToArray(this->pd_bool_, target);
+  }
+
+  // required string r_string = 51;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->r_string().data(), static_cast<int>(this->r_string().length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "ut_test_message.r_string");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        51, this->r_string(), target);
+  }
+
+  // optional string o_string = 52;
+  if (cached_has_bits & 0x00000002u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->o_string().data(), static_cast<int>(this->o_string().length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "ut_test_message.o_string");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        52, this->o_string(), target);
+  }
+
+  // repeated string f_string = 53;
+  for (int i = 0, n = this->f_string_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->f_string(i).data(), static_cast<int>(this->f_string(i).length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "ut_test_message.f_string");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(53, this->f_string(i), target);
+  }
+
+  // repeated string d_string = 54;
+  for (int i = 0, n = this->d_string_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->d_string(i).data(), static_cast<int>(this->d_string(i).length()),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "ut_test_message.d_string");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(54, this->d_string(i), target);
+  }
+
+  // required bytes r_bytes = 61;
+  if (cached_has_bits & 0x00000004u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        61, this->r_bytes(), target);
+  }
+
+  // optional bytes o_bytes = 62;
+  if (cached_has_bits & 0x00000008u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        62, this->o_bytes(), target);
+  }
+
+  // repeated bytes f_bytes = 63;
+  for (int i = 0, n = this->f_bytes_size(); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteBytesToArray(63, this->f_bytes(i), target);
+  }
+
+  // repeated bytes d_bytes = 64;
+  for (int i = 0, n = this->d_bytes_size(); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteBytesToArray(64, this->d_bytes(i), target);
+  }
+
+  // required .ut_test_enum r_enum = 71;
+  if (cached_has_bits & 0x00040000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      71, this->r_enum(), target);
+  }
+
+  // optional .ut_test_enum o_enum = 72;
+  if (cached_has_bits & 0x00080000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      72, this->o_enum(), target);
+  }
+
+  // repeated .ut_test_enum f_enum = 73;
+  target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+    73, this->f_enum_, target);
+
+  // repeated .ut_test_enum d_enum = 74;
+  target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+    74, this->d_enum_, target);
+
+  // required .ut_test_sub_message r_message = 81;
+  if (cached_has_bits & 0x00000010u) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        81, *this->r_message_, deterministic, target);
+  }
+
+  // optional .ut_test_sub_message o_message = 82;
+  if (cached_has_bits & 0x00000020u) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        82, *this->o_message_, deterministic, target);
+  }
+
+  // repeated .ut_test_sub_message f_message = 83;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->f_message_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        83, this->f_message(static_cast<int>(i)), deterministic, target);
+  }
+
+  // repeated .ut_test_sub_message d_message = 84;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->d_message_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        84, this->d_message(static_cast<int>(i)), deterministic, target);
+  }
+
+  // optional int32 o_int32 = 86;
+  if (cached_has_bits & 0x00010000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(86, this->o_int32(), target);
+  }
+
+  // repeated int32 f_int32 = 87;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteInt32ToArray(87, this->f_int32_, target);
+
+  // repeated int32 d_int32 = 88;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteInt32ToArray(88, this->d_int32_, target);
+
+  // repeated int32 pf_int32 = 89 [packed = true];
+  if (this->pf_int32_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      89,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pf_int32_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteInt32NoTagToArray(this->pf_int32_, target);
+  }
+
+  // repeated int32 pd_int32 = 90 [packed = true];
+  if (this->pd_int32_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      90,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pd_int32_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteInt32NoTagToArray(this->pd_int32_, target);
+  }
+
+  // optional float o_float = 91;
+  if (cached_has_bits & 0x00020000u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(91, this->o_float(), target);
+  }
+
+  // repeated float f_float = 92;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteFloatToArray(92, this->f_float_, target);
+
+  // repeated float d_float = 93;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteFloatToArray(93, this->d_float_, target);
+
+  // repeated float pf_float = 94 [packed = true];
+  if (this->pf_float_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      94,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pf_float_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteFloatNoTagToArray(this->pf_float_, target);
+  }
+
+  // repeated float pd_float = 95 [packed = true];
+  if (this->pd_float_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      95,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
+        static_cast< ::google::protobuf::int32>(
+            _pd_float_cached_byte_size_), target);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteFloatNoTagToArray(this->pd_float_, target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ut_test_message)
+  return target;
+}
+
+size_t ut_test_message::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:ut_test_message)
+  size_t total_size = 0;
+
+  if (has_r_string()) {
+    // required string r_string = 51;
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->r_string());
+  }
+
+  if (has_r_bytes()) {
+    // required bytes r_bytes = 61;
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->r_bytes());
+  }
+
+  if (has_r_message()) {
+    // required .ut_test_sub_message r_message = 81;
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *this->r_message_);
+  }
+
+  if (has_r_uint32()) {
+    // required uint32 r_uint32 = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->r_uint32());
+  }
+
+  if (has_r_uint64()) {
+    // required uint64 r_uint64 = 11;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->r_uint64());
+  }
+
+  if (has_r_fixed32()) {
+    // required fixed32 r_fixed32 = 21;
+    total_size += 2 + 4;
+  }
+
+  if (has_r_fixed64()) {
+    // required fixed64 r_fixed64 = 31;
+    total_size += 2 + 8;
+  }
+
+  if (has_r_bool()) {
+    // required bool r_bool = 41;
+    total_size += 2 + 1;
+  }
+
+  if (has_r_enum()) {
+    // required .ut_test_enum r_enum = 71;
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->r_enum());
+  }
+
+  return total_size;
+}
+size_t ut_test_message::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ut_test_message)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  if (((_has_bits_[0] & 0x00045555) ^ 0x00045555) == 0) {  // All required fields are present.
+    // required string r_string = 51;
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->r_string());
+
+    // required bytes r_bytes = 61;
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->r_bytes());
+
+    // required .ut_test_sub_message r_message = 81;
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *this->r_message_);
+
+    // required uint32 r_uint32 = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->r_uint32());
+
+    // required uint64 r_uint64 = 11;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->r_uint64());
+
+    // required fixed32 r_fixed32 = 21;
+    total_size += 2 + 4;
+
+    // required fixed64 r_fixed64 = 31;
+    total_size += 2 + 8;
+
+    // required bool r_bool = 41;
+    total_size += 2 + 1;
+
+    // required .ut_test_enum r_enum = 71;
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->r_enum());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
+  }
+  // repeated uint32 f_uint32 = 3;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt32Size(this->f_uint32_);
+    total_size += 1 *
+                  ::google::protobuf::internal::FromIntSize(this->f_uint32_size());
+    total_size += data_size;
+  }
+
+  // repeated uint32 d_uint32 = 4;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt32Size(this->d_uint32_);
+    total_size += 1 *
+                  ::google::protobuf::internal::FromIntSize(this->d_uint32_size());
+    total_size += data_size;
+  }
+
+  // repeated uint32 pf_uint32 = 5 [packed = true];
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt32Size(this->pf_uint32_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pf_uint32_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated uint32 pd_uint32 = 6 [packed = true];
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt32Size(this->pd_uint32_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pd_uint32_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated uint64 f_uint64 = 13;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt64Size(this->f_uint64_);
+    total_size += 1 *
+                  ::google::protobuf::internal::FromIntSize(this->f_uint64_size());
+    total_size += data_size;
+  }
+
+  // repeated uint64 d_uint64 = 14;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt64Size(this->d_uint64_);
+    total_size += 1 *
+                  ::google::protobuf::internal::FromIntSize(this->d_uint64_size());
+    total_size += data_size;
+  }
+
+  // repeated uint64 pf_uint64 = 15 [packed = true];
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt64Size(this->pf_uint64_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pf_uint64_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated uint64 pd_uint64 = 16 [packed = true];
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt64Size(this->pd_uint64_);
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pd_uint64_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated fixed32 f_fixed32 = 23;
+  {
+    unsigned int count = static_cast<unsigned int>(this->f_fixed32_size());
+    size_t data_size = 4UL * count;
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->f_fixed32_size());
+    total_size += data_size;
+  }
+
+  // repeated fixed32 d_fixed32 = 24;
+  {
+    unsigned int count = static_cast<unsigned int>(this->d_fixed32_size());
+    size_t data_size = 4UL * count;
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->d_fixed32_size());
+    total_size += data_size;
+  }
+
+  // repeated fixed32 pf_fixed32 = 25 [packed = true];
+  {
+    unsigned int count = static_cast<unsigned int>(this->pf_fixed32_size());
+    size_t data_size = 4UL * count;
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pf_fixed32_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated fixed32 pd_fixed32 = 26 [packed = true];
+  {
+    unsigned int count = static_cast<unsigned int>(this->pd_fixed32_size());
+    size_t data_size = 4UL * count;
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pd_fixed32_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated fixed64 f_fixed64 = 33;
+  {
+    unsigned int count = static_cast<unsigned int>(this->f_fixed64_size());
+    size_t data_size = 8UL * count;
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->f_fixed64_size());
+    total_size += data_size;
+  }
+
+  // repeated fixed64 d_fixed64 = 34;
+  {
+    unsigned int count = static_cast<unsigned int>(this->d_fixed64_size());
+    size_t data_size = 8UL * count;
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->d_fixed64_size());
+    total_size += data_size;
+  }
+
+  // repeated fixed64 pf_fixed64 = 35 [packed = true];
+  {
+    unsigned int count = static_cast<unsigned int>(this->pf_fixed64_size());
+    size_t data_size = 8UL * count;
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pf_fixed64_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated fixed64 pd_fixed64 = 36 [packed = true];
+  {
+    unsigned int count = static_cast<unsigned int>(this->pd_fixed64_size());
+    size_t data_size = 8UL * count;
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pd_fixed64_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated bool f_bool = 43;
+  {
+    unsigned int count = static_cast<unsigned int>(this->f_bool_size());
+    size_t data_size = 1UL * count;
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->f_bool_size());
+    total_size += data_size;
+  }
+
+  // repeated bool d_bool = 44;
+  {
+    unsigned int count = static_cast<unsigned int>(this->d_bool_size());
+    size_t data_size = 1UL * count;
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->d_bool_size());
+    total_size += data_size;
+  }
+
+  // repeated bool pf_bool = 45 [packed = true];
+  {
+    unsigned int count = static_cast<unsigned int>(this->pf_bool_size());
+    size_t data_size = 1UL * count;
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pf_bool_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated bool pd_bool = 46 [packed = true];
+  {
+    unsigned int count = static_cast<unsigned int>(this->pd_bool_size());
+    size_t data_size = 1UL * count;
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pd_bool_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated string f_string = 53;
+  total_size += 2 *
+      ::google::protobuf::internal::FromIntSize(this->f_string_size());
+  for (int i = 0, n = this->f_string_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->f_string(i));
+  }
+
+  // repeated string d_string = 54;
+  total_size += 2 *
+      ::google::protobuf::internal::FromIntSize(this->d_string_size());
+  for (int i = 0, n = this->d_string_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->d_string(i));
+  }
+
+  // repeated bytes f_bytes = 63;
+  total_size += 2 *
+      ::google::protobuf::internal::FromIntSize(this->f_bytes_size());
+  for (int i = 0, n = this->f_bytes_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::BytesSize(
+      this->f_bytes(i));
+  }
+
+  // repeated bytes d_bytes = 64;
+  total_size += 2 *
+      ::google::protobuf::internal::FromIntSize(this->d_bytes_size());
+  for (int i = 0, n = this->d_bytes_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::BytesSize(
+      this->d_bytes(i));
+  }
+
+  // repeated .ut_test_enum f_enum = 73;
+  {
+    size_t data_size = 0;
+    unsigned int count = static_cast<unsigned int>(this->f_enum_size());for (unsigned int i = 0; i < count; i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::EnumSize(
+        this->f_enum(static_cast<int>(i)));
+    }
+    total_size += (2UL * count) + data_size;
+  }
+
+  // repeated .ut_test_enum d_enum = 74;
+  {
+    size_t data_size = 0;
+    unsigned int count = static_cast<unsigned int>(this->d_enum_size());for (unsigned int i = 0; i < count; i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::EnumSize(
+        this->d_enum(static_cast<int>(i)));
+    }
+    total_size += (2UL * count) + data_size;
+  }
+
+  // repeated .ut_test_sub_message f_message = 83;
+  {
+    unsigned int count = static_cast<unsigned int>(this->f_message_size());
+    total_size += 2UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->f_message(static_cast<int>(i)));
+    }
+  }
+
+  // repeated .ut_test_sub_message d_message = 84;
+  {
+    unsigned int count = static_cast<unsigned int>(this->d_message_size());
+    total_size += 2UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->d_message(static_cast<int>(i)));
+    }
+  }
+
+  // repeated int32 f_int32 = 87;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      Int32Size(this->f_int32_);
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->f_int32_size());
+    total_size += data_size;
+  }
+
+  // repeated int32 d_int32 = 88;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      Int32Size(this->d_int32_);
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->d_int32_size());
+    total_size += data_size;
+  }
+
+  // repeated int32 pf_int32 = 89 [packed = true];
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      Int32Size(this->pf_int32_);
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pf_int32_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated int32 pd_int32 = 90 [packed = true];
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      Int32Size(this->pd_int32_);
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pd_int32_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated float f_float = 92;
+  {
+    unsigned int count = static_cast<unsigned int>(this->f_float_size());
+    size_t data_size = 4UL * count;
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->f_float_size());
+    total_size += data_size;
+  }
+
+  // repeated float d_float = 93;
+  {
+    unsigned int count = static_cast<unsigned int>(this->d_float_size());
+    size_t data_size = 4UL * count;
+    total_size += 2 *
+                  ::google::protobuf::internal::FromIntSize(this->d_float_size());
+    total_size += data_size;
+  }
+
+  // repeated float pf_float = 94 [packed = true];
+  {
+    unsigned int count = static_cast<unsigned int>(this->pf_float_size());
+    size_t data_size = 4UL * count;
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pf_float_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // repeated float pd_float = 95 [packed = true];
+  {
+    unsigned int count = static_cast<unsigned int>(this->pd_float_size());
+    size_t data_size = 4UL * count;
+    if (data_size > 0) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+            static_cast< ::google::protobuf::int32>(data_size));
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _pd_float_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // optional string o_string = 52;
+  if (has_o_string()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->o_string());
+  }
+
+  // optional bytes o_bytes = 62;
+  if (has_o_bytes()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->o_bytes());
+  }
+
+  // optional .ut_test_sub_message o_message = 82;
+  if (has_o_message()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *this->o_message_);
+  }
+
+  // optional uint32 o_uint32 = 2;
+  if (has_o_uint32()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->o_uint32());
+  }
+
+  // optional uint64 o_uint64 = 12;
+  if (has_o_uint64()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->o_uint64());
+  }
+
+  // optional fixed32 o_fixed32 = 22;
+  if (has_o_fixed32()) {
+    total_size += 2 + 4;
+  }
+
+  // optional fixed64 o_fixed64 = 32;
+  if (has_o_fixed64()) {
+    total_size += 2 + 8;
+  }
+
+  // optional bool o_bool = 42;
+  if (has_o_bool()) {
+    total_size += 2 + 1;
+  }
+
+  if (_has_bits_[16 / 32] & 196608u) {
+    // optional int32 o_int32 = 86;
+    if (has_o_int32()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->o_int32());
+    }
+
+    // optional float o_float = 91;
+    if (has_o_float()) {
+      total_size += 2 + 4;
+    }
+
+  }
+  // optional .ut_test_enum o_enum = 72;
+  if (has_o_enum()) {
+    total_size += 2 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->o_enum());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ut_test_message::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ut_test_message)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ut_test_message* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ut_test_message>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ut_test_message)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ut_test_message)
+    MergeFrom(*source);
+  }
+}
+
+void ut_test_message::MergeFrom(const ut_test_message& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ut_test_message)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  f_uint32_.MergeFrom(from.f_uint32_);
+  d_uint32_.MergeFrom(from.d_uint32_);
+  pf_uint32_.MergeFrom(from.pf_uint32_);
+  pd_uint32_.MergeFrom(from.pd_uint32_);
+  f_uint64_.MergeFrom(from.f_uint64_);
+  d_uint64_.MergeFrom(from.d_uint64_);
+  pf_uint64_.MergeFrom(from.pf_uint64_);
+  pd_uint64_.MergeFrom(from.pd_uint64_);
+  f_fixed32_.MergeFrom(from.f_fixed32_);
+  d_fixed32_.MergeFrom(from.d_fixed32_);
+  pf_fixed32_.MergeFrom(from.pf_fixed32_);
+  pd_fixed32_.MergeFrom(from.pd_fixed32_);
+  f_fixed64_.MergeFrom(from.f_fixed64_);
+  d_fixed64_.MergeFrom(from.d_fixed64_);
+  pf_fixed64_.MergeFrom(from.pf_fixed64_);
+  pd_fixed64_.MergeFrom(from.pd_fixed64_);
+  f_bool_.MergeFrom(from.f_bool_);
+  d_bool_.MergeFrom(from.d_bool_);
+  pf_bool_.MergeFrom(from.pf_bool_);
+  pd_bool_.MergeFrom(from.pd_bool_);
+  f_string_.MergeFrom(from.f_string_);
+  d_string_.MergeFrom(from.d_string_);
+  f_bytes_.MergeFrom(from.f_bytes_);
+  d_bytes_.MergeFrom(from.d_bytes_);
+  f_enum_.MergeFrom(from.f_enum_);
+  d_enum_.MergeFrom(from.d_enum_);
+  f_message_.MergeFrom(from.f_message_);
+  d_message_.MergeFrom(from.d_message_);
+  f_int32_.MergeFrom(from.f_int32_);
+  d_int32_.MergeFrom(from.d_int32_);
+  pf_int32_.MergeFrom(from.pf_int32_);
+  pd_int32_.MergeFrom(from.pd_int32_);
+  f_float_.MergeFrom(from.f_float_);
+  d_float_.MergeFrom(from.d_float_);
+  pf_float_.MergeFrom(from.pf_float_);
+  pd_float_.MergeFrom(from.pd_float_);
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 255u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_r_string();
+      r_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.r_string_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      set_has_o_string();
+      o_string_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.o_string_);
+    }
+    if (cached_has_bits & 0x00000004u) {
+      set_has_r_bytes();
+      r_bytes_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.r_bytes_);
+    }
+    if (cached_has_bits & 0x00000008u) {
+      set_has_o_bytes();
+      o_bytes_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.o_bytes_);
+    }
+    if (cached_has_bits & 0x00000010u) {
+      mutable_r_message()->::ut_test_sub_message::MergeFrom(from.r_message());
+    }
+    if (cached_has_bits & 0x00000020u) {
+      mutable_o_message()->::ut_test_sub_message::MergeFrom(from.o_message());
+    }
+    if (cached_has_bits & 0x00000040u) {
+      r_uint32_ = from.r_uint32_;
+    }
+    if (cached_has_bits & 0x00000080u) {
+      o_uint32_ = from.o_uint32_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+  if (cached_has_bits & 65280u) {
+    if (cached_has_bits & 0x00000100u) {
+      r_uint64_ = from.r_uint64_;
+    }
+    if (cached_has_bits & 0x00000200u) {
+      o_uint64_ = from.o_uint64_;
+    }
+    if (cached_has_bits & 0x00000400u) {
+      r_fixed32_ = from.r_fixed32_;
+    }
+    if (cached_has_bits & 0x00000800u) {
+      o_fixed32_ = from.o_fixed32_;
+    }
+    if (cached_has_bits & 0x00001000u) {
+      r_fixed64_ = from.r_fixed64_;
+    }
+    if (cached_has_bits & 0x00002000u) {
+      o_fixed64_ = from.o_fixed64_;
+    }
+    if (cached_has_bits & 0x00004000u) {
+      r_bool_ = from.r_bool_;
+    }
+    if (cached_has_bits & 0x00008000u) {
+      o_bool_ = from.o_bool_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+  if (cached_has_bits & 983040u) {
+    if (cached_has_bits & 0x00010000u) {
+      o_int32_ = from.o_int32_;
+    }
+    if (cached_has_bits & 0x00020000u) {
+      o_float_ = from.o_float_;
+    }
+    if (cached_has_bits & 0x00040000u) {
+      r_enum_ = from.r_enum_;
+    }
+    if (cached_has_bits & 0x00080000u) {
+      o_enum_ = from.o_enum_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+}
+
+void ut_test_message::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ut_test_message)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ut_test_message::CopyFrom(const ut_test_message& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ut_test_message)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ut_test_message::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00045555) != 0x00045555) return false;
+  return true;
+}
+
+void ut_test_message::Swap(ut_test_message* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ut_test_message::InternalSwap(ut_test_message* other) {
+  using std::swap;
+  f_uint32_.InternalSwap(&other->f_uint32_);
+  d_uint32_.InternalSwap(&other->d_uint32_);
+  pf_uint32_.InternalSwap(&other->pf_uint32_);
+  pd_uint32_.InternalSwap(&other->pd_uint32_);
+  f_uint64_.InternalSwap(&other->f_uint64_);
+  d_uint64_.InternalSwap(&other->d_uint64_);
+  pf_uint64_.InternalSwap(&other->pf_uint64_);
+  pd_uint64_.InternalSwap(&other->pd_uint64_);
+  f_fixed32_.InternalSwap(&other->f_fixed32_);
+  d_fixed32_.InternalSwap(&other->d_fixed32_);
+  pf_fixed32_.InternalSwap(&other->pf_fixed32_);
+  pd_fixed32_.InternalSwap(&other->pd_fixed32_);
+  f_fixed64_.InternalSwap(&other->f_fixed64_);
+  d_fixed64_.InternalSwap(&other->d_fixed64_);
+  pf_fixed64_.InternalSwap(&other->pf_fixed64_);
+  pd_fixed64_.InternalSwap(&other->pd_fixed64_);
+  f_bool_.InternalSwap(&other->f_bool_);
+  d_bool_.InternalSwap(&other->d_bool_);
+  pf_bool_.InternalSwap(&other->pf_bool_);
+  pd_bool_.InternalSwap(&other->pd_bool_);
+  f_string_.InternalSwap(&other->f_string_);
+  d_string_.InternalSwap(&other->d_string_);
+  f_bytes_.InternalSwap(&other->f_bytes_);
+  d_bytes_.InternalSwap(&other->d_bytes_);
+  f_enum_.InternalSwap(&other->f_enum_);
+  d_enum_.InternalSwap(&other->d_enum_);
+  f_message_.InternalSwap(&other->f_message_);
+  d_message_.InternalSwap(&other->d_message_);
+  f_int32_.InternalSwap(&other->f_int32_);
+  d_int32_.InternalSwap(&other->d_int32_);
+  pf_int32_.InternalSwap(&other->pf_int32_);
+  pd_int32_.InternalSwap(&other->pd_int32_);
+  f_float_.InternalSwap(&other->f_float_);
+  d_float_.InternalSwap(&other->d_float_);
+  pf_float_.InternalSwap(&other->pf_float_);
+  pd_float_.InternalSwap(&other->pd_float_);
+  r_string_.Swap(&other->r_string_);
+  o_string_.Swap(&other->o_string_);
+  r_bytes_.Swap(&other->r_bytes_);
+  o_bytes_.Swap(&other->o_bytes_);
+  swap(r_message_, other->r_message_);
+  swap(o_message_, other->o_message_);
+  swap(r_uint32_, other->r_uint32_);
+  swap(o_uint32_, other->o_uint32_);
+  swap(r_uint64_, other->r_uint64_);
+  swap(o_uint64_, other->o_uint64_);
+  swap(r_fixed32_, other->r_fixed32_);
+  swap(o_fixed32_, other->o_fixed32_);
+  swap(r_fixed64_, other->r_fixed64_);
+  swap(o_fixed64_, other->o_fixed64_);
+  swap(r_bool_, other->r_bool_);
+  swap(o_bool_, other->o_bool_);
+  swap(o_int32_, other->o_int32_);
+  swap(o_float_, other->o_float_);
+  swap(r_enum_, other->r_enum_);
+  swap(o_enum_, other->o_enum_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata ut_test_message::GetMetadata() const {
   protobuf_Hello_2eproto::protobuf_AssignDescriptorsOnce();
   return ::protobuf_Hello_2eproto::file_level_metadata[kIndexInFileMessages];
 }
