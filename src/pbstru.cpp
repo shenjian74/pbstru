@@ -291,7 +291,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "        if(TRUE == old_version) {\n");
-    fprintf(fp, "            *field_num = buf[0] & 0x7F;\n");
+    fprintf(fp, "            *field_num = (buf[0] & 0x7F) + (buf[1] >> 3) * 128;\n");
     fprintf(fp, "            *wire_type = buf[1] & 0x07;\n");
     fprintf(fp, "        } else {\n");
     fprintf(fp, "            *field_num = (buf[1] << 4) + ((buf[0] & 0x7F) >> 3);\n");
@@ -302,7 +302,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        if(buflen<1) {\n");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
-    fprintf(fp, "        *field_num = (buf[0] >> 3);\n");
+    fprintf(fp, "        *field_num = buf[0] >> 3;\n");
     fprintf(fp, "        *wire_type = buf[0] & 0x07;\n");
     fprintf(fp, "        *offset += 1;\n");
     fprintf(fp, "    }\n");
@@ -320,7 +320,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        if (NULL != buf) {\n");
     fprintf(fp, "            if (TRUE == old_version) {\n");
     fprintf(fp, "                buf[*offset] = tag | 0x80;\n");
-    fprintf(fp, "                buf[*offset+1] = wire_type & 0x07;\n");
+    fprintf(fp, "                buf[*offset+1] = ((BYTE)(tag/16) & 0x78) | wire_type;\n");
     fprintf(fp, "            } else {\n");
     fprintf(fp, "                buf[*offset] = (tag << 3) | (wire_type & 0x07) | 0x80;\n");
     fprintf(fp, "                buf[*offset+1] = (tag >> 4);\n");
