@@ -28,6 +28,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 
@@ -36,7 +37,7 @@ namespace protobuf_Hello_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[1];
+  static const ::google::protobuf::internal::ParseTable schema[3];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -44,14 +45,45 @@ struct TableStruct {
 void AddDescriptors();
 void InitDefaultsHelloImpl();
 void InitDefaultsHello();
+void InitDefaultsut_test_sub_messageImpl();
+void InitDefaultsut_test_sub_message();
+void InitDefaultsut_test_messageImpl();
+void InitDefaultsut_test_message();
 inline void InitDefaults() {
   InitDefaultsHello();
+  InitDefaultsut_test_sub_message();
+  InitDefaultsut_test_message();
 }
 }  // namespace protobuf_Hello_2eproto
 class Hello;
 class HelloDefaultTypeInternal;
 extern HelloDefaultTypeInternal _Hello_default_instance_;
+class ut_test_message;
+class ut_test_messageDefaultTypeInternal;
+extern ut_test_messageDefaultTypeInternal _ut_test_message_default_instance_;
+class ut_test_sub_message;
+class ut_test_sub_messageDefaultTypeInternal;
+extern ut_test_sub_messageDefaultTypeInternal _ut_test_sub_message_default_instance_;
 
+enum ut_test_enum {
+  CLIENT = 1,
+  SERVER = 2
+};
+bool ut_test_enum_IsValid(int value);
+const ut_test_enum ut_test_enum_MIN = CLIENT;
+const ut_test_enum ut_test_enum_MAX = SERVER;
+const int ut_test_enum_ARRAYSIZE = ut_test_enum_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* ut_test_enum_descriptor();
+inline const ::std::string& ut_test_enum_Name(ut_test_enum value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    ut_test_enum_descriptor(), value);
+}
+inline bool ut_test_enum_Parse(
+    const ::std::string& name, ut_test_enum* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ut_test_enum>(
+    ut_test_enum_descriptor(), name, value);
+}
 // ===================================================================
 
 class Hello : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:Hello) */ {
@@ -203,6 +235,976 @@ class Hello : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   friend struct ::protobuf_Hello_2eproto::TableStruct;
   friend void ::protobuf_Hello_2eproto::InitDefaultsHelloImpl();
 };
+// -------------------------------------------------------------------
+
+class ut_test_sub_message : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ut_test_sub_message) */ {
+ public:
+  ut_test_sub_message();
+  virtual ~ut_test_sub_message();
+
+  ut_test_sub_message(const ut_test_sub_message& from);
+
+  inline ut_test_sub_message& operator=(const ut_test_sub_message& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  ut_test_sub_message(ut_test_sub_message&& from) noexcept
+    : ut_test_sub_message() {
+    *this = ::std::move(from);
+  }
+
+  inline ut_test_sub_message& operator=(ut_test_sub_message&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ut_test_sub_message& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ut_test_sub_message* internal_default_instance() {
+    return reinterpret_cast<const ut_test_sub_message*>(
+               &_ut_test_sub_message_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    1;
+
+  void Swap(ut_test_sub_message* other);
+  friend void swap(ut_test_sub_message& a, ut_test_sub_message& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ut_test_sub_message* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ut_test_sub_message* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const ut_test_sub_message& from);
+  void MergeFrom(const ut_test_sub_message& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(ut_test_sub_message* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated uint32 d_uint32 = 1;
+  int d_uint32_size() const;
+  void clear_d_uint32();
+  static const int kDUint32FieldNumber = 1;
+  ::google::protobuf::uint32 d_uint32(int index) const;
+  void set_d_uint32(int index, ::google::protobuf::uint32 value);
+  void add_d_uint32(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      d_uint32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_d_uint32();
+
+  // @@protoc_insertion_point(class_scope:ut_test_sub_message)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > d_uint32_;
+  friend struct ::protobuf_Hello_2eproto::TableStruct;
+  friend void ::protobuf_Hello_2eproto::InitDefaultsut_test_sub_messageImpl();
+};
+// -------------------------------------------------------------------
+
+class ut_test_message : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ut_test_message) */ {
+ public:
+  ut_test_message();
+  virtual ~ut_test_message();
+
+  ut_test_message(const ut_test_message& from);
+
+  inline ut_test_message& operator=(const ut_test_message& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  ut_test_message(ut_test_message&& from) noexcept
+    : ut_test_message() {
+    *this = ::std::move(from);
+  }
+
+  inline ut_test_message& operator=(ut_test_message&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ut_test_message& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ut_test_message* internal_default_instance() {
+    return reinterpret_cast<const ut_test_message*>(
+               &_ut_test_message_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    2;
+
+  void Swap(ut_test_message* other);
+  friend void swap(ut_test_message& a, ut_test_message& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ut_test_message* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ut_test_message* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const ut_test_message& from);
+  void MergeFrom(const ut_test_message& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(ut_test_message* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated uint32 f_uint32 = 3;
+  int f_uint32_size() const;
+  void clear_f_uint32();
+  static const int kFUint32FieldNumber = 3;
+  ::google::protobuf::uint32 f_uint32(int index) const;
+  void set_f_uint32(int index, ::google::protobuf::uint32 value);
+  void add_f_uint32(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      f_uint32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_f_uint32();
+
+  // repeated uint32 d_uint32 = 4;
+  int d_uint32_size() const;
+  void clear_d_uint32();
+  static const int kDUint32FieldNumber = 4;
+  ::google::protobuf::uint32 d_uint32(int index) const;
+  void set_d_uint32(int index, ::google::protobuf::uint32 value);
+  void add_d_uint32(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      d_uint32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_d_uint32();
+
+  // repeated uint32 pf_uint32 = 5 [packed = true];
+  int pf_uint32_size() const;
+  void clear_pf_uint32();
+  static const int kPfUint32FieldNumber = 5;
+  ::google::protobuf::uint32 pf_uint32(int index) const;
+  void set_pf_uint32(int index, ::google::protobuf::uint32 value);
+  void add_pf_uint32(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      pf_uint32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_pf_uint32();
+
+  // repeated uint32 pd_uint32 = 6 [packed = true];
+  int pd_uint32_size() const;
+  void clear_pd_uint32();
+  static const int kPdUint32FieldNumber = 6;
+  ::google::protobuf::uint32 pd_uint32(int index) const;
+  void set_pd_uint32(int index, ::google::protobuf::uint32 value);
+  void add_pd_uint32(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      pd_uint32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_pd_uint32();
+
+  // repeated uint64 f_uint64 = 13;
+  int f_uint64_size() const;
+  void clear_f_uint64();
+  static const int kFUint64FieldNumber = 13;
+  ::google::protobuf::uint64 f_uint64(int index) const;
+  void set_f_uint64(int index, ::google::protobuf::uint64 value);
+  void add_f_uint64(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      f_uint64() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_f_uint64();
+
+  // repeated uint64 d_uint64 = 14;
+  int d_uint64_size() const;
+  void clear_d_uint64();
+  static const int kDUint64FieldNumber = 14;
+  ::google::protobuf::uint64 d_uint64(int index) const;
+  void set_d_uint64(int index, ::google::protobuf::uint64 value);
+  void add_d_uint64(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      d_uint64() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_d_uint64();
+
+  // repeated uint64 pf_uint64 = 15 [packed = true];
+  int pf_uint64_size() const;
+  void clear_pf_uint64();
+  static const int kPfUint64FieldNumber = 15;
+  ::google::protobuf::uint64 pf_uint64(int index) const;
+  void set_pf_uint64(int index, ::google::protobuf::uint64 value);
+  void add_pf_uint64(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      pf_uint64() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_pf_uint64();
+
+  // repeated uint64 pd_uint64 = 16 [packed = true];
+  int pd_uint64_size() const;
+  void clear_pd_uint64();
+  static const int kPdUint64FieldNumber = 16;
+  ::google::protobuf::uint64 pd_uint64(int index) const;
+  void set_pd_uint64(int index, ::google::protobuf::uint64 value);
+  void add_pd_uint64(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      pd_uint64() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_pd_uint64();
+
+  // repeated fixed32 f_fixed32 = 23;
+  int f_fixed32_size() const;
+  void clear_f_fixed32();
+  static const int kFFixed32FieldNumber = 23;
+  ::google::protobuf::uint32 f_fixed32(int index) const;
+  void set_f_fixed32(int index, ::google::protobuf::uint32 value);
+  void add_f_fixed32(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      f_fixed32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_f_fixed32();
+
+  // repeated fixed32 d_fixed32 = 24;
+  int d_fixed32_size() const;
+  void clear_d_fixed32();
+  static const int kDFixed32FieldNumber = 24;
+  ::google::protobuf::uint32 d_fixed32(int index) const;
+  void set_d_fixed32(int index, ::google::protobuf::uint32 value);
+  void add_d_fixed32(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      d_fixed32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_d_fixed32();
+
+  // repeated fixed32 pf_fixed32 = 25 [packed = true];
+  int pf_fixed32_size() const;
+  void clear_pf_fixed32();
+  static const int kPfFixed32FieldNumber = 25;
+  ::google::protobuf::uint32 pf_fixed32(int index) const;
+  void set_pf_fixed32(int index, ::google::protobuf::uint32 value);
+  void add_pf_fixed32(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      pf_fixed32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_pf_fixed32();
+
+  // repeated fixed32 pd_fixed32 = 26 [packed = true];
+  int pd_fixed32_size() const;
+  void clear_pd_fixed32();
+  static const int kPdFixed32FieldNumber = 26;
+  ::google::protobuf::uint32 pd_fixed32(int index) const;
+  void set_pd_fixed32(int index, ::google::protobuf::uint32 value);
+  void add_pd_fixed32(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      pd_fixed32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_pd_fixed32();
+
+  // repeated fixed64 f_fixed64 = 33;
+  int f_fixed64_size() const;
+  void clear_f_fixed64();
+  static const int kFFixed64FieldNumber = 33;
+  ::google::protobuf::uint64 f_fixed64(int index) const;
+  void set_f_fixed64(int index, ::google::protobuf::uint64 value);
+  void add_f_fixed64(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      f_fixed64() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_f_fixed64();
+
+  // repeated fixed64 d_fixed64 = 34;
+  int d_fixed64_size() const;
+  void clear_d_fixed64();
+  static const int kDFixed64FieldNumber = 34;
+  ::google::protobuf::uint64 d_fixed64(int index) const;
+  void set_d_fixed64(int index, ::google::protobuf::uint64 value);
+  void add_d_fixed64(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      d_fixed64() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_d_fixed64();
+
+  // repeated fixed64 pf_fixed64 = 35 [packed = true];
+  int pf_fixed64_size() const;
+  void clear_pf_fixed64();
+  static const int kPfFixed64FieldNumber = 35;
+  ::google::protobuf::uint64 pf_fixed64(int index) const;
+  void set_pf_fixed64(int index, ::google::protobuf::uint64 value);
+  void add_pf_fixed64(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      pf_fixed64() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_pf_fixed64();
+
+  // repeated fixed64 pd_fixed64 = 36 [packed = true];
+  int pd_fixed64_size() const;
+  void clear_pd_fixed64();
+  static const int kPdFixed64FieldNumber = 36;
+  ::google::protobuf::uint64 pd_fixed64(int index) const;
+  void set_pd_fixed64(int index, ::google::protobuf::uint64 value);
+  void add_pd_fixed64(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      pd_fixed64() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_pd_fixed64();
+
+  // repeated bool f_bool = 43;
+  int f_bool_size() const;
+  void clear_f_bool();
+  static const int kFBoolFieldNumber = 43;
+  bool f_bool(int index) const;
+  void set_f_bool(int index, bool value);
+  void add_f_bool(bool value);
+  const ::google::protobuf::RepeatedField< bool >&
+      f_bool() const;
+  ::google::protobuf::RepeatedField< bool >*
+      mutable_f_bool();
+
+  // repeated bool d_bool = 44;
+  int d_bool_size() const;
+  void clear_d_bool();
+  static const int kDBoolFieldNumber = 44;
+  bool d_bool(int index) const;
+  void set_d_bool(int index, bool value);
+  void add_d_bool(bool value);
+  const ::google::protobuf::RepeatedField< bool >&
+      d_bool() const;
+  ::google::protobuf::RepeatedField< bool >*
+      mutable_d_bool();
+
+  // repeated bool pf_bool = 45 [packed = true];
+  int pf_bool_size() const;
+  void clear_pf_bool();
+  static const int kPfBoolFieldNumber = 45;
+  bool pf_bool(int index) const;
+  void set_pf_bool(int index, bool value);
+  void add_pf_bool(bool value);
+  const ::google::protobuf::RepeatedField< bool >&
+      pf_bool() const;
+  ::google::protobuf::RepeatedField< bool >*
+      mutable_pf_bool();
+
+  // repeated bool pd_bool = 46 [packed = true];
+  int pd_bool_size() const;
+  void clear_pd_bool();
+  static const int kPdBoolFieldNumber = 46;
+  bool pd_bool(int index) const;
+  void set_pd_bool(int index, bool value);
+  void add_pd_bool(bool value);
+  const ::google::protobuf::RepeatedField< bool >&
+      pd_bool() const;
+  ::google::protobuf::RepeatedField< bool >*
+      mutable_pd_bool();
+
+  // repeated string f_string = 53;
+  int f_string_size() const;
+  void clear_f_string();
+  static const int kFStringFieldNumber = 53;
+  const ::std::string& f_string(int index) const;
+  ::std::string* mutable_f_string(int index);
+  void set_f_string(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_f_string(int index, ::std::string&& value);
+  #endif
+  void set_f_string(int index, const char* value);
+  void set_f_string(int index, const char* value, size_t size);
+  ::std::string* add_f_string();
+  void add_f_string(const ::std::string& value);
+  #if LANG_CXX11
+  void add_f_string(::std::string&& value);
+  #endif
+  void add_f_string(const char* value);
+  void add_f_string(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField< ::std::string>& f_string() const;
+  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_f_string();
+
+  // repeated string d_string = 54;
+  int d_string_size() const;
+  void clear_d_string();
+  static const int kDStringFieldNumber = 54;
+  const ::std::string& d_string(int index) const;
+  ::std::string* mutable_d_string(int index);
+  void set_d_string(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_d_string(int index, ::std::string&& value);
+  #endif
+  void set_d_string(int index, const char* value);
+  void set_d_string(int index, const char* value, size_t size);
+  ::std::string* add_d_string();
+  void add_d_string(const ::std::string& value);
+  #if LANG_CXX11
+  void add_d_string(::std::string&& value);
+  #endif
+  void add_d_string(const char* value);
+  void add_d_string(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField< ::std::string>& d_string() const;
+  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_d_string();
+
+  // repeated bytes f_bytes = 63;
+  int f_bytes_size() const;
+  void clear_f_bytes();
+  static const int kFBytesFieldNumber = 63;
+  const ::std::string& f_bytes(int index) const;
+  ::std::string* mutable_f_bytes(int index);
+  void set_f_bytes(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_f_bytes(int index, ::std::string&& value);
+  #endif
+  void set_f_bytes(int index, const char* value);
+  void set_f_bytes(int index, const void* value, size_t size);
+  ::std::string* add_f_bytes();
+  void add_f_bytes(const ::std::string& value);
+  #if LANG_CXX11
+  void add_f_bytes(::std::string&& value);
+  #endif
+  void add_f_bytes(const char* value);
+  void add_f_bytes(const void* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField< ::std::string>& f_bytes() const;
+  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_f_bytes();
+
+  // repeated bytes d_bytes = 64;
+  int d_bytes_size() const;
+  void clear_d_bytes();
+  static const int kDBytesFieldNumber = 64;
+  const ::std::string& d_bytes(int index) const;
+  ::std::string* mutable_d_bytes(int index);
+  void set_d_bytes(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_d_bytes(int index, ::std::string&& value);
+  #endif
+  void set_d_bytes(int index, const char* value);
+  void set_d_bytes(int index, const void* value, size_t size);
+  ::std::string* add_d_bytes();
+  void add_d_bytes(const ::std::string& value);
+  #if LANG_CXX11
+  void add_d_bytes(::std::string&& value);
+  #endif
+  void add_d_bytes(const char* value);
+  void add_d_bytes(const void* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField< ::std::string>& d_bytes() const;
+  ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_d_bytes();
+
+  // repeated .ut_test_enum f_enum = 73;
+  int f_enum_size() const;
+  void clear_f_enum();
+  static const int kFEnumFieldNumber = 73;
+  ::ut_test_enum f_enum(int index) const;
+  void set_f_enum(int index, ::ut_test_enum value);
+  void add_f_enum(::ut_test_enum value);
+  const ::google::protobuf::RepeatedField<int>& f_enum() const;
+  ::google::protobuf::RepeatedField<int>* mutable_f_enum();
+
+  // repeated .ut_test_enum d_enum = 74;
+  int d_enum_size() const;
+  void clear_d_enum();
+  static const int kDEnumFieldNumber = 74;
+  ::ut_test_enum d_enum(int index) const;
+  void set_d_enum(int index, ::ut_test_enum value);
+  void add_d_enum(::ut_test_enum value);
+  const ::google::protobuf::RepeatedField<int>& d_enum() const;
+  ::google::protobuf::RepeatedField<int>* mutable_d_enum();
+
+  // repeated .ut_test_sub_message f_message = 83;
+  int f_message_size() const;
+  void clear_f_message();
+  static const int kFMessageFieldNumber = 83;
+  const ::ut_test_sub_message& f_message(int index) const;
+  ::ut_test_sub_message* mutable_f_message(int index);
+  ::ut_test_sub_message* add_f_message();
+  ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message >*
+      mutable_f_message();
+  const ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message >&
+      f_message() const;
+
+  // repeated .ut_test_sub_message d_message = 84;
+  int d_message_size() const;
+  void clear_d_message();
+  static const int kDMessageFieldNumber = 84;
+  const ::ut_test_sub_message& d_message(int index) const;
+  ::ut_test_sub_message* mutable_d_message(int index);
+  ::ut_test_sub_message* add_d_message();
+  ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message >*
+      mutable_d_message();
+  const ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message >&
+      d_message() const;
+
+  // repeated int32 f_int32 = 87;
+  int f_int32_size() const;
+  void clear_f_int32();
+  static const int kFInt32FieldNumber = 87;
+  ::google::protobuf::int32 f_int32(int index) const;
+  void set_f_int32(int index, ::google::protobuf::int32 value);
+  void add_f_int32(::google::protobuf::int32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      f_int32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_f_int32();
+
+  // repeated int32 d_int32 = 88;
+  int d_int32_size() const;
+  void clear_d_int32();
+  static const int kDInt32FieldNumber = 88;
+  ::google::protobuf::int32 d_int32(int index) const;
+  void set_d_int32(int index, ::google::protobuf::int32 value);
+  void add_d_int32(::google::protobuf::int32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      d_int32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_d_int32();
+
+  // repeated int32 pf_int32 = 89 [packed = true];
+  int pf_int32_size() const;
+  void clear_pf_int32();
+  static const int kPfInt32FieldNumber = 89;
+  ::google::protobuf::int32 pf_int32(int index) const;
+  void set_pf_int32(int index, ::google::protobuf::int32 value);
+  void add_pf_int32(::google::protobuf::int32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      pf_int32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_pf_int32();
+
+  // repeated int32 pd_int32 = 90 [packed = true];
+  int pd_int32_size() const;
+  void clear_pd_int32();
+  static const int kPdInt32FieldNumber = 90;
+  ::google::protobuf::int32 pd_int32(int index) const;
+  void set_pd_int32(int index, ::google::protobuf::int32 value);
+  void add_pd_int32(::google::protobuf::int32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      pd_int32() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_pd_int32();
+
+  // repeated float f_float = 92;
+  int f_float_size() const;
+  void clear_f_float();
+  static const int kFFloatFieldNumber = 92;
+  float f_float(int index) const;
+  void set_f_float(int index, float value);
+  void add_f_float(float value);
+  const ::google::protobuf::RepeatedField< float >&
+      f_float() const;
+  ::google::protobuf::RepeatedField< float >*
+      mutable_f_float();
+
+  // repeated float d_float = 93;
+  int d_float_size() const;
+  void clear_d_float();
+  static const int kDFloatFieldNumber = 93;
+  float d_float(int index) const;
+  void set_d_float(int index, float value);
+  void add_d_float(float value);
+  const ::google::protobuf::RepeatedField< float >&
+      d_float() const;
+  ::google::protobuf::RepeatedField< float >*
+      mutable_d_float();
+
+  // repeated float pf_float = 94 [packed = true];
+  int pf_float_size() const;
+  void clear_pf_float();
+  static const int kPfFloatFieldNumber = 94;
+  float pf_float(int index) const;
+  void set_pf_float(int index, float value);
+  void add_pf_float(float value);
+  const ::google::protobuf::RepeatedField< float >&
+      pf_float() const;
+  ::google::protobuf::RepeatedField< float >*
+      mutable_pf_float();
+
+  // repeated float pd_float = 95 [packed = true];
+  int pd_float_size() const;
+  void clear_pd_float();
+  static const int kPdFloatFieldNumber = 95;
+  float pd_float(int index) const;
+  void set_pd_float(int index, float value);
+  void add_pd_float(float value);
+  const ::google::protobuf::RepeatedField< float >&
+      pd_float() const;
+  ::google::protobuf::RepeatedField< float >*
+      mutable_pd_float();
+
+  // required string r_string = 51;
+  bool has_r_string() const;
+  void clear_r_string();
+  static const int kRStringFieldNumber = 51;
+  const ::std::string& r_string() const;
+  void set_r_string(const ::std::string& value);
+  #if LANG_CXX11
+  void set_r_string(::std::string&& value);
+  #endif
+  void set_r_string(const char* value);
+  void set_r_string(const char* value, size_t size);
+  ::std::string* mutable_r_string();
+  ::std::string* release_r_string();
+  void set_allocated_r_string(::std::string* r_string);
+
+  // optional string o_string = 52;
+  bool has_o_string() const;
+  void clear_o_string();
+  static const int kOStringFieldNumber = 52;
+  const ::std::string& o_string() const;
+  void set_o_string(const ::std::string& value);
+  #if LANG_CXX11
+  void set_o_string(::std::string&& value);
+  #endif
+  void set_o_string(const char* value);
+  void set_o_string(const char* value, size_t size);
+  ::std::string* mutable_o_string();
+  ::std::string* release_o_string();
+  void set_allocated_o_string(::std::string* o_string);
+
+  // required bytes r_bytes = 61;
+  bool has_r_bytes() const;
+  void clear_r_bytes();
+  static const int kRBytesFieldNumber = 61;
+  const ::std::string& r_bytes() const;
+  void set_r_bytes(const ::std::string& value);
+  #if LANG_CXX11
+  void set_r_bytes(::std::string&& value);
+  #endif
+  void set_r_bytes(const char* value);
+  void set_r_bytes(const void* value, size_t size);
+  ::std::string* mutable_r_bytes();
+  ::std::string* release_r_bytes();
+  void set_allocated_r_bytes(::std::string* r_bytes);
+
+  // optional bytes o_bytes = 62;
+  bool has_o_bytes() const;
+  void clear_o_bytes();
+  static const int kOBytesFieldNumber = 62;
+  const ::std::string& o_bytes() const;
+  void set_o_bytes(const ::std::string& value);
+  #if LANG_CXX11
+  void set_o_bytes(::std::string&& value);
+  #endif
+  void set_o_bytes(const char* value);
+  void set_o_bytes(const void* value, size_t size);
+  ::std::string* mutable_o_bytes();
+  ::std::string* release_o_bytes();
+  void set_allocated_o_bytes(::std::string* o_bytes);
+
+  // required .ut_test_sub_message r_message = 81;
+  bool has_r_message() const;
+  void clear_r_message();
+  static const int kRMessageFieldNumber = 81;
+  const ::ut_test_sub_message& r_message() const;
+  ::ut_test_sub_message* release_r_message();
+  ::ut_test_sub_message* mutable_r_message();
+  void set_allocated_r_message(::ut_test_sub_message* r_message);
+
+  // optional .ut_test_sub_message o_message = 82;
+  bool has_o_message() const;
+  void clear_o_message();
+  static const int kOMessageFieldNumber = 82;
+  const ::ut_test_sub_message& o_message() const;
+  ::ut_test_sub_message* release_o_message();
+  ::ut_test_sub_message* mutable_o_message();
+  void set_allocated_o_message(::ut_test_sub_message* o_message);
+
+  // required uint32 r_uint32 = 1;
+  bool has_r_uint32() const;
+  void clear_r_uint32();
+  static const int kRUint32FieldNumber = 1;
+  ::google::protobuf::uint32 r_uint32() const;
+  void set_r_uint32(::google::protobuf::uint32 value);
+
+  // optional uint32 o_uint32 = 2;
+  bool has_o_uint32() const;
+  void clear_o_uint32();
+  static const int kOUint32FieldNumber = 2;
+  ::google::protobuf::uint32 o_uint32() const;
+  void set_o_uint32(::google::protobuf::uint32 value);
+
+  // required uint64 r_uint64 = 11;
+  bool has_r_uint64() const;
+  void clear_r_uint64();
+  static const int kRUint64FieldNumber = 11;
+  ::google::protobuf::uint64 r_uint64() const;
+  void set_r_uint64(::google::protobuf::uint64 value);
+
+  // optional uint64 o_uint64 = 12;
+  bool has_o_uint64() const;
+  void clear_o_uint64();
+  static const int kOUint64FieldNumber = 12;
+  ::google::protobuf::uint64 o_uint64() const;
+  void set_o_uint64(::google::protobuf::uint64 value);
+
+  // required fixed32 r_fixed32 = 21;
+  bool has_r_fixed32() const;
+  void clear_r_fixed32();
+  static const int kRFixed32FieldNumber = 21;
+  ::google::protobuf::uint32 r_fixed32() const;
+  void set_r_fixed32(::google::protobuf::uint32 value);
+
+  // optional fixed32 o_fixed32 = 22;
+  bool has_o_fixed32() const;
+  void clear_o_fixed32();
+  static const int kOFixed32FieldNumber = 22;
+  ::google::protobuf::uint32 o_fixed32() const;
+  void set_o_fixed32(::google::protobuf::uint32 value);
+
+  // required fixed64 r_fixed64 = 31;
+  bool has_r_fixed64() const;
+  void clear_r_fixed64();
+  static const int kRFixed64FieldNumber = 31;
+  ::google::protobuf::uint64 r_fixed64() const;
+  void set_r_fixed64(::google::protobuf::uint64 value);
+
+  // optional fixed64 o_fixed64 = 32;
+  bool has_o_fixed64() const;
+  void clear_o_fixed64();
+  static const int kOFixed64FieldNumber = 32;
+  ::google::protobuf::uint64 o_fixed64() const;
+  void set_o_fixed64(::google::protobuf::uint64 value);
+
+  // required bool r_bool = 41;
+  bool has_r_bool() const;
+  void clear_r_bool();
+  static const int kRBoolFieldNumber = 41;
+  bool r_bool() const;
+  void set_r_bool(bool value);
+
+  // optional bool o_bool = 42;
+  bool has_o_bool() const;
+  void clear_o_bool();
+  static const int kOBoolFieldNumber = 42;
+  bool o_bool() const;
+  void set_o_bool(bool value);
+
+  // optional int32 o_int32 = 86;
+  bool has_o_int32() const;
+  void clear_o_int32();
+  static const int kOInt32FieldNumber = 86;
+  ::google::protobuf::int32 o_int32() const;
+  void set_o_int32(::google::protobuf::int32 value);
+
+  // optional float o_float = 91;
+  bool has_o_float() const;
+  void clear_o_float();
+  static const int kOFloatFieldNumber = 91;
+  float o_float() const;
+  void set_o_float(float value);
+
+  // required .ut_test_enum r_enum = 71;
+  bool has_r_enum() const;
+  void clear_r_enum();
+  static const int kREnumFieldNumber = 71;
+  ::ut_test_enum r_enum() const;
+  void set_r_enum(::ut_test_enum value);
+
+  // optional .ut_test_enum o_enum = 72;
+  bool has_o_enum() const;
+  void clear_o_enum();
+  static const int kOEnumFieldNumber = 72;
+  ::ut_test_enum o_enum() const;
+  void set_o_enum(::ut_test_enum value);
+
+  // @@protoc_insertion_point(class_scope:ut_test_message)
+ private:
+  void set_has_r_uint32();
+  void clear_has_r_uint32();
+  void set_has_o_uint32();
+  void clear_has_o_uint32();
+  void set_has_r_uint64();
+  void clear_has_r_uint64();
+  void set_has_o_uint64();
+  void clear_has_o_uint64();
+  void set_has_r_fixed32();
+  void clear_has_r_fixed32();
+  void set_has_o_fixed32();
+  void clear_has_o_fixed32();
+  void set_has_r_fixed64();
+  void clear_has_r_fixed64();
+  void set_has_o_fixed64();
+  void clear_has_o_fixed64();
+  void set_has_r_bool();
+  void clear_has_r_bool();
+  void set_has_o_bool();
+  void clear_has_o_bool();
+  void set_has_r_string();
+  void clear_has_r_string();
+  void set_has_o_string();
+  void clear_has_o_string();
+  void set_has_r_bytes();
+  void clear_has_r_bytes();
+  void set_has_o_bytes();
+  void clear_has_o_bytes();
+  void set_has_r_enum();
+  void clear_has_r_enum();
+  void set_has_o_enum();
+  void clear_has_o_enum();
+  void set_has_r_message();
+  void clear_has_r_message();
+  void set_has_o_message();
+  void clear_has_o_message();
+  void set_has_o_int32();
+  void clear_has_o_int32();
+  void set_has_o_float();
+  void clear_has_o_float();
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::HasBits<1> _has_bits_;
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > f_uint32_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > d_uint32_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > pf_uint32_;
+  mutable int _pf_uint32_cached_byte_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > pd_uint32_;
+  mutable int _pd_uint32_cached_byte_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > f_uint64_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > d_uint64_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > pf_uint64_;
+  mutable int _pf_uint64_cached_byte_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > pd_uint64_;
+  mutable int _pd_uint64_cached_byte_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > f_fixed32_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > d_fixed32_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > pf_fixed32_;
+  mutable int _pf_fixed32_cached_byte_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > pd_fixed32_;
+  mutable int _pd_fixed32_cached_byte_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > f_fixed64_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > d_fixed64_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > pf_fixed64_;
+  mutable int _pf_fixed64_cached_byte_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > pd_fixed64_;
+  mutable int _pd_fixed64_cached_byte_size_;
+  ::google::protobuf::RepeatedField< bool > f_bool_;
+  ::google::protobuf::RepeatedField< bool > d_bool_;
+  ::google::protobuf::RepeatedField< bool > pf_bool_;
+  mutable int _pf_bool_cached_byte_size_;
+  ::google::protobuf::RepeatedField< bool > pd_bool_;
+  mutable int _pd_bool_cached_byte_size_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> f_string_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> d_string_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> f_bytes_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> d_bytes_;
+  ::google::protobuf::RepeatedField<int> f_enum_;
+  ::google::protobuf::RepeatedField<int> d_enum_;
+  ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message > f_message_;
+  ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message > d_message_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > f_int32_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > d_int32_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > pf_int32_;
+  mutable int _pf_int32_cached_byte_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > pd_int32_;
+  mutable int _pd_int32_cached_byte_size_;
+  ::google::protobuf::RepeatedField< float > f_float_;
+  ::google::protobuf::RepeatedField< float > d_float_;
+  ::google::protobuf::RepeatedField< float > pf_float_;
+  mutable int _pf_float_cached_byte_size_;
+  ::google::protobuf::RepeatedField< float > pd_float_;
+  mutable int _pd_float_cached_byte_size_;
+  ::google::protobuf::internal::ArenaStringPtr r_string_;
+  ::google::protobuf::internal::ArenaStringPtr o_string_;
+  ::google::protobuf::internal::ArenaStringPtr r_bytes_;
+  ::google::protobuf::internal::ArenaStringPtr o_bytes_;
+  ::ut_test_sub_message* r_message_;
+  ::ut_test_sub_message* o_message_;
+  ::google::protobuf::uint32 r_uint32_;
+  ::google::protobuf::uint32 o_uint32_;
+  ::google::protobuf::uint64 r_uint64_;
+  ::google::protobuf::uint64 o_uint64_;
+  ::google::protobuf::uint32 r_fixed32_;
+  ::google::protobuf::uint32 o_fixed32_;
+  ::google::protobuf::uint64 r_fixed64_;
+  ::google::protobuf::uint64 o_fixed64_;
+  bool r_bool_;
+  bool o_bool_;
+  ::google::protobuf::int32 o_int32_;
+  float o_float_;
+  int r_enum_;
+  int o_enum_;
+  friend struct ::protobuf_Hello_2eproto::TableStruct;
+  friend void ::protobuf_Hello_2eproto::InitDefaultsut_test_messageImpl();
+};
 // ===================================================================
 
 
@@ -349,12 +1351,2004 @@ inline void Hello::set_opt(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:Hello.opt)
 }
 
+// -------------------------------------------------------------------
+
+// ut_test_sub_message
+
+// repeated uint32 d_uint32 = 1;
+inline int ut_test_sub_message::d_uint32_size() const {
+  return d_uint32_.size();
+}
+inline void ut_test_sub_message::clear_d_uint32() {
+  d_uint32_.Clear();
+}
+inline ::google::protobuf::uint32 ut_test_sub_message::d_uint32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_sub_message.d_uint32)
+  return d_uint32_.Get(index);
+}
+inline void ut_test_sub_message::set_d_uint32(int index, ::google::protobuf::uint32 value) {
+  d_uint32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_sub_message.d_uint32)
+}
+inline void ut_test_sub_message::add_d_uint32(::google::protobuf::uint32 value) {
+  d_uint32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_sub_message.d_uint32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+ut_test_sub_message::d_uint32() const {
+  // @@protoc_insertion_point(field_list:ut_test_sub_message.d_uint32)
+  return d_uint32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+ut_test_sub_message::mutable_d_uint32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_sub_message.d_uint32)
+  return &d_uint32_;
+}
+
+// -------------------------------------------------------------------
+
+// ut_test_message
+
+// required uint32 r_uint32 = 1;
+inline bool ut_test_message::has_r_uint32() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void ut_test_message::set_has_r_uint32() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void ut_test_message::clear_has_r_uint32() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void ut_test_message::clear_r_uint32() {
+  r_uint32_ = 0u;
+  clear_has_r_uint32();
+}
+inline ::google::protobuf::uint32 ut_test_message::r_uint32() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.r_uint32)
+  return r_uint32_;
+}
+inline void ut_test_message::set_r_uint32(::google::protobuf::uint32 value) {
+  set_has_r_uint32();
+  r_uint32_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.r_uint32)
+}
+
+// optional uint32 o_uint32 = 2;
+inline bool ut_test_message::has_o_uint32() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void ut_test_message::set_has_o_uint32() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void ut_test_message::clear_has_o_uint32() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void ut_test_message::clear_o_uint32() {
+  o_uint32_ = 0u;
+  clear_has_o_uint32();
+}
+inline ::google::protobuf::uint32 ut_test_message::o_uint32() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_uint32)
+  return o_uint32_;
+}
+inline void ut_test_message::set_o_uint32(::google::protobuf::uint32 value) {
+  set_has_o_uint32();
+  o_uint32_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.o_uint32)
+}
+
+// repeated uint32 f_uint32 = 3;
+inline int ut_test_message::f_uint32_size() const {
+  return f_uint32_.size();
+}
+inline void ut_test_message::clear_f_uint32() {
+  f_uint32_.Clear();
+}
+inline ::google::protobuf::uint32 ut_test_message::f_uint32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_uint32)
+  return f_uint32_.Get(index);
+}
+inline void ut_test_message::set_f_uint32(int index, ::google::protobuf::uint32 value) {
+  f_uint32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.f_uint32)
+}
+inline void ut_test_message::add_f_uint32(::google::protobuf::uint32 value) {
+  f_uint32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_uint32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+ut_test_message::f_uint32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_uint32)
+  return f_uint32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+ut_test_message::mutable_f_uint32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_uint32)
+  return &f_uint32_;
+}
+
+// repeated uint32 d_uint32 = 4;
+inline int ut_test_message::d_uint32_size() const {
+  return d_uint32_.size();
+}
+inline void ut_test_message::clear_d_uint32() {
+  d_uint32_.Clear();
+}
+inline ::google::protobuf::uint32 ut_test_message::d_uint32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_uint32)
+  return d_uint32_.Get(index);
+}
+inline void ut_test_message::set_d_uint32(int index, ::google::protobuf::uint32 value) {
+  d_uint32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.d_uint32)
+}
+inline void ut_test_message::add_d_uint32(::google::protobuf::uint32 value) {
+  d_uint32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_uint32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+ut_test_message::d_uint32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_uint32)
+  return d_uint32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+ut_test_message::mutable_d_uint32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_uint32)
+  return &d_uint32_;
+}
+
+// repeated uint32 pf_uint32 = 5 [packed = true];
+inline int ut_test_message::pf_uint32_size() const {
+  return pf_uint32_.size();
+}
+inline void ut_test_message::clear_pf_uint32() {
+  pf_uint32_.Clear();
+}
+inline ::google::protobuf::uint32 ut_test_message::pf_uint32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pf_uint32)
+  return pf_uint32_.Get(index);
+}
+inline void ut_test_message::set_pf_uint32(int index, ::google::protobuf::uint32 value) {
+  pf_uint32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pf_uint32)
+}
+inline void ut_test_message::add_pf_uint32(::google::protobuf::uint32 value) {
+  pf_uint32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pf_uint32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+ut_test_message::pf_uint32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pf_uint32)
+  return pf_uint32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+ut_test_message::mutable_pf_uint32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pf_uint32)
+  return &pf_uint32_;
+}
+
+// repeated uint32 pd_uint32 = 6 [packed = true];
+inline int ut_test_message::pd_uint32_size() const {
+  return pd_uint32_.size();
+}
+inline void ut_test_message::clear_pd_uint32() {
+  pd_uint32_.Clear();
+}
+inline ::google::protobuf::uint32 ut_test_message::pd_uint32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pd_uint32)
+  return pd_uint32_.Get(index);
+}
+inline void ut_test_message::set_pd_uint32(int index, ::google::protobuf::uint32 value) {
+  pd_uint32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pd_uint32)
+}
+inline void ut_test_message::add_pd_uint32(::google::protobuf::uint32 value) {
+  pd_uint32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pd_uint32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+ut_test_message::pd_uint32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pd_uint32)
+  return pd_uint32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+ut_test_message::mutable_pd_uint32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pd_uint32)
+  return &pd_uint32_;
+}
+
+// required uint64 r_uint64 = 11;
+inline bool ut_test_message::has_r_uint64() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void ut_test_message::set_has_r_uint64() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void ut_test_message::clear_has_r_uint64() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void ut_test_message::clear_r_uint64() {
+  r_uint64_ = GOOGLE_ULONGLONG(0);
+  clear_has_r_uint64();
+}
+inline ::google::protobuf::uint64 ut_test_message::r_uint64() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.r_uint64)
+  return r_uint64_;
+}
+inline void ut_test_message::set_r_uint64(::google::protobuf::uint64 value) {
+  set_has_r_uint64();
+  r_uint64_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.r_uint64)
+}
+
+// optional uint64 o_uint64 = 12;
+inline bool ut_test_message::has_o_uint64() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void ut_test_message::set_has_o_uint64() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void ut_test_message::clear_has_o_uint64() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void ut_test_message::clear_o_uint64() {
+  o_uint64_ = GOOGLE_ULONGLONG(0);
+  clear_has_o_uint64();
+}
+inline ::google::protobuf::uint64 ut_test_message::o_uint64() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_uint64)
+  return o_uint64_;
+}
+inline void ut_test_message::set_o_uint64(::google::protobuf::uint64 value) {
+  set_has_o_uint64();
+  o_uint64_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.o_uint64)
+}
+
+// repeated uint64 f_uint64 = 13;
+inline int ut_test_message::f_uint64_size() const {
+  return f_uint64_.size();
+}
+inline void ut_test_message::clear_f_uint64() {
+  f_uint64_.Clear();
+}
+inline ::google::protobuf::uint64 ut_test_message::f_uint64(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_uint64)
+  return f_uint64_.Get(index);
+}
+inline void ut_test_message::set_f_uint64(int index, ::google::protobuf::uint64 value) {
+  f_uint64_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.f_uint64)
+}
+inline void ut_test_message::add_f_uint64(::google::protobuf::uint64 value) {
+  f_uint64_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_uint64)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+ut_test_message::f_uint64() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_uint64)
+  return f_uint64_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+ut_test_message::mutable_f_uint64() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_uint64)
+  return &f_uint64_;
+}
+
+// repeated uint64 d_uint64 = 14;
+inline int ut_test_message::d_uint64_size() const {
+  return d_uint64_.size();
+}
+inline void ut_test_message::clear_d_uint64() {
+  d_uint64_.Clear();
+}
+inline ::google::protobuf::uint64 ut_test_message::d_uint64(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_uint64)
+  return d_uint64_.Get(index);
+}
+inline void ut_test_message::set_d_uint64(int index, ::google::protobuf::uint64 value) {
+  d_uint64_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.d_uint64)
+}
+inline void ut_test_message::add_d_uint64(::google::protobuf::uint64 value) {
+  d_uint64_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_uint64)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+ut_test_message::d_uint64() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_uint64)
+  return d_uint64_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+ut_test_message::mutable_d_uint64() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_uint64)
+  return &d_uint64_;
+}
+
+// repeated uint64 pf_uint64 = 15 [packed = true];
+inline int ut_test_message::pf_uint64_size() const {
+  return pf_uint64_.size();
+}
+inline void ut_test_message::clear_pf_uint64() {
+  pf_uint64_.Clear();
+}
+inline ::google::protobuf::uint64 ut_test_message::pf_uint64(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pf_uint64)
+  return pf_uint64_.Get(index);
+}
+inline void ut_test_message::set_pf_uint64(int index, ::google::protobuf::uint64 value) {
+  pf_uint64_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pf_uint64)
+}
+inline void ut_test_message::add_pf_uint64(::google::protobuf::uint64 value) {
+  pf_uint64_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pf_uint64)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+ut_test_message::pf_uint64() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pf_uint64)
+  return pf_uint64_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+ut_test_message::mutable_pf_uint64() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pf_uint64)
+  return &pf_uint64_;
+}
+
+// repeated uint64 pd_uint64 = 16 [packed = true];
+inline int ut_test_message::pd_uint64_size() const {
+  return pd_uint64_.size();
+}
+inline void ut_test_message::clear_pd_uint64() {
+  pd_uint64_.Clear();
+}
+inline ::google::protobuf::uint64 ut_test_message::pd_uint64(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pd_uint64)
+  return pd_uint64_.Get(index);
+}
+inline void ut_test_message::set_pd_uint64(int index, ::google::protobuf::uint64 value) {
+  pd_uint64_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pd_uint64)
+}
+inline void ut_test_message::add_pd_uint64(::google::protobuf::uint64 value) {
+  pd_uint64_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pd_uint64)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+ut_test_message::pd_uint64() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pd_uint64)
+  return pd_uint64_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+ut_test_message::mutable_pd_uint64() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pd_uint64)
+  return &pd_uint64_;
+}
+
+// required fixed32 r_fixed32 = 21;
+inline bool ut_test_message::has_r_fixed32() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void ut_test_message::set_has_r_fixed32() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void ut_test_message::clear_has_r_fixed32() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void ut_test_message::clear_r_fixed32() {
+  r_fixed32_ = 0u;
+  clear_has_r_fixed32();
+}
+inline ::google::protobuf::uint32 ut_test_message::r_fixed32() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.r_fixed32)
+  return r_fixed32_;
+}
+inline void ut_test_message::set_r_fixed32(::google::protobuf::uint32 value) {
+  set_has_r_fixed32();
+  r_fixed32_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.r_fixed32)
+}
+
+// optional fixed32 o_fixed32 = 22;
+inline bool ut_test_message::has_o_fixed32() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void ut_test_message::set_has_o_fixed32() {
+  _has_bits_[0] |= 0x00000800u;
+}
+inline void ut_test_message::clear_has_o_fixed32() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline void ut_test_message::clear_o_fixed32() {
+  o_fixed32_ = 0u;
+  clear_has_o_fixed32();
+}
+inline ::google::protobuf::uint32 ut_test_message::o_fixed32() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_fixed32)
+  return o_fixed32_;
+}
+inline void ut_test_message::set_o_fixed32(::google::protobuf::uint32 value) {
+  set_has_o_fixed32();
+  o_fixed32_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.o_fixed32)
+}
+
+// repeated fixed32 f_fixed32 = 23;
+inline int ut_test_message::f_fixed32_size() const {
+  return f_fixed32_.size();
+}
+inline void ut_test_message::clear_f_fixed32() {
+  f_fixed32_.Clear();
+}
+inline ::google::protobuf::uint32 ut_test_message::f_fixed32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_fixed32)
+  return f_fixed32_.Get(index);
+}
+inline void ut_test_message::set_f_fixed32(int index, ::google::protobuf::uint32 value) {
+  f_fixed32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.f_fixed32)
+}
+inline void ut_test_message::add_f_fixed32(::google::protobuf::uint32 value) {
+  f_fixed32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_fixed32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+ut_test_message::f_fixed32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_fixed32)
+  return f_fixed32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+ut_test_message::mutable_f_fixed32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_fixed32)
+  return &f_fixed32_;
+}
+
+// repeated fixed32 d_fixed32 = 24;
+inline int ut_test_message::d_fixed32_size() const {
+  return d_fixed32_.size();
+}
+inline void ut_test_message::clear_d_fixed32() {
+  d_fixed32_.Clear();
+}
+inline ::google::protobuf::uint32 ut_test_message::d_fixed32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_fixed32)
+  return d_fixed32_.Get(index);
+}
+inline void ut_test_message::set_d_fixed32(int index, ::google::protobuf::uint32 value) {
+  d_fixed32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.d_fixed32)
+}
+inline void ut_test_message::add_d_fixed32(::google::protobuf::uint32 value) {
+  d_fixed32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_fixed32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+ut_test_message::d_fixed32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_fixed32)
+  return d_fixed32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+ut_test_message::mutable_d_fixed32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_fixed32)
+  return &d_fixed32_;
+}
+
+// repeated fixed32 pf_fixed32 = 25 [packed = true];
+inline int ut_test_message::pf_fixed32_size() const {
+  return pf_fixed32_.size();
+}
+inline void ut_test_message::clear_pf_fixed32() {
+  pf_fixed32_.Clear();
+}
+inline ::google::protobuf::uint32 ut_test_message::pf_fixed32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pf_fixed32)
+  return pf_fixed32_.Get(index);
+}
+inline void ut_test_message::set_pf_fixed32(int index, ::google::protobuf::uint32 value) {
+  pf_fixed32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pf_fixed32)
+}
+inline void ut_test_message::add_pf_fixed32(::google::protobuf::uint32 value) {
+  pf_fixed32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pf_fixed32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+ut_test_message::pf_fixed32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pf_fixed32)
+  return pf_fixed32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+ut_test_message::mutable_pf_fixed32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pf_fixed32)
+  return &pf_fixed32_;
+}
+
+// repeated fixed32 pd_fixed32 = 26 [packed = true];
+inline int ut_test_message::pd_fixed32_size() const {
+  return pd_fixed32_.size();
+}
+inline void ut_test_message::clear_pd_fixed32() {
+  pd_fixed32_.Clear();
+}
+inline ::google::protobuf::uint32 ut_test_message::pd_fixed32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pd_fixed32)
+  return pd_fixed32_.Get(index);
+}
+inline void ut_test_message::set_pd_fixed32(int index, ::google::protobuf::uint32 value) {
+  pd_fixed32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pd_fixed32)
+}
+inline void ut_test_message::add_pd_fixed32(::google::protobuf::uint32 value) {
+  pd_fixed32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pd_fixed32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+ut_test_message::pd_fixed32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pd_fixed32)
+  return pd_fixed32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+ut_test_message::mutable_pd_fixed32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pd_fixed32)
+  return &pd_fixed32_;
+}
+
+// required fixed64 r_fixed64 = 31;
+inline bool ut_test_message::has_r_fixed64() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void ut_test_message::set_has_r_fixed64() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void ut_test_message::clear_has_r_fixed64() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline void ut_test_message::clear_r_fixed64() {
+  r_fixed64_ = GOOGLE_ULONGLONG(0);
+  clear_has_r_fixed64();
+}
+inline ::google::protobuf::uint64 ut_test_message::r_fixed64() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.r_fixed64)
+  return r_fixed64_;
+}
+inline void ut_test_message::set_r_fixed64(::google::protobuf::uint64 value) {
+  set_has_r_fixed64();
+  r_fixed64_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.r_fixed64)
+}
+
+// optional fixed64 o_fixed64 = 32;
+inline bool ut_test_message::has_o_fixed64() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void ut_test_message::set_has_o_fixed64() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void ut_test_message::clear_has_o_fixed64() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void ut_test_message::clear_o_fixed64() {
+  o_fixed64_ = GOOGLE_ULONGLONG(0);
+  clear_has_o_fixed64();
+}
+inline ::google::protobuf::uint64 ut_test_message::o_fixed64() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_fixed64)
+  return o_fixed64_;
+}
+inline void ut_test_message::set_o_fixed64(::google::protobuf::uint64 value) {
+  set_has_o_fixed64();
+  o_fixed64_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.o_fixed64)
+}
+
+// repeated fixed64 f_fixed64 = 33;
+inline int ut_test_message::f_fixed64_size() const {
+  return f_fixed64_.size();
+}
+inline void ut_test_message::clear_f_fixed64() {
+  f_fixed64_.Clear();
+}
+inline ::google::protobuf::uint64 ut_test_message::f_fixed64(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_fixed64)
+  return f_fixed64_.Get(index);
+}
+inline void ut_test_message::set_f_fixed64(int index, ::google::protobuf::uint64 value) {
+  f_fixed64_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.f_fixed64)
+}
+inline void ut_test_message::add_f_fixed64(::google::protobuf::uint64 value) {
+  f_fixed64_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_fixed64)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+ut_test_message::f_fixed64() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_fixed64)
+  return f_fixed64_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+ut_test_message::mutable_f_fixed64() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_fixed64)
+  return &f_fixed64_;
+}
+
+// repeated fixed64 d_fixed64 = 34;
+inline int ut_test_message::d_fixed64_size() const {
+  return d_fixed64_.size();
+}
+inline void ut_test_message::clear_d_fixed64() {
+  d_fixed64_.Clear();
+}
+inline ::google::protobuf::uint64 ut_test_message::d_fixed64(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_fixed64)
+  return d_fixed64_.Get(index);
+}
+inline void ut_test_message::set_d_fixed64(int index, ::google::protobuf::uint64 value) {
+  d_fixed64_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.d_fixed64)
+}
+inline void ut_test_message::add_d_fixed64(::google::protobuf::uint64 value) {
+  d_fixed64_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_fixed64)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+ut_test_message::d_fixed64() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_fixed64)
+  return d_fixed64_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+ut_test_message::mutable_d_fixed64() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_fixed64)
+  return &d_fixed64_;
+}
+
+// repeated fixed64 pf_fixed64 = 35 [packed = true];
+inline int ut_test_message::pf_fixed64_size() const {
+  return pf_fixed64_.size();
+}
+inline void ut_test_message::clear_pf_fixed64() {
+  pf_fixed64_.Clear();
+}
+inline ::google::protobuf::uint64 ut_test_message::pf_fixed64(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pf_fixed64)
+  return pf_fixed64_.Get(index);
+}
+inline void ut_test_message::set_pf_fixed64(int index, ::google::protobuf::uint64 value) {
+  pf_fixed64_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pf_fixed64)
+}
+inline void ut_test_message::add_pf_fixed64(::google::protobuf::uint64 value) {
+  pf_fixed64_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pf_fixed64)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+ut_test_message::pf_fixed64() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pf_fixed64)
+  return pf_fixed64_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+ut_test_message::mutable_pf_fixed64() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pf_fixed64)
+  return &pf_fixed64_;
+}
+
+// repeated fixed64 pd_fixed64 = 36 [packed = true];
+inline int ut_test_message::pd_fixed64_size() const {
+  return pd_fixed64_.size();
+}
+inline void ut_test_message::clear_pd_fixed64() {
+  pd_fixed64_.Clear();
+}
+inline ::google::protobuf::uint64 ut_test_message::pd_fixed64(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pd_fixed64)
+  return pd_fixed64_.Get(index);
+}
+inline void ut_test_message::set_pd_fixed64(int index, ::google::protobuf::uint64 value) {
+  pd_fixed64_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pd_fixed64)
+}
+inline void ut_test_message::add_pd_fixed64(::google::protobuf::uint64 value) {
+  pd_fixed64_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pd_fixed64)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+ut_test_message::pd_fixed64() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pd_fixed64)
+  return pd_fixed64_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+ut_test_message::mutable_pd_fixed64() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pd_fixed64)
+  return &pd_fixed64_;
+}
+
+// required bool r_bool = 41;
+inline bool ut_test_message::has_r_bool() const {
+  return (_has_bits_[0] & 0x00004000u) != 0;
+}
+inline void ut_test_message::set_has_r_bool() {
+  _has_bits_[0] |= 0x00004000u;
+}
+inline void ut_test_message::clear_has_r_bool() {
+  _has_bits_[0] &= ~0x00004000u;
+}
+inline void ut_test_message::clear_r_bool() {
+  r_bool_ = false;
+  clear_has_r_bool();
+}
+inline bool ut_test_message::r_bool() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.r_bool)
+  return r_bool_;
+}
+inline void ut_test_message::set_r_bool(bool value) {
+  set_has_r_bool();
+  r_bool_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.r_bool)
+}
+
+// optional bool o_bool = 42;
+inline bool ut_test_message::has_o_bool() const {
+  return (_has_bits_[0] & 0x00008000u) != 0;
+}
+inline void ut_test_message::set_has_o_bool() {
+  _has_bits_[0] |= 0x00008000u;
+}
+inline void ut_test_message::clear_has_o_bool() {
+  _has_bits_[0] &= ~0x00008000u;
+}
+inline void ut_test_message::clear_o_bool() {
+  o_bool_ = false;
+  clear_has_o_bool();
+}
+inline bool ut_test_message::o_bool() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_bool)
+  return o_bool_;
+}
+inline void ut_test_message::set_o_bool(bool value) {
+  set_has_o_bool();
+  o_bool_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.o_bool)
+}
+
+// repeated bool f_bool = 43;
+inline int ut_test_message::f_bool_size() const {
+  return f_bool_.size();
+}
+inline void ut_test_message::clear_f_bool() {
+  f_bool_.Clear();
+}
+inline bool ut_test_message::f_bool(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_bool)
+  return f_bool_.Get(index);
+}
+inline void ut_test_message::set_f_bool(int index, bool value) {
+  f_bool_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.f_bool)
+}
+inline void ut_test_message::add_f_bool(bool value) {
+  f_bool_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_bool)
+}
+inline const ::google::protobuf::RepeatedField< bool >&
+ut_test_message::f_bool() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_bool)
+  return f_bool_;
+}
+inline ::google::protobuf::RepeatedField< bool >*
+ut_test_message::mutable_f_bool() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_bool)
+  return &f_bool_;
+}
+
+// repeated bool d_bool = 44;
+inline int ut_test_message::d_bool_size() const {
+  return d_bool_.size();
+}
+inline void ut_test_message::clear_d_bool() {
+  d_bool_.Clear();
+}
+inline bool ut_test_message::d_bool(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_bool)
+  return d_bool_.Get(index);
+}
+inline void ut_test_message::set_d_bool(int index, bool value) {
+  d_bool_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.d_bool)
+}
+inline void ut_test_message::add_d_bool(bool value) {
+  d_bool_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_bool)
+}
+inline const ::google::protobuf::RepeatedField< bool >&
+ut_test_message::d_bool() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_bool)
+  return d_bool_;
+}
+inline ::google::protobuf::RepeatedField< bool >*
+ut_test_message::mutable_d_bool() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_bool)
+  return &d_bool_;
+}
+
+// repeated bool pf_bool = 45 [packed = true];
+inline int ut_test_message::pf_bool_size() const {
+  return pf_bool_.size();
+}
+inline void ut_test_message::clear_pf_bool() {
+  pf_bool_.Clear();
+}
+inline bool ut_test_message::pf_bool(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pf_bool)
+  return pf_bool_.Get(index);
+}
+inline void ut_test_message::set_pf_bool(int index, bool value) {
+  pf_bool_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pf_bool)
+}
+inline void ut_test_message::add_pf_bool(bool value) {
+  pf_bool_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pf_bool)
+}
+inline const ::google::protobuf::RepeatedField< bool >&
+ut_test_message::pf_bool() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pf_bool)
+  return pf_bool_;
+}
+inline ::google::protobuf::RepeatedField< bool >*
+ut_test_message::mutable_pf_bool() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pf_bool)
+  return &pf_bool_;
+}
+
+// repeated bool pd_bool = 46 [packed = true];
+inline int ut_test_message::pd_bool_size() const {
+  return pd_bool_.size();
+}
+inline void ut_test_message::clear_pd_bool() {
+  pd_bool_.Clear();
+}
+inline bool ut_test_message::pd_bool(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pd_bool)
+  return pd_bool_.Get(index);
+}
+inline void ut_test_message::set_pd_bool(int index, bool value) {
+  pd_bool_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pd_bool)
+}
+inline void ut_test_message::add_pd_bool(bool value) {
+  pd_bool_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pd_bool)
+}
+inline const ::google::protobuf::RepeatedField< bool >&
+ut_test_message::pd_bool() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pd_bool)
+  return pd_bool_;
+}
+inline ::google::protobuf::RepeatedField< bool >*
+ut_test_message::mutable_pd_bool() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pd_bool)
+  return &pd_bool_;
+}
+
+// required string r_string = 51;
+inline bool ut_test_message::has_r_string() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ut_test_message::set_has_r_string() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ut_test_message::clear_has_r_string() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ut_test_message::clear_r_string() {
+  r_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_r_string();
+}
+inline const ::std::string& ut_test_message::r_string() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.r_string)
+  return r_string_.GetNoArena();
+}
+inline void ut_test_message::set_r_string(const ::std::string& value) {
+  set_has_r_string();
+  r_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:ut_test_message.r_string)
+}
+#if LANG_CXX11
+inline void ut_test_message::set_r_string(::std::string&& value) {
+  set_has_r_string();
+  r_string_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:ut_test_message.r_string)
+}
+#endif
+inline void ut_test_message::set_r_string(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_r_string();
+  r_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:ut_test_message.r_string)
+}
+inline void ut_test_message::set_r_string(const char* value, size_t size) {
+  set_has_r_string();
+  r_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:ut_test_message.r_string)
+}
+inline ::std::string* ut_test_message::mutable_r_string() {
+  set_has_r_string();
+  // @@protoc_insertion_point(field_mutable:ut_test_message.r_string)
+  return r_string_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* ut_test_message::release_r_string() {
+  // @@protoc_insertion_point(field_release:ut_test_message.r_string)
+  clear_has_r_string();
+  return r_string_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ut_test_message::set_allocated_r_string(::std::string* r_string) {
+  if (r_string != NULL) {
+    set_has_r_string();
+  } else {
+    clear_has_r_string();
+  }
+  r_string_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), r_string);
+  // @@protoc_insertion_point(field_set_allocated:ut_test_message.r_string)
+}
+
+// optional string o_string = 52;
+inline bool ut_test_message::has_o_string() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ut_test_message::set_has_o_string() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ut_test_message::clear_has_o_string() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ut_test_message::clear_o_string() {
+  o_string_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_o_string();
+}
+inline const ::std::string& ut_test_message::o_string() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_string)
+  return o_string_.GetNoArena();
+}
+inline void ut_test_message::set_o_string(const ::std::string& value) {
+  set_has_o_string();
+  o_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:ut_test_message.o_string)
+}
+#if LANG_CXX11
+inline void ut_test_message::set_o_string(::std::string&& value) {
+  set_has_o_string();
+  o_string_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:ut_test_message.o_string)
+}
+#endif
+inline void ut_test_message::set_o_string(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_o_string();
+  o_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:ut_test_message.o_string)
+}
+inline void ut_test_message::set_o_string(const char* value, size_t size) {
+  set_has_o_string();
+  o_string_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:ut_test_message.o_string)
+}
+inline ::std::string* ut_test_message::mutable_o_string() {
+  set_has_o_string();
+  // @@protoc_insertion_point(field_mutable:ut_test_message.o_string)
+  return o_string_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* ut_test_message::release_o_string() {
+  // @@protoc_insertion_point(field_release:ut_test_message.o_string)
+  clear_has_o_string();
+  return o_string_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ut_test_message::set_allocated_o_string(::std::string* o_string) {
+  if (o_string != NULL) {
+    set_has_o_string();
+  } else {
+    clear_has_o_string();
+  }
+  o_string_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), o_string);
+  // @@protoc_insertion_point(field_set_allocated:ut_test_message.o_string)
+}
+
+// repeated string f_string = 53;
+inline int ut_test_message::f_string_size() const {
+  return f_string_.size();
+}
+inline void ut_test_message::clear_f_string() {
+  f_string_.Clear();
+}
+inline const ::std::string& ut_test_message::f_string(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_string)
+  return f_string_.Get(index);
+}
+inline ::std::string* ut_test_message::mutable_f_string(int index) {
+  // @@protoc_insertion_point(field_mutable:ut_test_message.f_string)
+  return f_string_.Mutable(index);
+}
+inline void ut_test_message::set_f_string(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:ut_test_message.f_string)
+  f_string_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void ut_test_message::set_f_string(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:ut_test_message.f_string)
+  f_string_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void ut_test_message::set_f_string(int index, const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  f_string_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:ut_test_message.f_string)
+}
+inline void ut_test_message::set_f_string(int index, const char* value, size_t size) {
+  f_string_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ut_test_message.f_string)
+}
+inline ::std::string* ut_test_message::add_f_string() {
+  // @@protoc_insertion_point(field_add_mutable:ut_test_message.f_string)
+  return f_string_.Add();
+}
+inline void ut_test_message::add_f_string(const ::std::string& value) {
+  f_string_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_string)
+}
+#if LANG_CXX11
+inline void ut_test_message::add_f_string(::std::string&& value) {
+  f_string_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:ut_test_message.f_string)
+}
+#endif
+inline void ut_test_message::add_f_string(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  f_string_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:ut_test_message.f_string)
+}
+inline void ut_test_message::add_f_string(const char* value, size_t size) {
+  f_string_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:ut_test_message.f_string)
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+ut_test_message::f_string() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_string)
+  return f_string_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+ut_test_message::mutable_f_string() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_string)
+  return &f_string_;
+}
+
+// repeated string d_string = 54;
+inline int ut_test_message::d_string_size() const {
+  return d_string_.size();
+}
+inline void ut_test_message::clear_d_string() {
+  d_string_.Clear();
+}
+inline const ::std::string& ut_test_message::d_string(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_string)
+  return d_string_.Get(index);
+}
+inline ::std::string* ut_test_message::mutable_d_string(int index) {
+  // @@protoc_insertion_point(field_mutable:ut_test_message.d_string)
+  return d_string_.Mutable(index);
+}
+inline void ut_test_message::set_d_string(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:ut_test_message.d_string)
+  d_string_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void ut_test_message::set_d_string(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:ut_test_message.d_string)
+  d_string_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void ut_test_message::set_d_string(int index, const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  d_string_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:ut_test_message.d_string)
+}
+inline void ut_test_message::set_d_string(int index, const char* value, size_t size) {
+  d_string_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ut_test_message.d_string)
+}
+inline ::std::string* ut_test_message::add_d_string() {
+  // @@protoc_insertion_point(field_add_mutable:ut_test_message.d_string)
+  return d_string_.Add();
+}
+inline void ut_test_message::add_d_string(const ::std::string& value) {
+  d_string_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_string)
+}
+#if LANG_CXX11
+inline void ut_test_message::add_d_string(::std::string&& value) {
+  d_string_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:ut_test_message.d_string)
+}
+#endif
+inline void ut_test_message::add_d_string(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  d_string_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:ut_test_message.d_string)
+}
+inline void ut_test_message::add_d_string(const char* value, size_t size) {
+  d_string_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:ut_test_message.d_string)
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+ut_test_message::d_string() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_string)
+  return d_string_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+ut_test_message::mutable_d_string() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_string)
+  return &d_string_;
+}
+
+// required bytes r_bytes = 61;
+inline bool ut_test_message::has_r_bytes() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ut_test_message::set_has_r_bytes() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ut_test_message::clear_has_r_bytes() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ut_test_message::clear_r_bytes() {
+  r_bytes_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_r_bytes();
+}
+inline const ::std::string& ut_test_message::r_bytes() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.r_bytes)
+  return r_bytes_.GetNoArena();
+}
+inline void ut_test_message::set_r_bytes(const ::std::string& value) {
+  set_has_r_bytes();
+  r_bytes_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:ut_test_message.r_bytes)
+}
+#if LANG_CXX11
+inline void ut_test_message::set_r_bytes(::std::string&& value) {
+  set_has_r_bytes();
+  r_bytes_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:ut_test_message.r_bytes)
+}
+#endif
+inline void ut_test_message::set_r_bytes(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_r_bytes();
+  r_bytes_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:ut_test_message.r_bytes)
+}
+inline void ut_test_message::set_r_bytes(const void* value, size_t size) {
+  set_has_r_bytes();
+  r_bytes_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:ut_test_message.r_bytes)
+}
+inline ::std::string* ut_test_message::mutable_r_bytes() {
+  set_has_r_bytes();
+  // @@protoc_insertion_point(field_mutable:ut_test_message.r_bytes)
+  return r_bytes_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* ut_test_message::release_r_bytes() {
+  // @@protoc_insertion_point(field_release:ut_test_message.r_bytes)
+  clear_has_r_bytes();
+  return r_bytes_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ut_test_message::set_allocated_r_bytes(::std::string* r_bytes) {
+  if (r_bytes != NULL) {
+    set_has_r_bytes();
+  } else {
+    clear_has_r_bytes();
+  }
+  r_bytes_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), r_bytes);
+  // @@protoc_insertion_point(field_set_allocated:ut_test_message.r_bytes)
+}
+
+// optional bytes o_bytes = 62;
+inline bool ut_test_message::has_o_bytes() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void ut_test_message::set_has_o_bytes() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void ut_test_message::clear_has_o_bytes() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void ut_test_message::clear_o_bytes() {
+  o_bytes_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_o_bytes();
+}
+inline const ::std::string& ut_test_message::o_bytes() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_bytes)
+  return o_bytes_.GetNoArena();
+}
+inline void ut_test_message::set_o_bytes(const ::std::string& value) {
+  set_has_o_bytes();
+  o_bytes_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:ut_test_message.o_bytes)
+}
+#if LANG_CXX11
+inline void ut_test_message::set_o_bytes(::std::string&& value) {
+  set_has_o_bytes();
+  o_bytes_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:ut_test_message.o_bytes)
+}
+#endif
+inline void ut_test_message::set_o_bytes(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_o_bytes();
+  o_bytes_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:ut_test_message.o_bytes)
+}
+inline void ut_test_message::set_o_bytes(const void* value, size_t size) {
+  set_has_o_bytes();
+  o_bytes_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:ut_test_message.o_bytes)
+}
+inline ::std::string* ut_test_message::mutable_o_bytes() {
+  set_has_o_bytes();
+  // @@protoc_insertion_point(field_mutable:ut_test_message.o_bytes)
+  return o_bytes_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* ut_test_message::release_o_bytes() {
+  // @@protoc_insertion_point(field_release:ut_test_message.o_bytes)
+  clear_has_o_bytes();
+  return o_bytes_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ut_test_message::set_allocated_o_bytes(::std::string* o_bytes) {
+  if (o_bytes != NULL) {
+    set_has_o_bytes();
+  } else {
+    clear_has_o_bytes();
+  }
+  o_bytes_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), o_bytes);
+  // @@protoc_insertion_point(field_set_allocated:ut_test_message.o_bytes)
+}
+
+// repeated bytes f_bytes = 63;
+inline int ut_test_message::f_bytes_size() const {
+  return f_bytes_.size();
+}
+inline void ut_test_message::clear_f_bytes() {
+  f_bytes_.Clear();
+}
+inline const ::std::string& ut_test_message::f_bytes(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_bytes)
+  return f_bytes_.Get(index);
+}
+inline ::std::string* ut_test_message::mutable_f_bytes(int index) {
+  // @@protoc_insertion_point(field_mutable:ut_test_message.f_bytes)
+  return f_bytes_.Mutable(index);
+}
+inline void ut_test_message::set_f_bytes(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:ut_test_message.f_bytes)
+  f_bytes_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void ut_test_message::set_f_bytes(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:ut_test_message.f_bytes)
+  f_bytes_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void ut_test_message::set_f_bytes(int index, const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  f_bytes_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:ut_test_message.f_bytes)
+}
+inline void ut_test_message::set_f_bytes(int index, const void* value, size_t size) {
+  f_bytes_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ut_test_message.f_bytes)
+}
+inline ::std::string* ut_test_message::add_f_bytes() {
+  // @@protoc_insertion_point(field_add_mutable:ut_test_message.f_bytes)
+  return f_bytes_.Add();
+}
+inline void ut_test_message::add_f_bytes(const ::std::string& value) {
+  f_bytes_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_bytes)
+}
+#if LANG_CXX11
+inline void ut_test_message::add_f_bytes(::std::string&& value) {
+  f_bytes_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:ut_test_message.f_bytes)
+}
+#endif
+inline void ut_test_message::add_f_bytes(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  f_bytes_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:ut_test_message.f_bytes)
+}
+inline void ut_test_message::add_f_bytes(const void* value, size_t size) {
+  f_bytes_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:ut_test_message.f_bytes)
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+ut_test_message::f_bytes() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_bytes)
+  return f_bytes_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+ut_test_message::mutable_f_bytes() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_bytes)
+  return &f_bytes_;
+}
+
+// repeated bytes d_bytes = 64;
+inline int ut_test_message::d_bytes_size() const {
+  return d_bytes_.size();
+}
+inline void ut_test_message::clear_d_bytes() {
+  d_bytes_.Clear();
+}
+inline const ::std::string& ut_test_message::d_bytes(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_bytes)
+  return d_bytes_.Get(index);
+}
+inline ::std::string* ut_test_message::mutable_d_bytes(int index) {
+  // @@protoc_insertion_point(field_mutable:ut_test_message.d_bytes)
+  return d_bytes_.Mutable(index);
+}
+inline void ut_test_message::set_d_bytes(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:ut_test_message.d_bytes)
+  d_bytes_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void ut_test_message::set_d_bytes(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:ut_test_message.d_bytes)
+  d_bytes_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void ut_test_message::set_d_bytes(int index, const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  d_bytes_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:ut_test_message.d_bytes)
+}
+inline void ut_test_message::set_d_bytes(int index, const void* value, size_t size) {
+  d_bytes_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ut_test_message.d_bytes)
+}
+inline ::std::string* ut_test_message::add_d_bytes() {
+  // @@protoc_insertion_point(field_add_mutable:ut_test_message.d_bytes)
+  return d_bytes_.Add();
+}
+inline void ut_test_message::add_d_bytes(const ::std::string& value) {
+  d_bytes_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_bytes)
+}
+#if LANG_CXX11
+inline void ut_test_message::add_d_bytes(::std::string&& value) {
+  d_bytes_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:ut_test_message.d_bytes)
+}
+#endif
+inline void ut_test_message::add_d_bytes(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  d_bytes_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:ut_test_message.d_bytes)
+}
+inline void ut_test_message::add_d_bytes(const void* value, size_t size) {
+  d_bytes_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:ut_test_message.d_bytes)
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+ut_test_message::d_bytes() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_bytes)
+  return d_bytes_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+ut_test_message::mutable_d_bytes() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_bytes)
+  return &d_bytes_;
+}
+
+// required .ut_test_enum r_enum = 71;
+inline bool ut_test_message::has_r_enum() const {
+  return (_has_bits_[0] & 0x00040000u) != 0;
+}
+inline void ut_test_message::set_has_r_enum() {
+  _has_bits_[0] |= 0x00040000u;
+}
+inline void ut_test_message::clear_has_r_enum() {
+  _has_bits_[0] &= ~0x00040000u;
+}
+inline void ut_test_message::clear_r_enum() {
+  r_enum_ = 1;
+  clear_has_r_enum();
+}
+inline ::ut_test_enum ut_test_message::r_enum() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.r_enum)
+  return static_cast< ::ut_test_enum >(r_enum_);
+}
+inline void ut_test_message::set_r_enum(::ut_test_enum value) {
+  assert(::ut_test_enum_IsValid(value));
+  set_has_r_enum();
+  r_enum_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.r_enum)
+}
+
+// optional .ut_test_enum o_enum = 72;
+inline bool ut_test_message::has_o_enum() const {
+  return (_has_bits_[0] & 0x00080000u) != 0;
+}
+inline void ut_test_message::set_has_o_enum() {
+  _has_bits_[0] |= 0x00080000u;
+}
+inline void ut_test_message::clear_has_o_enum() {
+  _has_bits_[0] &= ~0x00080000u;
+}
+inline void ut_test_message::clear_o_enum() {
+  o_enum_ = 1;
+  clear_has_o_enum();
+}
+inline ::ut_test_enum ut_test_message::o_enum() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_enum)
+  return static_cast< ::ut_test_enum >(o_enum_);
+}
+inline void ut_test_message::set_o_enum(::ut_test_enum value) {
+  assert(::ut_test_enum_IsValid(value));
+  set_has_o_enum();
+  o_enum_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.o_enum)
+}
+
+// repeated .ut_test_enum f_enum = 73;
+inline int ut_test_message::f_enum_size() const {
+  return f_enum_.size();
+}
+inline void ut_test_message::clear_f_enum() {
+  f_enum_.Clear();
+}
+inline ::ut_test_enum ut_test_message::f_enum(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_enum)
+  return static_cast< ::ut_test_enum >(f_enum_.Get(index));
+}
+inline void ut_test_message::set_f_enum(int index, ::ut_test_enum value) {
+  assert(::ut_test_enum_IsValid(value));
+  f_enum_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.f_enum)
+}
+inline void ut_test_message::add_f_enum(::ut_test_enum value) {
+  assert(::ut_test_enum_IsValid(value));
+  f_enum_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_enum)
+}
+inline const ::google::protobuf::RepeatedField<int>&
+ut_test_message::f_enum() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_enum)
+  return f_enum_;
+}
+inline ::google::protobuf::RepeatedField<int>*
+ut_test_message::mutable_f_enum() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_enum)
+  return &f_enum_;
+}
+
+// repeated .ut_test_enum d_enum = 74;
+inline int ut_test_message::d_enum_size() const {
+  return d_enum_.size();
+}
+inline void ut_test_message::clear_d_enum() {
+  d_enum_.Clear();
+}
+inline ::ut_test_enum ut_test_message::d_enum(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_enum)
+  return static_cast< ::ut_test_enum >(d_enum_.Get(index));
+}
+inline void ut_test_message::set_d_enum(int index, ::ut_test_enum value) {
+  assert(::ut_test_enum_IsValid(value));
+  d_enum_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.d_enum)
+}
+inline void ut_test_message::add_d_enum(::ut_test_enum value) {
+  assert(::ut_test_enum_IsValid(value));
+  d_enum_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_enum)
+}
+inline const ::google::protobuf::RepeatedField<int>&
+ut_test_message::d_enum() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_enum)
+  return d_enum_;
+}
+inline ::google::protobuf::RepeatedField<int>*
+ut_test_message::mutable_d_enum() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_enum)
+  return &d_enum_;
+}
+
+// required .ut_test_sub_message r_message = 81;
+inline bool ut_test_message::has_r_message() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void ut_test_message::set_has_r_message() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void ut_test_message::clear_has_r_message() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void ut_test_message::clear_r_message() {
+  if (r_message_ != NULL) r_message_->Clear();
+  clear_has_r_message();
+}
+inline const ::ut_test_sub_message& ut_test_message::r_message() const {
+  const ::ut_test_sub_message* p = r_message_;
+  // @@protoc_insertion_point(field_get:ut_test_message.r_message)
+  return p != NULL ? *p : *reinterpret_cast<const ::ut_test_sub_message*>(
+      &::_ut_test_sub_message_default_instance_);
+}
+inline ::ut_test_sub_message* ut_test_message::release_r_message() {
+  // @@protoc_insertion_point(field_release:ut_test_message.r_message)
+  clear_has_r_message();
+  ::ut_test_sub_message* temp = r_message_;
+  r_message_ = NULL;
+  return temp;
+}
+inline ::ut_test_sub_message* ut_test_message::mutable_r_message() {
+  set_has_r_message();
+  if (r_message_ == NULL) {
+    r_message_ = new ::ut_test_sub_message;
+  }
+  // @@protoc_insertion_point(field_mutable:ut_test_message.r_message)
+  return r_message_;
+}
+inline void ut_test_message::set_allocated_r_message(::ut_test_sub_message* r_message) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete r_message_;
+  }
+  if (r_message) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      r_message = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, r_message, submessage_arena);
+    }
+    set_has_r_message();
+  } else {
+    clear_has_r_message();
+  }
+  r_message_ = r_message;
+  // @@protoc_insertion_point(field_set_allocated:ut_test_message.r_message)
+}
+
+// optional .ut_test_sub_message o_message = 82;
+inline bool ut_test_message::has_o_message() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void ut_test_message::set_has_o_message() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void ut_test_message::clear_has_o_message() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void ut_test_message::clear_o_message() {
+  if (o_message_ != NULL) o_message_->Clear();
+  clear_has_o_message();
+}
+inline const ::ut_test_sub_message& ut_test_message::o_message() const {
+  const ::ut_test_sub_message* p = o_message_;
+  // @@protoc_insertion_point(field_get:ut_test_message.o_message)
+  return p != NULL ? *p : *reinterpret_cast<const ::ut_test_sub_message*>(
+      &::_ut_test_sub_message_default_instance_);
+}
+inline ::ut_test_sub_message* ut_test_message::release_o_message() {
+  // @@protoc_insertion_point(field_release:ut_test_message.o_message)
+  clear_has_o_message();
+  ::ut_test_sub_message* temp = o_message_;
+  o_message_ = NULL;
+  return temp;
+}
+inline ::ut_test_sub_message* ut_test_message::mutable_o_message() {
+  set_has_o_message();
+  if (o_message_ == NULL) {
+    o_message_ = new ::ut_test_sub_message;
+  }
+  // @@protoc_insertion_point(field_mutable:ut_test_message.o_message)
+  return o_message_;
+}
+inline void ut_test_message::set_allocated_o_message(::ut_test_sub_message* o_message) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete o_message_;
+  }
+  if (o_message) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      o_message = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, o_message, submessage_arena);
+    }
+    set_has_o_message();
+  } else {
+    clear_has_o_message();
+  }
+  o_message_ = o_message;
+  // @@protoc_insertion_point(field_set_allocated:ut_test_message.o_message)
+}
+
+// repeated .ut_test_sub_message f_message = 83;
+inline int ut_test_message::f_message_size() const {
+  return f_message_.size();
+}
+inline void ut_test_message::clear_f_message() {
+  f_message_.Clear();
+}
+inline const ::ut_test_sub_message& ut_test_message::f_message(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_message)
+  return f_message_.Get(index);
+}
+inline ::ut_test_sub_message* ut_test_message::mutable_f_message(int index) {
+  // @@protoc_insertion_point(field_mutable:ut_test_message.f_message)
+  return f_message_.Mutable(index);
+}
+inline ::ut_test_sub_message* ut_test_message::add_f_message() {
+  // @@protoc_insertion_point(field_add:ut_test_message.f_message)
+  return f_message_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message >*
+ut_test_message::mutable_f_message() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_message)
+  return &f_message_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message >&
+ut_test_message::f_message() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_message)
+  return f_message_;
+}
+
+// repeated .ut_test_sub_message d_message = 84;
+inline int ut_test_message::d_message_size() const {
+  return d_message_.size();
+}
+inline void ut_test_message::clear_d_message() {
+  d_message_.Clear();
+}
+inline const ::ut_test_sub_message& ut_test_message::d_message(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_message)
+  return d_message_.Get(index);
+}
+inline ::ut_test_sub_message* ut_test_message::mutable_d_message(int index) {
+  // @@protoc_insertion_point(field_mutable:ut_test_message.d_message)
+  return d_message_.Mutable(index);
+}
+inline ::ut_test_sub_message* ut_test_message::add_d_message() {
+  // @@protoc_insertion_point(field_add:ut_test_message.d_message)
+  return d_message_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message >*
+ut_test_message::mutable_d_message() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_message)
+  return &d_message_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ut_test_sub_message >&
+ut_test_message::d_message() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_message)
+  return d_message_;
+}
+
+// optional int32 o_int32 = 86;
+inline bool ut_test_message::has_o_int32() const {
+  return (_has_bits_[0] & 0x00010000u) != 0;
+}
+inline void ut_test_message::set_has_o_int32() {
+  _has_bits_[0] |= 0x00010000u;
+}
+inline void ut_test_message::clear_has_o_int32() {
+  _has_bits_[0] &= ~0x00010000u;
+}
+inline void ut_test_message::clear_o_int32() {
+  o_int32_ = 0;
+  clear_has_o_int32();
+}
+inline ::google::protobuf::int32 ut_test_message::o_int32() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_int32)
+  return o_int32_;
+}
+inline void ut_test_message::set_o_int32(::google::protobuf::int32 value) {
+  set_has_o_int32();
+  o_int32_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.o_int32)
+}
+
+// repeated int32 f_int32 = 87;
+inline int ut_test_message::f_int32_size() const {
+  return f_int32_.size();
+}
+inline void ut_test_message::clear_f_int32() {
+  f_int32_.Clear();
+}
+inline ::google::protobuf::int32 ut_test_message::f_int32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_int32)
+  return f_int32_.Get(index);
+}
+inline void ut_test_message::set_f_int32(int index, ::google::protobuf::int32 value) {
+  f_int32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.f_int32)
+}
+inline void ut_test_message::add_f_int32(::google::protobuf::int32 value) {
+  f_int32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_int32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+ut_test_message::f_int32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_int32)
+  return f_int32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+ut_test_message::mutable_f_int32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_int32)
+  return &f_int32_;
+}
+
+// repeated int32 d_int32 = 88;
+inline int ut_test_message::d_int32_size() const {
+  return d_int32_.size();
+}
+inline void ut_test_message::clear_d_int32() {
+  d_int32_.Clear();
+}
+inline ::google::protobuf::int32 ut_test_message::d_int32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_int32)
+  return d_int32_.Get(index);
+}
+inline void ut_test_message::set_d_int32(int index, ::google::protobuf::int32 value) {
+  d_int32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.d_int32)
+}
+inline void ut_test_message::add_d_int32(::google::protobuf::int32 value) {
+  d_int32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_int32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+ut_test_message::d_int32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_int32)
+  return d_int32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+ut_test_message::mutable_d_int32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_int32)
+  return &d_int32_;
+}
+
+// repeated int32 pf_int32 = 89 [packed = true];
+inline int ut_test_message::pf_int32_size() const {
+  return pf_int32_.size();
+}
+inline void ut_test_message::clear_pf_int32() {
+  pf_int32_.Clear();
+}
+inline ::google::protobuf::int32 ut_test_message::pf_int32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pf_int32)
+  return pf_int32_.Get(index);
+}
+inline void ut_test_message::set_pf_int32(int index, ::google::protobuf::int32 value) {
+  pf_int32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pf_int32)
+}
+inline void ut_test_message::add_pf_int32(::google::protobuf::int32 value) {
+  pf_int32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pf_int32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+ut_test_message::pf_int32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pf_int32)
+  return pf_int32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+ut_test_message::mutable_pf_int32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pf_int32)
+  return &pf_int32_;
+}
+
+// repeated int32 pd_int32 = 90 [packed = true];
+inline int ut_test_message::pd_int32_size() const {
+  return pd_int32_.size();
+}
+inline void ut_test_message::clear_pd_int32() {
+  pd_int32_.Clear();
+}
+inline ::google::protobuf::int32 ut_test_message::pd_int32(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pd_int32)
+  return pd_int32_.Get(index);
+}
+inline void ut_test_message::set_pd_int32(int index, ::google::protobuf::int32 value) {
+  pd_int32_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pd_int32)
+}
+inline void ut_test_message::add_pd_int32(::google::protobuf::int32 value) {
+  pd_int32_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pd_int32)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+ut_test_message::pd_int32() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pd_int32)
+  return pd_int32_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+ut_test_message::mutable_pd_int32() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pd_int32)
+  return &pd_int32_;
+}
+
+// optional float o_float = 91;
+inline bool ut_test_message::has_o_float() const {
+  return (_has_bits_[0] & 0x00020000u) != 0;
+}
+inline void ut_test_message::set_has_o_float() {
+  _has_bits_[0] |= 0x00020000u;
+}
+inline void ut_test_message::clear_has_o_float() {
+  _has_bits_[0] &= ~0x00020000u;
+}
+inline void ut_test_message::clear_o_float() {
+  o_float_ = 0;
+  clear_has_o_float();
+}
+inline float ut_test_message::o_float() const {
+  // @@protoc_insertion_point(field_get:ut_test_message.o_float)
+  return o_float_;
+}
+inline void ut_test_message::set_o_float(float value) {
+  set_has_o_float();
+  o_float_ = value;
+  // @@protoc_insertion_point(field_set:ut_test_message.o_float)
+}
+
+// repeated float f_float = 92;
+inline int ut_test_message::f_float_size() const {
+  return f_float_.size();
+}
+inline void ut_test_message::clear_f_float() {
+  f_float_.Clear();
+}
+inline float ut_test_message::f_float(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.f_float)
+  return f_float_.Get(index);
+}
+inline void ut_test_message::set_f_float(int index, float value) {
+  f_float_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.f_float)
+}
+inline void ut_test_message::add_f_float(float value) {
+  f_float_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.f_float)
+}
+inline const ::google::protobuf::RepeatedField< float >&
+ut_test_message::f_float() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.f_float)
+  return f_float_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+ut_test_message::mutable_f_float() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.f_float)
+  return &f_float_;
+}
+
+// repeated float d_float = 93;
+inline int ut_test_message::d_float_size() const {
+  return d_float_.size();
+}
+inline void ut_test_message::clear_d_float() {
+  d_float_.Clear();
+}
+inline float ut_test_message::d_float(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.d_float)
+  return d_float_.Get(index);
+}
+inline void ut_test_message::set_d_float(int index, float value) {
+  d_float_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.d_float)
+}
+inline void ut_test_message::add_d_float(float value) {
+  d_float_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.d_float)
+}
+inline const ::google::protobuf::RepeatedField< float >&
+ut_test_message::d_float() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.d_float)
+  return d_float_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+ut_test_message::mutable_d_float() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.d_float)
+  return &d_float_;
+}
+
+// repeated float pf_float = 94 [packed = true];
+inline int ut_test_message::pf_float_size() const {
+  return pf_float_.size();
+}
+inline void ut_test_message::clear_pf_float() {
+  pf_float_.Clear();
+}
+inline float ut_test_message::pf_float(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pf_float)
+  return pf_float_.Get(index);
+}
+inline void ut_test_message::set_pf_float(int index, float value) {
+  pf_float_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pf_float)
+}
+inline void ut_test_message::add_pf_float(float value) {
+  pf_float_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pf_float)
+}
+inline const ::google::protobuf::RepeatedField< float >&
+ut_test_message::pf_float() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pf_float)
+  return pf_float_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+ut_test_message::mutable_pf_float() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pf_float)
+  return &pf_float_;
+}
+
+// repeated float pd_float = 95 [packed = true];
+inline int ut_test_message::pd_float_size() const {
+  return pd_float_.size();
+}
+inline void ut_test_message::clear_pd_float() {
+  pd_float_.Clear();
+}
+inline float ut_test_message::pd_float(int index) const {
+  // @@protoc_insertion_point(field_get:ut_test_message.pd_float)
+  return pd_float_.Get(index);
+}
+inline void ut_test_message::set_pd_float(int index, float value) {
+  pd_float_.Set(index, value);
+  // @@protoc_insertion_point(field_set:ut_test_message.pd_float)
+}
+inline void ut_test_message::add_pd_float(float value) {
+  pd_float_.Add(value);
+  // @@protoc_insertion_point(field_add:ut_test_message.pd_float)
+}
+inline const ::google::protobuf::RepeatedField< float >&
+ut_test_message::pd_float() const {
+  // @@protoc_insertion_point(field_list:ut_test_message.pd_float)
+  return pd_float_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+ut_test_message::mutable_pd_float() {
+  // @@protoc_insertion_point(field_mutable_list:ut_test_message.pd_float)
+  return &pd_float_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::ut_test_enum> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::ut_test_enum>() {
+  return ::ut_test_enum_descriptor();
+}
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 
