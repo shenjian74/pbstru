@@ -88,12 +88,12 @@ std::string get_pb_string(BYTE * buf, size_t buf_len2, const char *proto_filenam
 
     write_buffer_file(pb_filename, buf, buf_len2);
     sprintf(command, "./protoc --decode=%s %s < %s", message_type, proto_filename, pb_filename);
-    printf("[%s:%d]> %s\n", filename, lineno, command);
+    // printf("[%s:%d]> %s\n", filename, lineno, command);
 
     FILE *p = popen(command, "r");
     while (fgets(line, sizeof(line), p))
 	result += line;
-    printf("result:[\n%s\n]\n", result.c_str());
+    // printf("result:[\n%s\n]\n", result.c_str());
     // print_buffer((BYTE *) result.c_str(), result.length());
     pclose(p);
     return result;
@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
         var_global.var_query_trigger_delete = 24;  /* tag:24 */
 
 	buf_len2 = encode_message_GLOBAL_T_safe(&var_global, buf, sizeof(buf));
-	print_buffer(buf, buf_len2);
+	// print_buffer(buf, buf_len2);
 	assert(57 == buf_len2);
         std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GLOBAL_T", _THIS_FILE, __LINE__); 
         assert(0 == pb_string.length());
@@ -419,9 +419,9 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
@@ -455,17 +455,16 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-	    print_buffer(buf, size3);
-	    // printf("buf_len:%zu\n", size3);
-	    assert(93 == size3);
-            std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+	    // print_buffer(buf, size3);
+	    assert(91 == size3);
+            std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size3, &msg);
 
@@ -489,7 +488,7 @@ int main(int argc, char *argv[])
 	    WORD64 var_int64;
 
 	    encode_varint(20360023315404117, buf, &offset);
-	    print_buffer(buf, offset);
+	    // print_buffer(buf, offset);
 	    buf_len1 = offset;
 	    offset = 0;
 	    decode_varint(buf, buf_len1, &var_int64, &offset);
@@ -518,18 +517,18 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "string";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-	    print_buffer(buf, size2);
-            printf("----------------------------------------");
+	    // print_buffer(buf, size2);
+            // printf("----------------------------------------");
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
-	    assert(78 == size2);
+	    assert(76 == size2);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
 	    assert(2447866062020153618 == msg.var_r_uint64);
@@ -566,15 +565,15 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-	    // printf("size2:%zu\n", size2);
-	    assert(118 == size2);
+	    // print_buffer(buf, size2);
+	    assert(116 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -613,15 +612,15 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
-	    assert(146 == size2);
+	    assert(144 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -660,15 +659,15 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
-	    assert(97 == size2);
+	    assert(95 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -716,13 +715,13 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-	    // printf("size2:%zu\n", size2);
-	    assert(113 == size2);
+	    // print_buffer(buf, size2);
+	    assert(112 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -766,13 +765,13 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-	    // printf("size2:%zu\n", size2);
-	    assert(107 == size2);
+	    // print_buffer(buf, size2);
+	    assert(106 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -801,14 +800,15 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+	    // print_buffer(buf, size2);
 	    // printf("size2:%zu\n", size2);
-	    assert(92 == size2);
+	    assert(90 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -845,6 +845,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+	    // print_buffer(buf, size2);
 	    // printf("size2:%zu\n", size2);
 	    assert(128 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
@@ -903,15 +904,15 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size3);
-	    assert(125 == size3);
+	    assert(123 == size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size3, &msg);
@@ -945,15 +946,15 @@ int main(int argc, char *argv[])
 
 	    char value12[] = "u4ojlfsjalfjaio;sjfl";
 	    msg.var_r_string.data = value12;
-	    msg.var_r_string.length = sizeof(value12);
+	    msg.var_r_string.length = strlen(value12);
 	    msg.var_r_bytes.data = (BYTE *) value12;
-	    msg.var_r_bytes.length = sizeof(value12);
+	    msg.var_r_bytes.length = strlen(value12);
 	    msg.var_r_message.var_d_uint32.count = 0;
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size3);
-	    assert(118 == size3);
+	    assert(116 == size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size3, &msg);
