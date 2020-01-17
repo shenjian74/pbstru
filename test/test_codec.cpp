@@ -65,36 +65,46 @@ void print_buffer(BYTE * content, size_t filelen)
     for (i = 0; i < total_len % 16; i++) {
         fputc(isprint(content[16 * total_line + i]) ? content[16 * total_line + i] : '.', stderr);
     }
-    fputc('\n', stderr);
+    fputs("\n--------------------------------------------------------------------\n", stderr);
     fflush(stderr);
 }
 
 void write_buffer_file(const char *filename, BYTE * buf, size_t buf_len2)
 {
-    FILE *fp = fopen(filename, "w");
+    FILE *fp = fopen(filename, "wb");
     if (NULL == fp) {
-	return;
+	    return;
     }
+    printf("Write %u bytes to %s\n", buf_len2, filename);
     fwrite(buf, buf_len2, 1, fp);
     fclose(fp);
 }
 
-std::string get_pb_string(BYTE * buf, size_t buf_len2, const char *proto_filename, const char *message_type, const char *filename, const int lineno)
+std::string get_pb_string(BYTE * buf,
+                          size_t buf_len2,
+                          const char *proto_filename,
+                          const char *message_type,
+                          const char *filename,
+                          const int lineno)
 {
     char command[256];
     std::string result;
     char pb_filename[] = "pb.bin";
     char line[4*1024];
 
+    print_buffer(buf, buf_len2);
     write_buffer_file(pb_filename, buf, buf_len2);
+    #ifdef _WIN32
+    sprintf(command, "protoc.exe --decode=%s %s < %s", message_type, proto_filename, pb_filename);
+    #else
     sprintf(command, "./protoc --decode=%s %s < %s", message_type, proto_filename, pb_filename);
-    // printf("[%s:%d]> %s\n", filename, lineno, command);
+    #endif // _WIN32
+    printf("[%s:%d]> %s\n", filename, lineno, command);
 
     FILE *p = popen(command, "r");
     while (fgets(line, sizeof(line), p))
 	result += line;
-    // printf("result:[\n%s\n]\n", result.c_str());
-    // print_buffer((BYTE *) result.c_str(), result.length());
+    printf("result:[\n%s\n]\n", result.c_str());
     pclose(p);
     return result;
 }
@@ -254,8 +264,8 @@ int main(int argc, char *argv[])
 	buf_len2 = encode_message_GLOBAL_T_safe(&var_global, buf, sizeof(buf));
 	// print_buffer(buf, buf_len2);
 	assert(57 == buf_len2);
-        std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GLOBAL_T", _THIS_FILE, __LINE__); 
-        assert(0 == pb_string.length());
+    std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GLOBAL_T", _THIS_FILE, __LINE__);
+    assert(0 == pb_string.length());
 	BOOL bret = decode_message_GLOBAL_T(buf, buf_len2, &var_global);
 	assert(TRUE == bret);
 
@@ -323,7 +333,7 @@ int main(int argc, char *argv[])
 	buf_len2 = encode_message_Tuple_safe(&var_Tuple, buf, sizeof(buf));
 	assert(87 == buf_len2);
 	// print_buffer(buf, buf_len2);
-        std::string pb_string = get_pb_string(buf, buf_len2, "cdb.proto", "zte.cdb.Tuple", _THIS_FILE, __LINE__); 
+        std::string pb_string = get_pb_string(buf, buf_len2, "cdb.proto", "zte.cdb.Tuple", _THIS_FILE, __LINE__);
         assert(pb_string.length()>0);
 	BOOL bret = decode_message_Tuple(buf, buf_len2, &var_Tuple);
 	assert(TRUE == bret);
@@ -382,7 +392,7 @@ int main(int argc, char *argv[])
         buf_len1 = encode_message_AddRequest_safe(&var_AddRequest, buf, sizeof(buf));
 	// printf("buf_len:%zu\n", buf_len1);
 	assert(160 == buf_len1);
-        std::string pb_string = get_pb_string(buf, buf_len1, "cdb.proto", "zte.cdb.AddRequest", _THIS_FILE, __LINE__); 
+        std::string pb_string = get_pb_string(buf, buf_len1, "cdb.proto", "zte.cdb.AddRequest", _THIS_FILE, __LINE__);
         assert(pb_string.length()>0);
 	// print_buffer(buf, buf_len1);
 
@@ -426,7 +436,7 @@ int main(int argc, char *argv[])
 	    msg.var_r_enum = CLIENT_M;
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
@@ -464,7 +474,7 @@ int main(int argc, char *argv[])
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size3);
 	    assert(91 == size3);
-            std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size3, &msg);
 
@@ -526,7 +536,7 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size2);
             // printf("----------------------------------------");
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    assert(76 == size2);
 	    decode_message_ut_test_message(buf, size2, &msg);
@@ -574,7 +584,7 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size2);
 	    assert(116 == size2);
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
@@ -621,7 +631,7 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(144 == size2);
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
@@ -668,7 +678,7 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(95 == size2);
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
@@ -722,7 +732,7 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size2);
 	    assert(112 == size2);
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
@@ -772,7 +782,7 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size2);
 	    assert(106 == size2);
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
@@ -809,7 +819,7 @@ int main(int argc, char *argv[])
 	    // print_buffer(buf, size2);
 	    // printf("size2:%zu\n", size2);
 	    assert(90 == size2);
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size2, &msg);
 
@@ -848,7 +858,7 @@ int main(int argc, char *argv[])
 	    // print_buffer(buf, size2);
 	    // printf("size2:%zu\n", size2);
 	    assert(128 == size2);
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    BOOL bret;
 	    for (size_t size3 = 0; size3 < size2 - 1; ++size3) {
@@ -913,7 +923,7 @@ int main(int argc, char *argv[])
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size3);
 	    assert(123 == size3);
-            std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size3, &msg);
 
@@ -955,7 +965,7 @@ int main(int argc, char *argv[])
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size3);
 	    assert(116 == size3);
-            std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size3, &msg);
 
@@ -985,7 +995,7 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_sub_message_safe(&msg, buf, sizeof(buf));
 	    // printf("size2:%zu\n", size2);
 	    assert(6 == size2);
-            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_sub_message", _THIS_FILE, __LINE__); 
+            std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_sub_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_sub_message(buf, size2, &msg);
 	    assert(1000 == msg.var_d_uint32.item[0]);
