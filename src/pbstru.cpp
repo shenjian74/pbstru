@@ -196,10 +196,12 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
-    fprintf(fp, "void encode_varint32(const DWORD value, BYTE *buf, WORD64 *offset);\n");
-    fprintf(fp, "void decode_varint32(const BYTE *buf, const WORD64 buflen, DWORD *value, WORD64 *offset);\n");
-    fprintf(fp, "void encode_varint64(const WORD64 value, BYTE *buf, WORD64 *offset);\n");
-    fprintf(fp, "void decode_varint64(const BYTE *buf, const WORD64 buflen, WORD64 *value, WORD64 *offset);\n");
+    fprintf(fp, "void encode_varint32(const DWORD value, BYTE *buf, size_t *offset);\n");
+    fprintf(fp, "void decode_varint32(const BYTE *buf, const size_t buflen, DWORD *value, size_t *offset);\n");
+    fprintf(fp, "void encode_varint64(const WORD64 value, BYTE *buf, size_t *offset);\n");
+    fprintf(fp, "void decode_varint64(const BYTE *buf, const size_t buflen, WORD64 *value, size_t *offset);\n");
+    fprintf(fp, "void encode_size(const size_t value, BYTE *buf, size_t *offset);\n");
+    fprintf(fp, "void decode_size(const BYTE *buf, const size_t buflen, size_t *value, size_t *offset);\n");
     fprintf(fp, "DWORD encode_zigzag32(const SWORD32 n);\n");
     fprintf(fp, "SWORD32 decode_zigzag32(const DWORD n);\n");
     fprintf(fp, "WORD64 encode_zigzag64(const SWORD64 n);\n");
@@ -207,10 +209,10 @@ int gen_comm(const string& nf_name, const string &target_dir)
 
 
     fprintf(fp, "#define deal_unknown_field(wire_type, buf, buflen, offset) do {\\\n");
-    fprintf(fp, "    WORD64 tmp_field_len; \\\n");
+    fprintf(fp, "    size_t tmp_field_len; \\\n");
     fprintf(fp, "    switch(wire_type){ \\\n");
     fprintf(fp, "    case WIRE_TYPE_VARINT: \\\n");
-    fprintf(fp, "        decode_varint64((buf), (buflen), &tmp_field_len, (offset)); \\\n");
+    fprintf(fp, "        decode_size((buf), (buflen), &tmp_field_len, (offset)); \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX64: \\\n");
     fprintf(fp, "        if(((*(offset)) + sizeof(WORD64)) > (buf_len)) {\\\n");
@@ -219,7 +221,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        *(offset) += 8; \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \\\n");
-    fprintf(fp, "        decode_varint64((buf), (buflen), &tmp_field_len, (offset)); \\\n");
+    fprintf(fp, "        decode_size((buf), (buflen), &tmp_field_len, (offset)); \\\n");
     fprintf(fp, "        if(((*(offset)) + tmp_field_len) > (buf_len)) {\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
@@ -252,7 +254,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE *buf, const WORD64 buflen, WORD *field_num, BYTE *wire_type, WORD64 *offset, BOOL old_version) {\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE *buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL old_version) {\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "    if(buf[0] & 0x80) {\n");
     fprintf(fp, "        if(buflen<2) {\n");
     fprintf(fp, "            return FALSE;\n");
@@ -277,7 +279,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, WORD64 *offset, BOOL old_version) {\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset, BOOL old_version) {\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "    if(tag < 16) {\n");
     fprintf(fp, "        if (NULL != buf) {\n");
     fprintf(fp, "            buf[*offset] = (tag << 3) | wire_type;\n");
@@ -298,9 +300,9 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void encode_varint32(const DWORD value, BYTE *buf, WORD64 *offset) {\n");
+    fprintf(fp, "void encode_varint32(const DWORD value, BYTE *buf, size_t *offset) {\n");
     fprintf(fp, "    DWORD remain_len = value;\n");
-    fprintf(fp, "    WORD64 iloop;\n");
+    fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "\n");
     fprintf(fp, "    if (NULL == buf) {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
@@ -324,8 +326,8 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void decode_varint32(const BYTE *buf, const WORD64 buflen, DWORD *value, WORD64 *offset) {\n");
-    fprintf(fp, "    WORD64 iloop;\n");
+    fprintf(fp, "void decode_varint32(const BYTE *buf, const size_t buflen, DWORD *value, size_t *offset) {\n");
+    fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "    *value = 0;\n");
     fprintf(fp, "    for(iloop=0; iloop<buflen; ++iloop){\n");
     fprintf(fp, "        *value += ((DWORD)(buf[iloop] & 0x7F)) << (7*iloop);\n");
@@ -337,9 +339,9 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void encode_varint64(const WORD64 value, BYTE *buf, WORD64 *offset) {\n");
+    fprintf(fp, "void encode_varint64(const WORD64 value, BYTE *buf, size_t *offset) {\n");
     fprintf(fp, "    WORD64 remain_len = value;\n");
-    fprintf(fp, "    WORD64 iloop;\n");
+    fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "\n");
     fprintf(fp, "    if (NULL == buf) {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
@@ -363,11 +365,49 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void decode_varint64(const BYTE *buf, const WORD64 buflen, WORD64 *value, WORD64 *offset) {\n");
-    fprintf(fp, "    WORD64 iloop;\n");
+    fprintf(fp, "void decode_varint64(const BYTE *buf, const size_t buflen, WORD64 *value, size_t *offset) {\n");
+    fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "    *value = 0;\n");
     fprintf(fp, "    for(iloop=0; iloop<buflen; ++iloop){\n");
     fprintf(fp, "        *value += ((WORD64)(buf[iloop] & 0x7F)) << (7*iloop);\n");
+    fprintf(fp, "        if(0 == (buf[iloop] & 0x80)){\n");
+    fprintf(fp, "            break;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    *offset += 1 + iloop;\n");
+    fprintf(fp, "}\n\n");
+
+    fprintf(fp, "void encode_size(const size_t value, BYTE *buf, size_t *offset) {\n");
+    fprintf(fp, "    size_t remain_len = value;\n");
+    fprintf(fp, "    size_t iloop;\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "    if (NULL == buf) {\n");
+    fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
+    fprintf(fp, "            remain_len = remain_len >> 7;\n");
+    fprintf(fp, "            if (0 == remain_len) {\n");
+    fprintf(fp, "                break;\n");
+    fprintf(fp, "            }\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "    } else {\n");
+    fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
+    fprintf(fp, "            if ((remain_len >> 7) > 0) {\n");
+    fprintf(fp, "                buf[(*offset) + iloop] = ((BYTE)remain_len) | 0x80;\n");
+    fprintf(fp, "                remain_len = remain_len >> 7;\n");
+    fprintf(fp, "            } else {\n");
+    fprintf(fp, "                buf[(*offset) + iloop] = (BYTE)remain_len;\n");
+    fprintf(fp, "                break;\n");
+    fprintf(fp, "            }\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    *offset += 1 + iloop;\n");
+    fprintf(fp, "}\n");
+    fprintf(fp, "\n");
+
+    fprintf(fp, "void decode_size(const BYTE *buf, const size_t buflen, size_t *value, size_t *offset) {\n");
+    fprintf(fp, "    size_t iloop;\n");
+    fprintf(fp, "    *value = 0;\n");
+    fprintf(fp, "    for(iloop=0; iloop<buflen; ++iloop){\n");
+    fprintf(fp, "        *value += ((size_t)(buf[iloop] & 0x7F)) << (7*iloop);\n");
     fprintf(fp, "        if(0 == (buf[iloop] & 0x80)){\n");
     fprintf(fp, "            break;\n");
     fprintf(fp, "        }\n");
@@ -815,7 +855,7 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
             get_struct_list_name(field, struct_list_name);
             fprintf(fp, "\ntypedef struct _st_%s_list {\n", struct_list_name.c_str());
 
-            fprintf(fp, "    WORD64 count;\n");
+            fprintf(fp, "    size_t count;\n");
 
             switch(field->type())
             {
@@ -883,7 +923,7 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     {
         print_field_in_struct(fp, desc->field(i));
     }
-    fprintf(fp, "\n    WORD64 _message_length;  // The length of this message, DO NOT set it manually. \n");
+    fprintf(fp, "\n    size_t _message_length;  // The length of this message, DO NOT set it manually. \n");
     fprintf(fp, "                            // Setting and Using at _internal_encode_message_xxx().\n");
     fprintf(fp, "} %s;\n", struct_name.c_str());
 
@@ -895,10 +935,10 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "void clear_message_%s_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "void _clear_message_%s_len_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "#define encode_message_%s_safe(msg, buf, buf_size) encode_message_%s_safe_%s((msg), (buf), (buf_size))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
-    fprintf(fp, "WORD64 encode_message_%s_safe_%s(%s* msg, BYTE* buf, WORD64 buf_size);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
-    fprintf(fp, "WORD64 _internal_encode_message_%s_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
+    fprintf(fp, "size_t encode_message_%s_safe_%s(%s* msg, BYTE* buf, size_t buf_size);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
+    fprintf(fp, "size_t _internal_encode_message_%s_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "#define decode_message_%s(buf, buf_len, msg) decode_message_%s_%s((buf), (buf_len), (msg))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
-    fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, WORD64 buf_len, %s* msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
+    fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, size_t buf_len, %s* msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
 
     fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
@@ -915,7 +955,7 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated() && FieldDescriptor::TYPE_MESSAGE == field->type())
         {
-            fprintf(fp, "    WORD64 i = 0;\n\n");
+            fprintf(fp, "    size_t i = 0;\n\n");
             break;
         }
     }
@@ -1023,7 +1063,7 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<
         {
             if(field->is_repeated())
             {
-                fprintf(fp, "    WORD64 i;\n\n");
+                fprintf(fp, "    size_t i;\n\n");
                 break;
             }
         }
@@ -1090,14 +1130,14 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "}\n\n");
 
     ////////////////////////////////////////
-    fprintf(fp, "WORD64 _internal_encode_message_%s_%s(%s* var_%s, BYTE* buf) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "size_t _internal_encode_message_%s_%s(%s* var_%s, BYTE* buf) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
 
     for(int i=0; i<desc->field_count(); ++i)
     {
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated())
         {
-            fprintf(fp, "    WORD64 i = 0;\n");
+            fprintf(fp, "    size_t i = 0;\n");
             break;
         }
     }
@@ -1106,12 +1146,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         const FieldDescriptor *field = desc->field(i);
         if(field->is_repeated() && field->is_packed())
         {
-            fprintf(fp, "    WORD64 packed_bytes_size = 0;\n");
+            fprintf(fp, "    size_t packed_bytes_size = 0;\n");
             fprintf(fp, "    BYTE *packed_bytes = NULL;\n");
             break;
         }
     }
-    fprintf(fp, "    WORD64 offset = 0;\n\n");
+    fprintf(fp, "    size_t offset = 0;\n\n");
 
     // encode every fields
     for(int i=0; i<desc->field_count(); ++i)
@@ -1130,13 +1170,13 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 case FieldDescriptor::TYPE_SFIXED32:
                 case FieldDescriptor::TYPE_FLOAT:
                     fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                    fprintf(fp, "        encode_varint64(((var_%s->var_%s.count)<<2), buf, &offset);\n", desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "        encode_size(((var_%s->var_%s.count)<<2), buf, &offset);\n", desc->name().c_str(), field->name().c_str());
                     break;
                 case FieldDescriptor::TYPE_FIXED64:
                 case FieldDescriptor::TYPE_SFIXED64:
                 case FieldDescriptor::TYPE_DOUBLE:
                     fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                    fprintf(fp, "        encode_varint64(((var_%s->var_%s.count)<<3), buf, &offset);\n", desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "        encode_size(((var_%s->var_%s.count)<<3), buf, &offset);\n", desc->name().c_str(), field->name().c_str());
                     break;
                 case FieldDescriptor::TYPE_BOOL:
                 case FieldDescriptor::TYPE_UINT64:
@@ -1152,7 +1192,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                         fprintf(fp, "            encode_varint64(var_%s->var_%s.item[i], packed_bytes, &packed_bytes_size);\n", desc->name().c_str(), field->name().c_str());
                     }
                     fprintf(fp, "        }\n");
-                    fprintf(fp, "        encode_varint64(packed_bytes_size, buf, &offset);\n");
+                    fprintf(fp, "        encode_size(packed_bytes_size, buf, &offset);\n");
                     break;
                 case FieldDescriptor::TYPE_UINT32:
                 case FieldDescriptor::TYPE_INT32:
@@ -1166,7 +1206,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                         fprintf(fp, "            encode_varint32(var_%s->var_%s.item[i], packed_bytes, &packed_bytes_size);\n", desc->name().c_str(), field->name().c_str());
                     }
                     fprintf(fp, "        }\n");
-                    fprintf(fp, "        encode_varint64(packed_bytes_size, buf, &offset);\n");
+                    fprintf(fp, "        encode_size(packed_bytes_size, buf, &offset);\n");
                     break;
                 default:
                     fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
@@ -1375,7 +1415,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             if(field->is_repeated())
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                fprintf(fp, "%sencode_varint64(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1384,7 +1424,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                fprintf(fp, "%sencode_varint64(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1396,7 +1436,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             if(field->is_repeated())
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                fprintf(fp, "%sencode_varint64(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1405,7 +1445,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                fprintf(fp, "%sencode_varint64(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1420,14 +1460,14 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%sif (0 == var_%s->var_%s.item[i]._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s.item[i]._message_length = _internal_encode_message_%s_%s(&(var_%s->var_%s.item[i]), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
-                fprintf(fp, "%sencode_varint64(var_%s->var_%s.item[i]._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size(var_%s->var_%s.item[i]._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "%sif (0 == var_%s->var_%s._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s._message_length = _internal_encode_message_%s_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
-                fprintf(fp, "%sencode_varint64(var_%s->var_%s._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size(var_%s->var_%s._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
 
             if(field->is_repeated())
@@ -1467,7 +1507,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "}\n\n");
 
     ////////////////////////////////////////
-    fprintf(fp, "WORD64 encode_message_%s_safe_%s(%s* var_%s, BYTE* buf, WORD64 buf_size) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "size_t encode_message_%s_safe_%s(%s* var_%s, BYTE* buf, size_t buf_size) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "    _clear_message_%s_len_%s(var_%s); \n\n", desc->name().c_str(), _BUILD_TIME_, desc->name().c_str());
     fprintf(fp, "    if (_internal_encode_message_%s_%s(var_%s, NULL) > buf_size) {\n", desc->name().c_str(), _BUILD_TIME_, desc->name().c_str());
     fprintf(fp, "        return 0;\n");
@@ -1477,14 +1517,14 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
 ///////////////////////////////////////////////////////////////////////////
 // Decode function
-    fprintf(fp, "\nBOOL decode_message_%s_%s(BYTE* buf, const WORD64 buf_len, %s* var_%s) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
-    fprintf(fp, "    WORD64 offset = 0;\n");
+    fprintf(fp, "\nBOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* var_%s) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "    size_t offset = 0;\n");
     // use this variable if has a sub-message
     for(int i=0; i<desc->field_count(); ++i)
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
         {
-            fprintf(fp, "    WORD64 tmp_field_len;\n");
+            fprintf(fp, "    size_t tmp_field_len;\n");
             break;
         }
     }
@@ -1518,8 +1558,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                WORD64 array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                WORD64 data_offset;\n");
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
@@ -1575,8 +1615,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                WORD64 array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                WORD64 data_offset;\n");
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
@@ -1632,8 +1672,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                WORD64 array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                WORD64 data_offset;\n");
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
@@ -1686,8 +1726,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                WORD64 array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                WORD64 data_offset;\n");
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
@@ -1740,8 +1780,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                WORD64 array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                WORD64 data_offset;\n");
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
@@ -1794,8 +1834,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                WORD64 array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                WORD64 data_offset;\n");
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
@@ -1852,8 +1892,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                WORD64 array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                WORD64 data_offset;\n");
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
@@ -1905,8 +1945,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 spaces[0] = '\0';
                 if(field->is_packed())
                 {
-                    fprintf(fp, "                WORD64 array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                WORD64 data_offset;\n");
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
                     fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, &(array_size), &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
