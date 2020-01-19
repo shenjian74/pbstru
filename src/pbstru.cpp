@@ -1901,7 +1901,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                decode_size(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                decode_varint64(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 if(FieldDescriptor::TYPE_SINT64==field->type()) { 
                     fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = decode_zigzag64(var_%s->var_%s.item[var_%s->var_%s.count]);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 }
