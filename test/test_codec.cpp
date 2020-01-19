@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 
     {
         long value = 0;
-        WORD64 offset = 0;
+        size_t offset = 0;
         encode_varint32(value, buf, &offset);
         assert(1 == offset);
         buf_len1 = offset;
@@ -550,7 +550,7 @@ int main(int argc, char *argv[])
         for (int i = 0; i < 3; ++i)
         {
             BYTE buf[128];
-            WORD64 offset = 0;
+            size_t offset = 0;
             WORD64 var_int64;
 
             encode_varint64(20360023315404117, buf, &offset);
