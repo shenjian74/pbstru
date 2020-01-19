@@ -554,4 +554,42 @@ message ut_test_message
 	repeated float d_float = 93;
 	repeated float pf_float = 94 [packed=true];
 	repeated float pd_float = 95 [packed=true];
+
+//////////////////////////////////////////////////////////
+	optional int64 o_int64 = 96;
+	repeated int64 f_int64 = 97;
+	repeated int64 d_int64 = 98;
+	repeated int64 pf_int64 = 99 [packed=true];
+	repeated int64 pd_int64 = 100 [packed=true];
+
+	optional double o_double = 101;
+	repeated double f_double = 102;
+	repeated double d_double = 103;
+	repeated double pf_double = 104 [packed=true];
+	repeated double pd_double = 105 [packed=true];
+
+	optional sint32 o_sint32 = 106;
+	repeated sint32 f_sint32 = 107;
+	repeated sint32 d_sint32 = 108;
+	repeated sint32 pf_sint32 = 109 [packed=true];
+	repeated sint32 pd_sint32 = 110 [packed=true];
+
+	optional sint64 o_sint64 = 121;
+	repeated sint64 f_sint64 = 122;
+	repeated sint64 d_sint64 = 123;
+	repeated sint64 pf_sint64 = 124 [packed=true];
+	repeated sint64 pd_sint64 = 125 [packed=true];
+
+	optional sfixed32 o_sfixed32 = 111;
+	repeated sfixed32 f_sfixed32 = 112;
+	repeated sfixed32 d_sfixed32 = 113;
+	repeated sfixed32 pf_sfixed32 = 114 [packed=true];
+	repeated sfixed32 pd_sfixed32 = 115 [packed=true];
+
+	optional sfixed64 o_sfixed64 = 116;
+	repeated sfixed64 f_sfixed64 = 117;
+	repeated sfixed64 d_sfixed64 = 118;
+	repeated sfixed64 pf_sfixed64 = 119 [packed=true];
+	repeated sfixed64 pd_sfixed64 = 120 [packed=true];
+
 }
