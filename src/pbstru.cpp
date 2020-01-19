@@ -207,7 +207,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
 
 
     fprintf(fp, "#define deal_unknown_field(wire_type, buf, buflen, offset) do {\\\n");
-    fprintf(fp, "    size_t tmp_field_len; \\\n");
+    fprintf(fp, "    WORD64 tmp_field_len; \\\n");
     fprintf(fp, "    switch(wire_type){ \\\n");
     fprintf(fp, "    case WIRE_TYPE_VARINT: \\\n");
     fprintf(fp, "        decode_varint64((buf), (buflen), &tmp_field_len, (offset)); \\\n");
