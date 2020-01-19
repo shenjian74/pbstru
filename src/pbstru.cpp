@@ -170,12 +170,12 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "\n");
     fprintf(fp, "typedef struct {\n");
     fprintf(fp, "    char *data;\n");
-    fprintf(fp, "    WORD64 length;\n");
+    fprintf(fp, "    size_t length;\n");
     fprintf(fp, "} ps_string;\n");
     fprintf(fp, "\n");
     fprintf(fp, "typedef struct {\n");
     fprintf(fp, "    unsigned char *data;\n");
-    fprintf(fp, "    WORD64 length;\n");
+    fprintf(fp, "    size_t length;\n");
     fprintf(fp, "} ps_bytes;\n");
     fprintf(fp, "\n");
 
