@@ -43,8 +43,10 @@ md build
 cd build
 "C:\Program Files\CMake\bin\cmake.exe" -G "CodeBlocks - MinGW Makefiles" ..
 mingw32-make
+move /y test_codec.exe ..\..\bin
+cd ..\..\bin
 test_codec.exe
-cd ..\..
+cd ..
 
 :end
 echo 'Done."
