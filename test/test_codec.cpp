@@ -87,7 +87,7 @@ void write_buffer_file(const char *filename, BYTE * buf, size_t buf_len2)
     {
         return;
     }
-    printf("Write %lu bytes to %s\n", buf_len2, filename);
+    printf("Write %zd bytes to %s\n", buf_len2, filename);
     fwrite(buf, buf_len2, 1, fp);
     fclose(fp);
 }
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 
     {
         long value = 0;
-        size_t offset = 0;
+        WORD64 offset = 0;
         encode_varint32(value, buf, &offset);
         assert(1 == offset);
         buf_len1 = offset;
@@ -550,7 +550,7 @@ int main(int argc, char *argv[])
         for (int i = 0; i < 3; ++i)
         {
             BYTE buf[128];
-            size_t offset = 0;
+            WORD64 offset = 0;
             WORD64 var_int64;
 
             encode_varint64(20360023315404117, buf, &offset);
