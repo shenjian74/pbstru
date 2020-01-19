@@ -1560,7 +1560,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1617,7 +1617,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1674,7 +1674,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1728,7 +1728,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1782,7 +1782,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1836,7 +1836,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1894,7 +1894,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1947,7 +1947,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(array_size), &offset);\n");
+                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
