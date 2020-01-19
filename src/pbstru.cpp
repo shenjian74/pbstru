@@ -185,12 +185,12 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "\n");
     fprintf(fp, "#define %s_encode_tag_byte(buf, tag, wire_type, offset) %s_encode_tag_byte_%s((buf), (tag), (wire_type), (offset), FALSE)\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "/* encode tag and wire_type value */\n");
-    fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, WORD64 *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
 
     fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset), FALSE)\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "/* parse tag and wire_type value */\n");
-    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const WORD64 buflen, WORD *field_num, BYTE *wire_type, WORD64 *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const WORD64 buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
     fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
