@@ -75,7 +75,7 @@ void write_buffer_file(const char *filename, BYTE * buf, size_t buf_len2)
     if (NULL == fp) {
 	    return;
     }
-    printf("Write %u bytes to %s\n", buf_len2, filename);
+    printf("Write %lu bytes to %s\n", buf_len2, filename);
     fwrite(buf, buf_len2, 1, fp);
     fclose(fp);
 }
@@ -139,43 +139,43 @@ int main(int argc, char *argv[])
     gettimeofday(&tv_begin, NULL);
 
     {
-	int value = 0;
+	long value = 0;
 	size_t offset = 0;
-	encode_varint(value, buf, &offset);
+	encode_varint32(value, buf, &offset);
 	assert(1 == offset);
 	buf_len1 = offset;
 	assert(0 == buf[0]);
 	offset = 0;
-	decode_varint(buf, buf_len1, &value, &offset);
+	decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
 	assert(1 == offset);
 	assert(0 == value);
 
 	value = 1;
 	offset = 0;
-	encode_varint(value, buf, &offset);
+	encode_varint32(value, buf, &offset);
 	assert(1 == offset);
 	buf_len1 = offset;
 	assert(0x01 == buf[0]);
 	offset = 0;
-	decode_varint(buf, buf_len1, &value, &offset);
+	decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
 	assert(1 == offset);
 	assert(1 == value);
 
 	value = 128;
 	offset = 0;
-	encode_varint(value, buf, &offset);
+	encode_varint32(value, buf, &offset);
 	assert(2 == offset);
 	buf_len1 = offset;
 	assert(0x80 == buf[0]);
 	assert(0x01 == buf[1]);
 	offset = 0;
-	decode_varint(buf, buf_len1, &value, &offset);
+	decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
 	assert(2 == offset);
 	assert(128 == value);
 
 	value = 65535;
 	offset = 0;
-	encode_varint(value, buf, &offset);
+	encode_varint32(value, buf, &offset);
 	// print_buffer(buf, offset);
 	assert(3 == offset);
 	buf_len1 = offset;
@@ -183,13 +183,13 @@ int main(int argc, char *argv[])
 	assert(0xFF == buf[1]);
 	assert(0x03 == buf[2]);
 	offset = 0;
-	decode_varint(buf, buf_len1, &value, &offset);
+	decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
 	assert(3 == offset);
 	assert(65535 == value);
 
 	value = 65536;
 	offset = 0;
-	encode_varint(value, buf, &offset);
+	encode_varint32(value, buf, &offset);
 	// print_buffer(buf, offset);
 	assert(3 == offset);
 	buf_len1 = offset;
@@ -197,22 +197,40 @@ int main(int argc, char *argv[])
 	assert(0x80 == buf[1]);
 	assert(0x04 == buf[2]);
 	offset = 0;
-	decode_varint(buf, buf_len1, &value, &offset);
+	decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
 	assert(3 == offset);
 	assert(65536 == value);
 
 	long long value3 = 0xFFFFFFFF;
 	offset = 0;
-	encode_varint(value3, buf, &offset);
+	encode_varint32(value3, buf, &offset);
 	// print_buffer(buf, offset);
 	assert(5 == offset);
 	buf_len1 = offset;
 	assert(0xFF == buf[0]);
 	assert(0x0F == buf[4]);
 	offset = 0;
-	decode_varint(buf, buf_len1, &value3, &offset);
+	decode_varint32(buf, buf_len1, (uint32_t *)&value3, &offset);
 	assert(5 == offset);
 	assert(0xFFFFFFFF == value3);
+
+        long value4 = -1;
+	offset = 0;
+	encode_varint32(value4, buf, &offset);
+	print_buffer(buf, offset);
+	buf_len1 = offset;
+	offset = 0;
+	decode_varint32(buf, buf_len1, (uint32_t *)&value4, &offset);
+        assert(-1==value4);
+
+        long long value5 = -1;
+	offset = 0;
+	encode_varint64(value5, buf, &offset);
+	print_buffer(buf, offset);
+	buf_len1 = offset;
+	offset = 0;
+	decode_varint64(buf, buf_len1, (uint64_t *)&value5, &offset);
+        assert(-1==value4);
     }
 
     {
@@ -497,11 +515,11 @@ int main(int argc, char *argv[])
 	    size_t offset = 0;
 	    WORD64 var_int64;
 
-	    encode_varint(20360023315404117, buf, &offset);
+	    encode_varint64(20360023315404117, buf, &offset);
 	    // print_buffer(buf, offset);
 	    buf_len1 = offset;
 	    offset = 0;
-	    decode_varint(buf, buf_len1, &var_int64, &offset);
+	    decode_varint64(buf, buf_len1, &var_int64, &offset);
 	    assert(20360023315404117 == var_int64);
 
 	    constru_message_ut_test_message(&msg);
@@ -863,15 +881,20 @@ int main(int argc, char *argv[])
 	    BOOL bret;
 	    for (size_t size3 = 0; size3 < size2 - 1; ++size3) {
 		bret = decode_message_ut_test_message(buf, size3, &msg);
+                // printf("size=%lu\n", size3);
 		switch (size3) {
 		case 0:
+		case 1:
 		case 2:
+		case 3:
 		case 4:
 		case 10:
 		case 20:
+		case 22:
 		case 23:
 		case 47:
 		case 71:
+		case 73:
 		case 74:
 		case 83:
 		case 92:
@@ -922,7 +945,8 @@ int main(int argc, char *argv[])
 
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
 	    // print_buffer(buf, size3);
-	    assert(123 == size3);
+            // printf("size:%lu\n", size3);
+	    assert(108 == size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
 	    decode_message_ut_test_message(buf, size3, &msg);
