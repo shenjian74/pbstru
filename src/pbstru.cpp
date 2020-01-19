@@ -1484,7 +1484,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
         {
-            fprintf(fp, "    size_t tmp_field_len;\n");
+            fprintf(fp, "    WORD64 tmp_field_len;\n");
             break;
         }
     }
