@@ -168,11 +168,13 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "\n");
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
+    fprintf(fp, "/* store utf-8 encoding string */\n");
     fprintf(fp, "typedef struct {\n");
     fprintf(fp, "    char *data;\n");
     fprintf(fp, "    size_t length;\n");
     fprintf(fp, "} ps_string;\n");
     fprintf(fp, "\n");
+    fprintf(fp, "/* store binary raw data */\n");
     fprintf(fp, "typedef struct {\n");
     fprintf(fp, "    unsigned char *data;\n");
     fprintf(fp, "    size_t length;\n");
