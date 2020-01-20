@@ -512,10 +512,10 @@ void get_struct_list_name(const FieldDescriptor *field, string &struct_list_name
         break;
     case FieldDescriptor::TYPE_INT32:
     case FieldDescriptor::TYPE_FIXED32:
+    case FieldDescriptor::TYPE_SFIXED32:
         struct_list_name += string("_int32");
         break;
     case FieldDescriptor::TYPE_SINT32:
-    case FieldDescriptor::TYPE_SFIXED32:
         struct_list_name += string("_sint32");
         break;
 
@@ -524,10 +524,10 @@ void get_struct_list_name(const FieldDescriptor *field, string &struct_list_name
         break;
     case FieldDescriptor::TYPE_INT64:
     case FieldDescriptor::TYPE_FIXED64:
+    case FieldDescriptor::TYPE_SFIXED64:
         struct_list_name += string("_int64");
         break;
     case FieldDescriptor::TYPE_SINT64:
-    case FieldDescriptor::TYPE_SFIXED64:
         struct_list_name += string("_sint64");
         break;
 
@@ -583,10 +583,10 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     const FieldDescriptor::Type type = field->type();
     switch(type)
     {
-    case FieldDescriptor::TYPE_SFIXED32:
-    case FieldDescriptor::TYPE_FIXED32:
     case FieldDescriptor::TYPE_INT32:
     case FieldDescriptor::TYPE_SINT32:
+    case FieldDescriptor::TYPE_FIXED32:
+    case FieldDescriptor::TYPE_SFIXED32:
         if(field->is_repeated())
         {
             string struct_list_name;
@@ -600,10 +600,10 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         }
         break;
 
-    case FieldDescriptor::TYPE_SFIXED64:
-    case FieldDescriptor::TYPE_FIXED64:
     case FieldDescriptor::TYPE_INT64:
     case FieldDescriptor::TYPE_SINT64:
+    case FieldDescriptor::TYPE_FIXED64:
+    case FieldDescriptor::TYPE_SFIXED64:
         if(field->is_repeated())
         {
             string struct_list_name;
@@ -1003,15 +1003,15 @@ static void print_clear_message(FILE *fp, const Descriptor *desc, bool init, con
             switch(field->type())
             {
             case FieldDescriptor::TYPE_FIXED32:
+            case FieldDescriptor::TYPE_SFIXED32:
             case FieldDescriptor::TYPE_FIXED64:
+            case FieldDescriptor::TYPE_SFIXED64:
             case FieldDescriptor::TYPE_UINT32:
             case FieldDescriptor::TYPE_UINT64:
             case FieldDescriptor::TYPE_INT32:
             case FieldDescriptor::TYPE_INT64:
             case FieldDescriptor::TYPE_SINT32:
             case FieldDescriptor::TYPE_SINT64:
-            case FieldDescriptor::TYPE_SFIXED32:
-            case FieldDescriptor::TYPE_SFIXED64:
                 fprintf(fp, "%svar_%s->var_%s = 0;\n", spaces, desc->name().c_str(), field->name().c_str());
                 break;
             case FieldDescriptor::TYPE_FLOAT:
@@ -1233,6 +1233,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         switch(field->type())
         {
         case FieldDescriptor::TYPE_FIXED32:
+        case FieldDescriptor::TYPE_SFIXED32:
             if(!field->is_packed())
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
@@ -1251,25 +1252,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             fprintf(fp, "%soffset += sizeof(DWORD);\n", prefix_spaces.c_str());
             break;
 
-        case FieldDescriptor::TYPE_SFIXED32:
-            if(!field->is_packed())
-            {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-            }
-            fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
-            if(field->is_repeated())
-            {
-                fprintf(fp, "%s    *((DWORD *)(buf + offset)) = encode_zigzag32(var_%s->var_%s.item[i]);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            else
-            {
-                fprintf(fp, "%s    *((DWORD *)(buf + offset)) = encode_zigzag32(var_%s->var_%s);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            fprintf(fp, "%s}\n", prefix_spaces.c_str());
-            fprintf(fp, "%soffset += sizeof(DWORD);\n", prefix_spaces.c_str());
-            break;
-
         case FieldDescriptor::TYPE_FIXED64:
+        case FieldDescriptor::TYPE_SFIXED64:
             if(!field->is_packed())
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
@@ -1282,24 +1266,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "%s    *((WORD64 *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            fprintf(fp, "%s}\n", prefix_spaces.c_str());
-            fprintf(fp, "%soffset += sizeof(WORD64);\n", prefix_spaces.c_str());
-            break;
-
-        case FieldDescriptor::TYPE_SFIXED64:
-            if(!field->is_packed())
-            {
-                fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-            }
-            fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
-            if(field->is_repeated())
-            {
-                fprintf(fp, "%s    *((WORD64 *)(buf + offset)) = encode_zigzag64(var_%s->var_%s.item[i]);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-            }
-            else
-            {
-                fprintf(fp, "%s    *((WORD64 *)(buf + offset)) = encode_zigzag64(var_%s->var_%s);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
             fprintf(fp, "%soffset += sizeof(WORD64);\n", prefix_spaces.c_str());
@@ -1547,6 +1513,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         switch(field->type())
         {
         case FieldDescriptor::TYPE_FIXED32:
+        case FieldDescriptor::TYPE_SFIXED32:
             if(field->is_packed()) {
                 fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
             } else {
@@ -1596,63 +1563,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                offset += sizeof(DWORD);\n");
-            }
-            fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
-            fprintf(fp, "            }\n");
-            break;
-
-        case FieldDescriptor::TYPE_SFIXED32:
-            if(field->is_packed()) {
-                fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
-            } else {
-                fprintf(fp, "            if(WIRE_TYPE_FIX32 == wire_type) {\n");
-            }
-            if(field->is_repeated())
-            {
-                char spaces[100];
-                spaces[0] = '\0';
-                if(field->is_packed())
-                {
-                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
-                    fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
-                    strcpy(spaces, "    ");
-                }
-                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n",
-                        spaces, desc->name().c_str(), field->name().c_str(),
-                        map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
-                fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                if((offset + sizeof(DWORD)) > buf_len) {\n", spaces);
-                fprintf(fp, "%s                    return FALSE;\n", spaces);
-                fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = decode_zigzag32(*((DWORD *)(buf + offset)));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s                offset += sizeof(DWORD);\n", spaces);
-                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n",
-                        spaces, desc->name().c_str(), field->name().c_str());
-                if(field->is_packed())
-                {
-                    fprintf(fp, "                }\n");
-                }
-            }
-            else if(field->is_optional())
-            {
-                fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len) {\n");
-                fprintf(fp, "                    return FALSE;\n");
-                fprintf(fp, "                }\n");
-                fprintf(fp, "                var_%s->var_%s = decode_zigzag32(*((DWORD *)(buf + offset)));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                offset += sizeof(DWORD);\n");
-                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
-            }
-            else
-            {
-                fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len) {\n");
-                fprintf(fp, "                    return FALSE;\n");
-                fprintf(fp, "                }\n");
-                fprintf(fp, "                var_%s->var_%s = decode_zigzag32(*((DWORD *)(buf + offset)));\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                offset += sizeof(DWORD);\n");
             }
             fprintf(fp, "            } else {\n");
@@ -1715,6 +1625,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             break;
 
         case FieldDescriptor::TYPE_FIXED64:
+        case FieldDescriptor::TYPE_SFIXED64:
             if(field->is_packed()) {
                 fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
             } else {
@@ -1761,60 +1672,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                offset += sizeof(WORD64);\n");
-            }
-            fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
-            fprintf(fp, "            }\n");
-            break;
-
-        case FieldDescriptor::TYPE_SFIXED64:
-            if(field->is_packed()) {
-                fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
-            } else {
-                fprintf(fp, "            if(WIRE_TYPE_FIX64 == wire_type) {\n");
-            }
-            if(field->is_repeated())
-            {
-                char spaces[100];
-                spaces[0] = '\0';
-                if(field->is_packed())
-                {
-                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
-                    fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
-                    fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
-                    strcpy(spaces, "    ");
-                }
-                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
-                fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
-                fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                if((offset + sizeof(WORD64)) > buf_len) {\n", spaces);
-                fprintf(fp, "%s                    return FALSE;\n", spaces);
-                fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = decode_zigzag64(*((WORD64 *)(buf + offset)));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s                offset += sizeof(WORD64);\n", spaces);
-                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
-                if(field->is_packed())
-                {
-                    fprintf(fp, "                }\n");
-                }
-            }
-            else if(field->is_optional())
-            {
-                fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len) {\n");
-                fprintf(fp, "                    return FALSE;\n");
-                fprintf(fp, "                }\n");
-                fprintf(fp, "                var_%s->var_%s = decode_zigzag64(*((WORD64 *)(buf + offset)));\n", desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                offset += sizeof(WORD64);\n");
-                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
-            }
-            else
-            {
-                fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len) {\n");
-                fprintf(fp, "                    return FALSE;\n");
-                fprintf(fp, "                }\n");
-                fprintf(fp, "                var_%s->var_%s = decode_zigzag64(*((WORD64 *)(buf + offset)));\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                offset += sizeof(WORD64);\n");
             }
             fprintf(fp, "            } else {\n");

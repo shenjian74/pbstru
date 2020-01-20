@@ -1069,6 +1069,10 @@ int main(int argc, char *argv[])
             msg.var_pf_int64.item[msg.var_pf_int64.count++] = -4300000001;
             msg.var_pd_int64.item[msg.var_pd_int64.count++] = 4300000002;
             msg.var_pd_int64.item[msg.var_pd_int64.count++] = -4300000002;
+            msg.var_pd_int64.item[msg.var_pd_int64.count++] = 1;
+            msg.var_pd_int64.item[msg.var_pd_int64.count++] = -1;
+            msg.var_pd_int64.item[msg.var_pd_int64.count++] = 9223372036854775807;
+            msg.var_pd_int64.item[msg.var_pd_int64.count++] = -9223372036854775807;
 
             msg.has_o_double = TRUE;
             msg.var_o_double = 101.1;
@@ -1102,6 +1106,10 @@ int main(int argc, char *argv[])
             msg.var_pf_sint64.item[msg.var_pf_sint64.count++]  = -124;
             msg.var_pd_sint64.item[msg.var_pd_sint64.count++]  = 125;
             msg.var_pd_sint64.item[msg.var_pd_sint64.count++]  = -125;
+            msg.var_pd_sint64.item[msg.var_pd_sint64.count++]  = 1;
+            msg.var_pd_sint64.item[msg.var_pd_sint64.count++]  = -1;
+            msg.var_pd_sint64.item[msg.var_pd_sint64.count++]  = 9223372036854775807;
+            msg.var_pd_sint64.item[msg.var_pd_sint64.count++]  = -9223372036854775807;
 
             msg.has_o_sfixed32 = TRUE;
             msg.var_o_sfixed32 = 111;
@@ -1124,6 +1132,10 @@ int main(int argc, char *argv[])
             msg.var_pf_sfixed64.item[msg.var_pf_sfixed64.count++]  = -119;
             msg.var_pd_sfixed64.item[msg.var_pd_sfixed64.count++]  = 120;
             msg.var_pd_sfixed64.item[msg.var_pd_sfixed64.count++]  = -120;
+            msg.var_pd_sfixed64.item[msg.var_pd_sfixed64.count++]  = 1;
+            msg.var_pd_sfixed64.item[msg.var_pd_sfixed64.count++]  = -1;
+            msg.var_pd_sfixed64.item[msg.var_pd_sfixed64.count++]  = 9223372036854775807;
+            msg.var_pd_sfixed64.item[msg.var_pd_sfixed64.count++]  = -9223372036854775807;
 
             char value12[] = "string";
             msg.var_r_string.data = value12;
@@ -1137,7 +1149,7 @@ int main(int argc, char *argv[])
             // print_buffer(buf, size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
-            assert(416 == size3);
+            assert(500 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(TRUE == msg.has_o_double);
@@ -1152,9 +1164,13 @@ int main(int argc, char *argv[])
             assert(msg.var_pf_int64.count == 2);
             assert(msg.var_pf_int64.item[0] == 4300000001);
             assert(msg.var_pf_int64.item[1] == -4300000001);
-            assert(msg.var_pd_int64.count == 2);
+            assert(msg.var_pd_int64.count == 6);
             assert(msg.var_pd_int64.item[0] == 4300000002);
             assert(msg.var_pd_int64.item[1] == -4300000002);
+            assert(msg.var_pd_int64.item[2] == 1);
+            assert(msg.var_pd_int64.item[3] == -1);
+            assert(msg.var_pd_int64.item[4] == 9223372036854775807);
+            assert(msg.var_pd_int64.item[5] == -9223372036854775807);
 
             assert(msg.has_o_double == TRUE);
             assert(msg.var_o_double == 101.1);
@@ -1197,9 +1213,13 @@ int main(int argc, char *argv[])
             assert(msg.var_pf_sint64.count == 2);
             assert(msg.var_pf_sint64.item[0]  == 124);
             assert(msg.var_pf_sint64.item[1]  == -124);
-            assert(msg.var_pd_sint64.count == 2);
+            assert(msg.var_pd_sint64.count == 6);
             assert(msg.var_pd_sint64.item[0]  == 125);
             assert(msg.var_pd_sint64.item[1]  == -125);
+            assert(msg.var_pd_sint64.item[2]  == 1);
+            assert(msg.var_pd_sint64.item[3]  == -1);
+            assert(msg.var_pd_sint64.item[4]  == 9223372036854775807);
+            assert(msg.var_pd_sint64.item[5]  == -9223372036854775807);
 
             assert(msg.has_o_sfixed32 == TRUE);
             assert(msg.var_o_sfixed32 == 111);
@@ -1227,9 +1247,13 @@ int main(int argc, char *argv[])
             assert(msg.var_pf_sfixed64.count == 2);
             assert(msg.var_pf_sfixed64.item[0]  == 119);
             assert(msg.var_pf_sfixed64.item[1]  == -119);
-            assert(msg.var_pd_sfixed64.count == 2);
+            assert(msg.var_pd_sfixed64.count == 6);
             assert(msg.var_pd_sfixed64.item[0]  == 120);
             assert(msg.var_pd_sfixed64.item[1]  == -120);
+            assert(msg.var_pd_sfixed64.item[2]  == 1);
+            assert(msg.var_pd_sfixed64.item[3]  == -1);
+            assert(msg.var_pd_sfixed64.item[4]  == 9223372036854775807);
+            assert(msg.var_pd_sfixed64.item[5]  == -9223372036854775807);
         }
     }
 
