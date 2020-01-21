@@ -510,27 +510,23 @@ void get_struct_list_name(const FieldDescriptor *field, string &struct_list_name
     switch(field->type())
     {
     case FieldDescriptor::TYPE_UINT32:
+    case FieldDescriptor::TYPE_FIXED32:
         struct_list_name += string("_uint32");
         break;
     case FieldDescriptor::TYPE_INT32:
-    case FieldDescriptor::TYPE_FIXED32:
+    case FieldDescriptor::TYPE_SINT32:
     case FieldDescriptor::TYPE_SFIXED32:
         struct_list_name += string("_int32");
         break;
-    case FieldDescriptor::TYPE_SINT32:
-        struct_list_name += string("_sint32");
-        break;
 
     case FieldDescriptor::TYPE_UINT64:
+    case FieldDescriptor::TYPE_FIXED64:
         struct_list_name += string("_uint64");
         break;
     case FieldDescriptor::TYPE_INT64:
-    case FieldDescriptor::TYPE_FIXED64:
+    case FieldDescriptor::TYPE_SINT64:
     case FieldDescriptor::TYPE_SFIXED64:
         struct_list_name += string("_int64");
-        break;
-    case FieldDescriptor::TYPE_SINT64:
-        struct_list_name += string("_sint64");
         break;
 
     case FieldDescriptor::TYPE_FLOAT:
@@ -587,7 +583,6 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     {
     case FieldDescriptor::TYPE_INT32:
     case FieldDescriptor::TYPE_SINT32:
-    case FieldDescriptor::TYPE_FIXED32:
     case FieldDescriptor::TYPE_SFIXED32:
         if(field->is_repeated())
         {
@@ -604,7 +599,6 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
 
     case FieldDescriptor::TYPE_INT64:
     case FieldDescriptor::TYPE_SINT64:
-    case FieldDescriptor::TYPE_FIXED64:
     case FieldDescriptor::TYPE_SFIXED64:
         if(field->is_repeated())
         {
@@ -662,6 +656,7 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         break;
 
     case FieldDescriptor::TYPE_UINT32:
+    case FieldDescriptor::TYPE_FIXED32:
         if(field->is_repeated())
         {
             string struct_list_name;
@@ -676,6 +671,7 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
         break;
 
     case FieldDescriptor::TYPE_UINT64:
+    case FieldDescriptor::TYPE_FIXED64:
         if(field->is_repeated())
         {
             string struct_list_name;
@@ -862,20 +858,20 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
             switch(field->type())
             {
             case FieldDescriptor::TYPE_UINT32:
+            case FieldDescriptor::TYPE_FIXED32:
                 fprintf(fp, "    DWORD");
                 break;
             case FieldDescriptor::TYPE_INT32:
             case FieldDescriptor::TYPE_SINT32:
-            case FieldDescriptor::TYPE_FIXED32:
             case FieldDescriptor::TYPE_SFIXED32:
                 fprintf(fp, "    SWORD32");
                 break;
             case FieldDescriptor::TYPE_UINT64:
+            case FieldDescriptor::TYPE_FIXED64:
                 fprintf(fp, "    WORD64");
                 break;
             case FieldDescriptor::TYPE_INT64:
             case FieldDescriptor::TYPE_SINT64:
-            case FieldDescriptor::TYPE_FIXED64:
             case FieldDescriptor::TYPE_SFIXED64:
                 fprintf(fp, "    SWORD64");
                 break;

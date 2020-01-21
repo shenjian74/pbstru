@@ -1,5 +1,5 @@
 #pragma once
 
-#define VERSION "3.1-427-f343572"
+#define VERSION "3.1-477-782d473"
 
 //some other junk

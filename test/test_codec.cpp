@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
         // print_buffer(buf, buf_len2);
         assert(57 == buf_len2);
         std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GLOBAL_T", _THIS_FILE, __LINE__);
-        assert(0 == pb_string.length());
+        assert(0 == pb_string.length()); // 解码不正确是正常的
         BOOL bret = decode_message_GLOBAL_T(buf, buf_len2, &var_global);
         assert(TRUE == bret);
 
@@ -452,23 +452,30 @@ int main(int argc, char *argv[])
         decode_message_AddRequest(buf, buf_len1, &var_AddRequest);
         assert(TRUE == var_AddRequest.var_tuple.item[0].var_path.has_path_string);
         assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_path.var_path_string.data, "/20", var_AddRequest.var_tuple.item[0].var_path.var_path_string.length));
-        assert(2000 == var_AddRequest.var_tuple.item[0].var_version);
+	assert(NULL != strstr(pb_string.c_str(), "path_string: \"/20\""));
         assert(TRUE == var_AddRequest.var_tuple.item[0].has_version);
-        assert(3000 == var_AddRequest.var_tuple.item[0].var_ttl);
+        assert(2000 == var_AddRequest.var_tuple.item[0].var_version);
+	assert(NULL != strstr(pb_string.c_str(), "version: 2000"));
         assert(TRUE == var_AddRequest.var_tuple.item[0].has_ttl);
+        assert(3000 == var_AddRequest.var_tuple.item[0].var_ttl);
+	assert(NULL != strstr(pb_string.c_str(), "ttl: 3000"));
 
         assert(var_AddRequest.var_tuple.item[0].var_field.item[0].var_fieldid == 1);
         assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.data, "fawejlkrj1230940p1243lkjljfksldaj", var_AddRequest.var_tuple.item[0].var_field.item[0].var_value.length));
+	assert(NULL != strstr(pb_string.c_str(), "value: \"fawejlkrj1230940p1243lkjljfksldaj\""));
         assert(var_AddRequest.var_tuple.item[0].var_field.item[1].var_fieldid == 2);
         assert(0 == memcmp(var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data, "jflasjfu32ujfljsljkljkljljoiu", var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length));
+	assert(NULL != strstr(pb_string.c_str(), "value: \"jflasjfu32ujfljsljkljkljljoiu\""));
 
         assert(var_AddRequest.var_identifiers.var_primary.item[0].var_id_type == 1);
         assert(var_AddRequest.var_identifiers.var_primary.item[0].var_value.count == 1);
         assert(0 == memcmp(var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].data, "465749674123167465431674613", var_AddRequest.var_identifiers.var_primary.item[0].var_value.item[0].length));
+	assert(NULL != strstr(pb_string.c_str(), "value: \"465749674123167465431674613\""));
 
         assert(var_AddRequest.var_identifiers.var_non_primary.item[0].var_id_type == 1);
         assert(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.count == 1);
         assert(0 == memcmp(var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].data, "465789461313213646461231324654", var_AddRequest.var_identifiers.var_non_primary.item[0].var_value.item[0].length));
+	assert(NULL != strstr(pb_string.c_str(), "value: \"465789461313213646461231324654\""));
     }
 
     {
@@ -495,7 +502,9 @@ int main(int argc, char *argv[])
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(1000 == msg.var_d_uint32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_uint32: 1000"));
             assert(1001 == msg.var_d_uint32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_uint32: 1001"));
             assert(2 == msg.var_d_uint32.count);
         }
 
@@ -512,8 +521,8 @@ int main(int argc, char *argv[])
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
-            msg.var_pf_uint32.item[0] = 14;
-            msg.var_pf_uint32.item[1] = 15;
+            msg.var_pf_uint32.item[msg.var_pf_uint32.count++] = 14;
+            msg.var_pf_uint32.item[msg.var_pf_uint32.count++] = 15;
 
             msg.var_pd_uint32.item[msg.var_pd_uint32.count++] = 16;
             msg.var_pd_uint32.item[msg.var_pd_uint32.count++] = 17;
@@ -528,23 +537,33 @@ int main(int argc, char *argv[])
 
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
             // print_buffer(buf, size3);
-            assert(91 == size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+            assert(95 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(10 == msg.var_r_uint32);
+	    assert(NULL != strstr(pb_string.c_str(), "r_uint32: 10"));
             assert(TRUE == msg.has_o_uint32);
             assert(11 == msg.var_o_uint32);
+	    assert(NULL != strstr(pb_string.c_str(), "o_uint32: 11"));
             assert(2 == msg.var_f_uint32.count);
             assert(12 == msg.var_f_uint32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_uint32: 12"));
             assert(13 == msg.var_f_uint32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_uint32: 13"));
             assert(1000 == msg.var_d_uint32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_uint32: 1000"));
             assert(1001 == msg.var_d_uint32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_uint32: 1001"));
             assert(14 == msg.var_pf_uint32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_uint32: 14"));
             assert(15 == msg.var_pf_uint32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_uint32: 15"));
             assert(16 == msg.var_pd_uint32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_uint32: 16"));
             assert(17 == msg.var_pd_uint32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_uint32: 17"));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -598,17 +617,27 @@ int main(int argc, char *argv[])
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(2447866062020153618 == msg.var_r_uint64);
+	    assert(NULL != strstr(pb_string.c_str(), "r_uint64: 2447866062020153618"));
             assert(TRUE == msg.has_o_uint64);
             assert(11 == msg.var_o_uint64);
+	    assert(NULL != strstr(pb_string.c_str(), "o_uint64: 11"));
             assert(2 == msg.var_f_uint64.count);
             assert(12 == msg.var_f_uint64.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_uint64: 12"));
             assert(13 == msg.var_f_uint64.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_uint64: 13"));
             assert(1001 == msg.var_d_uint64.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_uint64: 1001"));
             assert(1002 == msg.var_d_uint64.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_uint64: 1002"));
             assert(14 == msg.var_pf_uint64.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_uint64: 14"));
             assert(15 == msg.var_pf_uint64.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_uint64: 15"));
             assert(16 == msg.var_pd_uint64.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_uint64: 16"));
             assert(17 == msg.var_pd_uint64.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_uint64: 17"));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -624,11 +653,12 @@ int main(int argc, char *argv[])
             msg.var_d_fixed32.item[msg.var_d_fixed32.count++] = 1000;
             msg.var_d_fixed32.item[msg.var_d_fixed32.count++] = 1001;
 
-            msg.var_pf_fixed32.item[0] = 14;
-            msg.var_pf_fixed32.item[1] = 15;
+            msg.var_pf_fixed32.item[msg.var_pf_fixed32.count++] = 14;
+            msg.var_pf_fixed32.item[msg.var_pf_fixed32.count++] = 15;
 
             msg.var_pd_fixed32.item[msg.var_pd_fixed32.count++] = 16;
             msg.var_pd_fixed32.item[msg.var_pd_fixed32.count++] = 17;
+            msg.var_pd_fixed32.item[msg.var_pd_fixed32.count++] = -1;
 
             char value12[] = "u4ojlfsjalfjaio;sjfl";
             msg.var_r_string.data = value12;
@@ -640,23 +670,35 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
             // print_buffer(buf, size2);
-            assert(116 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+            assert(131 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed32);
+	    assert(NULL != strstr(pb_string.c_str(), "r_fixed32: 10"));
             assert(TRUE == msg.has_o_fixed32);
             assert(11 == msg.var_o_fixed32);
+	    assert(NULL != strstr(pb_string.c_str(), "o_fixed32: 11"));
             assert(2 == msg.var_f_fixed32.count);
             assert(12 == msg.var_f_fixed32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_fixed32: 12"));
             assert(13 == msg.var_f_fixed32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_fixed32: 13"));
             assert(1000 == msg.var_d_fixed32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_fixed32: 1000"));
             assert(1001 == msg.var_d_fixed32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_fixed32: 1001"));
             assert(14 == msg.var_pf_fixed32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_fixed32: 14"));
             assert(15 == msg.var_pf_fixed32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_fixed32: 15"));
             assert(16 == msg.var_pd_fixed32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_fixed32: 16"));
             assert(17 == msg.var_pd_fixed32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_fixed32: 17"));
+            assert(0xFFFFFFFF == msg.var_pd_fixed32.item[2]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_fixed32: 4294967295"));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -668,15 +710,17 @@ int main(int argc, char *argv[])
             msg.var_f_fixed64.count = 2;
             msg.var_f_fixed64.item[0] = 12;
             msg.var_f_fixed64.item[1] = 13;
+            msg.var_f_fixed64.item[2] = -13;
 
             msg.var_d_fixed64.item[msg.var_d_fixed64.count++] = 1000;
             msg.var_d_fixed64.item[msg.var_d_fixed64.count++] = 1001;
 
-            msg.var_pf_fixed64.item[0] = 14;
-            msg.var_pf_fixed64.item[1] = 15;
+            msg.var_pf_fixed64.item[msg.var_pf_fixed64.count++] = 14;
+            msg.var_pf_fixed64.item[msg.var_pf_fixed64.count++] = 15;
 
             msg.var_pd_fixed64.item[msg.var_pd_fixed64.count++] = 16;
             msg.var_pd_fixed64.item[msg.var_pd_fixed64.count++] = 17;
+            msg.var_pd_fixed64.item[msg.var_pd_fixed64.count++] = -1;
 
             char value12[] = "u4ojlfsjalfjaio;sjfl";
             msg.var_r_string.data = value12;
@@ -688,23 +732,35 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
             // printf("size2:%zu\n", size2);
-            assert(144 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+            assert(171 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed64);
+	    assert(NULL != strstr(pb_string.c_str(), "r_fixed64: 10"));
             assert(TRUE == msg.has_o_fixed64);
             assert(11 == msg.var_o_fixed64);
+	    assert(NULL != strstr(pb_string.c_str(), "o_fixed64: 11"));
             assert(2 == msg.var_f_fixed64.count);
             assert(12 == msg.var_f_fixed64.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_fixed64: 12"));
             assert(13 == msg.var_f_fixed64.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_fixed64: 13"));
             assert(1000 == msg.var_d_fixed64.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_fixed64: 1000"));
             assert(1001 == msg.var_d_fixed64.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_fixed64: 1001"));
             assert(14 == msg.var_pf_fixed64.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_fixed64: 14"));
             assert(15 == msg.var_pf_fixed64.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_fixed64: 15"));
             assert(16 == msg.var_pd_fixed64.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_fixed64: 16"));
             assert(17 == msg.var_pd_fixed64.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_fixed64: 17"));
+            assert(0xFFFFFFFFFFFFFFFF == msg.var_pd_fixed64.item[2]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_fixed64: 18446744073709551615"));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -720,8 +776,8 @@ int main(int argc, char *argv[])
             msg.var_d_bool.item[msg.var_d_bool.count++] = TRUE;
             msg.var_d_bool.item[msg.var_d_bool.count++] = FALSE;
 
-            msg.var_pf_bool.item[0] = TRUE;
-            msg.var_pf_bool.item[1] = FALSE;
+            msg.var_pf_bool.item[msg.var_pf_bool.count++] = TRUE;
+            msg.var_pf_bool.item[msg.var_pf_bool.count++] = FALSE;
 
             msg.var_pd_bool.item[msg.var_pd_bool.count++] = TRUE;
             msg.var_pd_bool.item[msg.var_pd_bool.count++] = FALSE;
@@ -736,23 +792,33 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
             // printf("size2:%zu\n", size2);
-            assert(95 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+            assert(100 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(TRUE == msg.var_r_bool);
+	    assert(NULL != strstr(pb_string.c_str(), "r_bool: true"));
             assert(TRUE == msg.has_o_bool);
             assert(FALSE == msg.var_o_bool);
+	    assert(NULL != strstr(pb_string.c_str(), "o_bool: false"));
             assert(2 == msg.var_f_bool.count);
             assert(TRUE == msg.var_f_bool.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_bool: true"));
             assert(FALSE == msg.var_f_bool.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_bool: false"));
             assert(TRUE == msg.var_d_bool.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_bool: true"));
             assert(FALSE == msg.var_d_bool.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_bool: false"));
             assert(TRUE == msg.var_pf_bool.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_bool: true"));
             assert(FALSE == msg.var_pf_bool.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_bool: false"));
             assert(TRUE == msg.var_pd_bool.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_bool: true"));
             assert(FALSE == msg.var_pd_bool.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_bool: false"));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -791,19 +857,25 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
             // print_buffer(buf, size2);
-            assert(112 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+            assert(112 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_string.data, string1, msg.var_r_string.length));
+	    assert(NULL != strstr(pb_string.c_str(), "r_string: \"string1\""));
             assert(TRUE == msg.has_o_string);
             assert(0 == memcmp(msg.var_o_string.data, string2, msg.var_o_string.length));
+	    assert(NULL != strstr(pb_string.c_str(), "o_string: \"string2\""));
             assert(2 == msg.var_f_string.count);
             assert(0 == memcmp(msg.var_f_string.item[0].data, string3, msg.var_f_string.item[0].length));
+	    assert(NULL != strstr(pb_string.c_str(), "f_string: \"string3\""));
             assert(0 == memcmp(msg.var_f_string.item[1].data, string4, msg.var_f_string.item[1].length));
+	    assert(NULL != strstr(pb_string.c_str(), "f_string: \"string4\""));
             assert(0 == memcmp(msg.var_d_string.item[0].data, string5, msg.var_d_string.item[0].length));
+	    assert(NULL != strstr(pb_string.c_str(), "d_string: \"string5\""));
             assert(0 == memcmp(msg.var_d_string.item[1].data, string6, msg.var_d_string.item[1].length));
+	    assert(NULL != strstr(pb_string.c_str(), "d_string: \"string6\""));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -842,19 +914,25 @@ int main(int argc, char *argv[])
 
             size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
             // print_buffer(buf, size2);
-            assert(106 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+            assert(106 == size2);
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_bytes.data, bytes1, msg.var_r_bytes.length));
+	    assert(NULL != strstr(pb_string.c_str(), "r_bytes: \"bytes1\""));
             assert(TRUE == msg.has_o_bytes);
             assert(0 == memcmp(msg.var_o_bytes.data, bytes2, msg.var_o_bytes.length));
+	    assert(NULL != strstr(pb_string.c_str(), "o_bytes: \"bytes2\""));
             assert(2 == msg.var_f_bytes.count);
             assert(0 == memcmp(msg.var_f_bytes.item[0].data, bytes3, msg.var_f_bytes.item[0].length));
+	    assert(NULL != strstr(pb_string.c_str(), "f_bytes: \"bytes3\""));
             assert(0 == memcmp(msg.var_f_bytes.item[1].data, bytes4, msg.var_f_bytes.item[1].length));
+	    assert(NULL != strstr(pb_string.c_str(), "f_bytes: \"bytes4\""));
             assert(0 == memcmp(msg.var_d_bytes.item[0].data, bytes5, msg.var_d_bytes.item[0].length));
+	    assert(NULL != strstr(pb_string.c_str(), "d_bytes: \"bytes5\""));
             assert(0 == memcmp(msg.var_d_bytes.item[1].data, bytes6, msg.var_d_bytes.item[1].length));
+	    assert(NULL != strstr(pb_string.c_str(), "d_bytes: \"bytes6\""));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -886,13 +964,19 @@ int main(int argc, char *argv[])
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(CLIENT_M == msg.var_r_enum);
+	    assert(NULL != strstr(pb_string.c_str(), "r_enum: CLIENT"));
             assert(TRUE == msg.has_o_enum);
             assert(SERVER_M == msg.var_o_enum);
+	    assert(NULL != strstr(pb_string.c_str(), "o_enum: SERVER"));
             assert(2 == msg.var_f_enum.count);
             assert(CLIENT_M == msg.var_f_enum.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_enum: CLIENT"));
             assert(SERVER_M == msg.var_f_enum.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_enum: SERVER"));
             assert(CLIENT_M == msg.var_d_enum.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_enum: CLIENT"));
             assert(SERVER_M == msg.var_d_enum.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_enum: SERVER"));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -978,8 +1062,8 @@ int main(int argc, char *argv[])
             msg.var_f_int32.item[1] = 13;
             msg.var_d_int32.item[msg.var_d_int32.count++] = 1000;
             msg.var_d_int32.item[msg.var_d_int32.count++] = -1001;
-            msg.var_pf_int32.item[0] = 14;
-            msg.var_pf_int32.item[1] = -15;
+            msg.var_pf_int32.item[msg.var_pf_int32.count++] = 14;
+            msg.var_pf_int32.item[msg.var_pf_int32.count++] = -15;
             msg.var_pd_int32.item[msg.var_pd_int32.count++] = 16;
             msg.var_pd_int32.item[msg.var_pd_int32.count++] = -17;
 
@@ -994,22 +1078,31 @@ int main(int argc, char *argv[])
             size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
             // print_buffer(buf, size3);
             // printf("size:%lu\n", size3);
-            assert(108 == size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+            assert(117 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(TRUE == msg.has_o_int32);
             assert(0 == msg.var_o_int32);
+	    assert(NULL != strstr(pb_string.c_str(), "o_int32: 0"));
             assert(2 == msg.var_f_int32.count);
             assert(-1 == msg.var_f_int32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_int32: -1"));
             assert(13 == msg.var_f_int32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "f_int32: 13"));
             assert(1000 == msg.var_d_int32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_int32: 1000"));
             assert(-1001 == msg.var_d_int32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "d_int32: -1001"));
             assert(14 == msg.var_pf_int32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_int32: 14"));
             assert(-15 == msg.var_pf_int32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_int32: -15"));
             assert(16 == msg.var_pd_int32.item[0]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_int32: 16"));
             assert(-17 == msg.var_pd_int32.item[1]);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_int32: -17"));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -1160,116 +1253,189 @@ int main(int argc, char *argv[])
             assert(528 == size3);
             decode_message_ut_test_message(buf, size3, &msg);
 
-            assert(TRUE == msg.has_o_double);
             assert(msg.has_o_int64 == TRUE);
             assert(msg.var_o_int64 == 96);
+	    assert(NULL != strstr(pb_string.c_str(), "o_int64: 96"));
             assert(msg.var_f_int64.count == 2);
             assert(msg.var_f_int64.item[0] == 97);
+	    assert(NULL != strstr(pb_string.c_str(), "f_int64: 97"));
             assert(msg.var_f_int64.item[1] == -97);
+	    assert(NULL != strstr(pb_string.c_str(), "f_int64: -97"));
             assert(msg.var_d_int64.count == 2);
             assert(msg.var_d_int64.item[0] == 4300000000);
+	    assert(NULL != strstr(pb_string.c_str(), "d_int64: 4300000000"));
             assert(msg.var_d_int64.item[1] == -4300000000);
+	    assert(NULL != strstr(pb_string.c_str(), "d_int64: -4300000000"));
             assert(msg.var_pf_int64.count == 2);
             assert(msg.var_pf_int64.item[0] == 4300000001);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_int64: 4300000001"));
             assert(msg.var_pf_int64.item[1] == -4300000001);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_int64: -4300000001"));
             assert(msg.var_pd_int64.count == 6);
             assert(msg.var_pd_int64.item[0] == 4300000002);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_int64: 4300000002"));
             assert(msg.var_pd_int64.item[1] == -4300000002);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_int64: -4300000002"));
             assert(msg.var_pd_int64.item[2] == 1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_int64: 1"));
             assert(msg.var_pd_int64.item[3] == -1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_int64: -1"));
             assert(msg.var_pd_int64.item[4] == 9223372036854775807);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_int64: 9223372036854775807"));
             assert(msg.var_pd_int64.item[5] == -9223372036854775807);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_int64: -9223372036854775807"));
 
             assert(msg.has_o_double == TRUE);
             assert(msg.var_o_double == 101.1);
+	    assert(NULL != strstr(pb_string.c_str(), "o_double: 101.1"));
             assert(msg.var_f_double.count == 2);
             assert(msg.var_f_double.item[0]  == 102.2);
+	    assert(NULL != strstr(pb_string.c_str(), "f_double: 102.2"));
             assert(msg.var_f_double.item[1]  == -102.2);
+	    assert(NULL != strstr(pb_string.c_str(), "f_double: -102.2"));
             assert(msg.var_d_double.count == 2);
             assert(msg.var_d_double.item[0]  == 103.3);
+	    assert(NULL != strstr(pb_string.c_str(), "d_double: 103.3"));
             assert(msg.var_d_double.item[1]  == -103.3);
+	    assert(NULL != strstr(pb_string.c_str(), "d_double: -103.3"));
             assert(msg.var_pf_double.count == 2);
             assert(msg.var_pf_double.item[0]  == 104.4);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_double: 104.4"));
             assert(msg.var_pf_double.item[1]  == -104.4);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_double: -104.4"));
             assert(msg.var_pd_double.count == 2);
             assert(msg.var_pd_double.item[0]  == 105.5);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_double: 105.5"));
             assert(msg.var_pd_double.item[1]  == -105.5);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_double: -105.5"));
 
             assert(msg.has_o_sint32 == TRUE);
             assert(msg.var_o_sint32 == 106);
+	    assert(NULL != strstr(pb_string.c_str(), "o_sint32: 106"));
             assert(msg.var_f_sint32.count == 2);
             assert(msg.var_f_sint32.item[0]  == 107);
+	    assert(NULL != strstr(pb_string.c_str(), "f_sint32: 107"));
             assert(msg.var_f_sint32.item[1]  == -107);
+	    assert(NULL != strstr(pb_string.c_str(), "f_sint32: -107"));
             assert(msg.var_d_sint32.count == 2);
             assert(msg.var_d_sint32.item[0]  == 108);
+	    assert(NULL != strstr(pb_string.c_str(), "d_sint32: 108"));
             assert(msg.var_d_sint32.item[1]  == -108);
+	    assert(NULL != strstr(pb_string.c_str(), "d_sint32: -108"));
             assert(msg.var_pf_sint32.count == 2);
             assert(msg.var_pf_sint32.item[0]  == 109);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_sint32: 109"));
             assert(msg.var_pf_sint32.item[1]  == -109);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_sint32: -109"));
             assert(msg.var_pd_sint32.count == 6);
             assert(msg.var_pd_sint32.item[0]  == 110);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint32: 110"));
             assert(msg.var_pd_sint32.item[1]  == -110);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint32: -110"));
             assert(msg.var_pd_sint32.item[2]  == 1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint32: 1"));
             assert(msg.var_pd_sint32.item[3]  == -1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint32: -1"));
             assert(msg.var_pd_sint32.item[4]  == 2147483647);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint32: 2147483647"));
             assert(msg.var_pd_sint32.item[5]  == -2147483647);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint32: -2147483647"));
 
             assert(msg.has_o_sint64 == TRUE);
             assert(msg.var_o_sint64 == 121);
+	    assert(NULL != strstr(pb_string.c_str(), "o_sint64: 121"));
             assert(msg.var_f_sint64.count == 2);
             assert(msg.var_f_sint64.item[0]  == 122);
+	    assert(NULL != strstr(pb_string.c_str(), "f_sint64: 122"));
             assert(msg.var_f_sint64.item[1]  == -122);
+	    assert(NULL != strstr(pb_string.c_str(), "f_sint64: -122"));
             assert(msg.var_d_sint64.count == 2);
             assert(msg.var_d_sint64.item[0]  == 123);
+	    assert(NULL != strstr(pb_string.c_str(), "d_sint64: 123"));
             assert(msg.var_d_sint64.item[1]  == -123);
+	    assert(NULL != strstr(pb_string.c_str(), "d_sint64: -123"));
             assert(msg.var_pf_sint64.count == 2);
             assert(msg.var_pf_sint64.item[0]  == 124);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_sint64: 124"));
             assert(msg.var_pf_sint64.item[1]  == -124);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_sint64: -124"));
             assert(msg.var_pd_sint64.count == 6);
             assert(msg.var_pd_sint64.item[0]  == 125);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint64: 125"));
             assert(msg.var_pd_sint64.item[1]  == -125);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint64: -125"));
             assert(msg.var_pd_sint64.item[2]  == 1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint64: 1"));
             assert(msg.var_pd_sint64.item[3]  == -1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint64: -1"));
             assert(msg.var_pd_sint64.item[4]  == 9223372036854775807);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint64: 9223372036854775807"));
             assert(msg.var_pd_sint64.item[5]  == -9223372036854775807);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sint64: -9223372036854775807"));
 
             assert(msg.has_o_sfixed32 == TRUE);
             assert(msg.var_o_sfixed32 == 111);
+	    assert(NULL != strstr(pb_string.c_str(), "o_sfixed32: 111"));
             assert(msg.var_f_sfixed32.count == 2);
             assert(msg.var_f_sfixed32.item[0]  == 112);
+	    assert(NULL != strstr(pb_string.c_str(), "f_sfixed32: 112"));
             assert(msg.var_f_sfixed32.item[1]  == -112);
+	    assert(NULL != strstr(pb_string.c_str(), "f_sfixed32: -112"));
             assert(msg.var_d_sfixed32.count == 2);
             assert(msg.var_d_sfixed32.item[0]  == 113);
+	    assert(NULL != strstr(pb_string.c_str(), "d_sfixed32: 113"));
             assert(msg.var_d_sfixed32.item[1]  == -113);
+	    assert(NULL != strstr(pb_string.c_str(), "d_sfixed32: -113"));
             assert(msg.var_pf_sfixed32.count == 2);
             assert(msg.var_pf_sfixed32.item[0]  == 114);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_sfixed32: 114"));
             assert(msg.var_pf_sfixed32.item[1]  == -114);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_sfixed32: -114"));
             assert(msg.var_pd_sfixed32.count == 6);
             assert(msg.var_pd_sfixed32.item[0]  == 115);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed32: 115"));
             assert(msg.var_pd_sfixed32.item[1]  == -115);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed32: -115"));
             assert(msg.var_pd_sfixed32.item[2]  == 1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed32: 1"));
             assert(msg.var_pd_sfixed32.item[3]  == -1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed32: -1"));
             assert(msg.var_pd_sfixed32.item[4]  == 2147483647);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed32: 2147483647"));
             assert(msg.var_pd_sfixed32.item[5]  == -2147483647);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed32: -2147483647"));
 
             assert(msg.has_o_sfixed64 == TRUE);
             assert(msg.var_o_sfixed64 == 116);
+	    assert(NULL != strstr(pb_string.c_str(), "o_sfixed64: 116"));
             assert(msg.var_f_sfixed64.count == 2);
             assert(msg.var_f_sfixed64.item[0]  == 117);
+	    assert(NULL != strstr(pb_string.c_str(), "f_sfixed64: 117"));
             assert(msg.var_f_sfixed64.item[1]  == -117);
+	    assert(NULL != strstr(pb_string.c_str(), "f_sfixed64: -117"));
             assert(msg.var_d_sfixed64.count == 2);
             assert(msg.var_d_sfixed64.item[0]  == 118);
+	    assert(NULL != strstr(pb_string.c_str(), "d_sfixed64: 118"));
             assert(msg.var_d_sfixed64.item[1]  == -118);
+	    assert(NULL != strstr(pb_string.c_str(), "d_sfixed64: -118"));
             assert(msg.var_pf_sfixed64.count == 2);
             assert(msg.var_pf_sfixed64.item[0]  == 119);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_sfixed64: 119"));
             assert(msg.var_pf_sfixed64.item[1]  == -119);
+	    assert(NULL != strstr(pb_string.c_str(), "pf_sfixed64: -119"));
             assert(msg.var_pd_sfixed64.count == 6);
             assert(msg.var_pd_sfixed64.item[0]  == 120);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed64: 120"));
             assert(msg.var_pd_sfixed64.item[1]  == -120);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed64: -120"));
             assert(msg.var_pd_sfixed64.item[2]  == 1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed64: 1"));
             assert(msg.var_pd_sfixed64.item[3]  == -1);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed64: -1"));
             assert(msg.var_pd_sfixed64.item[4]  == 9223372036854775807);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed64: 9223372036854775807"));
             assert(msg.var_pd_sfixed64.item[5]  == -9223372036854775807);
+	    assert(NULL != strstr(pb_string.c_str(), "pd_sfixed64: -9223372036854775807"));
         }
     }
 
