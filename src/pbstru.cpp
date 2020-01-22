@@ -157,7 +157,8 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "typedef const char* LPCSTR;\n");
     fprintf(fp, "typedef uint64_t WORD64;\n");
     fprintf(fp, "typedef int64_t SWORD64;\n");
-    fprintf(fp, "\n#ifndef BOOL\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#ifndef BOOL\n");
     fprintf(fp, "#define BOOL int\n");
     fprintf(fp, "#define TRUE 1\n");
     fprintf(fp, "#define FALSE 0\n");
@@ -195,22 +196,32 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "/* parse tag and wire_type value */\n");
     fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
-    fprintf(fp, "void encode_varint32(const DWORD value, BYTE *buf, size_t *offset);\n");
-    fprintf(fp, "void decode_varint32(const BYTE *buf, const size_t buflen, DWORD *value, size_t *offset);\n");
-    fprintf(fp, "void encode_varint64(const WORD64 value, BYTE *buf, size_t *offset);\n");
-    fprintf(fp, "void decode_varint64(const BYTE *buf, const size_t buflen, WORD64 *value, size_t *offset);\n");
-    fprintf(fp, "void encode_size(const size_t value, BYTE *buf, size_t *offset);\n");
-    fprintf(fp, "void decode_size(const BYTE *buf, const size_t buflen, size_t *value, size_t *offset);\n");
-    fprintf(fp, "DWORD encode_zigzag32(const SWORD32 n);\n");
-    fprintf(fp, "SWORD32 decode_zigzag32(const DWORD n);\n");
-    fprintf(fp, "WORD64 encode_zigzag64(const SWORD64 n);\n");
-    fprintf(fp, "SWORD64 decode_zigzag64(const WORD64 n);\n");
+    fprintf(fp, "#define encode_varint32(value, buf, offset) encode_varint32_%s((value), (buf), (offset))\n", _BUILD_TIME_);
+    fprintf(fp, "void encode_varint32_%s(const DWORD value, BYTE *buf, size_t *offset);\n", _BUILD_TIME_);
+    fprintf(fp, "#define decode_varint32(buf, buflen, value, offset) decode_varint32_%s((buf), (buflen), (value), (offset))\n", _BUILD_TIME_);
+    fprintf(fp, "void decode_varint32_%s(const BYTE *buf, const size_t buflen, DWORD *value, size_t *offset);\n", _BUILD_TIME_);
+    fprintf(fp, "#define encode_varint64(value, buf, offset) encode_varint64_%s((value), (buf), (offset))\n", _BUILD_TIME_);
+    fprintf(fp, "void encode_varint64_%s(const WORD64 value, BYTE *buf, size_t *offset);\n", _BUILD_TIME_);
+    fprintf(fp, "#define decode_varint64(buf, buflen, value, offset) decode_varint64_%s((buf), (buflen), (value), (offset))\n", _BUILD_TIME_);
+    fprintf(fp, "void decode_varint64_%s(const BYTE *buf, const size_t buflen, WORD64 *value, size_t *offset);\n", _BUILD_TIME_);
+    fprintf(fp, "#define encode_size(value, buf, offset) encode_size_%s((value), (buf), (offset))\n", _BUILD_TIME_);
+    fprintf(fp, "void encode_size_%s(const size_t value, BYTE *buf, size_t *offset);\n", _BUILD_TIME_);
+    fprintf(fp, "#define decode_size(buf, buflen, value, offset) decode_size_%s((buf), (buflen), (value), (offset))\n", _BUILD_TIME_);
+    fprintf(fp, "void decode_size_%s(const BYTE *buf, const size_t buflen, size_t *value, size_t *offset);\n", _BUILD_TIME_);
+    fprintf(fp, "#define encode_zigzag32(n) encode_zigzag32_%s((n))\n", _BUILD_TIME_);
+    fprintf(fp, "DWORD encode_zigzag32_%s(const SWORD32 n);\n", _BUILD_TIME_);
+    fprintf(fp, "#define decode_zigzag32(n) decode_zigzag32_%s((n))\n", _BUILD_TIME_);
+    fprintf(fp, "SWORD32 decode_zigzag32_%s(const DWORD n);\n", _BUILD_TIME_);
+    fprintf(fp, "#define encode_zigzag64(n) encode_zigzag64_%s((n))\n", _BUILD_TIME_);
+    fprintf(fp, "WORD64 encode_zigzag64_%s(const SWORD64 n);\n", _BUILD_TIME_);
+    fprintf(fp, "#define decode_zigzag64(n) decode_zigzag64_%s((n))\n", _BUILD_TIME_);
+    fprintf(fp, "SWORD64 decode_zigzag64_%s(const WORD64 n);\n", _BUILD_TIME_);
     fprintf(fp, "\n");
     fprintf(fp, "#define deal_unknown_field(wire_type, buf, buflen, offset) do {\\\n");
     fprintf(fp, "    size_t tmp_field_len; \\\n");
     fprintf(fp, "    switch(wire_type){ \\\n");
     fprintf(fp, "    case WIRE_TYPE_VARINT: \\\n");
-    fprintf(fp, "        decode_size((buf), (buflen), &tmp_field_len, (offset)); \\\n");
+    fprintf(fp, "        decode_size_%s((buf), (buflen), &tmp_field_len, (offset)); \\\n", _BUILD_TIME_);
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX64: \\\n");
     fprintf(fp, "        if(((*(offset)) + sizeof(WORD64)) > (buf_len)) {\\\n");
@@ -219,7 +230,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        *(offset) += 8; \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \\\n");
-    fprintf(fp, "        decode_size((buf), (buflen), &tmp_field_len, (offset)); \\\n");
+    fprintf(fp, "        decode_size_%s((buf), (buflen), &tmp_field_len, (offset)); \\\n", _BUILD_TIME_);
     fprintf(fp, "        if(((*(offset)) + tmp_field_len) > (buf_len)) {\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
@@ -302,7 +313,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void encode_varint32(const DWORD value, BYTE *buf, size_t *offset) {\n");
+    fprintf(fp, "void encode_varint32_%s(const DWORD value, BYTE *buf, size_t *offset) {\n", _BUILD_TIME_);
     fprintf(fp, "    DWORD remain_len = value;\n");
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "\n");
@@ -328,7 +339,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void decode_varint32(const BYTE *buf, const size_t buflen, DWORD *value, size_t *offset) {\n");
+    fprintf(fp, "void decode_varint32_%s(const BYTE *buf, const size_t buflen, DWORD *value, size_t *offset) {\n", _BUILD_TIME_);
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "    *value = 0;\n");
     fprintf(fp, "    for(iloop=0; iloop<buflen; ++iloop){\n");
@@ -341,7 +352,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void encode_varint64(const WORD64 value, BYTE *buf, size_t *offset) {\n");
+    fprintf(fp, "void encode_varint64_%s(const WORD64 value, BYTE *buf, size_t *offset) {\n", _BUILD_TIME_);
     fprintf(fp, "    WORD64 remain_len = value;\n");
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "\n");
@@ -367,7 +378,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void decode_varint64(const BYTE *buf, const size_t buflen, WORD64 *value, size_t *offset) {\n");
+    fprintf(fp, "void decode_varint64_%s(const BYTE *buf, const size_t buflen, WORD64 *value, size_t *offset) {\n", _BUILD_TIME_);
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "    *value = 0;\n");
     fprintf(fp, "    for(iloop=0; iloop<buflen; ++iloop){\n");
@@ -379,7 +390,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    *offset += 1 + iloop;\n");
     fprintf(fp, "}\n\n");
 
-    fprintf(fp, "void encode_size(const size_t value, BYTE *buf, size_t *offset) {\n");
+    fprintf(fp, "void encode_size_%s(const size_t value, BYTE *buf, size_t *offset) {\n", _BUILD_TIME_);
     fprintf(fp, "    size_t remain_len = value;\n");
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "\n");
@@ -405,7 +416,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "void decode_size(const BYTE *buf, const size_t buflen, size_t *value, size_t *offset) {\n");
+    fprintf(fp, "void decode_size_%s(const BYTE *buf, const size_t buflen, size_t *value, size_t *offset) {\n", _BUILD_TIME_);
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "    *value = 0;\n");
     fprintf(fp, "    for(iloop=0; iloop<buflen; ++iloop){\n");
@@ -417,16 +428,16 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    *offset += 1 + iloop;\n");
     fprintf(fp, "}\n\n");
 
-    fprintf(fp, "DWORD encode_zigzag32(const SWORD32 n) {\n");
+    fprintf(fp, "DWORD encode_zigzag32_%s(const SWORD32 n) {\n", _BUILD_TIME_);
     fprintf(fp, "    return (n>>31)^(n<<1);\n");
     fprintf(fp, "}\n\n");
-    fprintf(fp, "SWORD32 decode_zigzag32(const DWORD n) {\n");
+    fprintf(fp, "SWORD32 decode_zigzag32_%s(const DWORD n) {\n", _BUILD_TIME_);
     fprintf(fp, "    return (n>>1)^(-(n&1));\n");
     fprintf(fp, "}\n\n");
-    fprintf(fp, "WORD64 encode_zigzag64(const SWORD64 n) {\n");
+    fprintf(fp, "WORD64 encode_zigzag64_%s(const SWORD64 n) {\n", _BUILD_TIME_);
     fprintf(fp, "    return (n>>63)^(n<<1);\n");
     fprintf(fp, "}\n\n");
-    fprintf(fp, "SWORD64 decode_zigzag64(const WORD64 n) {\n");
+    fprintf(fp, "SWORD64 decode_zigzag64_%s(const WORD64 n) {\n", _BUILD_TIME_);
     fprintf(fp, "    return (n>>1)^(-(n&1));\n");
     fprintf(fp, "}\n\n");
 
@@ -770,12 +781,14 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, genbypbstru);
     string name_upper = desc->name();
     toupper(name_upper);
-    fprintf(fp, "#pragma once\n");
+    fprintf(fp, "#ifndef __PBSTRU_%s_H__\n", name_upper.c_str());
+    fprintf(fp, "#define __PBSTRU_%s_H__\n", name_upper.c_str());
     fprintf(fp, "\n");
     fprintf(fp, "#ifdef __cplusplus\n");
-    fprintf(fp, "extern \"C\" {\n");
+    fprintf(fp, "extern \"C\"{\n");
     fprintf(fp, "#endif\n");
-    fprintf(fp, "\n#include \"pbstru_comm.h\"\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#include \"pbstru_comm.h\"\n");
 
     set<string> headers;
     headers.clear();
@@ -940,6 +953,8 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
 
     fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
+    fprintf(fp, "#endif\n");
+    fprintf(fp, "\n");
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n/* end of file */\n\n");
     fclose(fp);
@@ -1168,13 +1183,13 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 case FieldDescriptor::TYPE_SFIXED32:
                 case FieldDescriptor::TYPE_FLOAT:
                     fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                    fprintf(fp, "        encode_size(((var_%s->var_%s.count)<<2), buf, &offset);\n", desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "        encode_size_%s(((var_%s->var_%s.count)<<2), buf, &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                     break;
                 case FieldDescriptor::TYPE_FIXED64:
                 case FieldDescriptor::TYPE_SFIXED64:
                 case FieldDescriptor::TYPE_DOUBLE:
                     fprintf(fp, "        %s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                    fprintf(fp, "        encode_size(((var_%s->var_%s.count)<<3), buf, &offset);\n", desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "        encode_size_%s(((var_%s->var_%s.count)<<3), buf, &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                     break;
                 case FieldDescriptor::TYPE_BOOL:
                 case FieldDescriptor::TYPE_UINT64:
@@ -1185,12 +1200,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     fprintf(fp, "        packed_bytes_size = 0;\n");
                     fprintf(fp, "        for(i = 0; i < var_%s->var_%s.count; ++i) {\n", desc->name().c_str(), field->name().c_str());
                     if(FieldDescriptor::TYPE_SINT64==field->type()){
-                        fprintf(fp, "            encode_varint64(encode_zigzag64(var_%s->var_%s.item[i]), packed_bytes, &packed_bytes_size);\n", desc->name().c_str(), field->name().c_str());
+                        fprintf(fp, "            encode_varint64_%s(encode_zigzag64_%s(var_%s->var_%s.item[i]), packed_bytes, &packed_bytes_size);\n", _BUILD_TIME_, _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                     } else {
-                        fprintf(fp, "            encode_varint64(var_%s->var_%s.item[i], packed_bytes, &packed_bytes_size);\n", desc->name().c_str(), field->name().c_str());
+                        fprintf(fp, "            encode_varint64_%s(var_%s->var_%s.item[i], packed_bytes, &packed_bytes_size);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                     }
                     fprintf(fp, "        }\n");
-                    fprintf(fp, "        encode_size(packed_bytes_size, buf, &offset);\n");
+                    fprintf(fp, "        encode_size_%s(packed_bytes_size, buf, &offset);\n", _BUILD_TIME_);
                     break;
                 case FieldDescriptor::TYPE_UINT32:
                 case FieldDescriptor::TYPE_INT32:
@@ -1199,12 +1214,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     fprintf(fp, "        packed_bytes_size = 0;\n");
                     fprintf(fp, "        for(i = 0; i < var_%s->var_%s.count; ++i) {\n", desc->name().c_str(), field->name().c_str());
                     if(FieldDescriptor::TYPE_SINT32==field->type()){
-                        fprintf(fp, "            encode_varint32(encode_zigzag32(var_%s->var_%s.item[i]), packed_bytes, &packed_bytes_size);\n", desc->name().c_str(), field->name().c_str());
+                        fprintf(fp, "            encode_varint32_%s(encode_zigzag32_%s(var_%s->var_%s.item[i]), packed_bytes, &packed_bytes_size);\n", _BUILD_TIME_, _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                     } else {
-                        fprintf(fp, "            encode_varint32(var_%s->var_%s.item[i], packed_bytes, &packed_bytes_size);\n", desc->name().c_str(), field->name().c_str());
+                        fprintf(fp, "            encode_varint32_%s(var_%s->var_%s.item[i], packed_bytes, &packed_bytes_size);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                     }
                     fprintf(fp, "        }\n");
-                    fprintf(fp, "        encode_size(packed_bytes_size, buf, &offset);\n");
+                    fprintf(fp, "        encode_size_%s(packed_bytes_size, buf, &offset);\n", _BUILD_TIME_);
                     break;
                 default:
                     fprintf(fp, "[%s:%d] Unknown field type:%s, Please contact the author.\n", __THIS_FILE__, __LINE__, field->type_name());
@@ -1318,11 +1333,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
             if(field->is_repeated())
             {
-                fprintf(fp, "%sencode_varint64(var_%s->var_%s.item[i], buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_varint64_%s(var_%s->var_%s.item[i], buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sencode_varint64(var_%s->var_%s, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_varint64_%s(var_%s->var_%s, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             break;
 
@@ -1334,11 +1349,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
             if(field->is_repeated())
             {
-                fprintf(fp, "%sencode_varint64(encode_zigzag64(var_%s->var_%s.item[i]), buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_varint64_%s(encode_zigzag64_%s(var_%s->var_%s.item[i]), buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sencode_varint64(encode_zigzag64(var_%s->var_%s), buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_varint64_%s(encode_zigzag64_%s(var_%s->var_%s), buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             break;
 
@@ -1351,11 +1366,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
             if(field->is_repeated())
             {
-                fprintf(fp, "%sencode_varint32(var_%s->var_%s.item[i], buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_varint32_%s(var_%s->var_%s.item[i], buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sencode_varint32(var_%s->var_%s, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_varint32_%s(var_%s->var_%s, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             break;
 
@@ -1367,11 +1382,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
             if(field->is_repeated())
             {
-                fprintf(fp, "%sencode_varint32(encode_zigzag32(var_%s->var_%s.item[i]), buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_varint32_%s(encode_zigzag32_%s(var_%s->var_%s.item[i]), buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sencode_varint32(encode_zigzag32(var_%s->var_%s), buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_varint32_%s(encode_zigzag32_%s(var_%s->var_%s), buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             break;
 
@@ -1379,7 +1394,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             if(field->is_repeated())
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                fprintf(fp, "%sencode_size(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size_%s(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1388,7 +1403,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                fprintf(fp, "%sencode_size(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size_%s(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1400,7 +1415,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             if(field->is_repeated())
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                fprintf(fp, "%sencode_size(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size_%s(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1409,7 +1424,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
-                fprintf(fp, "%sencode_size(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size_%s(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
@@ -1424,14 +1439,14 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%sif (0 == var_%s->var_%s.item[i]._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s.item[i]._message_length = _internal_encode_message_%s_%s(&(var_%s->var_%s.item[i]), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
-                fprintf(fp, "%sencode_size(var_%s->var_%s.item[i]._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size_%s(var_%s->var_%s.item[i]._message_length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "%sif (0 == var_%s->var_%s._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s._message_length = _internal_encode_message_%s_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
-                fprintf(fp, "%sencode_size(var_%s->var_%s._message_length, buf, &offset);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sencode_size_%s(var_%s->var_%s._message_length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
 
             if(field->is_repeated())
@@ -1525,7 +1540,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
+                    fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &array_size, &offset);\n", _BUILD_TIME_);
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1582,7 +1597,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
+                    fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &array_size, &offset);\n", _BUILD_TIME_);
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1637,7 +1652,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
+                    fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &array_size, &offset);\n", _BUILD_TIME_);
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1691,7 +1706,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
+                    fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &array_size, &offset);\n", _BUILD_TIME_);
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
@@ -1749,16 +1764,16 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
+                    fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &array_size, &offset);\n", _BUILD_TIME_);
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                decode_varint64(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 if(FieldDescriptor::TYPE_SINT64==field->type()) { 
-                    fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = decode_zigzag64(var_%s->var_%s.item[var_%s->var_%s.count]);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = decode_zigzag64_%s(var_%s->var_%s.item[var_%s->var_%s.count]);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 }
                 fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
                 if(field->is_packed())
@@ -1768,17 +1783,17 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 if(FieldDescriptor::TYPE_SINT64 == field->type()) { 
-                    fprintf(fp, "                var_%s->var_%s = decode_zigzag64(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "                var_%s->var_%s = decode_zigzag64_%s(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 }
                 fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "                decode_varint64(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 if(FieldDescriptor::TYPE_SINT64 == field->type()) { 
-                    fprintf(fp, "                var_%s->var_%s = decode_zigzag64(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "                var_%s->var_%s = decode_zigzag64_%s(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 }
             }
             fprintf(fp, "            } else {\n");
@@ -1802,16 +1817,16 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 {
                     fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
                     fprintf(fp, "                size_t data_offset;\n");
-                    fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &array_size, &offset);\n");
+                    fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &array_size, &offset);\n", _BUILD_TIME_);
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                decode_varint32(buf+offset, buf_len-offset, (DWORD *)&(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                decode_varint32_%s(buf+offset, buf_len-offset, (DWORD *)&(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 if(FieldDescriptor::TYPE_SINT32 == field->type()){
-                    fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = decode_zigzag32(var_%s->var_%s.item[var_%s->var_%s.count]);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = decode_zigzag32_%s(var_%s->var_%s.item[var_%s->var_%s.count]);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 }
                 fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
                 if(field->is_packed())
@@ -1821,17 +1836,17 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                decode_varint32(buf+offset, buf_len-offset, (DWORD *)&(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint32_%s(buf+offset, buf_len-offset, (DWORD *)&(var_%s->var_%s), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 if(FieldDescriptor::TYPE_SINT32==field->type()){
-                    fprintf(fp, "                var_%s->var_%s = decode_zigzag32(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "                var_%s->var_%s = decode_zigzag32_%s(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 }
                 fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "                decode_varint32(buf+offset, buf_len-offset, (DWORD *)&(var_%s->var_%s), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint32_%s(buf+offset, buf_len-offset, (DWORD *)&(var_%s->var_%s), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 if(FieldDescriptor::TYPE_SINT32==field->type()){
-                    fprintf(fp, "                var_%s->var_%s = decode_zigzag32(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                    fprintf(fp, "                var_%s->var_%s = decode_zigzag32_%s(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 }
             }
             fprintf(fp, "            } else {\n");
@@ -1846,7 +1861,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1856,7 +1871,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1866,7 +1881,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else
             {
-                fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1886,7 +1901,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1896,7 +1911,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1906,7 +1921,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else
             {
-                fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1926,7 +1941,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                         map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n", _BUILD_TIME_);
                 fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1938,7 +1953,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n", _BUILD_TIME_);
                 fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1950,7 +1965,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else
             {
-                fprintf(fp, "                decode_size(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n");
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n", _BUILD_TIME_);
                 fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
