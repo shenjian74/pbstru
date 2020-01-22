@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
         var_global.has_query_trigger_delete = TRUE;
         var_global.var_query_trigger_delete = 24;  /* tag:24 */
 
-        buf_len2 = encode_message_GLOBAL_T_safe(&var_global, buf, sizeof(buf));
+        buf_len2 = encode_message_GLOBAL_T(&var_global, buf, sizeof(buf));
         // print_buffer(buf, buf_len2);
         assert(57 == buf_len2);
         std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GLOBAL_T", _THIS_FILE, __LINE__);
@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
         var_Tuple.var_field.item[1].var_fieldid = 2;
         var_Tuple.var_field.item[1].var_value.data = (BYTE *) strdup("jflasjfu32ujfljsljkljkljljoiu");
         var_Tuple.var_field.item[1].var_value.length = strlen((char *) var_Tuple.var_field.item[1].var_value.data);
-        buf_len2 = encode_message_Tuple_safe(&var_Tuple, buf, sizeof(buf));
+        buf_len2 = encode_message_Tuple(&var_Tuple, buf, sizeof(buf));
         assert(87 == buf_len2);
         // print_buffer(buf, buf_len2);
         std::string pb_string = get_pb_string(buf, buf_len2, "cdb.proto", "zte.cdb.Tuple", _THIS_FILE, __LINE__);
@@ -442,7 +442,7 @@ int main(int argc, char *argv[])
         var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data = (BYTE *) strdup("jflasjfu32ujfljsljkljkljljoiu");
         var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.length = strlen((char *) var_AddRequest.var_tuple.item[0].var_field.item[1].var_value.data);
 
-        buf_len1 = encode_message_AddRequest_safe(&var_AddRequest, buf, sizeof(buf));
+        buf_len1 = encode_message_AddRequest(&var_AddRequest, buf, sizeof(buf));
         // printf("buf_len:%zu\n", buf_len1);
         assert(160 == buf_len1);
         std::string pb_string = get_pb_string(buf, buf_len1, "cdb.proto", "zte.cdb.AddRequest", _THIS_FILE, __LINE__);
@@ -496,7 +496,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             decode_message_ut_test_message(buf, size2, &msg);
@@ -535,7 +535,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size3 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
@@ -608,7 +608,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size2);
             // printf("----------------------------------------");
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
@@ -668,7 +668,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
@@ -730,7 +730,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // printf("size2:%zu\n", size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
@@ -790,7 +790,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // printf("size2:%zu\n", size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
@@ -855,7 +855,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
@@ -912,7 +912,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
@@ -955,7 +955,7 @@ int main(int argc, char *argv[])
             msg.var_r_bytes.length = strlen(value12);
             msg.var_r_message.var_d_uint32.count = 0;
 
-            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size2);
             // printf("size2:%zu\n", size2);
             assert(90 == size2);
@@ -1001,7 +1001,7 @@ int main(int argc, char *argv[])
             msg.var_r_bytes.length = sizeof(value12);
             msg.var_r_enum = CLIENT_M;
 
-            size_t size2 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size2);
             // printf("size2:%zu\n", size2);
             assert(128 == size2);
@@ -1075,7 +1075,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size3 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size3);
             // printf("size:%lu\n", size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
@@ -1128,7 +1128,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size3 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size3);
             assert(116 == size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
@@ -1246,7 +1246,7 @@ int main(int argc, char *argv[])
             msg.var_r_message.var_d_uint32.count = 0;
             msg.var_r_enum = CLIENT_M;
 
-            size_t size3 = encode_message_ut_test_message_safe(&msg, buf, sizeof(buf));
+            size_t size3 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             // print_buffer(buf, size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
@@ -1448,7 +1448,7 @@ int main(int argc, char *argv[])
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
             msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
 
-            size_t size2 = encode_message_ut_test_sub_message_safe(&msg, buf, sizeof(buf));
+            size_t size2 = encode_message_ut_test_sub_message(&msg, buf, sizeof(buf));
             // printf("size2:%zu\n", size2);
             assert(6 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_sub_message", _THIS_FILE, __LINE__);

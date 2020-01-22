@@ -5,6 +5,7 @@
 
 #include <string>
 #include <algorithm>
+#include <iostream>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -194,10 +195,6 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "/* parse tag and wire_type value */\n");
     fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
-    fprintf(fp, "#ifdef __cplusplus\n");
-    fprintf(fp, "}\n");
-    fprintf(fp, "#endif\n");
-    fprintf(fp, "\n");
     fprintf(fp, "void encode_varint32(const DWORD value, BYTE *buf, size_t *offset);\n");
     fprintf(fp, "void decode_varint32(const BYTE *buf, const size_t buflen, DWORD *value, size_t *offset);\n");
     fprintf(fp, "void encode_varint64(const WORD64 value, BYTE *buf, size_t *offset);\n");
@@ -208,8 +205,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "SWORD32 decode_zigzag32(const DWORD n);\n");
     fprintf(fp, "WORD64 encode_zigzag64(const SWORD64 n);\n");
     fprintf(fp, "SWORD64 decode_zigzag64(const WORD64 n);\n");
-
-
+    fprintf(fp, "\n");
     fprintf(fp, "#define deal_unknown_field(wire_type, buf, buflen, offset) do {\\\n");
     fprintf(fp, "    size_t tmp_field_len; \\\n");
     fprintf(fp, "    switch(wire_type){ \\\n");
@@ -239,8 +235,12 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    } \\\n");
     fprintf(fp, "} while(0)\n");
-
-    fprintf(fp, "\n/* end of file */\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#ifdef __cplusplus\n");
+    fprintf(fp, "}\n");
+    fprintf(fp, "#endif\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "/* end of file */\n");
     fprintf(fp, "\n");
     fclose(fp);
 
@@ -932,7 +932,7 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "#define clear_message_%s(msg) clear_message_%s_%s(msg)\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
     fprintf(fp, "void clear_message_%s_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "void _clear_message_%s_len_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
-    fprintf(fp, "#define encode_message_%s_safe(msg, buf, buf_size) encode_message_%s_safe_%s((msg), (buf), (buf_size))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
+    fprintf(fp, "#define encode_message_%s(msg, buf, buf_size) encode_message_%s_safe_%s((msg), (buf), (buf_size))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
     fprintf(fp, "size_t encode_message_%s_safe_%s(%s* msg, BYTE* buf, size_t buf_size);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "size_t _internal_encode_message_%s_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "#define decode_message_%s(buf, buf_len, msg) decode_message_%s_%s((buf), (buf_len), (msg))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
