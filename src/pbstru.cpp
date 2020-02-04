@@ -222,31 +222,87 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#define decode_zigzag64(n) decode_zigzag64_%s((n))\n", _BUILD_TIME_);
     fprintf(fp, "SWORD64 decode_zigzag64_%s(const WORD64 n);\n", _BUILD_TIME_);
     fprintf(fp, "\n");
-    fprintf(fp, "#define deal_unknown_field(wire_type, buf, buflen, offset) do {\\\n");
-    fprintf(fp, "    size_t tmp_field_len; \\\n");
-    fprintf(fp, "    switch(wire_type){ \\\n");
+    fprintf(fp, "#define CASE_VARINT_FIELD(buf, buflen, offset) \\\n");
     fprintf(fp, "    case WIRE_TYPE_VARINT: \\\n");
     fprintf(fp, "        decode_size_%s((buf), (buflen), &tmp_field_len, (offset)); \\\n", _BUILD_TIME_);
-    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "        break; \n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define CASE_FIX64_FIELD(buf, buflen, offset) \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX64: \\\n");
     fprintf(fp, "        if(((*(offset)) + sizeof(WORD64)) > (buf_len)) {\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
-    fprintf(fp, "        *(offset) += 8; \\\n");
-    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "        *(offset) += sizeof(WORD64); \\\n");
+    fprintf(fp, "        break; \n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define CASE_LENGTH_DELIMITED_FIELD(buf, buflen, offset) \\\n");
     fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \\\n");
     fprintf(fp, "        decode_size_%s((buf), (buflen), &tmp_field_len, (offset)); \\\n", _BUILD_TIME_);
     fprintf(fp, "        if(((*(offset)) + tmp_field_len) > (buf_len)) {\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
     fprintf(fp, "        *(offset) += tmp_field_len; \\\n");
-    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "        break; \n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define CASE_FIX32_FIELD(buf, buflen, offset) \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX32: \\\n");
     fprintf(fp, "        if(((*(offset)) + sizeof(DWORD)) >= (buf_len)) {\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
-    fprintf(fp, "        *(offset) += 4; \\\n");
+    fprintf(fp, "        *(offset) += sizeof(DWORD); \\\n");
+    fprintf(fp, "        break; \n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define DEAL_UNKNOWN_FIELD(wire_type, buf, buflen, offset) do {\\\n");
+    fprintf(fp, "    size_t tmp_field_len; \\\n");
+    fprintf(fp, "    switch(wire_type){ \\\n");
+    fprintf(fp, "       CASE_VARINT_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_FIX64_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_LENGTH_DELIMITED_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_FIX32_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "    default: \\\n");
     fprintf(fp, "        break; \\\n");
+    fprintf(fp, "    } \\\n");
+    fprintf(fp, "} while(0)\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define DEAL_UNKNOWN_FIELD_EXCEPT_VARINT(wire_type, buf, buflen, offset) do {\\\n");
+    fprintf(fp, "    size_t tmp_field_len; \\\n");
+    fprintf(fp, "    switch(wire_type){ \\\n");
+    fprintf(fp, "       CASE_FIX64_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_LENGTH_DELIMITED_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_FIX32_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "    default: \\\n");
+    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "    } \\\n");
+    fprintf(fp, "} while(0)\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define DEAL_UNKNOWN_FIELD_EXCEPT_FIX64(wire_type, buf, buflen, offset) do {\\\n");
+    fprintf(fp, "    size_t tmp_field_len; \\\n");
+    fprintf(fp, "    switch(wire_type){ \\\n");
+    fprintf(fp, "       CASE_VARINT_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_LENGTH_DELIMITED_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_FIX32_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "    default: \\\n");
+    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "    } \\\n");
+    fprintf(fp, "} while(0)\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf, buflen, offset) do {\\\n");
+    fprintf(fp, "    size_t tmp_field_len; \\\n");
+    fprintf(fp, "    switch(wire_type){ \\\n");
+    fprintf(fp, "       CASE_VARINT_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_FIX64_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_FIX32_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "    default: \\\n");
+    fprintf(fp, "        break; \\\n");
+    fprintf(fp, "    } \\\n");
+    fprintf(fp, "} while(0)\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define DEAL_UNKNOWN_FIELD_EXCEPT_FIX32(wire_type, buf, buflen, offset) do {\\\n");
+    fprintf(fp, "    size_t tmp_field_len; \\\n");
+    fprintf(fp, "    switch(wire_type){ \\\n");
+    fprintf(fp, "       CASE_VARINT_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_FIX64_FIELD((buf), (buflen), (offset)); \\\n");
+    fprintf(fp, "       CASE_LENGTH_DELIMITED_FIELD((buf), (buflen), (offset)); \\\n");
     fprintf(fp, "    default: \\\n");
     fprintf(fp, "        break; \\\n");
     fprintf(fp, "    } \\\n");
@@ -1585,7 +1641,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                offset += sizeof(DWORD);\n");
             }
             fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            if (field->is_packed()) {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            else {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_FIX32(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
             fprintf(fp, "            }\n");
             break;
 
@@ -1639,7 +1700,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                offset += sizeof(float);\n");
             }
             fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            if (field->is_packed()) {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            else {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_FIX32(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
             fprintf(fp, "            }\n");
             break;
 
@@ -1694,7 +1760,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                offset += sizeof(WORD64);\n");
             }
             fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            if (field->is_packed()) {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            else {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_FIX64(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
             fprintf(fp, "            }\n");
             break;
 
@@ -1748,7 +1819,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                offset += sizeof(double);\n");
             }
             fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            if (field->is_packed()) {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            else {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_FIX64(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
             fprintf(fp, "            }\n");
             break;
 
@@ -1803,7 +1879,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 }
             }
             fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            if (field->is_packed()) {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            else {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_VARINT(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
             fprintf(fp, "            }\n");
             break;
 
@@ -1856,7 +1937,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 }
             }
             fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            if (field->is_packed()) {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            else {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_VARINT(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
             fprintf(fp, "            }\n");
             break;
 
@@ -1895,7 +1981,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
             fprintf(fp, "            }\n");
             break;
 
@@ -1935,7 +2021,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                offset += var_%s->var_%s.length;\n", desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
             fprintf(fp, "            }\n");
             break;
 
@@ -1981,7 +2067,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                offset += tmp_field_len;\n");
             }
             fprintf(fp, "            } else {\n");
-            fprintf(fp, "                deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
             fprintf(fp, "            }\n");
             break;
         default:
@@ -1991,7 +2077,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         fprintf(fp, "            break;\n\n");
     }
     fprintf(fp, "        default:\n");
-    fprintf(fp, "            deal_unknown_field(wire_type, buf+offset, buf_len-offset, &offset);\n");
+    fprintf(fp, "            DEAL_UNKNOWN_FIELD(wire_type, buf+offset, buf_len-offset, &offset);\n");
     fprintf(fp, "            break;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    }\n");
