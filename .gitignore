@@ -24,3 +24,4 @@ automake*
 protobuf3
 *.orig
 *.bak
+bin/pb.bin

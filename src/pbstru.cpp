@@ -3,15 +3,20 @@
 # pragma warning(disable: 4482)
 #endif
 
+#ifdef _WIN32
+#  include <windows.h>
+#  include <io.h>
+#else
+#  include <unistd.h>
+#endif
 #include <string>
 #include <algorithm>
 #include <iostream>
 #include <stdio.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <ctype.h>
 #include "importer.h"
-#include "./version.h"
+#include "version.h"
 
 typedef const char *LPCSTR;
 typedef char *LPSTR;
@@ -2050,11 +2055,13 @@ static inline void freep(char **p)
     }
     *p = NULL;
 }
-#define _cleanup_free_ __attribute__((cleanup(freep)))
 
 int create_path(string &path)
 {
-    _cleanup_free_ char* dir_name = (char *)malloc(path.length() + 10);
+#ifdef _WIN32
+    return ::CreateDirectory(path.c_str(), NULL);
+#else
+    char dir_name[512];
     if(path[path.length()-1] != path_sep[0])
     {
         path += path_sep;
@@ -2083,6 +2090,7 @@ int create_path(string &path)
         }
     }
     return 0;
+#endif
 }
 
 int get_syntax(LPCSTR proto_filename)
@@ -2340,10 +2348,10 @@ int main(int argc, char *argv[])
         ///////////////////////////////////////////////////
         if(3 == syntax)
         {
-            int fd = -1;
             sprintf(no_map_filename, "%s.tmp_XXXXXX", proto_filename);
-            fd = mkstemp(no_map_filename);
-            if(-1 == fd)
+            strcpy(no_map_filename, _mktemp(no_map_filename));
+            FILE *fp = fopen(no_map_filename, "w");
+            if(NULL == fp)
             {
                 printf("Cannot create tempfile.\n");
                 delete importer;
@@ -2352,9 +2360,8 @@ int main(int argc, char *argv[])
             else
             {
                 printf("tempfile %s created.\n", no_map_filename);
-                close(fd);
+                fclose(fp);
             }
-            // sprintf(no_map_filename, "%s.tmp", proto_filename);
             convert_pbv3(proto_filename, no_map_filename);
         }
         else

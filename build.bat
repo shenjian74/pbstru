@@ -1,5 +1,6 @@
 @echo off
 
+set path=%path%;"C:\Program Files\CMake\bin";"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin"
 dir protobuf3 | find "cmake"   
 if %errorlevel%==0 goto found
 if %errorlevel%==1 goto not_found
@@ -19,20 +20,20 @@ del /S /Q /F build >nul
 rd /S /Q build
 md build
 cd build
-"C:\Program Files\CMake\bin\cmake.exe" -G "CodeBlocks - MinGW Makefiles" -DCMAKE_C_FLAGS="-Wno-narrowing" -DCMAKE_CXX_FLAGS="-Wno-narrowing" ..
+cmake.exe -DCMAKE_C_FLAGS="-Wno-narrowing" -DCMAKE_CXX_FLAGS="-Wno-narrowing" ..
 cd ..
 
 :makefile_found
 cd build
-mingw32-make
-copy protoc.exe ..\..\..\bin
+msbuild.exe protoc.vcxproj
+copy Debug\protoc.exe ..\..\..\bin
 cd ..\..\..
 del /S /Q /F build >nul
 rd /S /Q build
 md build
 cd build
-"C:\Program Files\CMake\bin\cmake.exe" -G "CodeBlocks - MinGW Makefiles" ..
-mingw32-make
+cmake.exe ..
+msbuild.exe pbstru.vcxproj
 move pbstru.exe ..\bin\
 cd ..\bin
 call gen_codec.bat
@@ -41,9 +42,9 @@ del /S /Q /F build >nul
 rd /S /Q build
 md build
 cd build
-"C:\Program Files\CMake\bin\cmake.exe" -G "CodeBlocks - MinGW Makefiles" ..
-mingw32-make
-move /y test_codec.exe ..\..\bin
+cmake.exe ..
+msbuild.exe test_codec.vcxproj
+move /y Debug\test_codec.exe ..\..\bin
 cd ..\..\bin
 test_codec.exe
 cd ..

@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <asyncconfirmreq.h>
-#include <sys/time.h>
+// #include <sys/time.h>
 #include <string>
 #include "addrequest.h"
 #include "compoundrequest.h"
@@ -113,11 +113,11 @@ std::string get_pb_string(BYTE * buf,
 #endif // _WIN32
     printf("[%s:%d]> %s\n", filename, lineno, command);
 
-    FILE *p = popen(command, "r");
+    FILE *p = _popen(command, "r");
     while (fgets(line, sizeof(line), p))
         result += line;
     printf("result:[\n%s\n]\n", result.c_str());
-    pclose(p);
+    _pclose(p);
     return result;
 }
 
@@ -149,9 +149,6 @@ int main(int argc, char *argv[])
 {
     BYTE buf[1024];
     size_t buf_len1, buf_len2;
-
-    struct timeval tv_begin, tv_end;
-    gettimeofday(&tv_begin, NULL);
 
     {
         long value = 0;
@@ -1463,13 +1460,6 @@ int main(int argc, char *argv[])
     printf("sizeof(st_compountrequest): %zu\n", sizeof(st_compoundrequest));
     printf("sizeof(st_response): %zu\n", sizeof(st_response));
     printf("sizeof(st_tuple): %zu\n", sizeof(st_tuple));
-
-    // printf("<Press any key to continue ...>\n");
-    // getchar();
-
-    gettimeofday(&tv_end, NULL);
-    double diff = 1000000.0 * (tv_end.tv_sec - tv_begin.tv_sec) + tv_end.tv_usec - tv_begin.tv_usec;
-    printf("[%s:%d] spend %.0lf(us)\n", __FILE__, __LINE__, diff);
 
     printf("%s Done.\n", argv[0]);
     return 0;
