@@ -4,9 +4,12 @@ project (${PROJECT_NAME})
 cmake_minimum_required (VERSION 2.6)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
+IF (MSVC)
+ELSE ()
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -g")
 set(CMAKE_EXE_LINKER_FLAGS "-static -pthread")
+ENDIF (MSVC)
 
 aux_source_directory("." SRC_FILES1)
 aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/../bin/codec/source" SRC_FILES1)

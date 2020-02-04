@@ -475,7 +475,8 @@ static bool get_max_count(const string &message_name, const string &field_name, 
         if (NULL == fp_option)
         {
             printf("Error: [%s:%d] Cannot open file:%s for read.\n", __THIS_FILE__, __LINE__, option_filename.c_str());
-            return(10);
+            max_count = "10";
+            return true;
         }
     }
 
@@ -497,7 +498,7 @@ static bool get_max_count(const string &message_name, const string &field_name, 
             if (NULL == num_str)
             {
                 printf("Error: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n",
-                       __THIS_FILE__, __LINE__, key.c_str(), option_filename.c_str());
+                    __THIS_FILE__, __LINE__, key.c_str(), option_filename.c_str());
                 return false;
             }
             else
@@ -954,7 +955,7 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "size_t encode_message_%s_safe_%s(%s* msg, BYTE* buf, size_t buf_size);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "size_t _internal_encode_message_%s_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "#define decode_message_%s(buf, buf_len, msg) decode_message_%s_%s((buf), (buf_len), (msg))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
-    fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, size_t buf_len, %s* msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
+    fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
 
     fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
@@ -2058,14 +2059,14 @@ static inline void freep(char **p)
 
 int create_path(string &path)
 {
+    if (path[path.length() - 1] != path_sep[0])
+    {
+        path += path_sep;
+    }
 #ifdef _WIN32
     return ::CreateDirectory(path.c_str(), NULL);
 #else
     char dir_name[512];
-    if(path[path.length()-1] != path_sep[0])
-    {
-        path += path_sep;
-    }
     strcpy(dir_name, path.c_str());
 
     size_t len = path.length();
@@ -2208,7 +2209,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                             }
                         }
                         len = i - start;
-                        // 定位到key_type信息
+                        // 锟斤拷位锟斤拷key_type锟斤拷息
                         memcpy(key_type, buf + start, len);
                         key_type[len] = EOS;
                         printf("key_type:%s\n", key_type);

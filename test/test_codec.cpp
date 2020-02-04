@@ -213,16 +213,16 @@ int main(int argc, char *argv[])
         assert(3 == offset);
         assert(65536 == value);
 
-        long long value3 = 0xFFFFFFFF;
+        WORD64 value3 = 0xFFFFFFFF;
         offset = 0;
-        encode_varint32(value3, buf, &offset);
+        encode_varint64(value3, buf, &offset);
         // print_buffer(buf, offset);
         assert(5 == offset);
         buf_len1 = offset;
         assert(0xFF == buf[0]);
         assert(0x0F == buf[4]);
         offset = 0;
-        decode_varint32(buf, buf_len1, (uint32_t *)&value3, &offset);
+        decode_varint64(buf, buf_len1, &value3, &offset);
         assert(5 == offset);
         assert(0xFFFFFFFF == value3);
 
@@ -1107,7 +1107,7 @@ int main(int argc, char *argv[])
             constru_message_ut_test_message(&msg);
             msg.has_o_float = TRUE;
             msg.var_o_float = 0.0;
-            msg.var_f_float.count = 2.1;
+            msg.var_f_float.count = 2;
             msg.var_f_float.item[0] = -1.2;
             msg.var_f_float.item[1] = 13.3;
             msg.var_d_float.item[msg.var_d_float.count++] = 1000.4;

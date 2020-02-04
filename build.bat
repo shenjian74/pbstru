@@ -34,7 +34,7 @@ md build
 cd build
 cmake.exe ..
 msbuild.exe pbstru.vcxproj
-move pbstru.exe ..\bin\
+move Debug\pbstru.exe ..\bin
 cd ..\bin
 call gen_codec.bat
 cd ..\test
