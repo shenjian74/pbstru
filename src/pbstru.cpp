@@ -1829,9 +1829,107 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             break;
 
         case FieldDescriptor::TYPE_BOOL:
+            if(field->is_packed()) {
+                fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
+            } else {
+                fprintf(fp, "            if(WIRE_TYPE_VARINT == wire_type) {\n");
+            }
+                fprintf(fp, "                WORD64 tmp_value;\n");
+            if(field->is_repeated())
+            {
+                char spaces[100];
+                spaces[0] = '\0';
+                if(field->is_packed())
+                {
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
+                    fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &array_size, &offset);\n", _BUILD_TIME_);
+                    fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
+                    strcpy(spaces, "    ");
+                }
+                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
+                fprintf(fp, "%s                }\n", spaces);
+                fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", spaces, _BUILD_TIME_);
+                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = (tmp_value==0)?FALSE:TRUE;\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
+                if(field->is_packed()) {
+                    fprintf(fp, "                }\n");
+                }
+            }
+            else if(field->is_optional())
+            {
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                var_%s->var_%s = (tmp_value==0)?FALSE:TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+            }
+            else
+            {
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                var_%s->var_%s = (tmp_value==0)?FALSE:TRUE;\n", desc->name().c_str(), field->name().c_str());
+            }
+            fprintf(fp, "            } else {\n");
+            if (field->is_packed()) {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            else {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_VARINT(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            fprintf(fp, "            }\n");
+            break;
+
+        case FieldDescriptor::TYPE_ENUM:
+            if(field->is_packed()) {
+                fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
+            } else {
+                fprintf(fp, "            if(WIRE_TYPE_VARINT == wire_type) {\n");
+            }
+                fprintf(fp, "                WORD64 tmp_value;\n");
+            if(field->is_repeated())
+            {
+                char spaces[100];
+                spaces[0] = '\0';
+                if(field->is_packed())
+                {
+                    fprintf(fp, "                size_t array_size = 0;  /* packed repeated field */\n");
+                    fprintf(fp, "                size_t data_offset;\n");
+                    fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &array_size, &offset);\n", _BUILD_TIME_);
+                    fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
+                    strcpy(spaces, "    ");
+                }
+                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
+                fprintf(fp, "%s                }\n", spaces);
+                fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", spaces, _BUILD_TIME_);
+                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = (int)tmp_value;\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
+                if(field->is_packed()) {
+                    fprintf(fp, "                }\n");
+                }
+            }
+            else if(field->is_optional())
+            {
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                var_%s->var_%s = (int)tmp_value;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
+            }
+            else
+            {
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                var_%s->var_%s = (int)tmp_value;\n", desc->name().c_str(), field->name().c_str());
+            }
+            fprintf(fp, "            } else {\n");
+            if (field->is_packed()) {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_LENGTH_DELIMITED(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            else {
+                fprintf(fp, "                DEAL_UNKNOWN_FIELD_EXCEPT_VARINT(wire_type, buf+offset, buf_len-offset, &offset);\n");
+            }
+            fprintf(fp, "            }\n");
+            break;
+
         case FieldDescriptor::TYPE_UINT64:
         case FieldDescriptor::TYPE_INT64:
-        case FieldDescriptor::TYPE_ENUM:
         case FieldDescriptor::TYPE_SINT64:
             if(field->is_packed()) {
                 fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
