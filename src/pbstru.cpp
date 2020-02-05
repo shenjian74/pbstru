@@ -2534,7 +2534,11 @@ int main(int argc, char *argv[])
         if(3 == syntax)
         {
             sprintf(no_map_filename, "%s.tmp_XXXXXX", proto_filename);
+#ifdef _WIN32
             strcpy(no_map_filename, _mktemp(no_map_filename));
+#else
+            strcpy(no_map_filename, mktemp(no_map_filename));
+#endif
             FILE *fp = fopen(no_map_filename, "w");
             if(NULL == fp)
             {
