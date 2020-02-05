@@ -113,11 +113,19 @@ std::string get_pb_string(BYTE * buf,
 #endif // _WIN32
     printf("[%s:%d]> %s\n", filename, lineno, command);
 
+#ifdef _WIN32
     FILE *p = _popen(command, "r");
+#else    
+    FILE *p = popen(command, "r");
+#endif    
     while (fgets(line, sizeof(line), p))
         result += line;
     printf("result:[\n%s\n]\n", result.c_str());
+#ifdef _WIN32
     _pclose(p);
+#else    
+    pclose(p);
+#endif    
     return result;
 }
 
