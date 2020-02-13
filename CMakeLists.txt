@@ -13,7 +13,7 @@ IF (MSVC)
 ELSE()
   set(CMAKE_C_FLAGS "-Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wsign-compare -Wmissing-prototypes -Wpacked -Wunreachable-code -Winline")
   set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -Wpointer-arith -Wcast-align -Wsign-compare -Wpacked -Wunreachable-code -Winline -Wno-unused-parameter")
-  set(CMAKE_EXE_LINKER_FLAGS "-static -pthread")
+#   set(CMAKE_EXE_LINKER_FLAGS "-static -pthread")
 ENDIF (MSVC)
 
 find_program(CCACHE_FOUND ccache)
