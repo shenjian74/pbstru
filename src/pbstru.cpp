@@ -1606,9 +1606,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     fprintf(fp, "                for(data_offset=offset; (offset-data_offset)<array_size; ) {\n");
                     strcpy(spaces, "    ");
                 }
-                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n",
-                        spaces, desc->name().c_str(), field->name().c_str(),
-                        map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                if((offset + sizeof(DWORD)) > buf_len) {\n", spaces);
@@ -1616,8 +1614,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s                offset += sizeof(DWORD);\n", spaces);
-                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n",
-                        spaces, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
                 if(field->is_packed())
                 {
                     fprintf(fp, "                }\n");
