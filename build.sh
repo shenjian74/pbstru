@@ -31,7 +31,7 @@ if [ -f "protobuf3/Makefile" ]; then
   mv pbstru ../bin && \
   cd ../bin && \
   rm -rf codec &&\
-  ./pbstru cudr cdb.proto cdb_ccc.proto codec && \
+  ./gen_codec.sh && \
   mkdir ../build/test && \
   cd ../build/test && \
   cmake ../../test && \

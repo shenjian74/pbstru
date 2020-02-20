@@ -13,6 +13,7 @@
 #include "global_t.h"
 #include "ut_test_message.h"
 #include "ut_test_sub_message.h"
+#include "http2appreq.h"
 
 #define _THIS_FILE "pbstru.cpp"
 
@@ -1458,9 +1459,31 @@ int main(int argc, char *argv[])
             assert(6 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_sub_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
-            decode_message_ut_test_sub_message(buf, size2, &msg);
+            assert(TRUE == decode_message_ut_test_sub_message(buf, size2, &msg));
             assert(1000 == msg.var_d_uint32.item[0]);
             assert(1001 == msg.var_d_uint32.item[1]);
+        }
+    }
+
+    {
+        st_http2appreq msg;
+        // constru_message_ut_test_sub_message(&msg);
+        // msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
+        // msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
+
+        // size_t size2 = encode_message_ut_test_sub_message(&msg, buf, sizeof(buf));
+        // printf("size2:%zu\n", size2);
+        // assert(6 == size2);
+        FILE *fp = fopen("http2appreq.bin", "r");
+        if(NULL!=fp){
+            size_t size2 = fread(buf, 1, sizeof(buf), fp);
+            fclose(fp);
+            std::string pb_string = get_pb_string(buf, size2, "Http2Proxy.Http2AppReq.proto", "http2proxy.Http2AppReq", _THIS_FILE, __LINE__);
+            assert(pb_string.length()>0);
+            assert(TRUE == decode_message_Http2AppReq(buf, size2, &msg));
+            assert(TRUE == msg.has_url);
+            assert(42 == msg.var_url.length);
+            assert(0==memcmp(msg.var_url.data, "/nudr-dr/v1/application-data/pfds/1234_001", msg.var_url.length));
         }
     }
 

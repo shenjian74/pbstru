@@ -1,0 +1,38 @@
+syntax = "proto3";
+package http2proxy;
+
+enum ReqType{
+	NORMAL_REQ = 0; // normal request
+	SUBSCRIBE_REQ = 1; // response，由HTTP协议栈丢弃响应
+}
+	
+message Http2IpAddr {
+	bytes ip = 1;
+	uint32 port = 2;
+}
+
+message Http2TransParam {
+    Http2IpAddr local = 1;
+    Http2IpAddr remote = 2;
+	uint32 streamId = 3;
+}
+
+message Http2Jid {
+	uint32  jno = 1; 
+    uint32  comId = 2;        
+}
+
+message Http2AppInfo {
+	bytes  serviceAbility = 1;
+	bytes  serviceTypeName = 2;
+	uint32 serviceInst = 3;
+	bytes  scTypeName = 4;
+	uint32 userGroupId = 5;
+
+	Http2Jid jid = 6;
+}
+
+enum HttpVersion{
+	HTTP_2= 0; // http 2
+	HTTP_11 = 1; // http 1.1
+}
