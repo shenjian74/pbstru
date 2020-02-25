@@ -140,8 +140,17 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, genbypbstru);
     fprintf(fp, "#pragma once\n");
     fprintf(fp, "\n");
+    fprintf(fp, "#define _PBSTRU_BUILD_TIME_ %s\n", _BUILD_TIME_);
+    fprintf(fp, "\n");
+    fprintf(fp, "#include <stdio.h>\n");
     fprintf(fp, "#include <stdlib.h>\n");
     fprintf(fp, "#include <memory.h>\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define PBSTRU_RC_SUCCESS 0\n");
+    fprintf(fp, "#define PBSTRU_RC_BUFOVERFLOW 1\n");
+    fprintf(fp, "#define PBSTRU_RC_PARSETAG 2\n");
+    fprintf(fp, "#define PBSTRU_RC_MAXCOUNT 3\n");
+    fprintf(fp, "#define PBSTRU_RC_DECODEMSG 4\n");
     fprintf(fp, "\n");
     fprintf(fp, "#define WIRE_TYPE_VARINT 0\n");
     fprintf(fp, "#define WIRE_TYPE_FIX64 1\n");
@@ -197,9 +206,9 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
 
-    fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset), FALSE)\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset), FALSE, NULL, 0)\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "/* parse tag and wire_type value */\n");
-    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL use_old_version);\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL use_old_version, char *errinfo, const size_t maxlen_errinfo);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
     fprintf(fp, "#define encode_varint32(value, buf, offset) encode_varint32_%s((value), (buf), (offset))\n", _BUILD_TIME_);
     fprintf(fp, "void encode_varint32_%s(const DWORD value, BYTE *buf, size_t *offset);\n", _BUILD_TIME_);
@@ -230,6 +239,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#define CASE_FIX64_FIELD(buf, buflen, offset) \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX64: \\\n");
     fprintf(fp, "        if(((*(offset)) + sizeof(WORD64)) > (buf_len)) {\\\n");
+    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
     fprintf(fp, "        *(offset) += sizeof(WORD64); \\\n");
@@ -239,6 +249,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \\\n");
     fprintf(fp, "        decode_size_%s((buf), (buflen), &tmp_field_len, (offset)); \\\n", _BUILD_TIME_);
     fprintf(fp, "        if(((*(offset)) + tmp_field_len) > (buf_len)) {\\\n");
+    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
     fprintf(fp, "        *(offset) += tmp_field_len; \\\n");
@@ -247,6 +258,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#define CASE_FIX32_FIELD(buf, buflen, offset) \\\n");
     fprintf(fp, "    case WIRE_TYPE_FIX32: \\\n");
     fprintf(fp, "        if(((*(offset)) + sizeof(DWORD)) >= (buf_len)) {\\\n");
+    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\\\n");
     fprintf(fp, "            return FALSE;\\\n");
     fprintf(fp, "        }\\\n");
     fprintf(fp, "        *(offset) += sizeof(DWORD); \\\n");
@@ -308,6 +320,13 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    } \\\n");
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
+    fprintf(fp, "#define PRINT_ERRINFO(ret_code) do { \\\n");
+    fprintf(fp, "    if(NULL!=errinfo){ \\\n");
+    fprintf(fp, "        size_t len = strnlen(errinfo, maxlen_errinfo); \\\n");
+    fprintf(fp, "        snprintf(errinfo+len, maxlen_errinfo, \"%%d[%%s:%%d]\", (ret_code), __THIS_FILE__, __LINE__); \\\n");
+    fprintf(fp, "    } \\\n");
+    fprintf(fp, "} while(0)\n");
+    fprintf(fp, "\n");
     fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
     fprintf(fp, "#endif\n");
@@ -326,11 +345,13 @@ int gen_comm(const string& nf_name, const string &target_dir)
 
     fprintf(fp, genbypbstru);
     fprintf(fp, "#include \"pbstru_comm.h\"\n");
+    fprintf(fp, "static const char __THIS_FILE__[] = \"pbstru_comm.c\";\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE *buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL old_version) {\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE *buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL old_version, char *errinfo, const size_t maxlen_errinfo) {\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "    if(buf[0] & 0x80) {\n");
     fprintf(fp, "        if(buflen<2) {\n");
+    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\\\n");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "        if(TRUE == old_version) {\n");
@@ -343,6 +364,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        *offset += 2;\n");
     fprintf(fp, "    } else {\n");
     fprintf(fp, "        if(buflen<1) {\n");
+    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\\\n");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "        *field_num = buf[0] >> 3;\n");
@@ -1010,8 +1032,9 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "#define encode_message_%s(msg, buf, buf_size) encode_message_%s_safe_%s((msg), (buf), (buf_size))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
     fprintf(fp, "size_t encode_message_%s_safe_%s(%s* msg, BYTE* buf, size_t buf_size);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "size_t _internal_encode_message_%s_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
-    fprintf(fp, "#define decode_message_%s(buf, buf_len, msg) decode_message_%s_%s((buf), (buf_len), (msg))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
-    fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
+    fprintf(fp, "#define decode_message_%s(buf, buf_len, msg) decode_message_%s_%s((buf), (buf_len), (msg), NULL, 0)\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
+    fprintf(fp, "#define decode_message_%s_ex(buf, buf_len, msg, errinfo, maxlen_errinfo) decode_message_%s_%s((buf), (buf_len), (msg), (errinfo), (maxlen_errinfo))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
+    fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* msg, char *errinfo, const size_t maxlen_errinfo);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
 
     fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
@@ -1174,8 +1197,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     tolower(name_lower);
     string struct_name = struct_prefix + name_lower + struct_postfix;
 
-    string filename = target_dir + "source" + path_sep + name_lower;
-    filename += ".c";
+    string basefile = name_lower + ".c";
+    string filename = target_dir + "source" + path_sep + basefile;
     FILE *fp = fopen(filename.c_str(), "wt");
     if(NULL == fp)
     {
@@ -1185,7 +1208,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
     fprintf(fp, genbypbstru);
     fprintf(fp, "#include \"%s.h\"\n", name_lower.c_str());
-
+    fprintf(fp, "static const char __THIS_FILE__[] = \"%s\";\n", basefile.c_str());
     fprintf(fp, "\n");
     fprintf(fp, "/* lint -save -e701 -e647 */\n");
     fprintf(fp, "\n");
@@ -1558,7 +1581,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
 ///////////////////////////////////////////////////////////////////////////
 // Decode function
-    fprintf(fp, "\nBOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* var_%s) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "\nBOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* var_%s, char *errinfo, const size_t maxlen_errinfo) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "    size_t offset = 0;\n");
     // use this variable if has a sub-message
     for(int i=0; i<desc->field_count(); ++i)
@@ -1573,11 +1596,13 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "    BYTE wire_type;\n\n");
     fprintf(fp, "    clear_message_%s(var_%s);\n", desc->name().c_str(), desc->name().c_str());
     fprintf(fp, "    if(0 == buf_len) {\n");
+    fprintf(fp, "        PRINT_ERRINFO(PBSTRU_RC_SUCCESS);\n");
     fprintf(fp, "        return TRUE;\n");
     fprintf(fp, "    }\n\n");
 
     fprintf(fp, "    for(;offset < buf_len;) {\n");
-    fprintf(fp, "        if(FALSE == %s_parse_tag_byte_%s(buf+offset, buf_len-offset, &field_num, &wire_type, &offset, %s)) {\n", nf_name.c_str(), _BUILD_TIME_, use_old_version?"TRUE":"FALSE");
+    fprintf(fp, "        if(FALSE == %s_parse_tag_byte_%s(buf+offset, buf_len-offset, &field_num, &wire_type, &offset, %s, errinfo, maxlen_errinfo)) {\n", nf_name.c_str(), _BUILD_TIME_, use_old_version?"TRUE":"FALSE");
+    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_PARSETAG);\n");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "        switch(field_num) {\n");
@@ -1607,9 +1632,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                if((offset + sizeof(DWORD)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = *((DWORD *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1623,6 +1650,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else if(field->is_optional())
             {
                 fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
@@ -1632,6 +1660,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((DWORD *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
@@ -1666,9 +1695,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                if((offset + sizeof(float)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = *((float *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1682,6 +1713,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else if(field->is_optional())
             {
                 fprintf(fp, "                if((offset + sizeof(float)) > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((float *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
@@ -1691,6 +1723,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "                if((offset + sizeof(float)) > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((float *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
@@ -1726,9 +1759,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                if((offset + sizeof(WORD64)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = *((WORD64 *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1742,6 +1777,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else if(field->is_optional())
             {
                 fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
@@ -1751,6 +1787,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((WORD64 *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
@@ -1785,9 +1822,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                if((offset + sizeof(double)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = *((double *)(buf + offset));\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -1801,6 +1840,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else if(field->is_optional())
             {
                 fprintf(fp, "                if((offset + sizeof(double)) > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((double *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
@@ -1810,6 +1850,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "                if((offset + sizeof(double)) > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s = *((double *)(buf + offset));\n", desc->name().c_str(), field->name().c_str());
@@ -1845,6 +1886,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", spaces, _BUILD_TIME_);
@@ -1895,6 +1937,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", spaces, _BUILD_TIME_);
@@ -1946,6 +1989,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -2004,6 +2048,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                     strcpy(spaces, "    ");
                 }
                 fprintf(fp, "%s                if(var_%s->var_%s.count >= %s) {\n", spaces, desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                decode_varint32_%s(buf+offset, buf_len-offset, (DWORD *)&(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -2046,10 +2091,12 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             if(field->is_repeated())
             {
                 fprintf(fp, "                if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n");
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s.item[var_%s->var_%s.count].data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -2060,6 +2107,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
@@ -2070,6 +2118,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s.data = (char *)(buf + offset);\n", desc->name().c_str(), field->name().c_str());
@@ -2084,12 +2133,13 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
             if(field->is_repeated())
             {
-                fprintf(fp, "                if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
-                        map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "                if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n");
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s.item[var_%s->var_%s.count].data = buf + offset;\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
@@ -2100,6 +2150,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
@@ -2110,6 +2161,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                var_%s->var_%s.data = buf + offset;\n", desc->name().c_str(), field->name().c_str());
@@ -2124,15 +2176,17 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             fprintf(fp, "            if(WIRE_TYPE_LENGTH_DELIMITED == wire_type) {\n");
             if(field->is_repeated())
             {
-                fprintf(fp, "                if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(),
-                        map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "                if(var_%s->var_%s.count >= %s) {\n", desc->name().c_str(), field->name().c_str(), map_array_size.at(field->containing_type()->name() + ":" + field->name()).c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n");
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n", _BUILD_TIME_);
                 fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_DECODEMSG);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                offset += tmp_field_len;\n");
@@ -2142,9 +2196,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n", _BUILD_TIME_);
                 fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_field_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_DECODEMSG);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                offset += tmp_field_len;\n");
@@ -2154,9 +2210,11 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n", _BUILD_TIME_);
                 fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                if(FALSE == decode_message_%s(buf + offset, tmp_field_len, &(var_%s->var_%s))) {\n", field->message_type()->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_field_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_DECODEMSG);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                offset += tmp_field_len;\n");

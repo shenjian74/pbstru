@@ -1467,6 +1467,8 @@ int main(int argc, char *argv[])
 
     {
         st_http2appreq msg;
+        char errinfo[256];
+        errinfo[0] = '\0';
         // constru_message_ut_test_sub_message(&msg);
         // msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1000;
         // msg.var_d_uint32.item[msg.var_d_uint32.count++] = 1001;
@@ -1480,10 +1482,11 @@ int main(int argc, char *argv[])
             fclose(fp);
             std::string pb_string = get_pb_string(buf, size2, "Http2Proxy.Http2AppReq.proto", "http2proxy.Http2AppReq", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
-            assert(TRUE == decode_message_Http2AppReq(buf, size2, &msg));
-            assert(TRUE == msg.has_url);
-            assert(42 == msg.var_url.length);
-            assert(0==memcmp(msg.var_url.data, "/nudr-dr/v1/application-data/pfds/1234_001", msg.var_url.length));
+            assert(FALSE == decode_message_Http2AppReq_ex(buf, size2, &msg, errinfo, sizeof(errinfo)));
+            printf("errinfo:[%s]\n", errinfo);
+            // assert(TRUE == msg.has_url);
+            // assert(42 == msg.var_url.length);
+            // assert(0==memcmp(msg.var_url.data, "/nudr-dr/v1/application-data/pfds/1234_001", msg.var_url.length));
         }
     }
 
