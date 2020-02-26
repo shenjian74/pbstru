@@ -322,8 +322,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "\n");
     fprintf(fp, "#define PRINT_ERRINFO(ret_code) do { \\\n");
     fprintf(fp, "    if(NULL!=errinfo){ \\\n");
-    fprintf(fp, "        size_t len = strnlen(errinfo, maxlen_errinfo); \\\n");
-    fprintf(fp, "        snprintf(errinfo+len, maxlen_errinfo, \"%%d[%%s:%%d]\", (ret_code), __THIS_FILE__, __LINE__); \\\n");
+    fprintf(fp, "        snprintf(errinfo, maxlen_errinfo, \"%%d[%%s:%%d]\", (ret_code), __THIS_FILE__, __LINE__); \\\n");
     fprintf(fp, "    } \\\n");
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
@@ -2186,7 +2185,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_DECODEMSG);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                offset += tmp_field_len;\n");
@@ -2200,7 +2198,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_field_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_DECODEMSG);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                offset += tmp_field_len;\n");
@@ -2214,7 +2211,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_field_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_DECODEMSG);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                offset += tmp_field_len;\n");
