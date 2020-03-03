@@ -2246,7 +2246,7 @@ int gen_all_from_file(const string& nf_name, const FileDescriptor *f, string &ta
     {
         bool use_old_version = false;
         const Descriptor* desc = f->message_type(i);
-        if(desc->name()=="GLOBAL_T"){
+        if(desc->name()=="GLOBAL_T" || desc->name()=="codec_cdb_GLOBAL_T"){
             printf("Info: message type is %s, use old version to encode tag info.\n", desc->name().c_str());
             use_old_version = true;
         }

@@ -30,7 +30,6 @@ if [ -f "protobuf3/Makefile" ]; then
   make && \
   mv pbstru ../bin && \
   cd ../bin && \
-  rm -rf codec &&\
   ./gen_codec.sh && \
   mkdir ../build/test && \
   cd ../build/test && \

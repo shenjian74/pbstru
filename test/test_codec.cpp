@@ -10,6 +10,7 @@
 #include "response.h"
 #include "statresp.h"
 #include "global_t.h"
+#include "globalconfigrsp.h"
 #include "ut_test_message.h"
 #include "ut_test_sub_message.h"
 #include "http2appreq.h"
@@ -1487,6 +1488,221 @@ int main(int argc, char *argv[])
             // assert(42 == msg.var_url.length);
             // assert(0==memcmp(msg.var_url.data, "/nudr-dr/v1/application-data/pfds/1234_001", msg.var_url.length));
         }
+    }
+
+    {
+        st_global_t var_global;
+        constru_message_GLOBAL_T(&var_global);
+
+        var_global.var_mdbSize = 1;  /* tag:1 */
+        var_global.var_log_size = 2;  /* tag:2 */
+        var_global.var_sync_time = 3;  /* tag:3 */
+        var_global.var_auto_scale = 4;  /* tag:4 */
+        var_global.var_db_alarm_thre = 5;  /* tag:5 */
+        var_global.var_scale_limit = 6;  /* tag:6 */
+        var_global.var_sub_ntf_switch = 7;  /* tag:7 */
+        var_global.has_overload_cdn_tps_limit = TRUE;
+        var_global.var_overload_cdn_tps_limit = 8;  /* tag:8 */
+        var_global.has_overload_level1_cpu = TRUE;
+        var_global.var_overload_level1_cpu = 9;  /* tag:9 */
+        var_global.has_overload_level2_cpu = TRUE;
+        var_global.var_overload_level2_cpu = 10;  /* tag:10 */
+        var_global.has_overload_level3_cpu = TRUE;
+        var_global.var_overload_level3_cpu = 11;  /* tag:11 */
+        var_global.has_overload_level4_cpu = TRUE;
+        var_global.var_overload_level4_cpu = 12;  /* tag:12 */
+        var_global.has_overload_level5_cpu = TRUE;
+        var_global.var_overload_level5_cpu = 13;  /* tag:13 */
+        var_global.has_overload_level1_high_rate = TRUE;
+        var_global.var_overload_level1_high_rate = 14;  /* tag:14 */
+        var_global.has_overload_level2_high_rate = TRUE;
+        var_global.var_overload_level2_high_rate = 15;  /* tag:15 */
+        var_global.has_overload_level3_high_rate = TRUE;
+        var_global.var_overload_level3_high_rate = 16;  /* tag:16 */
+        var_global.has_overload_level4_high_rate = TRUE;
+        var_global.var_overload_level4_high_rate = 17;  /* tag:17 */
+        var_global.has_overload_level5_high_rate = TRUE;
+        var_global.var_overload_level5_high_rate = 18;  /* tag:18 */
+        var_global.has_overload_level1_low_rate = TRUE;
+        var_global.var_overload_level1_low_rate = 19;  /* tag:19 */
+        var_global.has_overload_level2_low_rate = TRUE;
+        var_global.var_overload_level2_low_rate = 20;  /* tag:20 */
+        var_global.has_overload_level3_low_rate = TRUE;
+        var_global.var_overload_level3_low_rate = 21;  /* tag:21 */
+        var_global.has_overload_level4_low_rate = TRUE;
+        var_global.var_overload_level4_low_rate = 22;  /* tag:22 */
+        var_global.has_overload_level5_low_rate = TRUE;
+        var_global.var_overload_level5_low_rate = 23;  /* tag:23 */
+        var_global.has_query_trigger_delete = TRUE;
+        var_global.var_query_trigger_delete = 24;  /* tag:24 */
+
+        buf_len2 = encode_message_GLOBAL_T(&var_global, buf, sizeof(buf));
+        print_buffer(buf, buf_len2);
+        assert(57 == buf_len2);
+        std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GLOBAL_T", _THIS_FILE, __LINE__);
+        assert(0 == pb_string.length()); // 解码不正确是正常的
+        BOOL bret = decode_message_GLOBAL_T(buf, buf_len2, &var_global);
+        assert(TRUE == bret);
+
+        assert(1 == var_global.var_mdbSize);  /* tag:1 */
+        assert(2 == var_global.var_log_size);  /* tag:2 */
+        assert(3 == var_global.var_sync_time);  /* tag:3 */
+        assert(4 == var_global.var_auto_scale);  /* tag:4 */
+        assert(5 == var_global.var_db_alarm_thre);  /* tag:5 */
+        assert(6 == var_global.var_scale_limit);  /* tag:6 */
+        assert(7 == var_global.var_sub_ntf_switch);  /* tag:7 */
+        assert(TRUE == var_global.has_overload_cdn_tps_limit);
+        assert(8 == var_global.var_overload_cdn_tps_limit);  /* tag:8 */
+        assert(TRUE == var_global.has_overload_level1_cpu);
+        assert(9 == var_global.var_overload_level1_cpu);  /* tag:9 */
+        assert(TRUE == var_global.has_overload_level2_cpu);
+        assert(10 == var_global.var_overload_level2_cpu);  /* tag:10 */
+        assert(TRUE == var_global.has_overload_level3_cpu);
+        assert(11 == var_global.var_overload_level3_cpu);  /* tag:11 */
+        assert(TRUE == var_global.has_overload_level4_cpu);
+        assert(12 == var_global.var_overload_level4_cpu);  /* tag:12 */
+        assert(TRUE == var_global.has_overload_level5_cpu);
+        assert(13 == var_global.var_overload_level5_cpu);  /* tag:13 */
+        assert(TRUE == var_global.has_overload_level1_high_rate);
+        assert(14 == var_global.var_overload_level1_high_rate);  /* tag:14 */
+        assert(TRUE == var_global.has_overload_level2_high_rate);
+        assert(15 == var_global.var_overload_level2_high_rate);  /* tag:15 */
+        assert(TRUE == var_global.has_overload_level3_high_rate);
+        assert(16 == var_global.var_overload_level3_high_rate);  /* tag:16 */
+        assert(TRUE == var_global.has_overload_level4_high_rate);
+        assert(17 == var_global.var_overload_level4_high_rate);  /* tag:17 */
+        assert(TRUE == var_global.has_overload_level5_high_rate);
+        assert(18 == var_global.var_overload_level5_high_rate);  /* tag:18 */
+        assert(TRUE == var_global.has_overload_level1_low_rate);
+        assert(19 == var_global.var_overload_level1_low_rate);  /* tag:19 */
+        assert(TRUE == var_global.has_overload_level2_low_rate);
+        assert(20 == var_global.var_overload_level2_low_rate);  /* tag:20 */
+        assert(TRUE == var_global.has_overload_level3_low_rate);
+        assert(21 == var_global.var_overload_level3_low_rate);  /* tag:21 */
+        assert(TRUE == var_global.has_overload_level4_low_rate);
+        assert(22 == var_global.var_overload_level4_low_rate);  /* tag:22 */
+        assert(TRUE == var_global.has_overload_level5_low_rate);
+        assert(23 == var_global.var_overload_level5_low_rate);  /* tag:23 */
+        assert(TRUE == var_global.has_query_trigger_delete);
+        assert(24 == var_global.var_query_trigger_delete);  /* tag:24 */
+    }
+
+    {
+        st_globalconfigrsp var_gcr;
+        constru_message_GlobalConfigRsp(&var_gcr);
+
+        var_gcr.var_tenant.count = 1;
+        var_gcr.var_tenant.item[0].var_tenant_id = 1;
+
+        var_gcr.var_global_val.var_mdbSize = 1;  /* tag:1 */
+        var_gcr.var_global_val.var_log_size = 2;  /* tag:2 */
+        var_gcr.var_global_val.var_sync_time = 3;  /* tag:3 */
+        var_gcr.var_global_val.var_auto_scale = 4;  /* tag:4 */
+        var_gcr.var_global_val.var_db_alarm_thre = 5;  /* tag:5 */
+        var_gcr.var_global_val.var_scale_limit = 6;  /* tag:6 */
+        var_gcr.var_global_val.var_sub_ntf_switch = 7;  /* tag:7 */
+        var_gcr.var_global_val.has_overload_cdn_tps_limit = TRUE;
+        var_gcr.var_global_val.var_overload_cdn_tps_limit = 8;  /* tag:8 */
+        var_gcr.var_global_val.has_overload_level1_cpu = TRUE;
+        var_gcr.var_global_val.var_overload_level1_cpu = 9;  /* tag:9 */
+        var_gcr.var_global_val.has_overload_level2_cpu = TRUE;
+        var_gcr.var_global_val.var_overload_level2_cpu = 10;  /* tag:10 */
+        var_gcr.var_global_val.has_overload_level3_cpu = TRUE;
+        var_gcr.var_global_val.var_overload_level3_cpu = 11;  /* tag:11 */
+        var_gcr.var_global_val.has_overload_level4_cpu = TRUE;
+        var_gcr.var_global_val.var_overload_level4_cpu = 12;  /* tag:12 */
+        var_gcr.var_global_val.has_overload_level5_cpu = TRUE;
+        var_gcr.var_global_val.var_overload_level5_cpu = 13;  /* tag:13 */
+        var_gcr.var_global_val.has_overload_level1_high_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level1_high_rate = 14;  /* tag:14 */
+        var_gcr.var_global_val.has_overload_level2_high_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level2_high_rate = 15;  /* tag:15 */
+        var_gcr.var_global_val.has_overload_level3_high_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level3_high_rate = 16;  /* tag:16 */
+        var_gcr.var_global_val.has_overload_level4_high_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level4_high_rate = 17;  /* tag:17 */
+        var_gcr.var_global_val.has_overload_level5_high_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level5_high_rate = 18;  /* tag:18 */
+        var_gcr.var_global_val.has_overload_level1_low_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level1_low_rate = 19;  /* tag:19 */
+        var_gcr.var_global_val.has_overload_level2_low_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level2_low_rate = 20;  /* tag:20 */
+        var_gcr.var_global_val.has_overload_level3_low_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level3_low_rate = 21;  /* tag:21 */
+        var_gcr.var_global_val.has_overload_level4_low_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level4_low_rate = 22;  /* tag:22 */
+        var_gcr.var_global_val.has_overload_level5_low_rate = TRUE;
+        var_gcr.var_global_val.var_overload_level5_low_rate = 23;  /* tag:23 */
+        var_gcr.var_global_val.has_query_trigger_delete = TRUE;
+        var_gcr.var_global_val.var_query_trigger_delete = 24;  /* tag:24 */
+
+        buf_len2 = encode_message_GlobalConfigRsp(&var_gcr, buf, sizeof(buf));
+        print_buffer(buf, buf_len2);
+/*
+0a 39 08 01 10 02 18 03 20 04 28 05 30 06 38 07     .9...... .(.0.8.
+     |t1    t2    t3    t4    t5    t6    t7
+--------------------------------------------------------------------
+40 08 48 09 50 0a 58 0b 60 0c 68 0d 70 0e 78 0f     @.H.P.X.`.h.p.x.
+t8    t9    t10   t11   t12   t13   t14   t15
+--------------------------------------------------------------------
+90 00 10 91 00 11 92 00 12 93 00 13 94 00 14 95     ................
+t16      t17      t18      t19      t20      t21
+--------------------------------------------------------------------
+00 15 96 00 16 97 00 17 98 00 18 12 08 08 01 12     ................
+      t22      t23      t24     |
+--------------------------------------------------------------------
+00 18 00 20 00
+*/
+        // assert(59 == buf_len2);
+        std::string pb_string = get_pb_string(buf, buf_len2, "cdb_ccc.proto", "zte.cdb.ccc.GlobalConfigRsp", _THIS_FILE, __LINE__);
+        assert(0 == pb_string.length()); // 解码不正确是正常的
+        BOOL bret = decode_message_GlobalConfigRsp(buf, buf_len2, &var_gcr);
+        assert(TRUE == bret);
+
+        assert(1 == var_gcr.var_global_val.var_mdbSize);  /* tag:1 */
+        assert(2 == var_gcr.var_global_val.var_log_size);  /* tag:2 */
+        assert(3 == var_gcr.var_global_val.var_sync_time);  /* tag:3 */
+        assert(4 == var_gcr.var_global_val.var_auto_scale);  /* tag:4 */
+        assert(5 == var_gcr.var_global_val.var_db_alarm_thre);  /* tag:5 */
+        assert(6 == var_gcr.var_global_val.var_scale_limit);  /* tag:6 */
+        assert(7 == var_gcr.var_global_val.var_sub_ntf_switch);  /* tag:7 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_cdn_tps_limit);
+        assert(8 == var_gcr.var_global_val.var_overload_cdn_tps_limit);  /* tag:8 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level1_cpu);
+        assert(9 == var_gcr.var_global_val.var_overload_level1_cpu);  /* tag:9 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level2_cpu);
+        assert(10 == var_gcr.var_global_val.var_overload_level2_cpu);  /* tag:10 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level3_cpu);
+        assert(11 == var_gcr.var_global_val.var_overload_level3_cpu);  /* tag:11 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level4_cpu);
+        assert(12 == var_gcr.var_global_val.var_overload_level4_cpu);  /* tag:12 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level5_cpu);
+        assert(13 == var_gcr.var_global_val.var_overload_level5_cpu);  /* tag:13 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level1_high_rate);
+        assert(14 == var_gcr.var_global_val.var_overload_level1_high_rate);  /* tag:14 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level2_high_rate);
+        assert(15 == var_gcr.var_global_val.var_overload_level2_high_rate);  /* tag:15 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level3_high_rate);
+        assert(16 == var_gcr.var_global_val.var_overload_level3_high_rate);  /* tag:16 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level4_high_rate);
+        assert(17 == var_gcr.var_global_val.var_overload_level4_high_rate);  /* tag:17 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level5_high_rate);
+        assert(18 == var_gcr.var_global_val.var_overload_level5_high_rate);  /* tag:18 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level1_low_rate);
+        assert(19 == var_gcr.var_global_val.var_overload_level1_low_rate);  /* tag:19 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level2_low_rate);
+        assert(20 == var_gcr.var_global_val.var_overload_level2_low_rate);  /* tag:20 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level3_low_rate);
+        assert(21 == var_gcr.var_global_val.var_overload_level3_low_rate);  /* tag:21 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level4_low_rate);
+        assert(22 == var_gcr.var_global_val.var_overload_level4_low_rate);  /* tag:22 */
+        assert(TRUE == var_gcr.var_global_val.has_overload_level5_low_rate);
+        assert(23 == var_gcr.var_global_val.var_overload_level5_low_rate);  /* tag:23 */
+        assert(TRUE == var_gcr.var_global_val.has_query_trigger_delete);
+        assert(24 == var_gcr.var_global_val.var_query_trigger_delete);  /* tag:24 */
+
+        assert(1 == var_gcr.var_tenant.count);
+        assert(1 == var_gcr.var_tenant.item[0].var_tenant_id);
     }
 
     printf("sizeof(st_addrequest): %zu\n", sizeof(st_addrequest));
