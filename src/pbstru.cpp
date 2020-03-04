@@ -2444,7 +2444,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                             }
                         }
                         len = i - start;
-                        // ��λ��key_type��Ϣ
+                        // find location of key_type
                         memcpy(key_type, buf + start, len);
                         key_type[len] = EOS;
                         printf("key_type:%s\n", key_type);
