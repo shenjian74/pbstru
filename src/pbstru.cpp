@@ -148,9 +148,8 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "\n");
     fprintf(fp, "#define PBSTRU_RC_SUCCESS 0\n");
     fprintf(fp, "#define PBSTRU_RC_BUFOVERFLOW 1\n");
-    fprintf(fp, "#define PBSTRU_RC_PARSETAG 2\n");
-    fprintf(fp, "#define PBSTRU_RC_MAXCOUNT 3\n");
-    fprintf(fp, "#define PBSTRU_WRONG_WIRETYPE 4\n");
+    fprintf(fp, "#define PBSTRU_RC_MAXCOUNT 2\n");
+    fprintf(fp, "#define PBSTRU_WRONG_WIRETYPE 3\n");
     fprintf(fp, "\n");
     fprintf(fp, "#define WIRE_TYPE_VARINT 0\n");
     fprintf(fp, "#define WIRE_TYPE_FIX64 1\n");
@@ -1557,7 +1556,6 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
     fprintf(fp, "    for(;offset < buf_len;) {\n");
     fprintf(fp, "        if(FALSE == %s_parse_tag_byte_%s(buf+offset, buf_len-offset, &field_num, &wire_type, &offset, %s, errinfo, maxlen_errinfo)) {\n", nf_name.c_str(), _BUILD_TIME_, use_old_version?"TRUE":"FALSE");
-    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_PARSETAG);\n");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "        switch(field_num) {\n");
