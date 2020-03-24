@@ -182,6 +182,17 @@ int main(int argc, char *argv[])
         assert(1 == offset);
         assert(1 == value);
 
+        value = 127;
+        offset = 0;
+        encode_varint32(value, buf, &offset);
+        assert(1 == offset);
+        buf_len1 = offset;
+        assert(0x7F == buf[0]);
+        offset = 0;
+        decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
+        assert(1 == offset);
+        assert(127 == value);
+
         value = 128;
         offset = 0;
         encode_varint32(value, buf, &offset);
@@ -193,6 +204,88 @@ int main(int argc, char *argv[])
         decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
         assert(2 == offset);
         assert(128 == value);
+
+        value = 16383;
+        offset = 0;
+        encode_varint32(value, buf, &offset);
+        assert(2 == offset);
+        buf_len1 = offset;
+        assert(0xFF == buf[0]);
+        assert(0x7F == buf[1]);
+        offset = 0;
+        decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
+        assert(2 == offset);
+        assert(16383 == value);
+
+        value = 16384;
+        offset = 0;
+        encode_varint32(value, buf, &offset);
+        assert(3 == offset);
+        buf_len1 = offset;
+        assert(0x80 == buf[0]);
+        assert(0x80 == buf[1]);
+        assert(0x01 == buf[2]);
+        offset = 0;
+        decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
+        assert(3 == offset);
+        assert(16384 == value);
+
+        value = 2097151;
+        offset = 0;
+        encode_varint32(value, buf, &offset);
+        assert(3 == offset);
+        print_buffer(buf, offset);
+        buf_len1 = offset;
+        assert(0xFF == buf[0]);
+        assert(0xFF == buf[1]);
+        assert(0x7F == buf[2]);
+        offset = 0;
+        decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
+        assert(3 == offset);
+        assert(2097151 == value);
+
+        value = 2097152;
+        offset = 0;
+        encode_varint32(value, buf, &offset);
+        assert(4 == offset);
+        buf_len1 = offset;
+        assert(0x80 == buf[0]);
+        assert(0x80 == buf[1]);
+        assert(0x80 == buf[2]);
+        assert(0x01 == buf[3]);
+        offset = 0;
+        decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
+        assert(4 == offset);
+        assert(2097152 == value);
+
+        value = 268435455;
+        offset = 0;
+        encode_varint32(value, buf, &offset);
+        assert(4 == offset);
+        buf_len1 = offset;
+        assert(0xFF == buf[0]);
+        assert(0xFF == buf[1]);
+        assert(0xFF == buf[2]);
+        assert(0x7F == buf[3]);
+        offset = 0;
+        decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
+        assert(4 == offset);
+        assert(268435455 == value);
+
+        value = 268435456;
+        offset = 0;
+        encode_varint32(value, buf, &offset);
+        assert(5 == offset);
+        buf_len1 = offset;
+        assert(0x80 == buf[0]);
+        assert(0x80 == buf[1]);
+        assert(0x80 == buf[2]);
+        assert(0x80 == buf[3]);
+        assert(0x01 == buf[4]);
+        offset = 0;
+        decode_varint32(buf, buf_len1, (uint32_t *)&value, &offset);
+        assert(5 == offset);
+        assert(268435456 == value);
 
         value = 65535;
         offset = 0;
