@@ -1542,7 +1542,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
         {
-            fprintf(fp, "    size_t tmp_field_len;\n");
+            fprintf(fp, "    size_t tmp_message_len;\n");
             break;
         }
     }
@@ -2103,41 +2103,41 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n");
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_message_len, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                if(offset + tmp_message_len > buf_len) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_field_len, &(var_%s->var_%s.item[var_%s->var_%s.count]), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_message_len, &(var_%s->var_%s.item[var_%s->var_%s.count]), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                offset += tmp_field_len;\n");
+                fprintf(fp, "                offset += tmp_message_len;\n");
                 fprintf(fp, "                var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_message_len, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                if(offset + tmp_message_len > buf_len) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_field_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_message_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                offset += tmp_field_len;\n");
+                fprintf(fp, "                offset += tmp_message_len;\n");
                 fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_field_len, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                if(offset + tmp_field_len > buf_len) {\n");
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_message_len, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                if(offset + tmp_message_len > buf_len) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_field_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_message_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                offset += tmp_field_len;\n");
+                fprintf(fp, "                offset += tmp_message_len;\n");
             }
             fprintf(fp, "            } else {\n");
             fprintf(fp, "                PRINT_ERRINFO(PBSTRU_WRONG_WIRETYPE);\n");
