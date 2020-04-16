@@ -437,6 +437,13 @@ int gen_comm(const string& nf_name, const string &target_dir)
 
     fprintf(fp, "BOOL deal_unknown_field_%s(const BYTE wire_type, const BYTE *buf, const size_t buf_len, size_t *offset, char *errinfo, const size_t maxlen_errinfo) {\n", _BUILD_TIME_);
     fprintf(fp, "    size_t tmp_field_len = 0;\n");
+    fprintf(fp, "    size_t origin_offset = *offset;\n");
+    fprintf(fp, "    \n");
+    // fprintf(fp, "    printf(\"wire_type:%%d, buf_len:%%d, offset:%%d\\n\", wire_type, buf_len, *offset);\n");
+    fprintf(fp, "    if(buf_len < 1) {\n");
+    fprintf(fp, "        return FALSE;\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    \n");
     fprintf(fp, "    switch(wire_type){\n");
     fprintf(fp, "    case WIRE_TYPE_VARINT:\n");
     fprintf(fp, "        decode_size_%s(buf, buf_len, &tmp_field_len, offset);\n", _BUILD_TIME_);
@@ -450,7 +457,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        break;\n");
     fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED:\n");
     fprintf(fp, "        decode_size_%s(buf, buf_len, &tmp_field_len, offset);\n", _BUILD_TIME_);
-    fprintf(fp, "        if(buf_len < tmp_field_len) {\n");
+    fprintf(fp, "        if((buf_len+origin_offset-(*offset)) < tmp_field_len) {\n");
     fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");

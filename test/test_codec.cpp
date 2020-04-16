@@ -157,6 +157,7 @@ st_addrequest var_AddRequest;
 int main(int argc, char *argv[])
 {
     BYTE buf[1024];
+    BOOL bret;
     size_t buf_len1, buf_len2;
 
     {
@@ -598,6 +599,18 @@ int main(int argc, char *argv[])
             size_t size2 = encode_message_ut_test_message(&msg, buf, sizeof(buf));
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(1000 == msg.var_d_uint32.item[0]);
@@ -639,6 +652,18 @@ int main(int argc, char *argv[])
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(95 == size3);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size3, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(10 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size3-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size3-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(10 == msg.var_r_uint32);
@@ -713,6 +738,18 @@ int main(int argc, char *argv[])
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(76 == size2);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(2447866062020153618 == msg.var_r_uint64);
@@ -772,6 +809,18 @@ int main(int argc, char *argv[])
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(131 == size2);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed32);
@@ -834,6 +883,18 @@ int main(int argc, char *argv[])
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(171 == size2);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(10 == msg.var_r_fixed64);
@@ -894,6 +955,18 @@ int main(int argc, char *argv[])
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(100 == size2);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(TRUE == msg.var_r_bool);
@@ -959,6 +1032,18 @@ int main(int argc, char *argv[])
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(112 == size2);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_string.data, string1, msg.var_r_string.length));
@@ -1016,6 +1101,18 @@ int main(int argc, char *argv[])
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(106 == size2);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(0 == memcmp(msg.var_r_bytes.data, bytes1, msg.var_r_bytes.length));
@@ -1060,6 +1157,18 @@ int main(int argc, char *argv[])
             assert(90 == size2);
             std::string pb_string = get_pb_string(buf, size2, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(CLIENT_M == msg.var_r_enum);
@@ -1140,11 +1249,14 @@ int main(int argc, char *argv[])
             }
 
             st_ut_test_sub_message sub_msg;
+            char errinfo[128];
             bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
             assert(TRUE == bret);
             assert(1 == sub_msg.var_d_uint32.count);
             assert(0 == sub_msg.var_d_uint32.item[0]);
-            bret = decode_message_ut_test_sub_message(buf, size2-1, &sub_msg);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size2-2, &sub_msg, errinfo, sizeof(errinfo));
             assert(FALSE == bret);
 
             bret = decode_message_ut_test_message(buf, size2, &msg);
@@ -1189,6 +1301,18 @@ int main(int argc, char *argv[])
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(117 == size3);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size3, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size3-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size3-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(TRUE == msg.has_o_int32);
@@ -1241,6 +1365,18 @@ int main(int argc, char *argv[])
             assert(116 == size3);
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size3, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size3-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size3-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(TRUE == msg.has_o_float);
@@ -1359,6 +1495,18 @@ int main(int argc, char *argv[])
             std::string pb_string = get_pb_string(buf, size3, "cdb_ccc.proto", "zte.cdb.ccc.ut_test_message", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(528 == size3);
+
+            st_ut_test_sub_message sub_msg;
+            char errinfo[128];
+            bret = decode_message_ut_test_sub_message(buf, size3, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message_ex(buf, size3-1, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+            bret = decode_message_ut_test_sub_message_ex(buf, size3-2, &sub_msg, errinfo, sizeof(errinfo));
+            assert(FALSE == bret);
+
             decode_message_ut_test_message(buf, size3, &msg);
 
             assert(msg.has_o_int64 == TRUE);
