@@ -230,50 +230,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#define decode_zigzag64(n) decode_zigzag64_%s((n))\n", _BUILD_TIME_);
     fprintf(fp, "SWORD64 decode_zigzag64_%s(const WORD64 n);\n", _BUILD_TIME_);
     fprintf(fp, "\n");
-    fprintf(fp, "#define CASE_VARINT_FIELD(buf, buflen, offset) \\\n");
-    fprintf(fp, "    case WIRE_TYPE_VARINT: \\\n");
-    fprintf(fp, "        decode_size_%s((buf), (buflen), &tmp_field_len, (offset)); \\\n", _BUILD_TIME_);
-    fprintf(fp, "        break; \n");
-    fprintf(fp, "\n");
-    fprintf(fp, "#define CASE_FIX64_FIELD(buf, buflen, offset) \\\n");
-    fprintf(fp, "    case WIRE_TYPE_FIX64: \\\n");
-    fprintf(fp, "        if(((*(offset)) + sizeof(WORD64)) > (buf_len)) {\\\n");
-    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\\\n");
-    fprintf(fp, "            return FALSE;\\\n");
-    fprintf(fp, "        }\\\n");
-    fprintf(fp, "        *(offset) += sizeof(WORD64); \\\n");
-    fprintf(fp, "        break; \n");
-    fprintf(fp, "\n");
-    fprintf(fp, "#define CASE_LENGTH_DELIMITED_FIELD(buf, buflen, offset) \\\n");
-    fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED: \\\n");
-    fprintf(fp, "        decode_size_%s((buf), (buflen), &tmp_field_len, (offset)); \\\n", _BUILD_TIME_);
-    fprintf(fp, "        if(((*(offset)) + tmp_field_len) > (buf_len)) {\\\n");
-    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\\\n");
-    fprintf(fp, "            return FALSE;\\\n");
-    fprintf(fp, "        }\\\n");
-    fprintf(fp, "        *(offset) += tmp_field_len; \\\n");
-    fprintf(fp, "        break; \n");
-    fprintf(fp, "\n");
-    fprintf(fp, "#define CASE_FIX32_FIELD(buf, buflen, offset) \\\n");
-    fprintf(fp, "    case WIRE_TYPE_FIX32: \\\n");
-    fprintf(fp, "        if(((*(offset)) + sizeof(DWORD)) >= (buf_len)) {\\\n");
-    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\\\n");
-    fprintf(fp, "            return FALSE;\\\n");
-    fprintf(fp, "        }\\\n");
-    fprintf(fp, "        *(offset) += sizeof(DWORD); \\\n");
-    fprintf(fp, "        break; \n");
-    fprintf(fp, "\n");
-    fprintf(fp, "#define DEAL_UNKNOWN_FIELD(wire_type, buf, buflen, offset) do {\\\n");
-    fprintf(fp, "    size_t tmp_field_len; \\\n");
-    fprintf(fp, "    switch(wire_type){ \\\n");
-    fprintf(fp, "       CASE_VARINT_FIELD((buf), (buflen), (offset)); \\\n");
-    fprintf(fp, "       CASE_FIX64_FIELD((buf), (buflen), (offset)); \\\n");
-    fprintf(fp, "       CASE_LENGTH_DELIMITED_FIELD((buf), (buflen), (offset)); \\\n");
-    fprintf(fp, "       CASE_FIX32_FIELD((buf), (buflen), (offset)); \\\n");
-    fprintf(fp, "    default: \\\n");
-    fprintf(fp, "        break; \\\n");
-    fprintf(fp, "    } \\\n");
-    fprintf(fp, "} while(0)\n");
+    fprintf(fp, "BOOL deal_unknown_field_%s(const BYTE wire_type, const BYTE *buf, const size_t buf_len, size_t *offset, char *errinfo, const size_t maxlen_errinfo);\n", _BUILD_TIME_);
     fprintf(fp, "\n");
     fprintf(fp, "#define PRINT_ERRINFO(ret_code) do { \\\n");
     fprintf(fp, "    if(NULL!=errinfo){ \\\n");
@@ -476,6 +433,40 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n\n");
     fprintf(fp, "SWORD64 decode_zigzag64_%s(const WORD64 n) {\n", _BUILD_TIME_);
     fprintf(fp, "    return (n>>1)^(-(n&1));\n");
+    fprintf(fp, "}\n\n");
+
+    fprintf(fp, "BOOL deal_unknown_field_%s(const BYTE wire_type, const BYTE *buf, const size_t buf_len, size_t *offset, char *errinfo, const size_t maxlen_errinfo) {\n", _BUILD_TIME_);
+    fprintf(fp, "    size_t tmp_field_len = 0;\n");
+    fprintf(fp, "    switch(wire_type){\n");
+    fprintf(fp, "    case WIRE_TYPE_VARINT:\n");
+    fprintf(fp, "        decode_size_%s(buf, buf_len, &tmp_field_len, offset);\n", _BUILD_TIME_);
+    fprintf(fp, "        break;\n");
+    fprintf(fp, "    case WIRE_TYPE_FIX64:\n");
+    fprintf(fp, "        if(buf_len < sizeof(WORD64)) {\n");
+    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
+    fprintf(fp, "            return FALSE;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "        *offset += sizeof(WORD64);\n");
+    fprintf(fp, "        break;\n");
+    fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED:\n");
+    fprintf(fp, "        decode_size_%s(buf, buf_len, &tmp_field_len, offset);\n", _BUILD_TIME_);
+    fprintf(fp, "        if(buf_len < tmp_field_len) {\n");
+    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
+    fprintf(fp, "            return FALSE;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "        *offset += tmp_field_len;\n");
+    fprintf(fp, "        break;\n");
+    fprintf(fp, "    case WIRE_TYPE_FIX32:\n");
+    fprintf(fp, "        if(buf_len < sizeof(DWORD)) {\n");
+    fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
+    fprintf(fp, "            return FALSE;\n");
+    fprintf(fp, "        }\n");
+    fprintf(fp, "        *offset += sizeof(DWORD);\n");
+    fprintf(fp, "        break;\n");
+    fprintf(fp, "    default:\n");
+    fprintf(fp, "        break;\n");
+    fprintf(fp, "    }\n");
+    fprintf(fp, "    return TRUE;\n");
     fprintf(fp, "}\n\n");
 
     fprintf(fp, "/* end of file */\n");
@@ -839,8 +830,6 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
             tolower(str);
             headers.insert(str);
         }
-        // tag must less than 256
-        assert(field->number()<256);
     }
 
     // use std::set to delete duplicate header files
@@ -2151,7 +2140,9 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
         fprintf(fp, "            break;\n\n");
     }
     fprintf(fp, "        default:\n");
-    fprintf(fp, "            DEAL_UNKNOWN_FIELD(wire_type, buf+offset, buf_len-offset, &offset);\n");
+    fprintf(fp, "            if(FALSE == deal_unknown_field_%s(wire_type, buf+offset, buf_len-offset, &offset, errinfo, maxlen_errinfo)){\n", _BUILD_TIME_);
+    fprintf(fp, "                return FALSE;\n");
+    fprintf(fp, "            }\n");
     fprintf(fp, "            break;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    }\n");
@@ -2172,11 +2163,35 @@ int gen_all_from_file(const string& nf_name, const FileDescriptor *f, string &ta
         bool use_old_version = false;
         const Descriptor* desc = f->message_type(i);
         if(desc->name()=="GLOBAL_T" || desc->name()=="codec_cdb_GLOBAL_T"){
+            // Backward compatibility is required for messages.
             printf("Info: message type is %s, use old version to encode tag info.\n", desc->name().c_str());
             use_old_version = true;
+        } else {
+            int largest_tag = 0;
+            // Get largest tag value
+            for(int i=0; i<desc->field_count(); ++i)
+            {
+                const FieldDescriptor *field = desc->field(i);
+                if(field->number() > largest_tag) {
+                    largest_tag = field->number();
+                }
+            }
+            if(desc->name()=="ut_test_message" || desc->name()=="App2HttpReq" || desc->name()=="Http2AppRes") {
+                // tag must less than 256
+                if(largest_tag > 255) {
+                    printf("error -- message:'%s' largest tag:%d is great than 255.\n", desc->name().c_str(), largest_tag);
+                    return -2;
+                }
+            } else {
+                // tag must less than 16
+                if(largest_tag > 15) {
+                    printf("error -- message:'%s' largest tag:%d is great than 15.\n", desc->name().c_str(), largest_tag);
+                    return -3;
+                }
+            }
         }
-        map<string, string> map_array_size;
 
+        map<string, string> map_array_size;
         retcode = gen_header(nf_name, desc, target_dir, map_array_size);
         if(0 == retcode)
         {
