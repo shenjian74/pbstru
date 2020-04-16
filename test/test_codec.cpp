@@ -601,9 +601,9 @@ int main(int argc, char *argv[])
             decode_message_ut_test_message(buf, size2, &msg);
 
             assert(1000 == msg.var_d_uint32.item[0]);
-	    assert(NULL != strstr(pb_string.c_str(), "d_uint32: 1000"));
+	        assert(NULL != strstr(pb_string.c_str(), "d_uint32: 1000"));
             assert(1001 == msg.var_d_uint32.item[1]);
-	    assert(NULL != strstr(pb_string.c_str(), "d_uint32: 1001"));
+	        assert(NULL != strstr(pb_string.c_str(), "d_uint32: 1001"));
             assert(2 == msg.var_d_uint32.count);
         }
 
@@ -1138,6 +1138,15 @@ int main(int argc, char *argv[])
                     break;
                 }
             }
+
+            st_ut_test_sub_message sub_msg;
+            bret = decode_message_ut_test_sub_message(buf, size2, &sub_msg);
+            assert(TRUE == bret);
+            assert(1 == sub_msg.var_d_uint32.count);
+            assert(0 == sub_msg.var_d_uint32.item[0]);
+            bret = decode_message_ut_test_sub_message(buf, size2-1, &sub_msg);
+            assert(FALSE == bret);
+
             bret = decode_message_ut_test_message(buf, size2, &msg);
             assert(TRUE == bret);
 
