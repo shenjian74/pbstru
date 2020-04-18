@@ -436,7 +436,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "}\n\n");
 
     fprintf(fp, "BOOL deal_unknown_field_%s(const BYTE wire_type, const BYTE *buf, const size_t buf_len, size_t *offset, char *errinfo, const size_t maxlen_errinfo) {\n", _BUILD_TIME_);
-    fprintf(fp, "    size_t tmp_field_len = 0;\n");
+    fprintf(fp, "    size_t field_len = 0;\n");
     fprintf(fp, "    size_t origin_offset = *offset;\n");
     fprintf(fp, "    \n");
     // fprintf(fp, "    printf(\"wire_type:%%d, buf_len:%%d, offset:%%d\\n\", wire_type, buf_len, *offset);\n");
@@ -446,7 +446,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    \n");
     fprintf(fp, "    switch(wire_type){\n");
     fprintf(fp, "    case WIRE_TYPE_VARINT:\n");
-    fprintf(fp, "        decode_size_%s(buf, buf_len, &tmp_field_len, offset);\n", _BUILD_TIME_);
+    fprintf(fp, "        decode_size_%s(buf, buf_len, &field_len, offset);\n", _BUILD_TIME_);
     fprintf(fp, "        break;\n");
     fprintf(fp, "    case WIRE_TYPE_FIX64:\n");
     fprintf(fp, "        if(buf_len < sizeof(WORD64)) {\n");
@@ -456,12 +456,12 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "        *offset += sizeof(WORD64);\n");
     fprintf(fp, "        break;\n");
     fprintf(fp, "    case WIRE_TYPE_LENGTH_DELIMITED:\n");
-    fprintf(fp, "        decode_size_%s(buf, buf_len, &tmp_field_len, offset);\n", _BUILD_TIME_);
-    fprintf(fp, "        if((buf_len+origin_offset-(*offset)) < tmp_field_len) {\n");
+    fprintf(fp, "        decode_size_%s(buf, buf_len, &field_len, offset);\n", _BUILD_TIME_);
+    fprintf(fp, "        if((buf_len+origin_offset-(*offset)) < field_len) {\n");
     fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
     fprintf(fp, "            return FALSE;\n");
     fprintf(fp, "        }\n");
-    fprintf(fp, "        *offset += tmp_field_len;\n");
+    fprintf(fp, "        *offset += field_len;\n");
     fprintf(fp, "        break;\n");
     fprintf(fp, "    case WIRE_TYPE_FIX32:\n");
     fprintf(fp, "        if(buf_len < sizeof(DWORD)) {\n");
@@ -1538,7 +1538,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
         {
-            fprintf(fp, "    size_t tmp_message_len;\n");
+            fprintf(fp, "    size_t message_len;\n");
             break;
         }
     }
@@ -1805,7 +1805,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             } else {
                 fprintf(fp, "            if(WIRE_TYPE_VARINT == wire_type) {\n");
             }
-                fprintf(fp, "                WORD64 tmp_value;\n");
+                fprintf(fp, "                WORD64 i64_value;\n");
             if(field->is_repeated())
             {
                 char spaces[100];
@@ -1822,8 +1822,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", spaces, _BUILD_TIME_);
-                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = (tmp_value==0)?FALSE:TRUE;\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, &i64_value, &offset);\n", spaces, _BUILD_TIME_);
+                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = (i64_value==0)?FALSE:TRUE;\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
                 if(field->is_packed()) {
                     fprintf(fp, "                }\n");
@@ -1831,14 +1831,14 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                var_%s->var_%s = (tmp_value==0)?FALSE:TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &i64_value, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                var_%s->var_%s = (i64_value==0)?FALSE:TRUE;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                var_%s->var_%s = (tmp_value==0)?FALSE:TRUE;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &i64_value, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                var_%s->var_%s = (i64_value==0)?FALSE:TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "            } else {\n");
             fprintf(fp, "                PRINT_ERRINFO(PBSTRU_WRONG_WIRETYPE);\n");
@@ -1852,7 +1852,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             } else {
                 fprintf(fp, "            if(WIRE_TYPE_VARINT == wire_type) {\n");
             }
-                fprintf(fp, "                WORD64 tmp_value;\n");
+                fprintf(fp, "                WORD64 i64_value;\n");
             if(field->is_repeated())
             {
                 char spaces[100];
@@ -1869,8 +1869,8 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", spaces, _BUILD_TIME_);
-                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = (int)tmp_value;\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, &i64_value, &offset);\n", spaces, _BUILD_TIME_);
+                fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = (int)i64_value;\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
                 if(field->is_packed()) {
                     fprintf(fp, "                }\n");
@@ -1878,14 +1878,14 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                var_%s->var_%s = (int)tmp_value;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &i64_value, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                var_%s->var_%s = (int)i64_value;\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &tmp_value, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                var_%s->var_%s = (int)tmp_value;\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, &i64_value, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                var_%s->var_%s = (int)i64_value;\n", desc->name().c_str(), field->name().c_str());
             }
             fprintf(fp, "            } else {\n");
             fprintf(fp, "                PRINT_ERRINFO(PBSTRU_WRONG_WIRETYPE);\n");
@@ -2099,41 +2099,41 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n");
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_message_len, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                if(offset + tmp_message_len > buf_len) {\n");
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &message_len, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                if(offset + message_len > buf_len) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_message_len, &(var_%s->var_%s.item[var_%s->var_%s.count]), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, message_len, &(var_%s->var_%s.item[var_%s->var_%s.count]), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                offset += tmp_message_len;\n");
+                fprintf(fp, "                offset += message_len;\n");
                 fprintf(fp, "                var_%s->var_%s.count += 1;\n", desc->name().c_str(), field->name().c_str());
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_message_len, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                if(offset + tmp_message_len > buf_len) {\n");
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &message_len, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                if(offset + message_len > buf_len) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_message_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, message_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                offset += tmp_message_len;\n");
+                fprintf(fp, "                offset += message_len;\n");
                 fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_message_len, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                if(offset + tmp_message_len > buf_len) {\n");
+                fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &message_len, &offset);\n", _BUILD_TIME_);
+                fprintf(fp, "                if(offset + message_len > buf_len) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, tmp_message_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if(FALSE == decode_message_%s_%s(buf + offset, message_len, &(var_%s->var_%s), errinfo, maxlen_errinfo)) {\n", field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
-                fprintf(fp, "                offset += tmp_message_len;\n");
+                fprintf(fp, "                offset += message_len;\n");
             }
             fprintf(fp, "            } else {\n");
             fprintf(fp, "                PRINT_ERRINFO(PBSTRU_WRONG_WIRETYPE);\n");
