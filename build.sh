@@ -10,7 +10,7 @@
 if [ ! -f "protobuf3/Makefile" ]; then 
   # wget --timestamping https://github.com/protocolbuffers/protobuf/releases/download/v3.5.1/protobuf-all-3.5.1.tar.gz && \
   tar xfz protobuf-all-3.5.1.tar.gz && \
-  rm -rf pr otobuf3 && \
+  rm -rf protobuf3 && \
   mv protobuf-3.5.1 protobuf3 && \
   cd protobuf3 && \
   ./autogen.sh && \

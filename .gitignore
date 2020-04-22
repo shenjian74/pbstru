@@ -25,3 +25,6 @@ protobuf3
 *.orig
 *.bak
 bin/pb.bin
+bin/protoc
+bin/test_codec
+bin/cdap
