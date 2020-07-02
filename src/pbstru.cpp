@@ -234,7 +234,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "\n");
     fprintf(fp, "#define PRINT_ERRINFO(ret_code) do { \\\n");
     fprintf(fp, "    if(NULL!=errinfo){ \\\n");
-    fprintf(fp, "        snprintf(errinfo, maxlen_errinfo, \"%%d[%%s:%%d]\", (ret_code), __THIS_FILE__, __LINE__); \\\n");
+    fprintf(fp, "        XOS_snprintf(errinfo, maxlen_errinfo, \"%%d[%%s:%%d]\", (ret_code), __THIS_FILE__, __LINE__); \\\n");
     fprintf(fp, "    } \\\n");
     fprintf(fp, "} while(0)\n");
     fprintf(fp, "\n");
