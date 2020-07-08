@@ -1539,7 +1539,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
         {
-            fprintf(fp, "    size_t message_len;\n");
+            fprintf(fp, "    size_t message_len = 0;\n");
             break;
         }
     }
