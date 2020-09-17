@@ -1539,7 +1539,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     {
         if(FieldDescriptor::TYPE_MESSAGE == desc->field(i)->type())
         {
-            fprintf(fp, "    size_t tmp_message_len;\n");
+            fprintf(fp, "    size_t tmp_message_len = 0;\n");
             break;
         }
     }
@@ -2588,4 +2588,5 @@ int main(int argc, char *argv[])
     retcode = gen_comm(nf_name, target_dir);
     return retcode;
 }
+
 
