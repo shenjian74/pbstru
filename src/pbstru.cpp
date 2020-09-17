@@ -208,7 +208,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
 
     fprintf(fp, "#define %s_parse_tag_byte(buf, buflen, field_num, wire_type, offset) %s_parse_tag_byte_%s((buf), (buflen), (field_num), (wire_type), (offset), FALSE, NULL, 0)\n", nf_name.c_str(), nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "/* parse tag and wire_type value */\n");
-    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL use_old_version, char *errinfo, const size_t maxlen_errinfo);\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE* buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL use_old_version, char *errinfo, const WORD32 maxlen_errinfo);\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "\n");
     fprintf(fp, "#define encode_varint32(value, buf, offset) encode_varint32_%s((value), (buf), (offset))\n", _BUILD_TIME_);
     fprintf(fp, "void encode_varint32_%s(const DWORD value, BYTE *buf, size_t *offset);\n", _BUILD_TIME_);
@@ -231,7 +231,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#define decode_zigzag64(n) decode_zigzag64_%s((n))\n", _BUILD_TIME_);
     fprintf(fp, "SWORD64 decode_zigzag64_%s(const WORD64 n);\n", _BUILD_TIME_);
     fprintf(fp, "\n");
-    fprintf(fp, "BOOL deal_unknown_field_%s(const BYTE wire_type, const BYTE *buf, const size_t buf_len, size_t *offset, char *errinfo, const size_t maxlen_errinfo);\n", _BUILD_TIME_);
+    fprintf(fp, "BOOL deal_unknown_field_%s(const BYTE wire_type, const BYTE *buf, const size_t buf_len, size_t *offset, char *errinfo, const WORD32 maxlen_errinfo);\n", _BUILD_TIME_);
     fprintf(fp, "\n");
     fprintf(fp, "#define PRINT_ERRINFO(ret_code) do { \\\n");
     fprintf(fp, "    if(NULL!=errinfo){ \\\n");
@@ -260,7 +260,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "static const char __THIS_FILE__[] = \"pbstru_comm.c\";\n");
     fprintf(fp, "\n");
 
-    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE *buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL old_version, char *errinfo, const size_t maxlen_errinfo) {\n", nf_name.c_str(), _BUILD_TIME_);
+    fprintf(fp, "BOOL %s_parse_tag_byte_%s(const BYTE *buf, const size_t buflen, WORD *field_num, BYTE *wire_type, size_t *offset, BOOL old_version, char *errinfo, const WORD32 maxlen_errinfo) {\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "    if(buf[0] & 0x80) {\n");
     fprintf(fp, "        if(buflen<2) {\n");
     fprintf(fp, "            PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\\\n");
@@ -436,7 +436,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    return (n>>1)^(-(n&1));\n");
     fprintf(fp, "}\n\n");
 
-    fprintf(fp, "BOOL deal_unknown_field_%s(const BYTE wire_type, const BYTE *buf, const size_t buf_len, size_t *offset, char *errinfo, const size_t maxlen_errinfo) {\n", _BUILD_TIME_);
+    fprintf(fp, "BOOL deal_unknown_field_%s(const BYTE wire_type, const BYTE *buf, const size_t buf_len, size_t *offset, char *errinfo, const WORD32 maxlen_errinfo) {\n", _BUILD_TIME_);
     fprintf(fp, "    size_t tmp_field_len = 0;\n");
     fprintf(fp, "    size_t origin_offset = *offset;\n");
     fprintf(fp, "    \n");
@@ -985,7 +985,7 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "size_t _internal_encode_message_%s_%s(%s* msg, BYTE* buf);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "#define decode_message_%s(buf, buf_len, msg) decode_message_%s_%s((buf), (buf_len), (msg), NULL, 0)\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
     fprintf(fp, "#define decode_message_%s_ex(buf, buf_len, msg, errinfo, maxlen_errinfo) decode_message_%s_%s((buf), (buf_len), (msg), (errinfo), (maxlen_errinfo))\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
-    fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* msg, char *errinfo, const size_t maxlen_errinfo);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
+    fprintf(fp, "BOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* msg, char *errinfo, const WORD32 maxlen_errinfo);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
 
     fprintf(fp, "#ifdef __cplusplus\n");
     fprintf(fp, "}\n");
@@ -1532,7 +1532,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
 
 ///////////////////////////////////////////////////////////////////////////
 // Decode function
-    fprintf(fp, "\nBOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* var_%s, char *errinfo, const size_t maxlen_errinfo) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
+    fprintf(fp, "\nBOOL decode_message_%s_%s(BYTE* buf, const size_t buf_len, %s* var_%s, char *errinfo, const WORD32 maxlen_errinfo) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "    size_t offset = 0;\n");
     // use this variable if has a sub-message
     for(int i=0; i<desc->field_count(); ++i)
