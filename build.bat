@@ -1,12 +1,11 @@
-@echo off
-
-set path=%path%;"C:\Program Files\CMake\bin";"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin"
+call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools_msbuild.bat"
+set path=%path%;"C:\Program Files (x86)\CMake\bin\"
 dir protobuf3 | find "cmake"   
 if %errorlevel%==0 goto found
 if %errorlevel%==1 goto not_found
 
 :not_found
-echo "Cannot find protbuf3."
+echo "无法找到protobuf3子目录，windows下需要手工解压protobuf-all-3.5.1.tar.gz到protobuf3子目录"
 goto end
 
 :found
@@ -16,11 +15,12 @@ if %errorlevel%==0 goto makefile_found
 if %errorlevel%==1 goto makefile_not_found
 
 :makefile_not_found
-del /S /Q /F build >nul
+del /S /Q /F build
 rd /S /Q build
 md build
 cd build
-cmake.exe -DCMAKE_C_FLAGS="-Wno-narrowing" -DCMAKE_CXX_FLAGS="-Wno-narrowing" ..
+:: cmake.exe -DCMAKE_C_FLAGS="-Wno-narrowing" -DCMAKE_CXX_FLAGS="-Wno-narrowing" ..
+cmake.exe ..
 cd ..
 
 :makefile_found
@@ -38,7 +38,7 @@ move Debug\pbstru.exe ..\bin
 cd ..\bin
 call gen_codec.bat
 cd ..\test
-del /S /Q /F build >nul
+del /S /Q /F build
 rd /S /Q build
 md build
 cd build

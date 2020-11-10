@@ -1726,10 +1726,11 @@ int main(int argc, char *argv[])
         // size_t size2 = encode_message_ut_test_sub_message(&msg, buf, sizeof(buf));
         // printf("size2:%zu\n", size2);
         // assert(6 == size2);
-        FILE *fp = fopen("http2appreq.bin", "r");
+        FILE *fp = fopen("http2appreq.bin", "rb");
         if(NULL!=fp){
             size_t size2 = fread(buf, 1, sizeof(buf), fp);
             fclose(fp);
+            assert(420 == size2);
             std::string pb_string = get_pb_string(buf, size2, "Http2Proxy.Http2AppReq.proto", "http2proxy.Http2AppReq", _THIS_FILE, __LINE__);
             assert(pb_string.length()>0);
             assert(FALSE == decode_message_Http2AppReq_ex(buf, size2, &msg, errinfo, sizeof(errinfo)));
