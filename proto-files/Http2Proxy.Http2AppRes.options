@@ -1,0 +1,2 @@
+http2proxy.Http2AppRes.header max_count:64
+http2proxy.Http2AppRes.appext max_count:4

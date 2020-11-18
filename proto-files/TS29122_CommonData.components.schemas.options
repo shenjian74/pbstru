@@ -1,0 +1,14 @@
+TS29122_CommonData.components.schemas.ProblemDetails.invalidParams_ max_count:256
+TS29122_CommonData.components.schemas.NotificationData.eventReports_ max_count:256
+TS29122_CommonData.components.schemas.LocationArea5G.geographicAreas_ max_count:256
+TS29122_CommonData.components.schemas.LocationArea5G.civicAddresses_ max_count:256
+TS29122_CommonData.components.schemas.LocationArea.trackingAreaIds_ max_count:256
+TS29122_CommonData.components.schemas.LocationArea.geographicAreas_ max_count:256
+TS29122_CommonData.components.schemas.LocationArea.routingAreaIds_ max_count:256
+TS29122_CommonData.components.schemas.ConfigResult.externalIds_ max_count:256
+TS29122_CommonData.components.schemas.ConfigResult.msisdns_ max_count:256
+TS29122_CommonData.components.schemas.EventReport.flowIds_ max_count:256
+TS29122_CommonData.components.schemas.FlowInfo.flowDescriptions_ max_count:256
+TS29122_CommonData.components.schemas.LocationArea.cellIds_ max_count:256
+TS29122_CommonData.components.schemas.LocationArea.civicAddresses_ max_count:256
+TS29122_CommonData.components.schemas.LocationArea.enodeBIds_ max_count:256

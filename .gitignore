@@ -29,3 +29,4 @@ bin/protoc
 bin/test_codec
 bin/cdap
 .vscode
+proto-files/codec

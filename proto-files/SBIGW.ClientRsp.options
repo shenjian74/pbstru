@@ -1,0 +1,3 @@
+SBIGW.SearResultParam.taiList max_count:256
+SBIGW.SearResultParam.taiRangeList max_count:256
+SBIGW.ClientRsp.appext max_count:256

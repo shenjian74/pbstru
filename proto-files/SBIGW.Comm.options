@@ -1,0 +1,2 @@
+SBIGW.HttpReqMsg.headers max_count:64
+SBIGW.HttpRspMsg.header max_count:64

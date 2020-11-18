@@ -2184,7 +2184,8 @@ int gen_all_from_file(const string& nf_name, const FileDescriptor *f, string &ta
                     largest_tag = field->number();
                 }
             }
-            if(desc->name()=="ut_test_message" || desc->name()=="App2HttpReq" || desc->name()=="Http2AppRes") {
+            // 第三方定义的proto，基本上都是syntax3
+            if(f->syntax() > 2 || desc->name()=="ut_test_message" || desc->name()=="App2HttpReq" || desc->name()=="Http2AppRes") {
                 // tag must less than 256
                 if(largest_tag > 255) {
                     printf("error -- message:'%s' largest tag:%d is great than 255.\n", desc->name().c_str(), largest_tag);
@@ -2340,7 +2341,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
 {
     char buf[8 * 1024];
     char key_type[40];
-    char key_value[40];
+    char key_value[256];
     char field_name[80];
     char field_no[40];
     char append_buf[8*1024];
@@ -2378,12 +2379,12 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                         printf("%s", buf+i);
                         for(i=i+3;; ++i)
                         {
-                            if('<'!=buf[i])
+                            if('<'==buf[i])
                             {
                                 break;
                             }
                         }
-                        start = i;
+                        start = i + 1;
                         for(;; ++i)
                         {
                             if(','==buf[i] || ' '==buf[i] || '\t'==buf[i])
@@ -2473,6 +2474,7 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                 }
             }
             fputs(append_buf, fpout);
+            printf("----------\n%s----------\n", append_buf);
             fclose(fpout);
         }
         fclose(fp);

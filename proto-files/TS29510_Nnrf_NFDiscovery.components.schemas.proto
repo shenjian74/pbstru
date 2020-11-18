@@ -90,7 +90,7 @@ message NFService
 	TS29571_CommonData.components.schemas.Bytes serviceInstanceId_ = 17;
 	TS29510_Nnrf_NFManagement.components.schemas.ServiceName serviceName_ = 18;
 	TS29571_CommonData.components.schemas.SupportedFeatures supportedFeatures_ = 19;
-	map <string, supportedVendorSpecificFeatures> supportedVendorSpecificFeatures_ = 20;
+	map <string, TS29510_Nnrf_NFManagement.components.schemas.VendorSpecificFeature> supportedVendorSpecificFeatures_ = 20;
 	TS29510_Nnrf_NFManagement.components.schemas.VendorId vendorId_ = 21;
 	repeated TS29510_Nnrf_NFManagement.components.schemas.NFServiceVersion versions_ = 22;
 }

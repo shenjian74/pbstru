@@ -1,0 +1,4 @@
+TS29510_Nnrf_AccessToken.components.schemas.AccessTokenClaims.producerNsiList_ max_count:256
+TS29510_Nnrf_AccessToken.components.schemas.AccessTokenClaims.producerSnssaiList_ max_count:256
+TS29510_Nnrf_AccessToken.components.schemas.AccessTokenReq.targetNsiList_ max_count:256
+TS29510_Nnrf_AccessToken.components.schemas.AccessTokenReq.targetSnssaiList_ max_count:256

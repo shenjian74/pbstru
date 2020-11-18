@@ -306,7 +306,7 @@ message NFService
 	TS29571_CommonData.components.schemas.Bytes serviceInstanceId_ = 23;
 	ServiceName serviceName_ = 24;
 	TS29571_CommonData.components.schemas.SupportedFeatures supportedFeatures_ = 25;
-	map <string, supportedVendorSpecificFeatures> supportedVendorSpecificFeatures_ = 26;
+	map <string, VendorSpecificFeature> supportedVendorSpecificFeatures_ = 26;
 	VendorId vendorId_ = 27;
 	repeated NFServiceVersion versions_ = 28;
 }

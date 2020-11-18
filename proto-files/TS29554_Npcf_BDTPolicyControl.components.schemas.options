@@ -1,0 +1,4 @@
+TS29554_Npcf_BDTPolicyControl.components.schemas.NetworkAreaInfo.gRanNodeIds_ max_count:256
+TS29554_Npcf_BDTPolicyControl.components.schemas.NetworkAreaInfo.ncgis_ max_count:256
+TS29554_Npcf_BDTPolicyControl.components.schemas.NetworkAreaInfo.tais_ max_count:256
+TS29554_Npcf_BDTPolicyControl.components.schemas.NetworkAreaInfo.ecgis_ max_count:256
