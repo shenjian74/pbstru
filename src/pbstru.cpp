@@ -92,7 +92,8 @@ const char path_sep[] = "/";
 
 const char _BUILD_TIME_[] =
 {
-    BUILD_YEAR_CH2, BUILD_YEAR_CH3, BUILD_MONTH_CH0, BUILD_MONTH_CH1, BUILD_DAY_CH0, BUILD_DAY_CH1,
+    BUILD_YEAR_CH2, BUILD_YEAR_CH3, BUILD_YEAR_CH2, BUILD_YEAR_CH3, 
+    BUILD_MONTH_CH0, BUILD_MONTH_CH1, BUILD_DAY_CH0, BUILD_DAY_CH1,
     BUILD_HOUR_CH0, BUILD_HOUR_CH1, BUILD_MIN_CH0, BUILD_MIN_CH1, BUILD_SEC_CH0, BUILD_SEC_CH1,
     '\0'
 };
@@ -971,12 +972,12 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     }
     fprintf(fp, "\n    size_t _message_length;  // The length of this message, DO NOT set it manually. \n");
     fprintf(fp, "                            // Setting and Using at _internal_encode_message_xxx().\n");
-    fprintf(fp, "} %s;\n", struct_name.c_str());
+    fprintf(fp, "} %s;\n\n", struct_name.c_str());
 
-    fprintf(fp, "\n/* construct msg, DO NOT use it high frequency. */\n");
+    fprintf(fp, "/* construct msg, DO NOT use it high frequency. */\n");
     fprintf(fp, "#define constru_message_%s(msg) constru_message_%s_%s(msg)\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
     fprintf(fp, "void constru_message_%s_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
-    fprintf(fp, "\n/* clear and reuse msg */\n");
+    fprintf(fp, "/* clear and reuse msg */\n");
     fprintf(fp, "#define clear_message_%s(msg) clear_message_%s_%s(msg)\n", desc->name().c_str(), desc->name().c_str(), _BUILD_TIME_);
     fprintf(fp, "void clear_message_%s_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
     fprintf(fp, "void _clear_message_%s_len_%s(%s *msg);\n\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str());
@@ -992,7 +993,7 @@ static int gen_header(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
     fprintf(fp, "#endif\n");
-    fprintf(fp, "\n/* end of file */\n\n");
+    fprintf(fp, "\n/* end of file */\n");
     fclose(fp);
     return retcode;
 }
@@ -2158,7 +2159,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     fprintf(fp, "}\n");
     fprintf(fp, "\n");
     fprintf(fp, "/* lint -restore */\n");
-    fprintf(fp, "/* end of file */\n\n");
+    fprintf(fp, "/* end of file */\n");
     fclose(fp);
     return retcode;
 }
