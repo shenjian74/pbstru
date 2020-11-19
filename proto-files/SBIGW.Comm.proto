@@ -1,0 +1,38 @@
+syntax = "proto3";
+package SBIGW;
+
+import "Http2Proxy.Http2Common.proto";
+
+enum ERetType 
+{ 
+    ERET_SUCCESS = 0; /* 成功*/ 
+}
+
+message RouteNode{
+    http2proxy.Http2IpAddr remote=1;
+    uint32 clipf=2;
+    uint32 status = 3;
+}
+
+message HttpServer{
+    bytes scheme=1;
+    bytes  host=2; /*fqdn、ipv4、ipv6*/
+    uint32 port=3;
+}
+
+message HttpReqMsg{
+	bytes method = 1;//必填参数
+	HttpServer server=2;
+	bytes urlWithoutHost = 3;    //必填参数，格式“/pcrfDiameterService1?ID=1345”
+	map<string,bytes> headers = 4;//选填参数
+	bytes data = 5;//选填参数
+}
+
+message HttpRspMsg{
+	bytes method = 1;
+    HttpServer server=2;
+	bytes url = 3;    //上面的信息和请求对应
+	uint32 responseCode = 4;
+	map<string,bytes> header = 5;
+	bytes data = 6;
+}

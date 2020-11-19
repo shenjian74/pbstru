@@ -1,0 +1,15 @@
+syntax = "proto3";
+package SBIGW;
+
+import "Http2Proxy.Http2Common.proto";
+import "TS29510_Nnrf_NFManagement.components.schemas.proto";
+
+message NrfClientRegReq
+{
+    bytes instanceKey = 1; 
+    http2proxy.Http2AppInfo appInfo = 2;
+    uint32 nrfProfileId = 3;
+    TS29510_Nnrf_NFManagement.components.schemas.NFProfile  nfProfile = 4;
+    bool traced = 5;
+    bool forceput = 6;/* 不论本地状态，本次始终外发put注册请求 */
+}

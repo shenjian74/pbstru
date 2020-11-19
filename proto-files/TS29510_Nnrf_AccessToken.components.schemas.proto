@@ -1,0 +1,94 @@
+syntax = "proto3";
+package TS29510_Nnrf_AccessToken.components.schemas;
+
+import "TS29510_Nnrf_NFManagement.components.schemas.proto";
+import "TS29571_CommonData.components.schemas.proto";
+
+message AccessTokenClaims
+{
+	message Maud
+	{
+		message MNfInstanceId
+		{
+			repeated TS29571_CommonData.components.schemas.NfInstanceId nfInstanceId_ = 1;
+		}
+
+		oneof maud_
+		{
+			TS29510_Nnrf_NFManagement.components.schemas.NFType nFType_ = 1;
+			MNfInstanceId mNfInstanceId_ = 2;
+		}
+
+	}
+
+	Maud aud_ = 1;
+	TS29571_CommonData.components.schemas.PlmnId consumerPlmnId_ = 2;
+	TS29571_CommonData.components.schemas.Int64 exp_ = 3;
+	TS29571_CommonData.components.schemas.NfInstanceId iss_ = 4;
+	TS29571_CommonData.components.schemas.NfSetId producerNfSetId_ = 5;
+	repeated TS29571_CommonData.components.schemas.Bytes producerNsiList_ = 6;
+	TS29571_CommonData.components.schemas.PlmnId producerPlmnId_ = 7;
+	repeated TS29571_CommonData.components.schemas.Snssai producerSnssaiList_ = 8;
+	TS29571_CommonData.components.schemas.Bytes scope_ = 9;
+	TS29571_CommonData.components.schemas.NfInstanceId sub_ = 10;
+}
+
+message AccessTokenErr
+{
+	enum Eerror
+	{
+		INVALID_error = 0;
+		invalid_request = 1;
+		invalid_client = 2;
+		invalid_grant = 3;
+		unauthorized_client = 4;
+		unsupported_grant_type = 5;
+		invalid_scope = 6;
+	}
+
+	Eerror error_ = 1;
+	TS29571_CommonData.components.schemas.Bytes error_description_ = 2;
+	TS29571_CommonData.components.schemas.Bytes error_uri_ = 3;
+}
+
+message AccessTokenReq
+{
+	enum Egrant_type
+	{
+		INVALID_grant_type = 0;
+		client_credentials = 1;
+	}
+
+	Egrant_type grant_type_ = 1;
+	TS29571_CommonData.components.schemas.NfInstanceId nfInstanceId_ = 2;
+	TS29510_Nnrf_NFManagement.components.schemas.NFType nfType_ = 3;
+	TS29571_CommonData.components.schemas.PlmnId requesterPlmn_ = 4;
+	TS29571_CommonData.components.schemas.Bytes scope_ = 5;
+	TS29571_CommonData.components.schemas.NfInstanceId targetNfInstanceId_ = 6;
+	TS29571_CommonData.components.schemas.NfSetId targetNfSetId_ = 7;
+	TS29510_Nnrf_NFManagement.components.schemas.NFType targetNfType_ = 8;
+	repeated TS29571_CommonData.components.schemas.Bytes targetNsiList_ = 9;
+	TS29571_CommonData.components.schemas.PlmnId targetPlmn_ = 10;
+	repeated TS29571_CommonData.components.schemas.Snssai targetSnssaiList_ = 11;
+}
+
+message AccessTokenRsp
+{
+	enum Etoken_type
+	{
+		INVALID_token_type = 0;
+		Bearer = 1;
+	}
+
+	TS29571_CommonData.components.schemas.Bytes access_token_ = 1;
+	TS29571_CommonData.components.schemas.Int64 expires_in_ = 2;
+	TS29571_CommonData.components.schemas.Bytes scope_ = 3;
+	Etoken_type token_type_ = 4;
+}
+
+message AccessTokenRequest
+{
+	TS29571_CommonData.components.schemas.Bytes accept_Encoding_ = 1;
+	TS29571_CommonData.components.schemas.Bytes content_Encoding_ = 2;
+}
+

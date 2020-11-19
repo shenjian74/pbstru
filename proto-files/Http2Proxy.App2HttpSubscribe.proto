@@ -1,0 +1,59 @@
+syntax = "proto3";
+package http2proxy;
+
+import "Http2Proxy.Http2Common.proto";
+
+enum DispatchFuncType
+{
+	PB_OBJ_FUNC = 0; // 入参为pb对象
+	PB_OBJ_FUNC_WITH_PARM = 1; // 入参为pb对象，带附加参数
+	PB_BUF_FUNC = 2; // 入参为pb码流
+	PB_BUF_FUNC_WITH_PARM = 3; // 入参为pb码流，带附加参数
+}
+
+enum ServiceMatchType
+{
+	SRV_NAME_MATCH = 0; // 按服务名称匹配
+	REGEX_MATCH = 1; // 正则表达式匹配
+}
+
+message DispatchData
+{
+    bytes soName = 1;
+    bytes soData = 2; /* 分发需要的数据 */
+	DispatchFuncType funcType = 3; /* 分发函数类型 */
+}
+
+message ServiceAblityInfo
+{
+    bytes serviceAbility = 1;
+    bytes serviceTypeName = 2;
+    uint32 serviceInst = 3;
+    bytes  scType = 4;
+}
+
+message DispatchRule
+{
+    bytes serviceName = 1;
+    DispatchData serviceData = 2;
+	HttpVersion version = 3;
+	ServiceMatchType matchType = 4;
+	bool controlByPriority = 5;  /* 是否根据优先级进行负荷控制，0:不进行控制，1:控制 */
+    ServiceAblityInfo ablityInfo = 6; /*  httplb使用ablityInfo和rsctype 获取业务的负荷等级*/
+    uint32 rsctype = 7;  /* 该服务关联的业务资源类型 */
+}
+
+message DiscoverSC
+{
+	uint32 serviceTypeID = 1;
+	uint32 serviceInst = 2;
+	uint32 scTypeID = 3;
+}
+
+message App2HttpSubscribe
+{
+	uint32 sequence = 1;
+	DiscoverSC scInfo = 2;
+	Http2AppInfo appInfo = 3;
+	repeated DispatchRule rules = 4;
+}

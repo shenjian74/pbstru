@@ -1,0 +1,893 @@
+syntax = "proto3";
+package TS29510_Nnrf_NFManagement.components.schemas;
+
+import "TS29517_Naf_EventExposure.components.schemas.proto";
+import "TS29518_Namf_Communication.components.schemas.proto";
+import "TS29520_Nnwdaf_AnalyticsInfo.components.schemas.proto";
+import "TS29520_Nnwdaf_EventsSubscription.components.schemas.proto";
+import "TS29571_CommonData.components.schemas.proto";
+import "TS29572_Nlmf_Location.components.schemas.proto";
+
+message AfEventExposureData
+{
+	repeated TS29517_Naf_EventExposure.components.schemas.AfEvent afEvents_ = 1;
+	repeated TS29571_CommonData.components.schemas.Bytes afIds_ = 2;
+	repeated TS29571_CommonData.components.schemas.Bytes appIds_ = 3;
+}
+
+message AmfCond
+{
+	TS29571_CommonData.components.schemas.AmfRegionId amfRegionId_ = 1;
+	TS29571_CommonData.components.schemas.AmfSetId amfSetId_ = 2;
+}
+
+message AmfInfo
+{
+	TS29571_CommonData.components.schemas.AmfRegionId amfRegionId_ = 1;
+	TS29571_CommonData.components.schemas.AmfSetId amfSetId_ = 2;
+	repeated TS29571_CommonData.components.schemas.Guami backupInfoAmfFailure_ = 3;
+	repeated TS29571_CommonData.components.schemas.Guami backupInfoAmfRemoval_ = 4;
+	repeated TS29571_CommonData.components.schemas.Guami guamiList_ = 5;
+	N2InterfaceAmfInfo n2InterfaceAmfInfo_ = 6;
+	repeated TS29571_CommonData.components.schemas.Tai taiList_ = 7;
+	repeated TaiRange taiRangeList_ = 8;
+}
+
+message AnNodeType
+{
+	enum EAnNodeType
+	{
+		INVALID_AnNodeType = 0;
+		GNB = 1;
+		NG_ENB = 2;
+	}
+
+	oneof anNodeType_
+	{
+		EAnNodeType eAnNodeType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message AusfInfo
+{
+	TS29571_CommonData.components.schemas.NfGroupId groupId_ = 1;
+	repeated TS29571_CommonData.components.schemas.Bytes routingIndicators_ = 2;
+	repeated SupiRange supiRanges_ = 3;
+}
+
+message BsfInfo
+{
+	repeated TS29571_CommonData.components.schemas.Dnn dnnList_ = 1;
+	repeated TS29571_CommonData.components.schemas.Bytes ipDomainList_ = 2;
+	repeated Ipv4AddressRange ipv4AddressRanges_ = 3;
+	repeated Ipv6PrefixRange ipv6PrefixRanges_ = 4;
+}
+
+message ChfInfo
+{
+	repeated IdentityRange gpsiRangeList_ = 1;
+	TS29571_CommonData.components.schemas.NfGroupId groupId_ = 2;
+	repeated PlmnRange plmnRangeList_ = 3;
+	repeated SupiRange supiRangeList_ = 4;
+}
+
+message ChfServiceInfo
+{
+	TS29571_CommonData.components.schemas.Bytes primaryChfServiceInstance_ = 1;
+	TS29571_CommonData.components.schemas.Bytes secondaryChfServiceInstance_ = 2;
+}
+
+message DataSetId
+{
+	enum EDataSetId
+	{
+		INVALID_DataSetId = 0;
+		SUBSCRIPTION = 1;
+		POLICY = 2;
+		EXPOSURE = 3;
+		APPLICATION = 4;
+	}
+
+	oneof dataSetId_
+	{
+		EDataSetId eDataSetId_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message DefaultNotificationSubscription
+{
+	TS29571_CommonData.components.schemas.Uri callbackUri_ = 1;
+	TS29518_Namf_Communication.components.schemas.N1MessageClass n1MessageClass_ = 2;
+	TS29518_Namf_Communication.components.schemas.N2InformationClass n2InformationClass_ = 3;
+	NotificationType notificationType_ = 4;
+	repeated TS29571_CommonData.components.schemas.Bytes versions_ = 5;
+}
+
+message DnnSmfInfoItem
+{
+	TS29571_CommonData.components.schemas.Dnn dnn_ = 1;
+}
+
+message DnnUpfInfoItem
+{
+	repeated TS29571_CommonData.components.schemas.Dnai dnaiList_ = 1;
+	TS29571_CommonData.components.schemas.Dnn dnn_ = 2;
+	repeated Ipv4AddressRange ipv4AddressRanges_ = 3;
+	repeated Ipv6PrefixRange ipv6PrefixRanges_ = 4;
+	repeated TS29571_CommonData.components.schemas.PduSessionType pduSessionTypes_ = 5;
+}
+
+message Fqdn
+{
+	bytes fqdn_ = 1;
+}
+
+message GmlcInfo
+{
+	repeated TS29572_Nlmf_Location.components.schemas.ExternalClientType servingClientTypes_ = 1;
+}
+
+message GuamiListCond
+{
+	repeated TS29571_CommonData.components.schemas.Guami guamiList_ = 1;
+}
+
+message HssInfo
+{
+	TS29571_CommonData.components.schemas.NfGroupId groupId_ = 1;
+	repeated ImsiRange imsRanges_ = 2;
+}
+
+message IdentityRange
+{
+	TS29571_CommonData.components.schemas.Bytes end_ = 1;
+	TS29571_CommonData.components.schemas.Bytes pattern_ = 2;
+	TS29571_CommonData.components.schemas.Bytes start_ = 3;
+}
+
+message ImsiRange
+{
+	TS29571_CommonData.components.schemas.Bytes end_ = 1;
+	TS29571_CommonData.components.schemas.Bytes pattern_ = 2;
+	TS29571_CommonData.components.schemas.Bytes start_ = 3;
+}
+
+message InterfaceUpfInfoItem
+{
+	Fqdn endpointFqdn_ = 1;
+	UPInterfaceType interfaceType_ = 2;
+	repeated TS29571_CommonData.components.schemas.Ipv4Addr ipv4EndpointAddresses_ = 3;
+	repeated TS29571_CommonData.components.schemas.Ipv6Addr ipv6EndpointAddresses_ = 4;
+	TS29571_CommonData.components.schemas.Bytes networkInstance_ = 5;
+}
+
+message InternalGroupIdRange
+{
+	TS29571_CommonData.components.schemas.GroupId end_ = 1;
+	TS29571_CommonData.components.schemas.Bytes pattern_ = 2;
+	TS29571_CommonData.components.schemas.GroupId start_ = 3;
+}
+
+message IpEndPoint
+{
+	TS29571_CommonData.components.schemas.Ipv4Addr ipv4Address_ = 1;
+	TS29571_CommonData.components.schemas.Ipv6Addr ipv6Address_ = 2;
+	TS29571_CommonData.components.schemas.Int64 port_ = 3;
+	TransportProtocol transport_ = 4;
+}
+
+message Ipv4AddressRange
+{
+	TS29571_CommonData.components.schemas.Ipv4Addr end_ = 1;
+	TS29571_CommonData.components.schemas.Ipv4Addr start_ = 2;
+}
+
+message Ipv6PrefixRange
+{
+	TS29571_CommonData.components.schemas.Ipv6Prefix end_ = 1;
+	TS29571_CommonData.components.schemas.Ipv6Prefix start_ = 2;
+}
+
+message LmfInfo
+{
+	TS29572_Nlmf_Location.components.schemas.LMFIdentification lmfId_ = 1;
+	repeated TS29571_CommonData.components.schemas.AccessType servingAccessTypes_ = 2;
+	repeated AnNodeType servingAnNodeTypes_ = 3;
+	repeated TS29572_Nlmf_Location.components.schemas.ExternalClientType servingClientTypes_ = 4;
+	repeated TS29571_CommonData.components.schemas.RatType servingRatTypes_ = 5;
+}
+
+message N2InterfaceAmfInfo
+{
+	TS29571_CommonData.components.schemas.AmfName amfName_ = 1;
+	repeated TS29571_CommonData.components.schemas.Ipv4Addr ipv4EndpointAddress_ = 2;
+	repeated TS29571_CommonData.components.schemas.Ipv6Addr ipv6EndpointAddress_ = 3;
+}
+
+message NFProfile
+{
+	repeated TS29571_CommonData.components.schemas.Bytes allowedNfDomains_ = 1;
+	repeated NFType allowedNfTypes_ = 2;
+	repeated TS29571_CommonData.components.schemas.Snssai allowedNssais_ = 3;
+	repeated TS29571_CommonData.components.schemas.PlmnId allowedPlmns_ = 4;
+	repeated TS29571_CommonData.components.schemas.PlmnIdNid allowedSnpns_ = 5;
+	AmfInfo amfInfo_ = 6;
+	repeated AmfInfo amfInfoExt_ = 7;
+	AusfInfo ausfInfo_ = 8;
+	repeated AusfInfo ausfInfoExt_ = 9;
+	BsfInfo bsfInfo_ = 10;
+	repeated BsfInfo bsfInfoExt_ = 11;
+	TS29571_CommonData.components.schemas.Int64 capacity_ = 12;
+	ChfInfo chfInfo_ = 13;
+	repeated ChfInfo chfInfoExt_ = 14;
+	TS29571_CommonData.components.schemas.AnyType customInfo_ = 15;
+	repeated DefaultNotificationSubscription defaultNotificationSubscriptions_ = 16;
+	Fqdn fqdn_ = 17;
+	GmlcInfo gmlcInfo_ = 18;
+	TS29571_CommonData.components.schemas.Int64 heartBeatTimer_ = 19;
+	repeated HssInfo hssInfo_ = 20;
+	Fqdn interPlmnFqdn_ = 21;
+	repeated TS29571_CommonData.components.schemas.Ipv4Addr ipv4Addresses_ = 22;
+	repeated TS29571_CommonData.components.schemas.Ipv6Addr ipv6Addresses_ = 23;
+	TS29571_CommonData.components.schemas.Bool lcHSupportInd_ = 24;
+	LmfInfo lmfInfo_ = 25;
+	TS29571_CommonData.components.schemas.Int64 load_ = 26;
+	TS29571_CommonData.components.schemas.DateTime loadTimeStamp_ = 27;
+	TS29571_CommonData.components.schemas.Bytes locality_ = 28;
+	NefInfo nefInfo_ = 29;
+	TS29571_CommonData.components.schemas.NfInstanceId nfInstanceId_ = 30;
+	TS29571_CommonData.components.schemas.Bytes nfInstanceName_ = 31;
+	TS29571_CommonData.components.schemas.Bool nfProfileChangesInd_ = 32;
+	TS29571_CommonData.components.schemas.Bool nfProfileChangesSupportInd_ = 33;
+	TS29571_CommonData.components.schemas.Bool nfServicePersistence_ = 34;
+	repeated NFService nfServices_ = 35;
+	repeated TS29571_CommonData.components.schemas.NfSetId nfSetIdList_ = 36;
+	NFStatus nfStatus_ = 37;
+	NFType nfType_ = 38;
+	NrfInfo nrfInfo_ = 39;
+	repeated TS29571_CommonData.components.schemas.Bytes nsiList_ = 40;
+	NwdafInfo nwdafInfo_ = 41;
+	TS29571_CommonData.components.schemas.Bool olcHSupportInd_ = 42;
+	PcfInfo pcfInfo_ = 43;
+	repeated PcfInfo pcfInfoExt_ = 44;
+	repeated PcscfInfo pcscfInfo_ = 45;
+	repeated PlmnSnssai perPlmnSnssaiList_ = 46;
+	repeated TS29571_CommonData.components.schemas.PlmnId plmnList_ = 47;
+	TS29571_CommonData.components.schemas.Int64 priority_ = 48;
+	TS29571_CommonData.components.schemas.DateTime recoveryTime_ = 49;
+	repeated TS29571_CommonData.components.schemas.Snssai sNssais_ = 50;
+	repeated TS29571_CommonData.components.schemas.Bytes servingScope_ = 51;
+	SmfInfo smfInfo_ = 52;
+	repeated SmfInfo smfInfoExt_ = 53;
+	repeated TS29571_CommonData.components.schemas.PlmnIdNid snpnList_ = 54;
+	UdmInfo udmInfo_ = 55;
+	repeated UdmInfo udmInfoExt_ = 56;
+	UdrInfo udrInfo_ = 57;
+	repeated UdrInfo udrInfoExt_ = 58;
+	UdsfInfo udsfInfo_ = 59;
+	repeated UdsfInfo udsfInfoExt_ = 60;
+	UpfInfo upfInfo_ = 61;
+	repeated UpfInfo upfInfoExt_ = 62;
+}
+
+message NFService
+{
+	message supportedVendorSpecificFeatures
+	{
+		repeated VendorSpecificFeature supportedVendorSpecificFeatures_ = 1;
+	}
+
+	repeated TS29571_CommonData.components.schemas.Bytes allowedNfDomains_ = 1;
+	repeated NFType allowedNfTypes_ = 2;
+	repeated TS29571_CommonData.components.schemas.Snssai allowedNssais_ = 3;
+	repeated TS29571_CommonData.components.schemas.PlmnId allowedPlmns_ = 4;
+	repeated TS29571_CommonData.components.schemas.PlmnIdNid allowedSnpns_ = 5;
+	TS29571_CommonData.components.schemas.Bytes apiPrefix_ = 6;
+	TS29571_CommonData.components.schemas.Int64 capacity_ = 7;
+	ChfServiceInfo chfServiceInfo_ = 8;
+	repeated DefaultNotificationSubscription defaultNotificationSubscriptions_ = 9;
+	Fqdn fqdn_ = 10;
+	Fqdn interPlmnFqdn_ = 11;
+	repeated IpEndPoint ipEndPoints_ = 12;
+	TS29571_CommonData.components.schemas.Int64 load_ = 13;
+	TS29571_CommonData.components.schemas.DateTime loadTimeStamp_ = 14;
+	repeated TS29571_CommonData.components.schemas.NfServiceSetId nfServiceSetIdList_ = 15;
+	NFServiceStatus nfServiceStatus_ = 16;
+	TS29571_CommonData.components.schemas.Bool oauth2Required_ = 17;
+	repeated PlmnSnssai perPlmnSnssaiList_ = 18;
+	TS29571_CommonData.components.schemas.Int64 priority_ = 19;
+	TS29571_CommonData.components.schemas.DateTime recoveryTime_ = 20;
+	repeated TS29571_CommonData.components.schemas.Snssai sNssais_ = 21;
+	TS29571_CommonData.components.schemas.UriScheme scheme_ = 22;
+	TS29571_CommonData.components.schemas.Bytes serviceInstanceId_ = 23;
+	ServiceName serviceName_ = 24;
+	TS29571_CommonData.components.schemas.SupportedFeatures supportedFeatures_ = 25;
+	map <string, supportedVendorSpecificFeatures> supportedVendorSpecificFeatures_ = 26;
+	VendorId vendorId_ = 27;
+	repeated NFServiceVersion versions_ = 28;
+}
+
+message NFServiceStatus
+{
+	enum ENFServiceStatus
+	{
+		INVALID_NFServiceStatus = 0;
+		REGISTERED = 1;
+		SUSPENDED = 2;
+		UNDISCOVERABLE = 3;
+	}
+
+	oneof nFServiceStatus_
+	{
+		ENFServiceStatus eNFServiceStatus_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message NFServiceVersion
+{
+	TS29571_CommonData.components.schemas.Bytes apiFullVersion_ = 1;
+	TS29571_CommonData.components.schemas.Bytes apiVersionInUri_ = 2;
+	TS29571_CommonData.components.schemas.DateTime expiry_ = 3;
+}
+
+message NFStatus
+{
+	enum ENFStatus
+	{
+		INVALID_NFStatus = 0;
+		REGISTERED = 1;
+		SUSPENDED = 2;
+		UNDISCOVERABLE = 3;
+	}
+
+	oneof nFStatus_
+	{
+		ENFStatus eNFStatus_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message NFType
+{
+	enum ENFType
+	{
+		INVALID_NFType = 0;
+		NRF = 1;
+		UDM = 2;
+		AMF = 3;
+		SMF = 4;
+		AUSF = 5;
+		NEF = 6;
+		PCF = 7;
+		SMSF = 8;
+		NSSF = 9;
+		UDR = 10;
+		LMF = 11;
+		GMLC = 12;
+		N5G_EIR = 13;
+		SEPP = 14;
+		UPF = 15;
+		N3IWF = 16;
+		AF = 17;
+		UDSF = 18;
+		BSF = 19;
+		CHF = 20;
+		NWDAF = 21;
+		PCSCF = 22;
+		CBCF = 23;
+		HSS = 24;
+		UCMF = 25;
+		SOR_AF = 26;
+		SPAF = 27;
+		MME = 28;
+		SCSAS = 29;
+		SCEF = 30;
+		SCP = 31;
+	}
+
+	oneof nFType_
+	{
+		ENFType eNFType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message NefId
+{
+	bytes nefId_ = 1;
+}
+
+message NefInfo
+{
+	AfEventExposureData afEeData_ = 1;
+	NefId nefId_ = 2;
+	PfdData pfdData_ = 3;
+}
+
+message NetworkSliceCond
+{
+	repeated TS29571_CommonData.components.schemas.Bytes nsiList_ = 1;
+	repeated TS29571_CommonData.components.schemas.Snssai snssaiList_ = 2;
+}
+
+message NfGroupCond
+{
+	enum EnfType
+	{
+		INVALID_nfType = 0;
+		UDM = 1;
+		AUSF = 2;
+		UDR = 3;
+		PCF = 4;
+		CHF = 5;
+	}
+
+	TS29571_CommonData.components.schemas.NfGroupId nfGroupId_ = 1;
+	EnfType nfType_ = 2;
+}
+
+message NfInfo
+{
+	NFType nfType_ = 1;
+}
+
+message NfInstanceIdCond
+{
+	TS29571_CommonData.components.schemas.NfInstanceId nfInstanceId_ = 1;
+}
+
+message NfServiceSetCond
+{
+	TS29571_CommonData.components.schemas.NfServiceSetId nfServiceSetId_ = 1;
+}
+
+message NfSetCond
+{
+	TS29571_CommonData.components.schemas.NfSetId nfSetId_ = 1;
+}
+
+message NfTypeCond
+{
+	NFType nfType_ = 1;
+}
+
+message NotifCondition
+{
+	repeated TS29571_CommonData.components.schemas.Bytes monitoredAttributes_ = 1;
+	repeated TS29571_CommonData.components.schemas.Bytes unmonitoredAttributes_ = 2;
+}
+
+message NotificationData
+{
+	NotificationEventType event_ = 1;
+	TS29571_CommonData.components.schemas.Uri nfInstanceUri_ = 2;
+	NFProfile nfProfile_ = 3;
+	repeated TS29571_CommonData.components.schemas.ChangeItem profileChanges_ = 4;
+}
+
+message NotificationEventType
+{
+	enum ENotificationEventType
+	{
+		INVALID_NotificationEventType = 0;
+		NF_REGISTERED = 1;
+		NF_DEREGISTERED = 2;
+		NF_PROFILE_CHANGED = 3;
+	}
+
+	oneof notificationEventType_
+	{
+		ENotificationEventType eNotificationEventType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message NotificationType
+{
+	enum ENotificationType
+	{
+		INVALID_NotificationType = 0;
+		N1_MESSAGES = 1;
+		N2_INFORMATION = 2;
+		LOCATION_NOTIFICATION = 3;
+		DATA_REMOVAL_NOTIFICATION = 4;
+		DATA_CHANGE_NOTIFICATION = 5;
+		LOCATION_UPDATE_NOTIFICATION = 6;
+	}
+
+	oneof notificationType_
+	{
+		ENotificationType eNotificationType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message NrfInfo
+{
+	map <string, AmfInfo> servedAmfInfo_ = 1;
+	map <string, AusfInfo> servedAusfInfo_ = 2;
+	map <string, BsfInfo> servedBsfInfo_ = 3;
+	map <string, ChfInfo> servedChfInfo_ = 4;
+	map <string, GmlcInfo> servedGmlcInfo_ = 5;
+	map <string, HssInfo> servedHssInfo_ = 6;
+	map <string, LmfInfo> servedLmfInfo_ = 7;
+	map <string, NefInfo> servedNefInfo_ = 8;
+	map <string, NfInfo> servedNfInfo_ = 9;
+	map <string, NwdafInfo> servedNwdafInfo_ = 10;
+	map <string, PcfInfo> servedPcfInfo_ = 11;
+	map <string, PcscfInfo> servedPcscfInfo_ = 12;
+	map <string, SmfInfo> servedSmfInfo_ = 13;
+	map <string, UdmInfo> servedUdmInfo_ = 14;
+	map <string, UdrInfo> servedUdrInfo_ = 15;
+	map <string, UpfInfo> servedUpfInfo_ = 16;
+}
+
+message NwdafInfo
+{
+	repeated TS29520_Nnwdaf_AnalyticsInfo.components.schemas.EventId eventIds_ = 1;
+	repeated TS29520_Nnwdaf_EventsSubscription.components.schemas.NwdafEvent nwdafEvents_ = 2;
+	repeated TS29571_CommonData.components.schemas.Tai taiList_ = 3;
+	repeated TaiRange taiRangeList_ = 4;
+}
+
+message PcfInfo
+{
+	repeated TS29571_CommonData.components.schemas.Dnn dnnList_ = 1;
+	repeated IdentityRange gpsiRanges_ = 2;
+	TS29571_CommonData.components.schemas.NfGroupId groupId_ = 3;
+	TS29571_CommonData.components.schemas.DiameterIdentity rxDiamHost_ = 4;
+	TS29571_CommonData.components.schemas.DiameterIdentity rxDiamRealm_ = 5;
+	repeated SupiRange supiRanges_ = 6;
+	TS29571_CommonData.components.schemas.Bool v2xSupportInd_ = 7;
+}
+
+message PcscfInfo
+{
+	repeated TS29571_CommonData.components.schemas.AccessType accessType_ = 1;
+	repeated TS29571_CommonData.components.schemas.Dnn dnnList_ = 2;
+}
+
+message PfdData
+{
+	repeated TS29571_CommonData.components.schemas.Bytes afIds_ = 1;
+	repeated TS29571_CommonData.components.schemas.Bytes appIds_ = 2;
+}
+
+message PlmnRange
+{
+	TS29571_CommonData.components.schemas.Bytes end_ = 1;
+	TS29571_CommonData.components.schemas.Bytes pattern_ = 2;
+	TS29571_CommonData.components.schemas.Bytes start_ = 3;
+}
+
+message PlmnSnssai
+{
+	TS29571_CommonData.components.schemas.Nid nid_ = 1;
+	TS29571_CommonData.components.schemas.PlmnId plmnId_ = 2;
+	repeated TS29571_CommonData.components.schemas.Snssai sNssaiList_ = 3;
+}
+
+message ServiceName
+{
+	enum EServiceName
+	{
+		INVALID_ServiceName = 0;
+		nnrf_nfm = 1;
+		nnrf_disc = 2;
+		nnrf_oauth2 = 3;
+		nudm_sdm = 4;
+		nudm_uecm = 5;
+		nudm_ueau = 6;
+		nudm_ee = 7;
+		nudm_pp = 8;
+		nudm_niddau = 9;
+		nudm_mt = 10;
+		namf_comm = 11;
+		namf_evts = 12;
+		namf_mt = 13;
+		namf_loc = 14;
+		nsmf_pdusession = 15;
+		nsmf_event_exposure = 16;
+		nausf_auth = 17;
+		nausf_sorprotection = 18;
+		nausf_upuprotection = 19;
+		nnef_pfdmanagement = 20;
+		nnef_smcontext = 21;
+		nnef_eventexposure = 22;
+		npcf_am_policy_control = 23;
+		npcf_smpolicycontrol = 24;
+		npcf_policyauthorization = 25;
+		npcf_bdtpolicycontrol = 26;
+		npcf_eventexposure = 27;
+		npcf_ue_policy_control = 28;
+		nsmsf_sms = 29;
+		nnssf_nsselection = 30;
+		nnssf_nssaiavailability = 31;
+		nudr_dr = 32;
+		nudr_group_id_map = 33;
+		nlmf_loc = 34;
+		n5g_eir_eic = 35;
+		nbsf_management = 36;
+		nchf_spendinglimitcontrol = 37;
+		nchf_convergedcharging = 38;
+		nchf_offlineonlycharging = 39;
+		nnwdaf_eventssubscription = 40;
+		nnwdaf_analyticsinfo = 41;
+		ngmlc_loc = 42;
+		nucmf_provisioning = 43;
+		nucmf_uecapabilitymanagement = 44;
+		nhss_sdm = 45;
+		nhss_uecm = 46;
+		nhss_ueau = 47;
+		nhss_ims_sdm = 48;
+		nhss_ims_uecm = 49;
+		nhss_ims_ueau = 50;
+		nsepp_telescopic = 51;
+		nsoraf_sor = 52;
+		nspaf_secured_packet = 53;
+	}
+
+	oneof serviceName_
+	{
+		EServiceName eServiceName_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message ServiceNameCond
+{
+	ServiceName serviceName_ = 1;
+}
+
+message SmfInfo
+{
+	repeated TS29571_CommonData.components.schemas.AccessType accessType_ = 1;
+	Fqdn pgwFqdn_ = 2;
+	TS29571_CommonData.components.schemas.Int64 priority_ = 3;
+	repeated SnssaiSmfInfoItem sNssaiSmfInfoList_ = 4;
+	repeated TS29571_CommonData.components.schemas.Tai taiList_ = 5;
+	repeated TaiRange taiRangeList_ = 6;
+}
+
+message SnssaiSmfInfoItem
+{
+	repeated DnnSmfInfoItem dnnSmfInfoList_ = 1;
+	TS29571_CommonData.components.schemas.Snssai sNssai_ = 2;
+}
+
+message SnssaiUpfInfoItem
+{
+	repeated DnnUpfInfoItem dnnUpfInfoList_ = 1;
+	TS29571_CommonData.components.schemas.Bool redundantTransport_ = 2;
+	TS29571_CommonData.components.schemas.Snssai sNssai_ = 3;
+}
+
+message SubscriptionData
+{
+	message MsubscrCond
+	{
+		oneof msubscrCond_
+		{
+			NfInstanceIdCond nfInstanceIdCond_ = 1;
+			NfTypeCond nfTypeCond_ = 2;
+			ServiceNameCond serviceNameCond_ = 3;
+			AmfCond amfCond_ = 4;
+			GuamiListCond guamiListCond_ = 5;
+			NetworkSliceCond networkSliceCond_ = 6;
+			NfGroupCond nfGroupCond_ = 7;
+			NfSetCond nfSetCond_ = 8;
+			NfServiceSetCond nfServiceSetCond_ = 9;
+			UpfCond upfCond_ = 10;
+		}
+
+	}
+
+	TS29571_CommonData.components.schemas.Bytes nfStatusNotificationUri_ = 1;
+	TS29571_CommonData.components.schemas.Nid nid_ = 2;
+	NotifCondition notifCondition_ = 3;
+	TS29571_CommonData.components.schemas.PlmnId plmnId_ = 4;
+	Fqdn reqNfFqdn_ = 5;
+	TS29571_CommonData.components.schemas.NfInstanceId reqNfInstanceId_ = 6;
+	NFType reqNfType_ = 7;
+	repeated NotificationEventType reqNotifEvents_ = 8;
+	repeated TS29571_CommonData.components.schemas.PlmnId reqPlmnList_ = 9;
+	repeated TS29571_CommonData.components.schemas.Snssai reqSnssais_ = 10;
+	MsubscrCond subscrCond_ = 11;
+	TS29571_CommonData.components.schemas.Bytes subscriptionId_ = 12;
+	TS29571_CommonData.components.schemas.DateTime validityTime_ = 13;
+}
+
+message SupiRange
+{
+	TS29571_CommonData.components.schemas.Bytes end_ = 1;
+	TS29571_CommonData.components.schemas.Bytes pattern_ = 2;
+	TS29571_CommonData.components.schemas.Bytes start_ = 3;
+}
+
+message TacRange
+{
+	TS29571_CommonData.components.schemas.Bytes end_ = 1;
+	TS29571_CommonData.components.schemas.Bytes pattern_ = 2;
+	TS29571_CommonData.components.schemas.Bytes start_ = 3;
+}
+
+message TaiRange
+{
+	TS29571_CommonData.components.schemas.Nid nid_ = 1;
+	TS29571_CommonData.components.schemas.PlmnId plmnId_ = 2;
+	repeated TacRange tacRangeList_ = 3;
+}
+
+message TngfInfo
+{
+	Fqdn endpointFqdn_ = 1;
+	repeated TS29571_CommonData.components.schemas.Ipv4Addr ipv4EndpointAddresses_ = 2;
+	repeated TS29571_CommonData.components.schemas.Ipv6Addr ipv6EndpointAddresses_ = 3;
+}
+
+message TransportProtocol
+{
+	enum ETransportProtocol
+	{
+		INVALID_TransportProtocol = 0;
+		TCP = 1;
+	}
+
+	oneof transportProtocol_
+	{
+		ETransportProtocol eTransportProtocol_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message TwifInfo
+{
+	Fqdn endpointFqdn_ = 1;
+	repeated TS29571_CommonData.components.schemas.Ipv4Addr ipv4EndpointAddresses_ = 2;
+	repeated TS29571_CommonData.components.schemas.Ipv6Addr ipv6EndpointAddresses_ = 3;
+}
+
+message UPInterfaceType
+{
+	enum EUPInterfaceType
+	{
+		INVALID_UPInterfaceType = 0;
+		N3 = 1;
+		N6 = 2;
+		N9 = 3;
+	}
+
+	oneof uPInterfaceType_
+	{
+		EUPInterfaceType eUPInterfaceType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message UdmInfo
+{
+	repeated IdentityRange externalGroupIdentifiersRanges_ = 1;
+	repeated IdentityRange gpsiRanges_ = 2;
+	TS29571_CommonData.components.schemas.NfGroupId groupId_ = 3;
+	repeated InternalGroupIdRange internalGroupIdentifiersRanges_ = 4;
+	repeated TS29571_CommonData.components.schemas.Bytes routingIndicators_ = 5;
+	repeated SupiRange supiRanges_ = 6;
+}
+
+message UdrInfo
+{
+	repeated IdentityRange externalGroupIdentifiersRanges_ = 1;
+	repeated IdentityRange gpsiRanges_ = 2;
+	TS29571_CommonData.components.schemas.NfGroupId groupId_ = 3;
+	repeated SupiRange supiRanges_ = 4;
+	repeated DataSetId supportedDataSets_ = 5;
+}
+
+message UdsfInfo
+{
+	TS29571_CommonData.components.schemas.NfGroupId groupId_ = 1;
+	repeated SupiRange supiRanges_ = 2;
+}
+
+message UpfCond
+{
+	repeated TS29571_CommonData.components.schemas.Bytes smfServingArea_ = 1;
+	repeated TS29571_CommonData.components.schemas.Tai taiList_ = 2;
+}
+
+message UpfInfo
+{
+	TS29571_CommonData.components.schemas.AtsssCapability atsssCapability_ = 1;
+	repeated InterfaceUpfInfoItem interfaceUpfInfoList_ = 2;
+	TS29571_CommonData.components.schemas.Bool iwkEpsInd_ = 3;
+	repeated TS29571_CommonData.components.schemas.PduSessionType pduSessionTypes_ = 4;
+	TS29571_CommonData.components.schemas.Int64 priority_ = 5;
+	TS29571_CommonData.components.schemas.Bool redundantGtpu_ = 6;
+	repeated SnssaiUpfInfoItem sNssaiUpfInfoList_ = 7;
+	repeated TS29571_CommonData.components.schemas.Bytes smfServingArea_ = 8;
+	repeated TS29571_CommonData.components.schemas.Tai taiList_ = 9;
+	TngfInfo tngfInfo_ = 10;
+	TwifInfo twifInfo_ = 11;
+	TS29571_CommonData.components.schemas.Bool ueIpAddrInd_ = 12;
+	WAgfInfo wAgfInfo_ = 13;
+}
+
+message VendorId
+{
+	bytes vendorId_ = 1;
+}
+
+message VendorSpecificFeature
+{
+	TS29571_CommonData.components.schemas.Bytes featureName_ = 1;
+	TS29571_CommonData.components.schemas.Bytes featureVersion_ = 2;
+}
+
+message WAgfInfo
+{
+	Fqdn endpointFqdn_ = 1;
+	repeated TS29571_CommonData.components.schemas.Ipv4Addr ipv4EndpointAddresses_ = 2;
+	repeated TS29571_CommonData.components.schemas.Ipv6Addr ipv6EndpointAddresses_ = 3;
+}
+
+message CreateSubscription
+{
+	TS29571_CommonData.components.schemas.Bytes accept_Encoding_ = 1;
+	TS29571_CommonData.components.schemas.Bytes content_Encoding_ = 2;
+}
+
+message DeregisterNFInstance
+{
+	TS29571_CommonData.components.schemas.NfInstanceId nfInstanceID_ = 1;
+}
+
+message GetNFInstance
+{
+	TS29571_CommonData.components.schemas.NfInstanceId nfInstanceID_ = 1;
+}
+
+message GetNFInstances
+{
+	TS29571_CommonData.components.schemas.Int64 limit_ = 1;
+	NFType nf_type_ = 2;
+}
+
+message RegisterNFInstance
+{
+	TS29571_CommonData.components.schemas.Bytes accept_Encoding_ = 1;
+	TS29571_CommonData.components.schemas.Bytes content_Encoding_ = 2;
+	TS29571_CommonData.components.schemas.NfInstanceId nfInstanceID_ = 3;
+}
+
+message RemoveSubscription
+{
+	bytes subscriptionID_ = 1;
+}
+
+message UpdateNFInstance
+{
+	TS29571_CommonData.components.schemas.Bytes accept_Encoding_ = 1;
+	TS29571_CommonData.components.schemas.Bytes content_Encoding_ = 2;
+	TS29571_CommonData.components.schemas.NfInstanceId nfInstanceID_ = 3;
+}
+
+message UpdateSubscription
+{
+	TS29571_CommonData.components.schemas.Bytes accept_Encoding_ = 1;
+	TS29571_CommonData.components.schemas.Bytes content_Encoding_ = 2;
+	TS29571_CommonData.components.schemas.Bytes subscriptionID_ = 3;
+}
+

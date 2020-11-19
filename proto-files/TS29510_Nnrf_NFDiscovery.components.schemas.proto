@@ -1,0 +1,209 @@
+syntax = "proto3";
+package TS29510_Nnrf_NFDiscovery.components.schemas;
+
+import "TS29503_Nudm_SDM.components.schemas.proto";
+import "TS29510_Nnrf_NFManagement.components.schemas.proto";
+import "TS29520_Nnwdaf_AnalyticsInfo.components.schemas.proto";
+import "TS29520_Nnwdaf_EventsSubscription.components.schemas.proto";
+import "TS29571_CommonData.components.schemas.proto";
+import "TS29572_Nlmf_Location.components.schemas.proto";
+
+message NFProfile
+{
+	TS29510_Nnrf_NFManagement.components.schemas.AmfInfo amfInfo_ = 1;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.AmfInfo amfInfoExt_ = 2;
+	TS29510_Nnrf_NFManagement.components.schemas.AusfInfo ausfInfo_ = 3;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.AusfInfo ausfInfoExt_ = 4;
+	TS29510_Nnrf_NFManagement.components.schemas.BsfInfo bsfInfo_ = 5;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.BsfInfo bsfInfoExt_ = 6;
+	TS29571_CommonData.components.schemas.Int64 capacity_ = 7;
+	TS29510_Nnrf_NFManagement.components.schemas.ChfInfo chfInfo_ = 8;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.ChfInfo chfInfoExt_ = 9;
+	TS29571_CommonData.components.schemas.AnyType customInfo_ = 10;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.DefaultNotificationSubscription defaultNotificationSubscriptions_ = 11;
+	TS29510_Nnrf_NFManagement.components.schemas.Fqdn fqdn_ = 12;
+	TS29510_Nnrf_NFManagement.components.schemas.GmlcInfo gmlcInfo_ = 13;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.HssInfo hssInfo_ = 14;
+	repeated TS29571_CommonData.components.schemas.Ipv4Addr ipv4Addresses_ = 15;
+	repeated TS29571_CommonData.components.schemas.Ipv6Addr ipv6Addresses_ = 16;
+	TS29571_CommonData.components.schemas.Bool lcHSupportInd_ = 17;
+	TS29510_Nnrf_NFManagement.components.schemas.LmfInfo lmfInfo_ = 18;
+	TS29571_CommonData.components.schemas.Int64 load_ = 19;
+	TS29571_CommonData.components.schemas.DateTime loadTimeStamp_ = 20;
+	TS29571_CommonData.components.schemas.Bytes locality_ = 21;
+	TS29510_Nnrf_NFManagement.components.schemas.NefInfo nefInfo_ = 22;
+	TS29571_CommonData.components.schemas.NfInstanceId nfInstanceId_ = 23;
+	TS29571_CommonData.components.schemas.Bytes nfInstanceName_ = 24;
+	TS29571_CommonData.components.schemas.Bool nfServicePersistence_ = 25;
+	repeated NFService nfServices_ = 26;
+	repeated TS29571_CommonData.components.schemas.NfSetId nfSetIdList_ = 27;
+	TS29510_Nnrf_NFManagement.components.schemas.NFStatus nfStatus_ = 28;
+	TS29510_Nnrf_NFManagement.components.schemas.NFType nfType_ = 29;
+	repeated TS29571_CommonData.components.schemas.Bytes nsiList_ = 30;
+	TS29510_Nnrf_NFManagement.components.schemas.NwdafInfo nwdafInfo_ = 31;
+	TS29571_CommonData.components.schemas.Bool olcHSupportInd_ = 32;
+	TS29510_Nnrf_NFManagement.components.schemas.PcfInfo pcfInfo_ = 33;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.PcfInfo pcfInfoExt_ = 34;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.PcscfInfo pcscfInfo_ = 35;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.PlmnSnssai perPlmnSnssaiList_ = 36;
+	repeated TS29571_CommonData.components.schemas.PlmnId plmnList_ = 37;
+	TS29571_CommonData.components.schemas.Int64 priority_ = 38;
+	TS29571_CommonData.components.schemas.DateTime recoveryTime_ = 39;
+	repeated TS29571_CommonData.components.schemas.Snssai sNssais_ = 40;
+	repeated TS29571_CommonData.components.schemas.Bytes servingScope_ = 41;
+	TS29510_Nnrf_NFManagement.components.schemas.SmfInfo smfInfo_ = 42;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.SmfInfo smfInfoExt_ = 43;
+	repeated TS29571_CommonData.components.schemas.PlmnIdNid snpnList_ = 44;
+	TS29510_Nnrf_NFManagement.components.schemas.UdmInfo udmInfo_ = 45;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.UdmInfo udmInfoExt_ = 46;
+	TS29510_Nnrf_NFManagement.components.schemas.UdrInfo udrInfo_ = 47;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.UdrInfo udrInfoExt_ = 48;
+	TS29510_Nnrf_NFManagement.components.schemas.UdsfInfo udsfInfo_ = 49;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.UdsfInfo udsfInfoExt_ = 50;
+	TS29510_Nnrf_NFManagement.components.schemas.UpfInfo upfInfo_ = 51;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.UpfInfo upfInfoExt_ = 52;
+}
+
+message NFService
+{
+	message supportedVendorSpecificFeatures
+	{
+		repeated TS29510_Nnrf_NFManagement.components.schemas.VendorSpecificFeature supportedVendorSpecificFeatures_ = 1;
+	}
+
+	TS29571_CommonData.components.schemas.Bytes apiPrefix_ = 1;
+	TS29571_CommonData.components.schemas.Int64 capacity_ = 2;
+	TS29510_Nnrf_NFManagement.components.schemas.ChfServiceInfo chfServiceInfo_ = 3;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.DefaultNotificationSubscription defaultNotificationSubscriptions_ = 4;
+	TS29510_Nnrf_NFManagement.components.schemas.Fqdn fqdn_ = 5;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.IpEndPoint ipEndPoints_ = 6;
+	TS29571_CommonData.components.schemas.Int64 load_ = 7;
+	TS29571_CommonData.components.schemas.DateTime loadTimeStamp_ = 8;
+	repeated TS29571_CommonData.components.schemas.NfServiceSetId nfServiceSetIdList_ = 9;
+	TS29510_Nnrf_NFManagement.components.schemas.NFServiceStatus nfServiceStatus_ = 10;
+	TS29571_CommonData.components.schemas.Bool oauth2Required_ = 11;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.PlmnSnssai perPlmnSnssaiList_ = 12;
+	TS29571_CommonData.components.schemas.Int64 priority_ = 13;
+	TS29571_CommonData.components.schemas.DateTime recoveryTime_ = 14;
+	repeated TS29571_CommonData.components.schemas.Snssai sNssais_ = 15;
+	TS29571_CommonData.components.schemas.UriScheme scheme_ = 16;
+	TS29571_CommonData.components.schemas.Bytes serviceInstanceId_ = 17;
+	TS29510_Nnrf_NFManagement.components.schemas.ServiceName serviceName_ = 18;
+	TS29571_CommonData.components.schemas.SupportedFeatures supportedFeatures_ = 19;
+	map <string, supportedVendorSpecificFeatures> supportedVendorSpecificFeatures_ = 20;
+	TS29510_Nnrf_NFManagement.components.schemas.VendorId vendorId_ = 21;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.NFServiceVersion versions_ = 22;
+}
+
+message PreferredSearch
+{
+	bool preferredTaiMatchInd_ = 1;
+}
+
+message SearchResult
+{
+	repeated NFProfile nfInstances_ = 1;
+	TS29571_CommonData.components.schemas.SupportedFeatures nrfSupportedFeatures_ = 2;
+	TS29571_CommonData.components.schemas.Uint32 numNfInstComplete_ = 3;
+	PreferredSearch preferredSearch_ = 4;
+	TS29571_CommonData.components.schemas.Bytes searchId_ = 5;
+	TS29571_CommonData.components.schemas.Int64 validityPeriod_ = 6;
+}
+
+message StoredSearchResult
+{
+	repeated NFProfile nfInstances_ = 1;
+}
+
+message RetrieveCompleteSearch
+{
+	searchId searchId_ = 1;
+	TS29571_CommonData.components.schemas.Bytes accept_Encoding_ = 2;
+}
+
+message RetrieveStoredSearch
+{
+	searchId searchId_ = 1;
+	TS29571_CommonData.components.schemas.Bytes accept_Encoding_ = 2;
+}
+
+message SearchNFInstances
+{
+	TS29571_CommonData.components.schemas.Bytes accept_Encoding_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.AccessType access_type_ = 3;
+	TS29510_Nnrf_NFManagement.components.schemas.AfEventExposureData af_ee_data_ = 4;
+	TS29571_CommonData.components.schemas.AmfRegionId amf_region_id_ = 5;
+	TS29571_CommonData.components.schemas.AmfSetId amf_set_id_ = 6;
+	TS29510_Nnrf_NFManagement.components.schemas.AnNodeType an_node_type_ = 7;
+	TS29571_CommonData.components.schemas.AtsssCapability atsss_capability_ = 8;
+	TS29571_CommonData.components.schemas.PlmnId chf_supported_plmn_ = 9;
+	TS29572_Nlmf_Location.components.schemas.ExternalClientType client_type_ = 10;
+	TS29571_CommonData.components.schemas.ComplexQuery complex_query_ = 11;
+	TS29510_Nnrf_NFManagement.components.schemas.DataSetId data_set_ = 12;
+	repeated TS29571_CommonData.components.schemas.Dnai dnai_list_ = 13;
+	TS29571_CommonData.components.schemas.Dnn dnn_ = 14;
+	repeated TS29520_Nnwdaf_AnalyticsInfo.components.schemas.EventId event_id_list_ = 15;
+	TS29503_Nudm_SDM.components.schemas.ExtGroupId external_group_identity_ = 16;
+	TS29571_CommonData.components.schemas.Gpsi gpsi_ = 17;
+	repeated TS29571_CommonData.components.schemas.NfGroupId group_id_list_ = 18;
+	TS29571_CommonData.components.schemas.Guami guami_ = 19;
+	TS29571_CommonData.components.schemas.Uri hnrf_uri_ = 20;
+	TS29571_CommonData.components.schemas.Bytes imsi_ = 21;
+	TS29571_CommonData.components.schemas.GroupId internal_group_identity_ = 22;
+	TS29571_CommonData.components.schemas.Bytes ip_domain_ = 23;
+	TS29571_CommonData.components.schemas.Int64 limit_ = 24;
+	TS29572_Nlmf_Location.components.schemas.LMFIdentification lmf_id_ = 25;
+	TS29571_CommonData.components.schemas.Int64 max_payload_size_ = 26;
+	TS29510_Nnrf_NFManagement.components.schemas.NefId nef_id_ = 27;
+	TS29510_Nnrf_NFManagement.components.schemas.NotificationType notification_type_ = 28;
+	repeated TS29571_CommonData.components.schemas.Bytes nsi_list_ = 29;
+	repeated TS29520_Nnwdaf_EventsSubscription.components.schemas.NwdafEvent nwdaf_event_list_ = 30;
+	repeated TS29571_CommonData.components.schemas.PduSessionType pdu_session_types_ = 31;
+	TS29510_Nnrf_NFManagement.components.schemas.PfdData pfd_data_ = 32;
+	TS29510_Nnrf_NFManagement.components.schemas.Fqdn pgw_ = 33;
+	TS29571_CommonData.components.schemas.Bool pgw_ind_ = 34;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.PlmnSnssai plmn_specific_snssai_list_ = 35;
+	map <string, TS29571_CommonData.components.schemas.Bytes> preferred_api_versions_ = 36;
+	TS29571_CommonData.components.schemas.Bytes preferred_locality_ = 37;
+	repeated TS29571_CommonData.components.schemas.NfInstanceId preferred_nf_instances_ = 38;
+	TS29571_CommonData.components.schemas.Tai preferred_tai_ = 39;
+	TS29571_CommonData.components.schemas.RatType rat_type_ = 40;
+	TS29571_CommonData.components.schemas.Bool redundant_gtpu_ = 41;
+	TS29571_CommonData.components.schemas.Bool redundant_transport_ = 42;
+	TS29510_Nnrf_NFManagement.components.schemas.Fqdn requester_nf_instance_fqdn_ = 43;
+	TS29571_CommonData.components.schemas.NfInstanceId requester_nf_instance_id_ = 44;
+	TS29510_Nnrf_NFManagement.components.schemas.NFType requester_nf_type_ = 45;
+	repeated TS29571_CommonData.components.schemas.PlmnId requester_plmn_list_ = 46;
+	repeated TS29571_CommonData.components.schemas.Snssai requester_snssais_ = 47;
+	repeated TS29571_CommonData.components.schemas.SupportedFeatures required_features_ = 48;
+	TS29571_CommonData.components.schemas.Bytes routing_indicator_ = 49;
+	repeated TS29510_Nnrf_NFManagement.components.schemas.ServiceName service_names_ = 50;
+	repeated TS29571_CommonData.components.schemas.Bytes serving_scope_ = 51;
+	TS29571_CommonData.components.schemas.Bytes smf_serving_area_ = 52;
+	repeated TS29571_CommonData.components.schemas.Snssai snssais_ = 53;
+	TS29571_CommonData.components.schemas.Supi supi_ = 54;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 55;
+	TS29571_CommonData.components.schemas.Tai tai_ = 56;
+	TS29510_Nnrf_NFManagement.components.schemas.Fqdn target_nf_fqdn_ = 57;
+	TS29571_CommonData.components.schemas.NfInstanceId target_nf_instance_id_ = 58;
+	TS29571_CommonData.components.schemas.NfServiceSetId target_nf_service_set_id_ = 59;
+	TS29571_CommonData.components.schemas.NfSetId target_nf_set_id_ = 60;
+	TS29510_Nnrf_NFManagement.components.schemas.NFType target_nf_type_ = 61;
+	repeated TS29571_CommonData.components.schemas.PlmnId target_plmn_list_ = 62;
+	TS29571_CommonData.components.schemas.PlmnIdNid target_snpn_ = 63;
+	TS29510_Nnrf_NFManagement.components.schemas.TngfInfo tngf_info_ = 64;
+	TS29510_Nnrf_NFManagement.components.schemas.TwifInfo twif_info_ = 65;
+	TS29571_CommonData.components.schemas.Ipv4Addr ue_ipv4_address_ = 66;
+	TS29571_CommonData.components.schemas.Ipv6Prefix ue_ipv6_prefix_ = 67;
+	TS29571_CommonData.components.schemas.Bool upf_iwk_eps_ind_ = 68;
+	TS29571_CommonData.components.schemas.Bool upf_ue_ip_addr_ind_ = 69;
+	TS29571_CommonData.components.schemas.Bool v2x_support_ind_ = 70;
+	TS29510_Nnrf_NFManagement.components.schemas.WAgfInfo w_agf_info_ = 71;
+}
+
+message searchId
+{
+	bytes searchId_ = 1;
+}
+

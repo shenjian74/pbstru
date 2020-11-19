@@ -1,0 +1,383 @@
+syntax = "proto3";
+package TS29518_Namf_Communication.components.schemas;
+
+import "TS29571_CommonData.components.schemas.proto";
+
+message CipheringAlgorithm
+{
+	enum ECipheringAlgorithm
+	{
+		INVALID_CipheringAlgorithm = 0;
+		NEA0 = 1;
+		NEA1 = 2;
+		NEA2 = 3;
+		NEA3 = 4;
+	}
+
+	oneof cipheringAlgorithm_
+	{
+		ECipheringAlgorithm eCipheringAlgorithm_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message IntegrityAlgorithm
+{
+	enum EIntegrityAlgorithm
+	{
+		INVALID_IntegrityAlgorithm = 0;
+		NIA0 = 1;
+		NIA1 = 2;
+		NIA2 = 3;
+		NIA3 = 4;
+	}
+
+	oneof integrityAlgorithm_
+	{
+		EIntegrityAlgorithm eIntegrityAlgorithm_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message KeyAmfType
+{
+	enum EKeyAmfType
+	{
+		INVALID_KeyAmfType = 0;
+		KAMF = 1;
+		KPRIMEAMF = 2;
+	}
+
+	oneof keyAmfType_
+	{
+		EKeyAmfType eKeyAmfType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message N1MessageClass
+{
+	enum EN1MessageClass
+	{
+		INVALID_N1MessageClass = 0;
+		N5GMM = 1;
+		SM = 2;
+		LPP = 3;
+		SMS = 4;
+		UPDP = 5;
+		LCS = 6;
+	}
+
+	oneof n1MessageClass_
+	{
+		EN1MessageClass eN1MessageClass_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message N1N2MessageTransferCause
+{
+	enum EN1N2MessageTransferCause
+	{
+		INVALID_N1N2MessageTransferCause = 0;
+		ATTEMPTING_TO_REACH_UE = 1;
+		N1_N2_TRANSFER_INITIATED = 2;
+		WAITING_FOR_ASYNCHRONOUS_TRANSFER = 3;
+		UE_NOT_RESPONDING = 4;
+		N1_MSG_NOT_TRANSFERRED = 5;
+		UE_NOT_REACHABLE_FOR_SESSION = 6;
+		TEMPORARY_REJECT_REGISTRATION_ONGOING = 7;
+		TEMPORARY_REJECT_HANDOVER_ONGOING = 8;
+	}
+
+	oneof n1N2MessageTransferCause_
+	{
+		EN1N2MessageTransferCause eN1N2MessageTransferCause_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message N2InfoNotifyReason
+{
+	enum EN2InfoNotifyReason
+	{
+		INVALID_N2InfoNotifyReason = 0;
+		HANDOVER_COMPLETED = 1;
+	}
+
+	oneof n2InfoNotifyReason_
+	{
+		EN2InfoNotifyReason eN2InfoNotifyReason_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message N2InformationClass
+{
+	enum EN2InformationClass
+	{
+		INVALID_N2InformationClass = 0;
+		SM = 1;
+		NRPPa = 2;
+		PWS = 3;
+		PWS_BCAL = 4;
+		PWS_RF = 5;
+		RAN = 6;
+	}
+
+	oneof n2InformationClass_
+	{
+		EN2InformationClass eN2InformationClass_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message N2InformationTransferResult
+{
+	enum EN2InformationTransferResult
+	{
+		INVALID_N2InformationTransferResult = 0;
+		N2_INFO_TRANSFER_INITIATED = 1;
+	}
+
+	oneof n2InformationTransferResult_
+	{
+		EN2InformationTransferResult eN2InformationTransferResult_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message NgapIeType
+{
+	enum ENgapIeType
+	{
+		INVALID_NgapIeType = 0;
+		PDU_RES_SETUP_REQ = 1;
+		PDU_RES_REL_CMD = 2;
+		PDU_RES_MOD_REQ = 3;
+		HANDOVER_CMD = 4;
+		HANDOVER_REQUIRED = 5;
+		HANDOVER_PREP_FAIL = 6;
+		SRC_TO_TAR_CONTAINER = 7;
+		TAR_TO_SRC_CONTAINER = 8;
+		RAN_STATUS_TRANS_CONTAINER = 9;
+		SON_CONFIG_TRANSFER = 10;
+		NRPPA_PDU = 11;
+		UE_RADIO_CAPABILITY = 12;
+		RIM_INFO_TRANSFER = 13;
+		SECONDARY_RAT_USAGE = 14;
+	}
+
+	oneof ngapIeType_
+	{
+		ENgapIeType eNgapIeType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message PolicyReqTrigger
+{
+	enum EPolicyReqTrigger
+	{
+		INVALID_PolicyReqTrigger = 0;
+		LOCATION_CHANGE = 1;
+		PRA_CHANGE = 2;
+		SARI_CHANGE = 3;
+		RFSP_INDEX_CHANGE = 4;
+		ALLOWED_NSSAI_CHANGE = 5;
+	}
+
+	oneof policyReqTrigger_
+	{
+		EPolicyReqTrigger ePolicyReqTrigger_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message RatSelector
+{
+	enum ERatSelector
+	{
+		INVALID_RatSelector = 0;
+		E_UTRA = 1;
+		NR = 2;
+	}
+
+	oneof ratSelector_
+	{
+		ERatSelector eRatSelector_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message SbiBindingLevel
+{
+	enum ESbiBindingLevel
+	{
+		INVALID_SbiBindingLevel = 0;
+		NF_INSTANCE_BINDING = 1;
+		NF_SET_BINDING = 2;
+		NF_SERVICE_SET_BINDING = 3;
+	}
+
+	oneof sbiBindingLevel_
+	{
+		ESbiBindingLevel eSbiBindingLevel_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message ScType
+{
+	enum EScType
+	{
+		INVALID_ScType = 0;
+		NATIVE = 1;
+		MAPPED = 2;
+	}
+
+	oneof scType_
+	{
+		EScType eScType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message SmfChangeIndication
+{
+	enum ESmfChangeIndication
+	{
+		INVALID_SmfChangeIndication = 0;
+		CHANGED = 1;
+		REMOVED = 2;
+	}
+
+	oneof smfChangeIndication_
+	{
+		ESmfChangeIndication eSmfChangeIndication_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message StatusChange
+{
+	enum EStatusChange
+	{
+		INVALID_StatusChange = 0;
+		AMF_UNAVAILABLE = 1;
+		AMF_AVAILABLE = 2;
+	}
+
+	oneof statusChange_
+	{
+		EStatusChange eStatusChange_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message TransferReason
+{
+	enum ETransferReason
+	{
+		INVALID_TransferReason = 0;
+		INIT_REG = 1;
+		MOBI_REG = 2;
+		MOBI_REG_UE_VALIDATED = 3;
+	}
+
+	oneof transferReason_
+	{
+		ETransferReason eTransferReason_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message UeContextTransferStatus
+{
+	enum EUeContextTransferStatus
+	{
+		INVALID_UeContextTransferStatus = 0;
+		TRANSFERRED = 1;
+		NOT_TRANSFERRED = 2;
+	}
+
+	oneof ueContextTransferStatus_
+	{
+		EUeContextTransferStatus eUeContextTransferStatus_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message AMFStatusChangeSubscribeModfy
+{
+	bytes subscriptionId_ = 1;
+}
+
+message AMFStatusChangeUnSubscribe
+{
+	bytes subscriptionId_ = 1;
+}
+
+message CreateUEContext
+{
+	bytes ueContextId_ = 1;
+}
+
+message EBIAssignment
+{
+	bytes ueContextId_ = 1;
+}
+
+message N1N2MessageSubscribe
+{
+	bytes ueContextId_ = 1;
+}
+
+message N1N2MessageTransfer
+{
+	bytes ueContextId_ = 1;
+}
+
+message N1N2MessageUnSubscribe
+{
+	TS29571_CommonData.components.schemas.Bytes subscriptionId_ = 1;
+	TS29571_CommonData.components.schemas.Bytes ueContextId_ = 2;
+}
+
+message NonUeN2InfoUnSubscribe
+{
+	bytes n2NotifySubscriptionId_ = 1;
+}
+
+message RegistrationStatusUpdate
+{
+	bytes ueContextId_ = 1;
+}
+
+message ReleaseUEContext
+{
+	bytes ueContextId_ = 1;
+}
+
+message UEContextTransfer
+{
+	bytes ueContextId_ = 1;
+}
+

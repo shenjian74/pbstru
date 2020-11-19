@@ -1,0 +1,23 @@
+syntax = "proto3";
+package TS29554_Npcf_BDTPolicyControl.components.schemas;
+
+import "TS29571_CommonData.components.schemas.proto";
+
+message NetworkAreaInfo
+{
+	repeated TS29571_CommonData.components.schemas.Ecgi ecgis_ = 1;
+	repeated TS29571_CommonData.components.schemas.GlobalRanNodeId gRanNodeIds_ = 2;
+	repeated TS29571_CommonData.components.schemas.Ncgi ncgis_ = 3;
+	repeated TS29571_CommonData.components.schemas.Tai tais_ = 4;
+}
+
+message GetBDTPolicy
+{
+	bytes bdtPolicyId_ = 1;
+}
+
+message UpdateBDTPolicy
+{
+	bytes bdtPolicyId_ = 1;
+}
+

@@ -1,0 +1,285 @@
+syntax = "proto3";
+package TS29503_Nudm_SDM.components.schemas;
+
+import "TS29571_CommonData.components.schemas.proto";
+
+message AfId
+{
+	bytes afId_ = 1;
+}
+
+message CodeWord
+{
+	bytes codeWord_ = 1;
+}
+
+message DlPacketCount
+{
+	int64 dlPacketCount_ = 1;
+}
+
+message DnnIndicator
+{
+	bool dnnIndicator_ = 1;
+}
+
+message ExtGroupId
+{
+	bytes extGroupId_ = 1;
+}
+
+message IwkEpsInd
+{
+	bool iwkEpsInd_ = 1;
+}
+
+message LboRoamingAllowed
+{
+	bool lboRoamingAllowed_ = 1;
+}
+
+message LcsClientId
+{
+	bytes lcsClientId_ = 1;
+}
+
+message McsPriorityIndicator
+{
+	bool mcsPriorityIndicator_ = 1;
+}
+
+message MicoAllowed
+{
+	bool micoAllowed_ = 1;
+}
+
+message MpsPriorityIndicator
+{
+	bool mpsPriorityIndicator_ = 1;
+}
+
+message N3GppChargingCharacteristics
+{
+	bytes n3GppChargingCharacteristics_ = 1;
+}
+
+message NbIoTUePriority
+{
+	int64 nbIoTUePriority_ = 1;
+}
+
+message SecuredPacket
+{
+	bytes securedPacket_ = 1;
+}
+
+message SharedDataId
+{
+	bytes sharedDataId_ = 1;
+}
+
+message SmsSubscribed
+{
+	bool smsSubscribed_ = 1;
+}
+
+message UeUsageType
+{
+	int64 ueUsageType_ = 1;
+}
+
+message UpuRegInd
+{
+	bool upuRegInd_ = 1;
+}
+
+message CAG_Ack
+{
+	TS29571_CommonData.components.schemas.Supi supi_ = 1;
+}
+
+message GetAmData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.PlmnId plmn_id_ = 3;
+	TS29571_CommonData.components.schemas.Supi supi_ = 4;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 5;
+}
+
+message GetDataSets
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.PlmnId plmn_id_ = 3;
+	TS29571_CommonData.components.schemas.Supi supi_ = 4;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 5;
+}
+
+message GetEcrData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.Supi supi_ = 3;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 4;
+}
+
+message GetGroupIdentifiers
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	ExtGroupId ext_group_id_ = 3;
+	TS29571_CommonData.components.schemas.GroupId int_group_id_ = 4;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 5;
+	TS29571_CommonData.components.schemas.Bool ue_id_ind_ = 6;
+}
+
+message GetLcsMoData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.PlmnId plmn_id_ = 3;
+	TS29571_CommonData.components.schemas.Supi supi_ = 4;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 5;
+}
+
+message GetLcsPrivacyData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 3;
+	TS29571_CommonData.components.schemas.VarUeId ueId_ = 4;
+}
+
+message GetNSSAI
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.PlmnId plmn_id_ = 3;
+	TS29571_CommonData.components.schemas.Supi supi_ = 4;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 5;
+}
+
+message GetSharedData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.SupportedFeatures supportedFeatures_ = 3;
+}
+
+message GetSmData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.Dnn dnn_ = 3;
+	TS29571_CommonData.components.schemas.PlmnId plmn_id_ = 4;
+	TS29571_CommonData.components.schemas.Snssai single_nssai_ = 5;
+	TS29571_CommonData.components.schemas.Supi supi_ = 6;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 7;
+}
+
+message GetSmfSelData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.PlmnId plmn_id_ = 3;
+	TS29571_CommonData.components.schemas.Supi supi_ = 4;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 5;
+}
+
+message GetSmsData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.PlmnId plmn_id_ = 3;
+	TS29571_CommonData.components.schemas.Supi supi_ = 4;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 5;
+}
+
+message GetSmsMngtData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.PlmnId plmn_id_ = 3;
+	TS29571_CommonData.components.schemas.Supi supi_ = 4;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 5;
+}
+
+message GetSupiOrGpsi
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 3;
+	TS29571_CommonData.components.schemas.VarUeId ueId_ = 4;
+}
+
+message GetTraceConfigData
+{
+	TS29571_CommonData.components.schemas.Bytes if_Modified_Since_ = 1;
+	TS29571_CommonData.components.schemas.Bytes if_None_Match_ = 2;
+	TS29571_CommonData.components.schemas.PlmnId plmn_id_ = 3;
+	TS29571_CommonData.components.schemas.Supi supi_ = 4;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 5;
+}
+
+message GetUeCtxInSmfData
+{
+	TS29571_CommonData.components.schemas.Supi supi_ = 1;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 2;
+}
+
+message GetUeCtxInSmsfData
+{
+	TS29571_CommonData.components.schemas.Supi supi_ = 1;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 2;
+}
+
+message Modify
+{
+	TS29571_CommonData.components.schemas.Bytes subscriptionId_ = 1;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 2;
+	TS29571_CommonData.components.schemas.VarUeId ueId_ = 3;
+}
+
+message ModifySharedDataSubs
+{
+	TS29571_CommonData.components.schemas.Bytes subscriptionId_ = 1;
+	TS29571_CommonData.components.schemas.SupportedFeatures supported_features_ = 2;
+}
+
+message S_NSSAIs_Ack
+{
+	TS29571_CommonData.components.schemas.Supi supi_ = 1;
+}
+
+message SorAckInfo
+{
+	TS29571_CommonData.components.schemas.Supi supi_ = 1;
+}
+
+message Subscribe
+{
+	TS29571_CommonData.components.schemas.VarUeId ueId_ = 1;
+}
+
+message Unsubscribe
+{
+	TS29571_CommonData.components.schemas.Bytes subscriptionId_ = 1;
+	TS29571_CommonData.components.schemas.VarUeId ueId_ = 2;
+}
+
+message UnsubscribeForSharedData
+{
+	bytes subscriptionId_ = 1;
+}
+
+message Update_SOR_Info
+{
+	TS29571_CommonData.components.schemas.Supi supi_ = 1;
+}
+
+message UpuAck
+{
+	TS29571_CommonData.components.schemas.Supi supi_ = 1;
+}
+

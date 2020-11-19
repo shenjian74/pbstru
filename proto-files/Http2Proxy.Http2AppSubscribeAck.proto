@@ -1,0 +1,15 @@
+syntax = "proto3";
+package http2proxy;
+
+message LoadRuleResult
+{
+	bytes serviceName = 1;
+	uint32 errorCode = 2;
+}
+
+message Http2AppSubscribeAck
+{
+	uint32 sequence = 1;
+	uint32 errorCode = 2;
+	repeated LoadRuleResult results = 3;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package http2proxy;
+
+import "Http2Proxy.Http2Common.proto";
+import "Http2Proxy.App2HttpReq.proto";
+
+message Http2AppAck
+{
+    Http2TransParam transParam = 1;
+    App2HttpReq req = 2;
+    bool reqsended = 3; // 当前请求是否发送成功
+}

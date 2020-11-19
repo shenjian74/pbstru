@@ -1,0 +1,17 @@
+syntax = "proto3";
+package SBIGW;
+
+import "TS29510_Nnrf_NFManagement.components.schemas.proto";
+import "TS29571_CommonData.components.schemas.proto";
+import "SBIGW.Comm.proto";
+
+message NrfClientSubscribeRsp{
+        bytes instanceKey = 1;  
+        uint32 responseCode = 2;
+        ERetType ret = 3; 
+        bytes subscriptionId = 4;
+        oneof data{
+            TS29510_Nnrf_NFManagement.components.schemas.SubscriptionData subData = 5;
+            TS29571_CommonData.components.schemas.ProblemDetails  problemDetails = 6;
+       }
+}

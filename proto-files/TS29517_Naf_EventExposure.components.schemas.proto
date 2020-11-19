@@ -1,0 +1,39 @@
+syntax = "proto3";
+package TS29517_Naf_EventExposure.components.schemas;
+
+import "TS29571_CommonData.components.schemas.proto";
+
+message AfEvent
+{
+	enum EAfEvent
+	{
+		INVALID_AfEvent = 0;
+		SVC_EXPERIENCE = 1;
+		UE_MOBILITY = 2;
+		UE_COMM = 3;
+		EXCEPTIONS = 4;
+	}
+
+	oneof afEvent_
+	{
+		EAfEvent eAfEvent_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message DeleteAfEventExposureSubsc
+{
+	bytes subscriptionId_ = 1;
+}
+
+message GetAfEventExposureSubsc
+{
+	bytes subscriptionId_ = 1;
+}
+
+message PutAfEventExposureSubsc
+{
+	bytes subscriptionId_ = 1;
+}
+

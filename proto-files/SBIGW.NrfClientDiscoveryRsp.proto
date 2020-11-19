@@ -1,0 +1,19 @@
+syntax = "proto3";
+package SBIGW;
+
+import "SBIGW.Comm.proto";
+import "TS29571_CommonData.components.schemas.proto";
+import "TS29510_Nnrf_NFDiscovery.components.schemas.proto";
+
+
+message NrfClientDiscoveryRsp{
+       bytes instanceKey = 1;  
+       uint32 responseCode = 2;
+       ERetType ret = 3; 
+       oneof data{
+            TS29510_Nnrf_NFDiscovery.components.schemas.SearchResult    resultData=4;
+            TS29571_CommonData.components.schemas.ProblemDetails  problemDetails=5;
+       }
+       uint32 resultChk=6;
+       bool    isStatic = 7;
+}

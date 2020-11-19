@@ -1,0 +1,13 @@
+syntax = "proto3";
+package SBIGW;
+
+import "Http2Proxy.Http2Common.proto";
+
+message SbiGwHeartBeat
+{
+    uint64 sequence = 1;
+    http2proxy.Http2AppInfo appInfo = 2;
+    bytes nfId=3;
+    uint32 load=4;
+    map<string,uint32> serviceloads = 5;
+}

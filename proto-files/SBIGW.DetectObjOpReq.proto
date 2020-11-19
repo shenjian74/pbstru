@@ -1,0 +1,18 @@
+syntax = "proto3";
+package SBIGW;
+
+import "SBIGW.Comm.proto";
+import "Http2Proxy.Http2Common.proto";
+import "TS29510_Nnrf_NFManagement.components.schemas.proto";
+
+message DetectObjOpReq{
+    uint64                  sequence         = 1;
+    bytes                   appName          = 2;
+    http2proxy.Http2AppInfo appInfo          = 3;
+    uint32                  isDel            = 4;
+    bytes                   targetNfInstId   = 5;
+    TS29510_Nnrf_NFManagement.components.schemas.ServiceName.EServiceName  servicename    = 6; 
+    bytes                   localNfInstId    = 7;
+    repeated RouteNode      baseDetectNodes  = 8;  
+    uint32                  validPeriod      = 9;  
+}

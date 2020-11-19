@@ -1,0 +1,2160 @@
+syntax = "proto3";
+package TS29571_CommonData.components.schemas;
+
+
+enum AccessType
+{
+	INVALID_AccessType = 0;
+	N3GPP_ACCESS = 1;
+	NON_3GPP_ACCESS = 2;
+}
+
+message AccessTypeRm
+{
+	oneof accessTypeRm_
+	{
+		AccessType accessType_ = 1;
+		NullValue nullValue_ = 2;
+	}
+
+}
+
+message AcsInfo
+{
+	Ipv4Addr acsIpv4Addr_ = 1;
+	Ipv6Addr acsIpv6Addr_ = 2;
+	Uri acsUrl_ = 3;
+}
+
+message AcsInfoRm
+{
+	oneof acsInfoRm_
+	{
+		NullValue nullValue_ = 1;
+		AcsInfo acsInfo_ = 2;
+	}
+
+}
+
+message AdditionalQosFlowInfo
+{
+	message MAdditionalQosFlowInfo
+	{
+		enum EAdditionalQosFlowInfo
+		{
+			INVALID_AdditionalQosFlowInfo = 0;
+			MORE_LIKELY = 1;
+		}
+
+		oneof mAdditionalQosFlowInfo_
+		{
+			EAdditionalQosFlowInfo eAdditionalQosFlowInfo_ = 1;
+			Bytes bytes_ = 2;
+		}
+
+	}
+
+	oneof additionalQosFlowInfo_
+	{
+		NullValue nullValue_ = 1;
+		MAdditionalQosFlowInfo mAdditionalQosFlowInfo_ = 2;
+	}
+
+}
+
+message Ambr
+{
+	BitRate downlink_ = 1;
+	BitRate uplink_ = 2;
+}
+
+message AmbrRm
+{
+	BitRate downlink_ = 1;
+	BitRate uplink_ = 2;
+}
+
+message AmfId
+{
+	bytes amfId_ = 1;
+}
+
+message AmfName
+{
+	bytes amfName_ = 1;
+}
+
+message AmfRegionId
+{
+	bytes amfRegionId_ = 1;
+}
+
+message AmfSetId
+{
+	bytes amfSetId_ = 1;
+}
+
+message AnyType
+{
+	bytes bytes_ = 1;
+}
+
+message ApnRateStatus
+{
+	Int64 remainExReportsDl_ = 1;
+	Int64 remainExReportsUl_ = 2;
+	Int64 remainPacketsDl_ = 3;
+	Int64 remainPacketsUl_ = 4;
+	DateTime validityTime_ = 5;
+}
+
+message ApplicationChargingId
+{
+	bytes applicationChargingId_ = 1;
+}
+
+message ApplicationId
+{
+	bytes applicationId_ = 1;
+}
+
+message ApplicationIdRm
+{
+	bytes applicationIdRm_ = 1;
+}
+
+message Area
+{
+	AreaCode areaCode_ = 1;
+	repeated Tac tacs_ = 2;
+}
+
+message AreaCode
+{
+	bytes areaCode_ = 1;
+}
+
+message AreaCodeRm
+{
+	bytes areaCodeRm_ = 1;
+}
+
+message Arp
+{
+	PreemptionCapability preemptCap_ = 1;
+	PreemptionVulnerability preemptVuln_ = 2;
+	ArpPriorityLevel priorityLevel_ = 3;
+}
+
+message ArpPriorityLevel
+{
+	int64 arpPriorityLevel_ = 1;
+}
+
+message ArpPriorityLevelRm
+{
+	int64 arpPriorityLevelRm_ = 1;
+}
+
+message ArpRm
+{
+	PreemptionCapability preemptCap_ = 1;
+	PreemptionVulnerability preemptVuln_ = 2;
+	ArpPriorityLevel priorityLevel_ = 3;
+}
+
+message Atom
+{
+	Bytes attr_ = 1;
+	Bool negative_ = 2;
+	AnyType value_ = 3;
+}
+
+message AtsssCapability
+{
+	Bool atsssLL_ = 1;
+	Bool mptcp_ = 2;
+}
+
+message AverWindow
+{
+	int64 averWindow_ = 1;
+}
+
+message AverWindowRm
+{
+	int64 averWindowRm_ = 1;
+}
+
+message BackupAmfInfo
+{
+	AmfName backupAmf_ = 1;
+	repeated Guami guamiList_ = 2;
+}
+
+message BatteryIndication
+{
+	Bool batteryInd_ = 1;
+	Bool rechargeableInd_ = 2;
+	Bool replaceableInd_ = 3;
+}
+
+message BatteryIndicationRm
+{
+	oneof batteryIndicationRm_
+	{
+		NullValue nullValue_ = 1;
+		BatteryIndication batteryIndication_ = 2;
+	}
+
+}
+
+message Binary
+{
+	bytes binary_ = 1;
+}
+
+message BinaryRm
+{
+	bytes binaryRm_ = 1;
+}
+
+message BitRate
+{
+	bytes bitRate_ = 1;
+}
+
+message BitRateRm
+{
+	bytes bitRateRm_ = 1;
+}
+
+message Bool
+{
+	bool bool_ = 1;
+}
+
+message Bytes
+{
+	bytes bytes_ = 1;
+}
+
+message BytesRm
+{
+	bytes bytesRm_ = 1;
+}
+
+message CMsisdn
+{
+	bytes cMsisdn_ = 1;
+}
+
+message CMsisdnRm
+{
+	bytes cMsisdnRm_ = 1;
+}
+
+message CagId
+{
+	bytes cagId_ = 1;
+}
+
+message CellGlobalId
+{
+	Bytes cellId_ = 1;
+	Bytes lac_ = 2;
+	PlmnId plmnId_ = 3;
+}
+
+message ChangeItem
+{
+	Bytes from_ = 1;
+	AnyType newValue_ = 2;
+	ChangeType op_ = 3;
+	AnyType origValue_ = 4;
+	Bytes path_ = 5;
+}
+
+message ChangeType
+{
+	enum EChangeType
+	{
+		INVALID_ChangeType = 0;
+		ADD = 1;
+		MOVE = 2;
+		REMOVE = 3;
+		REPLACE = 4;
+	}
+
+	oneof changeType_
+	{
+		EChangeType eChangeType_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message ChargingId
+{
+	Uint32 chargingId_ = 1;
+}
+
+message Cnf
+{
+	repeated CnfUnit cnfUnits_ = 1;
+}
+
+message CnfUnit
+{
+	repeated Atom cnfUnit_ = 1;
+}
+
+message ComplexQuery
+{
+	oneof complexQuery_
+	{
+		Cnf cnf_ = 1;
+		Dnf dnf_ = 2;
+	}
+
+}
+
+message CoreNetworkType
+{
+	enum ECoreNetworkType
+	{
+		INVALID_CoreNetworkType = 0;
+		N5GC = 1;
+		EPC = 2;
+	}
+
+	oneof coreNetworkType_
+	{
+		ECoreNetworkType eCoreNetworkType_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message CoreNetworkTypeRm
+{
+	oneof coreNetworkTypeRm_
+	{
+		NullValue nullValue_ = 1;
+		CoreNetworkType coreNetworkType_ = 2;
+	}
+
+}
+
+message Date
+{
+	bytes date_ = 1;
+}
+
+message DateRm
+{
+	bytes dateRm_ = 1;
+}
+
+message DateTime
+{
+	bytes dateTime_ = 1;
+}
+
+message DateTimeRm
+{
+	bytes dateTimeRm_ = 1;
+}
+
+message DayOfWeek
+{
+	int64 dayOfWeek_ = 1;
+}
+
+message DddTrafficDescriptor
+{
+	TS29571_CommonData.components.schemas.Ipv4Addr ipv4Addr_ = 1;
+	TS29571_CommonData.components.schemas.Ipv6Addr ipv6Addr_ = 2;
+	TS29571_CommonData.components.schemas.MacAddr48 macAddr_ = 3;
+	TS29571_CommonData.components.schemas.Uinteger portNumber_ = 4;
+}
+
+message DiameterIdentity
+{
+	bytes diameterIdentity_ = 1;
+}
+
+message DiameterIdentityRm
+{
+	bytes diameterIdentityRm_ = 1;
+}
+
+message DlDataDeliveryStatus
+{
+	enum EDlDataDeliveryStatus
+	{
+		INVALID_DlDataDeliveryStatus = 0;
+		BUFFERED = 1;
+		TRANSMITTED = 2;
+		DISCARDED = 3;
+	}
+
+	oneof dlDataDeliveryStatus_
+	{
+		EDlDataDeliveryStatus eDlDataDeliveryStatus_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message DlDataDeliveryStatusRm
+{
+	oneof dlDataDeliveryStatusRm_
+	{
+		NullValue nullValue_ = 1;
+		DlDataDeliveryStatus dlDataDeliveryStatus_ = 2;
+	}
+
+}
+
+message Dnai
+{
+	bytes dnai_ = 1;
+}
+
+message DnaiChangeType
+{
+	enum EDnaiChangeType
+	{
+		INVALID_DnaiChangeType = 0;
+		EARLY = 1;
+		EARLY_LATE = 2;
+		LATE = 3;
+	}
+
+	oneof dnaiChangeType_
+	{
+		EDnaiChangeType eDnaiChangeType_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message DnaiChangeTypeRm
+{
+	oneof dnaiChangeTypeRm_
+	{
+		NullValue nullValue_ = 1;
+		DnaiChangeType dnaiChangeType_ = 2;
+	}
+
+}
+
+message DnaiRm
+{
+	bytes dnaiRm_ = 1;
+}
+
+message Dnf
+{
+	repeated DnfUnit dnfUnits_ = 1;
+}
+
+message DnfUnit
+{
+	repeated Atom dnfUnit_ = 1;
+}
+
+message Dnn
+{
+	bytes dnn_ = 1;
+}
+
+message DnnRm
+{
+	bytes dnnRm_ = 1;
+}
+
+message Double
+{
+	double double_ = 1;
+}
+
+message DoubleRm
+{
+	double doubleRm_ = 1;
+}
+
+message DurationSec
+{
+	int64 durationSec_ = 1;
+}
+
+message DurationSecRm
+{
+	int64 durationSecRm_ = 1;
+}
+
+message Dynamic5Qi
+{
+	AverWindow averWindow_ = 1;
+	ExtMaxDataBurstVol extMaxDataBurstVol_ = 2;
+	MaxDataBurstVol maxDataBurstVol_ = 3;
+	PacketDelBudget packetDelayBudget_ = 4;
+	PacketErrRate packetErrRate_ = 5;
+	N5QiPriorityLevel priorityLevel_ = 6;
+	QosResourceType resourceType_ = 7;
+}
+
+message ENbId
+{
+	bytes eNbId_ = 1;
+}
+
+message Ecgi
+{
+	EutraCellId eutraCellId_ = 1;
+	Nid nid_ = 2;
+	PlmnId plmnId_ = 3;
+}
+
+message EcgiRm
+{
+	EutraCellId eutraCellId_ = 1;
+	Nid nid_ = 2;
+	PlmnId plmnId_ = 3;
+}
+
+message EutraCellId
+{
+	bytes eutraCellId_ = 1;
+}
+
+message EutraCellIdRm
+{
+	bytes eutraCellIdRm_ = 1;
+}
+
+message EutraLocation
+{
+	Int64 ageOfLocationInformation_ = 1;
+	Ecgi ecgi_ = 2;
+	Bytes geodeticInformation_ = 3;
+	Bytes geographicalInformation_ = 4;
+	GlobalRanNodeId globalENbId_ = 5;
+	GlobalRanNodeId globalNgenbId_ = 6;
+	Bool ignoreEcgi_ = 7;
+	Tai tai_ = 8;
+	DateTime ueLocationTimestamp_ = 9;
+}
+
+message EutraLocationRm
+{
+	Int64 ageOfLocationInformation_ = 1;
+	Ecgi ecgi_ = 2;
+	Bytes geodeticInformation_ = 3;
+	Bytes geographicalInformation_ = 4;
+	GlobalRanNodeId globalENbId_ = 5;
+	GlobalRanNodeId globalNgenbId_ = 6;
+	Tai tai_ = 7;
+	DateTime ueLocationTimestamp_ = 8;
+}
+
+message ExtMaxDataBurstVol
+{
+	int64 extMaxDataBurstVol_ = 1;
+}
+
+message ExtMaxDataBurstVolRm
+{
+	int64 extMaxDataBurstVolRm_ = 1;
+}
+
+message ExternalGroupId
+{
+	bytes externalGroupId_ = 1;
+}
+
+message ExternalGroupIdRm
+{
+	bytes externalGroupIdRm_ = 1;
+}
+
+message Float
+{
+	float float_ = 1;
+}
+
+message FloatRm
+{
+	float floatRm_ = 1;
+}
+
+message GNbId
+{
+	Int64 bitLength_ = 1;
+	Bytes gNBValue_ = 2;
+}
+
+message GeraLocation
+{
+	Int64 ageOfLocationInformation_ = 1;
+	CellGlobalId cgi_ = 2;
+	Bytes geodeticInformation_ = 3;
+	Bytes geographicalInformation_ = 4;
+	LocationAreaId lai_ = 5;
+	Bytes locationNumber_ = 6;
+	Bytes mscNumber_ = 7;
+	ServiceAreaId sai_ = 8;
+	DateTime ueLocationTimestamp_ = 9;
+	Bytes vlrNumber_ = 10;
+}
+
+message Gli
+{
+	Bytes gli_ = 1;
+}
+
+message GlobalRanNodeId
+{
+	ENbId eNbId_ = 1;
+	GNbId gNbId_ = 2;
+	N3IwfId n3IwfId_ = 3;
+	NgeNbId ngeNbId_ = 4;
+	Nid nid_ = 5;
+	PlmnId plmnId_ = 6;
+}
+
+message Gpsi
+{
+	bytes gpsi_ = 1;
+}
+
+message GpsiRm
+{
+	bytes gpsiRm_ = 1;
+}
+
+message GroupId
+{
+	bytes groupId_ = 1;
+}
+
+message GroupIdRm
+{
+	bytes groupIdRm_ = 1;
+}
+
+message Guami
+{
+	AmfId amfId_ = 1;
+	PlmnId plmnId_ = 2;
+}
+
+message GuamiRm
+{
+	AmfId amfId_ = 1;
+	PlmnId plmnId_ = 2;
+}
+
+message HalTemplate
+{
+	Bytes contentType_ = 1;
+	HttpMethod method_ = 2;
+	repeated Property properties_ = 3;
+	Bytes title_ = 4;
+}
+
+message HfcNId
+{
+	bytes hfcNId_ = 1;
+}
+
+message HfcNIdRm
+{
+	bytes hfcNIdRm_ = 1;
+}
+
+message HfcNodeId
+{
+	HfcNId hfcNId_ = 1;
+}
+
+message HfcNodeIdRm
+{
+	HfcNId hfcNId_ = 1;
+}
+
+message HttpMethod
+{
+	enum EHttpMethod
+	{
+		INVALID_HttpMethod = 0;
+		GET = 1;
+		POST = 2;
+		PUT = 3;
+		DELETE = 4;
+		PATCH = 5;
+		OPTIONS = 6;
+		HEAD = 7;
+		CONNECT = 8;
+		TRACE = 9;
+	}
+
+	oneof httpMethod_
+	{
+		EHttpMethod eHttpMethod_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message Int32
+{
+	int32 int32_ = 1;
+}
+
+message Int32Rm
+{
+	int32 int32Rm_ = 1;
+}
+
+message Int64
+{
+	int64 int64_ = 1;
+}
+
+message Int64Rm
+{
+	int64 int64Rm_ = 1;
+}
+
+message InvalidParam
+{
+	Bytes param_ = 1;
+	Bytes reason_ = 2;
+}
+
+message Ipv4Addr
+{
+	bytes ipv4Addr_ = 1;
+}
+
+message Ipv4AddrMask
+{
+	bytes ipv4AddrMask_ = 1;
+}
+
+message Ipv4AddrMaskRm
+{
+	bytes ipv4AddrMaskRm_ = 1;
+}
+
+message Ipv4AddrRm
+{
+	bytes ipv4AddrRm_ = 1;
+}
+
+message Ipv6Addr
+{
+	bytes ipv6Addr_ = 1;
+}
+
+message Ipv6AddrRm
+{
+	bytes ipv6AddrRm_ = 1;
+}
+
+message Ipv6Prefix
+{
+	bytes ipv6Prefix_ = 1;
+}
+
+message Ipv6PrefixRm
+{
+	bytes ipv6PrefixRm_ = 1;
+}
+
+message LcsServiceAuth
+{
+	enum ELcsServiceAuth
+	{
+		INVALID_LcsServiceAuth = 0;
+		LOCATION_NOT_ALLOWED = 1;
+		LOCATION_ALLOWED_WITH_NOTIFICATION = 2;
+		LOCATION_ALLOWED_WITHOUT_NOTIFICATION = 3;
+		LOCATION_ALLOWED_WITHOUT_RESPONSE = 4;
+		LOCATION_RESTRICTED_WITHOUT_RESPONSE = 5;
+		NOTIFICATION_ONLY = 6;
+		NOTIFICATION_AND_VERIFICATION_ONLY = 7;
+	}
+
+	oneof lcsServiceAuth_
+	{
+		ELcsServiceAuth eLcsServiceAuth_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message Link
+{
+	Uri href_ = 1;
+}
+
+message LinkRm
+{
+	Uri href_ = 1;
+}
+
+message LinksValueSchema
+{
+	message MLink
+	{
+		repeated Link link_ = 1;
+	}
+
+	oneof linksValueSchema_
+	{
+		MLink mLink_ = 1;
+		Link link_ = 2;
+	}
+
+}
+
+message LocationAreaId
+{
+	Bytes lac_ = 1;
+	PlmnId plmnId_ = 2;
+}
+
+message LteV2xAuth
+{
+	UeAuth pedestrianUeAuth_ = 1;
+	UeAuth vehicleUeAuth_ = 2;
+}
+
+message MacAddr48
+{
+	bytes macAddr48_ = 1;
+}
+
+message MacAddr48Rm
+{
+	bytes macAddr48Rm_ = 1;
+}
+
+message ManAssiUeRadioCapId
+{
+	Bytes manAssiUeRadioCapId_ = 1;
+}
+
+message MaxDataBurstVol
+{
+	int64 maxDataBurstVol_ = 1;
+}
+
+message MaxDataBurstVolRm
+{
+	int64 maxDataBurstVolRm_ = 1;
+}
+
+message Mcc
+{
+	bytes mcc_ = 1;
+}
+
+message MccRm
+{
+	bytes mccRm_ = 1;
+}
+
+message Mnc
+{
+	bytes mnc_ = 1;
+}
+
+message MncRm
+{
+	bytes mncRm_ = 1;
+}
+
+message MoExceptionDataFlag
+{
+	enum EMoExceptionDataFlag
+	{
+		INVALID_MoExceptionDataFlag = 0;
+		START = 1;
+		STOP = 2;
+	}
+
+	oneof moExceptionDataFlag_
+	{
+		EMoExceptionDataFlag eMoExceptionDataFlag_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message MoExpDataCounter
+{
+	Int64 counter_ = 1;
+	DateTime timeStamp_ = 2;
+}
+
+message MtcProviderInformation
+{
+	bytes mtcProviderInformation_ = 1;
+}
+
+message N3IwfId
+{
+	bytes n3IwfId_ = 1;
+}
+
+message N3gaLocation
+{
+	Bytes bssId_ = 1;
+	Bytes civicAddress_ = 2;
+	Gli gli_ = 3;
+	HfcNodeId hfcNodeId_ = 4;
+	Bytes n3IwfId_ = 5;
+	Tai n3gppTai_ = 6;
+	Uinteger portNumber_ = 7;
+	Bytes ssId_ = 8;
+	Ipv4Addr ueIpv4Addr_ = 9;
+	Ipv6Addr ueIpv6Addr_ = 10;
+}
+
+message N5GMmCause
+{
+	Uinteger n5GMmCause_ = 1;
+}
+
+message N5Qi
+{
+	int64 n5Qi_ = 1;
+}
+
+message N5QiPriorityLevel
+{
+	int64 n5QiPriorityLevel_ = 1;
+}
+
+message N5QiPriorityLevelRm
+{
+	int64 n5QiPriorityLevelRm_ = 1;
+}
+
+message N5QiRm
+{
+	int64 n5QiRm_ = 1;
+}
+
+message Ncgi
+{
+	Nid nid_ = 1;
+	NrCellId nrCellId_ = 2;
+	PlmnId plmnId_ = 3;
+}
+
+message NcgiRm
+{
+	Nid nid_ = 1;
+	NrCellId nrCellId_ = 2;
+	PlmnId plmnId_ = 3;
+}
+
+message NetworkId
+{
+	Mcc mcc_ = 1;
+	Mnc mnc_ = 2;
+}
+
+message NfGroupId
+{
+	bytes nfGroupId_ = 1;
+}
+
+message NfInstanceId
+{
+	bytes nfInstanceId_ = 1;
+}
+
+message NfServiceSetId
+{
+	bytes nfServiceSetId_ = 1;
+}
+
+message NfSetId
+{
+	bytes nfSetId_ = 1;
+}
+
+message NgApCause
+{
+	Uinteger group_ = 1;
+	Uinteger value_ = 2;
+}
+
+message NgeNbId
+{
+	bytes ngeNbId_ = 1;
+}
+
+message Nid
+{
+	bytes nid_ = 1;
+}
+
+message NidRm
+{
+	bytes nidRm_ = 1;
+}
+
+message NonDynamic5Qi
+{
+	AverWindow averWindow_ = 1;
+	ExtMaxDataBurstVol extMaxDataBurstVol_ = 2;
+	MaxDataBurstVol maxDataBurstVol_ = 3;
+	N5QiPriorityLevel priorityLevel_ = 4;
+}
+
+message NotificationControl
+{
+	enum ENotificationControl
+	{
+		INVALID_NotificationControl = 0;
+		REQUESTED = 1;
+		NOT_REQUESTED = 2;
+	}
+
+	oneof notificationControl_
+	{
+		ENotificationControl eNotificationControl_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message NotificationControlRm
+{
+	oneof notificationControlRm_
+	{
+		NullValue nullValue_ = 1;
+		NotificationControl notificationControl_ = 2;
+	}
+
+}
+
+message NotifyItem
+{
+	repeated ChangeItem changes_ = 1;
+	Uri resourceId_ = 2;
+}
+
+message NrCellId
+{
+	bytes nrCellId_ = 1;
+}
+
+message NrCellIdRm
+{
+	bytes nrCellIdRm_ = 1;
+}
+
+message NrLocation
+{
+	Int64 ageOfLocationInformation_ = 1;
+	Bytes geodeticInformation_ = 2;
+	Bytes geographicalInformation_ = 3;
+	GlobalRanNodeId globalGnbId_ = 4;
+	Ncgi ncgi_ = 5;
+	Tai tai_ = 6;
+	DateTime ueLocationTimestamp_ = 7;
+}
+
+message NrLocationRm
+{
+	Int64 ageOfLocationInformation_ = 1;
+	Bytes geodeticInformation_ = 2;
+	Bytes geographicalInformation_ = 3;
+	GlobalRanNodeId globalGnbId_ = 4;
+	Bool ignoreNcgi_ = 5;
+	Ncgi ncgi_ = 6;
+	Tai tai_ = 7;
+	DateTime ueLocationTimestamp_ = 8;
+}
+
+message NrV2xAuth
+{
+	UeAuth pedestrianUeAuth_ = 1;
+	UeAuth vehicleUeAuth_ = 2;
+}
+
+enum NullValue
+{
+	INVALID_NullValue = 0;
+	null = 1;
+}
+
+message OdbData
+{
+	RoamingOdb roamingOdb_ = 1;
+}
+
+message OdbPacketServices
+{
+	message MOdbPacketServices
+	{
+		enum EOdbPacketServices
+		{
+			INVALID_OdbPacketServices = 0;
+			ALL_PACKET_SERVICES = 1;
+			ROAMER_ACCESS_HPLMN_AP = 2;
+			ROAMER_ACCESS_VPLMN_AP = 3;
+		}
+
+		oneof mOdbPacketServices_
+		{
+			EOdbPacketServices eOdbPacketServices_ = 1;
+			Bytes bytes_ = 2;
+		}
+
+	}
+
+	oneof odbPacketServices_
+	{
+		NullValue nullValue_ = 1;
+		MOdbPacketServices mOdbPacketServices_ = 2;
+	}
+
+}
+
+message PacketDelBudget
+{
+	int64 packetDelBudget_ = 1;
+}
+
+message PacketDelBudgetRm
+{
+	int64 packetDelBudgetRm_ = 1;
+}
+
+message PacketErrRate
+{
+	bytes packetErrRate_ = 1;
+}
+
+message PacketErrRateRm
+{
+	bytes packetErrRateRm_ = 1;
+}
+
+message PacketLossRate
+{
+	int64 packetLossRate_ = 1;
+}
+
+message PacketLossRateRm
+{
+	int64 packetLossRateRm_ = 1;
+}
+
+message PatchItem
+{
+	Bytes from_ = 1;
+	PatchOperation op_ = 2;
+	Bytes path_ = 3;
+	AnyType value_ = 4;
+}
+
+message PatchOperation
+{
+	enum EPatchOperation
+	{
+		INVALID_PatchOperation = 0;
+		add = 1;
+		copy = 2;
+		move = 3;
+		remove = 4;
+		replace = 5;
+		test = 6;
+	}
+
+	oneof patchOperation_
+	{
+		EPatchOperation ePatchOperation_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message PatchResult
+{
+	repeated ReportItem report_ = 1;
+}
+
+message Pc5FlowBitRates
+{
+	BitRate guaFbr_ = 1;
+	BitRate maxFbr_ = 2;
+}
+
+message Pc5QoSPara
+{
+	BitRate pc5LinkAmbr_ = 1;
+	repeated Pc5QosFlowItem pc5QosFlowList_ = 2;
+}
+
+message Pc5QosFlowItem
+{
+	Pc5FlowBitRates pc5FlowBitRates_ = 1;
+	N5Qi pqi_ = 2;
+	Uinteger range_ = 3;
+}
+
+message PduSessionId
+{
+	int64 pduSessionId_ = 1;
+}
+
+message PduSessionType
+{
+	enum EPduSessionType
+	{
+		INVALID_PduSessionType = 0;
+		IPV4 = 1;
+		IPV6 = 2;
+		IPV4V6 = 3;
+		UNSTRUCTURED = 4;
+		ETHERNET = 5;
+	}
+
+	oneof pduSessionType_
+	{
+		EPduSessionType ePduSessionType_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message PduSessionTypeRm
+{
+	oneof pduSessionTypeRm_
+	{
+		NullValue nullValue_ = 1;
+		PduSessionType pduSessionType_ = 2;
+	}
+
+}
+
+message Pei
+{
+	bytes pei_ = 1;
+}
+
+message PeiRm
+{
+	bytes peiRm_ = 1;
+}
+
+message PlmnAssiUeRadioCapId
+{
+	Bytes plmnAssiUeRadioCapId_ = 1;
+}
+
+message PlmnId
+{
+	Mcc mcc_ = 1;
+	Mnc mnc_ = 2;
+}
+
+message PlmnIdNid
+{
+	Mcc mcc_ = 1;
+	Mnc mnc_ = 2;
+	Nid nid_ = 3;
+}
+
+message PlmnIdRm
+{
+	Mcc mcc_ = 1;
+	Mnc mnc_ = 2;
+}
+
+message PreemptionCapability
+{
+	enum EPreemptionCapability
+	{
+		INVALID_PreemptionCapability = 0;
+		NOT_PREEMPT = 1;
+		MAY_PREEMPT = 2;
+	}
+
+	oneof preemptionCapability_
+	{
+		EPreemptionCapability ePreemptionCapability_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message PreemptionCapabilityRm
+{
+	oneof preemptionCapabilityRm_
+	{
+		NullValue nullValue_ = 1;
+		PreemptionCapability preemptionCapability_ = 2;
+	}
+
+}
+
+message PreemptionVulnerability
+{
+	enum EPreemptionVulnerability
+	{
+		INVALID_PreemptionVulnerability = 0;
+		NOT_PREEMPTABLE = 1;
+		PREEMPTABLE = 2;
+	}
+
+	oneof preemptionVulnerability_
+	{
+		EPreemptionVulnerability ePreemptionVulnerability_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message PreemptionVulnerabilityRm
+{
+	oneof preemptionVulnerabilityRm_
+	{
+		NullValue nullValue_ = 1;
+		PreemptionVulnerability preemptionVulnerability_ = 2;
+	}
+
+}
+
+message PresenceInfo
+{
+	repeated Ecgi ecgiList_ = 1;
+	repeated GlobalRanNodeId globalRanNodeIdList_ = 2;
+	repeated GlobalRanNodeId globaleNbIdList_ = 3;
+	repeated Ncgi ncgiList_ = 4;
+	Bytes praId_ = 5;
+	PresenceState presenceState_ = 6;
+	repeated Tai trackingAreaList_ = 7;
+}
+
+message PresenceInfoRm
+{
+	repeated Ecgi ecgiList_ = 1;
+	repeated GlobalRanNodeId globalRanNodeIdList_ = 2;
+	repeated GlobalRanNodeId globaleNbIdList_ = 3;
+	repeated Ncgi ncgiList_ = 4;
+	Bytes praId_ = 5;
+	PresenceState presenceState_ = 6;
+	repeated Tai trackingAreaList_ = 7;
+}
+
+message PresenceState
+{
+	enum EPresenceState
+	{
+		INVALID_PresenceState = 0;
+		IN_AREA = 1;
+		OUT_OF_AREA = 2;
+		UNKNOWN = 3;
+		INACTIVE = 4;
+	}
+
+	oneof presenceState_
+	{
+		EPresenceState ePresenceState_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message ProblemDetails
+{
+	Bytes cause_ = 1;
+	Bytes detail_ = 2;
+	Uri instance_ = 3;
+	repeated InvalidParam invalidParams_ = 4;
+	Int64 status_ = 5;
+	SupportedFeatures supportedFeatures_ = 6;
+	Bytes title_ = 7;
+	Uri type_ = 8;
+}
+
+message Property
+{
+	Bytes name_ = 1;
+	Bytes regex_ = 2;
+	Bool required_ = 3;
+	Bytes value_ = 4;
+}
+
+message Qfi
+{
+	int64 qfi_ = 1;
+}
+
+message QfiRm
+{
+	int64 qfiRm_ = 1;
+}
+
+message QosFlowUsageReport
+{
+	Int64 downlinkVolume_ = 1;
+	DateTime endTimeStamp_ = 2;
+	Qfi qfi_ = 3;
+	DateTime startTimeStamp_ = 4;
+	Int64 uplinkVolume_ = 5;
+}
+
+message QosResourceType
+{
+	enum EQosResourceType
+	{
+		INVALID_QosResourceType = 0;
+		NON_GBR = 1;
+		NON_CRITICAL_GBR = 2;
+		CRITICAL_GBR = 3;
+	}
+
+	oneof qosResourceType_
+	{
+		EQosResourceType eQosResourceType_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message QosResourceTypeRm
+{
+	oneof qosResourceTypeRm_
+	{
+		NullValue nullValue_ = 1;
+		QosResourceType qosResourceType_ = 2;
+	}
+
+}
+
+message RatType
+{
+	enum ERatType
+	{
+		INVALID_RatType = 0;
+		NR = 1;
+		EUTRA = 2;
+		WLAN = 3;
+		VIRTUAL = 4;
+		NBIOT = 5;
+		WIRELINE = 6;
+		WIRELINE_CABLE = 7;
+		WIRELINE_DSL = 8;
+		WIRELINE_PON = 9;
+		LTE_M = 10;
+		NR_U = 11;
+		EUTRA_U = 12;
+		TRUSTED_N3GA = 13;
+		TRUSTED_WLAN = 14;
+		UTRA = 15;
+		GERA = 16;
+	}
+
+	oneof ratType_
+	{
+		ERatType eRatType_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message RatTypeRm
+{
+	RatType ratTypeRm_ = 1;
+}
+
+message RatingGroup
+{
+	Uint32 ratingGroup_ = 1;
+}
+
+message RefToBinaryData
+{
+	bytes contentId_ = 1;
+}
+
+message RefToBinaryDataRm
+{
+	bytes contentId_ = 1;
+}
+
+message ReflectiveQoSAttribute
+{
+	enum EReflectiveQoSAttribute
+	{
+		INVALID_ReflectiveQoSAttribute = 0;
+		RQOS = 1;
+		NO_RQOS = 2;
+	}
+
+	oneof reflectiveQoSAttribute_
+	{
+		EReflectiveQoSAttribute eReflectiveQoSAttribute_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message ReflectiveQoSAttributeRm
+{
+	oneof reflectiveQoSAttributeRm_
+	{
+		NullValue nullValue_ = 1;
+		ReflectiveQoSAttribute reflectiveQoSAttribute_ = 2;
+	}
+
+}
+
+message ReportItem
+{
+	bytes path_ = 1;
+}
+
+message RestrictionType
+{
+	enum ERestrictionType
+	{
+		INVALID_RestrictionType = 0;
+		ALLOWED_AREAS = 1;
+		NOT_ALLOWED_AREAS = 2;
+	}
+
+	oneof restrictionType_
+	{
+		ERestrictionType eRestrictionType_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message RestrictionTypeRm
+{
+	oneof restrictionTypeRm_
+	{
+		NullValue nullValue_ = 1;
+		RestrictionType restrictionType_ = 2;
+	}
+
+}
+
+message RfspIndex
+{
+	int64 rfspIndex_ = 1;
+}
+
+message RfspIndexRm
+{
+	int64 rfspIndexRm_ = 1;
+}
+
+message RgWirelineCharacteristics
+{
+	Bytes rgWirelineCharacteristics_ = 1;
+}
+
+message RgWirelineCharacteristicsRm
+{
+	RgWirelineCharacteristics rgWirelineCharacteristicsRm_ = 1;
+}
+
+message RoamingOdb
+{
+	enum ERoamingOdb
+	{
+		INVALID_RoamingOdb = 0;
+		OUTSIDE_HOME_PLMN = 1;
+		OUTSIDE_HOME_PLMN_COUNTRY = 2;
+	}
+
+	oneof roamingOdb_
+	{
+		ERoamingOdb eRoamingOdb_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message RouteInformation
+{
+	Ipv4Addr ipv4Addr_ = 1;
+	Ipv6Addr ipv6Addr_ = 2;
+	Uinteger portNumber_ = 3;
+}
+
+message RouteToLocation
+{
+	Dnai dnai_ = 1;
+	RouteInformation routeInfo_ = 2;
+	Bytes routeProfId_ = 3;
+}
+
+message RoutingAreaId
+{
+	Bytes lac_ = 1;
+	PlmnId plmnId_ = 2;
+	Bytes rac_ = 3;
+}
+
+message SamplingRatio
+{
+	int64 samplingRatio_ = 1;
+}
+
+message SamplingRatioRm
+{
+	int64 samplingRatioRm_ = 1;
+}
+
+message ScheduledCommunicationTime
+{
+	repeated DayOfWeek daysOfWeek_ = 1;
+	TimeOfDay timeOfDayEnd_ = 2;
+	TimeOfDay timeOfDayStart_ = 3;
+}
+
+message ScheduledCommunicationTimeRm
+{
+	oneof scheduledCommunicationTimeRm_
+	{
+		NullValue nullValue_ = 1;
+		ScheduledCommunicationTime scheduledCommunicationTime_ = 2;
+	}
+
+}
+
+message ScheduledCommunicationType
+{
+	enum EScheduledCommunicationType
+	{
+		INVALID_ScheduledCommunicationType = 0;
+		DOWNLINK_ONLY = 1;
+		UPLINK_ONLY = 2;
+		BIDIRECTIONAL = 3;
+	}
+
+	oneof scheduledCommunicationType_
+	{
+		EScheduledCommunicationType eScheduledCommunicationType_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message ScheduledCommunicationTypeRm
+{
+	oneof scheduledCommunicationTypeRm_
+	{
+		NullValue nullValue_ = 1;
+		ScheduledCommunicationType scheduledCommunicationType_ = 2;
+	}
+
+}
+
+message SecondaryRatUsageInfo
+{
+	repeated VolumeTimedReport pduSessionUsageData_ = 1;
+	repeated QosFlowUsageReport qosFlowsUsageData_ = 2;
+	RatType secondaryRatType_ = 3;
+}
+
+message SecondaryRatUsageReport
+{
+	repeated QosFlowUsageReport qosFlowsUsageData_ = 1;
+	RatType secondaryRatType_ = 2;
+}
+
+message SelfLink
+{
+	Link self_ = 1;
+}
+
+message ServiceAreaId
+{
+	Bytes lac_ = 1;
+	PlmnId plmnId_ = 2;
+	Bytes sac_ = 3;
+}
+
+message ServiceAreaRestriction
+{
+	repeated Area areas_ = 1;
+	Uinteger maxNumOfTAs_ = 2;
+	Uinteger maxNumOfTAsForNotAllowedAreas_ = 3;
+	RestrictionType restrictionType_ = 4;
+}
+
+message ServiceId
+{
+	Uint32 serviceId_ = 1;
+}
+
+message SmallDataRateStatus
+{
+	Int64 remainExReportsDl_ = 1;
+	Int64 remainExReportsUl_ = 2;
+	Int64 remainPacketsDl_ = 3;
+	Int64 remainPacketsUl_ = 4;
+	DateTime validityTime_ = 5;
+}
+
+message Snssai
+{
+	Bytes sd_ = 1;
+	Int64 sst_ = 2;
+}
+
+message SscMode
+{
+	enum ESscMode
+	{
+		INVALID_SscMode = 0;
+		SSC_MODE_1 = 1;
+		SSC_MODE_2 = 2;
+		SSC_MODE_3 = 3;
+	}
+
+	oneof sscMode_
+	{
+		ESscMode eSscMode_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message SscModeRm
+{
+	oneof sscModeRm_
+	{
+		NullValue nullValue_ = 1;
+		SscMode sscMode_ = 2;
+	}
+
+}
+
+message StationaryIndication
+{
+	enum EStationaryIndication
+	{
+		INVALID_StationaryIndication = 0;
+		STATIONARY = 1;
+		MOBILE = 2;
+	}
+
+	oneof stationaryIndication_
+	{
+		EStationaryIndication eStationaryIndication_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message StationaryIndicationRm
+{
+	oneof stationaryIndicationRm_
+	{
+		NullValue nullValue_ = 1;
+		StationaryIndication stationaryIndication_ = 2;
+	}
+
+}
+
+message StnSr
+{
+	bytes stnSr_ = 1;
+}
+
+message StnSrRm
+{
+	bytes stnSrRm_ = 1;
+}
+
+message SubscribedDefaultQos
+{
+	N5Qi n5qi_ = 1;
+	Arp arp_ = 2;
+	N5QiPriorityLevel priorityLevel_ = 3;
+}
+
+message Supi
+{
+	bytes supi_ = 1;
+}
+
+message SupiOrSuci
+{
+	bytes supiOrSuci_ = 1;
+}
+
+message SupiRm
+{
+	bytes supiRm_ = 1;
+}
+
+message SupportedFeatures
+{
+	bytes supportedFeatures_ = 1;
+}
+
+message Tac
+{
+	bytes tac_ = 1;
+}
+
+message TacRm
+{
+	bytes tacRm_ = 1;
+}
+
+message Tai
+{
+	Nid nid_ = 1;
+	PlmnId plmnId_ = 2;
+	Tac tac_ = 3;
+}
+
+message TaiRm
+{
+	Nid nid_ = 1;
+	PlmnId plmnId_ = 2;
+	Tac tac_ = 3;
+}
+
+message TimeOfDay
+{
+	bytes timeOfDay_ = 1;
+}
+
+message TimeZone
+{
+	bytes timeZone_ = 1;
+}
+
+message TimeZoneRm
+{
+	bytes timeZoneRm_ = 1;
+}
+
+message Tmbr
+{
+	BitRate downlink_ = 1;
+	BitRate uplink_ = 2;
+}
+
+message TmbrRm
+{
+	oneof tmbrRm_
+	{
+		NullValue nullValue_ = 1;
+		Tmbr tmbr_ = 2;
+	}
+
+}
+
+message TraceData
+{
+	Ipv4Addr collectionEntityIpv4Addr_ = 1;
+	Ipv6Addr collectionEntityIpv6Addr_ = 2;
+	Bytes eventList_ = 3;
+	Bytes interfaceList_ = 4;
+	Bytes neTypeList_ = 5;
+	TraceDepth traceDepth_ = 6;
+	Bytes traceRef_ = 7;
+}
+
+message TraceDepth
+{
+	enum ETraceDepth
+	{
+		INVALID_TraceDepth = 0;
+		MINIMUM = 1;
+		MEDIUM = 2;
+		MAXIMUM = 3;
+		MINIMUM_WO_VENDOR_EXTENSION = 4;
+		MEDIUM_WO_VENDOR_EXTENSION = 5;
+		MAXIMUM_WO_VENDOR_EXTENSION = 6;
+	}
+
+	oneof traceDepth_
+	{
+		ETraceDepth eTraceDepth_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message TraceDepthRm
+{
+	oneof traceDepthRm_
+	{
+		NullValue nullValue_ = 1;
+		TraceDepth traceDepth_ = 2;
+	}
+
+}
+
+message TrafficProfile
+{
+	enum ETrafficProfile
+	{
+		INVALID_TrafficProfile = 0;
+		SINGLE_TRANS_UL = 1;
+		SINGLE_TRANS_DL = 2;
+		DUAL_TRANS_UL_FIRST = 3;
+		DUAL_TRANS_DL_FIRST = 4;
+		MULTI_TRANS = 5;
+	}
+
+	oneof trafficProfile_
+	{
+		ETrafficProfile eTrafficProfile_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message TrafficProfileRm
+{
+	oneof trafficProfileRm_
+	{
+		NullValue nullValue_ = 1;
+		TrafficProfile trafficProfile_ = 2;
+	}
+
+}
+
+message TypeAllocationCode
+{
+	bytes typeAllocationCode_ = 1;
+}
+
+message UeAuth
+{
+	enum EUeAuth
+	{
+		INVALID_UeAuth = 0;
+		AUTHORIZED = 1;
+		NOT_AUTHORIZED = 2;
+	}
+
+	oneof ueAuth_
+	{
+		EUeAuth eUeAuth_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message Uint16
+{
+	int64 uint16_ = 1;
+}
+
+message Uint16Rm
+{
+	int64 uint16Rm_ = 1;
+}
+
+message Uint32
+{
+	int32 uint32_ = 1;
+}
+
+message Uint32Rm
+{
+	int32 uint32Rm_ = 1;
+}
+
+message Uint64
+{
+	int64 uint64_ = 1;
+}
+
+message Uint64Rm
+{
+	int64 uint64Rm_ = 1;
+}
+
+message Uinteger
+{
+	int64 uinteger_ = 1;
+}
+
+message UintegerRm
+{
+	int64 uintegerRm_ = 1;
+}
+
+message UpConfidentiality
+{
+	enum EUpConfidentiality
+	{
+		INVALID_UpConfidentiality = 0;
+		REQUIRED = 1;
+		PREFERRED = 2;
+		NOT_NEEDED = 3;
+	}
+
+	oneof upConfidentiality_
+	{
+		EUpConfidentiality eUpConfidentiality_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message UpConfidentialityRm
+{
+	oneof upConfidentialityRm_
+	{
+		NullValue nullValue_ = 1;
+		UpConfidentiality upConfidentiality_ = 2;
+	}
+
+}
+
+message UpIntegrity
+{
+	enum EUpIntegrity
+	{
+		INVALID_UpIntegrity = 0;
+		REQUIRED = 1;
+		PREFERRED = 2;
+		NOT_NEEDED = 3;
+	}
+
+	oneof upIntegrity_
+	{
+		EUpIntegrity eUpIntegrity_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message UpIntegrityRm
+{
+	oneof upIntegrityRm_
+	{
+		NullValue nullValue_ = 1;
+		UpIntegrity upIntegrity_ = 2;
+	}
+
+}
+
+message UpSecurity
+{
+	UpConfidentiality upConfid_ = 1;
+	UpIntegrity upIntegr_ = 2;
+}
+
+message UpSecurityRm
+{
+	UpConfidentiality upConfid_ = 1;
+	UpIntegrity upIntegr_ = 2;
+}
+
+message Uri
+{
+	bytes uri_ = 1;
+}
+
+message UriRm
+{
+	bytes uriRm_ = 1;
+}
+
+message UriScheme
+{
+	enum EUriScheme
+	{
+		INVALID_UriScheme = 0;
+		http = 1;
+		https = 2;
+	}
+
+	oneof uriScheme_
+	{
+		EUriScheme eUriScheme_ = 1;
+		Bytes bytes_ = 2;
+	}
+
+}
+
+message UserLocation
+{
+	EutraLocation eutraLocation_ = 1;
+	N3gaLocation n3gaLocation_ = 2;
+	NrLocation nrLocation_ = 3;
+}
+
+message UtraLocation
+{
+	Int64 ageOfLocationInformation_ = 1;
+	CellGlobalId cgi_ = 2;
+	Bytes geodeticInformation_ = 3;
+	Bytes geographicalInformation_ = 4;
+	LocationAreaId lai_ = 5;
+	RoutingAreaId rai_ = 6;
+	ServiceAreaId sai_ = 7;
+	DateTime ueLocationTimestamp_ = 8;
+}
+
+message VarUeId
+{
+	bytes varUeId_ = 1;
+}
+
+message VarUeIdRm
+{
+	bytes varUeIdRm_ = 1;
+}
+
+message VolumeTimedReport
+{
+	Int64 downlinkVolume_ = 1;
+	DateTime endTimeStamp_ = 2;
+	DateTime startTimeStamp_ = 3;
+	Int64 uplinkVolume_ = 4;
+}
+
+message WildcardDnn
+{
+	bytes wildcardDnn_ = 1;
+}
+
+message WildcardDnnRm
+{
+	bytes wildcardDnnRm_ = 1;
+}
+
+message WirelineArea
+{
+	AreaCode areaCodeB_ = 1;
+	AreaCode areaCodeC_ = 2;
+	repeated Gli globalLineIds_ = 3;
+	repeated HfcNId hfcNIds_ = 4;
+}
+
+message WirelineServiceAreaRestriction
+{
+	repeated WirelineArea areas_ = 1;
+	RestrictionType restrictionType_ = 2;
+}
+

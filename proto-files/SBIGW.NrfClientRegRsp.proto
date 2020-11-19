@@ -1,0 +1,13 @@
+syntax = "proto3";
+package SBIGW;
+
+import "SBIGW.Comm.proto";
+import "TS29571_CommonData.components.schemas.proto";
+
+message NrfClientRegRsp
+{
+    bytes instanceKey = 1;  
+    uint32 rspCode = 2;
+    ERetType ret = 3;
+    TS29571_CommonData.components.schemas.ProblemDetails  problemDetails=4;
+}

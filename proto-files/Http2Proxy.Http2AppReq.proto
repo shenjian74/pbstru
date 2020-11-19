@@ -1,0 +1,18 @@
+syntax = "proto3";
+package http2proxy;
+
+import "Http2Proxy.Http2Common.proto";
+
+message Http2AppReq
+{
+	bytes url = 1; // pcrfDiameterService1?ID=1345
+	bytes method = 2;
+	bytes data = 3;
+	uint64 sequence = 4; // 反向代理生成的序列号
+	bytes accept = 5;
+	bytes contentType = 6;
+	Http2TransParam transParam = 7;
+	map<string,bytes> header = 8;
+	Http2Jid httpJid = 9;
+    HttpVersion version = 10;
+}

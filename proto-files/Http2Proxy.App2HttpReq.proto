@@ -1,0 +1,28 @@
+syntax = "proto3";
+package http2proxy;
+
+import "Http2Proxy.Http2Common.proto";
+
+message App2HttpReq
+{
+	bytes url = 1; // 如http://194.168.44.2:8080/pcrfDiameterService1?ID=1345
+	bytes method = 2; // 需大写，如果GET、PUT、POST等
+	bytes data = 3;
+	bytes instance = 4;
+	bytes sessionID = 5;
+	bytes accept = 6;
+	bytes contentType = 7;
+	bool traced = 8;
+	map<string,bytes> header = 9;
+	Http2AppInfo appInfo = 10;
+	uint32 profileID = 11;
+    bytes userID = 12;        
+    HttpVersion version = 13;    
+	ReqType reqType = 21;
+	map<string,bytes> appext = 22; //业务扩展参数，不会在http码流中体现，http透明使用用，业务在请求中带给httplb，httplb在响应中会带回给业务
+    uint32 linkIndex         = 23;
+    bytes  sequence          = 24;	
+    uint32 socketId          = 25;
+    Http2IpAddr hostIpAddr = 26;// 主机地址，当携带该参数时，HTTPLB将以该地址端口作为本次请求访问的目的地址，如果url中的host部分为主机名格式，则必须携带该参数 */
+    uint32 priority = 27;//请求优先级，取值范围0~5，在负荷控制场景下，优先级低的将会被先拒绝,，5级始终不会被拒绝。
+}

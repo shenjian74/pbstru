@@ -1,0 +1,56 @@
+syntax = "proto3";
+package http2proxy;
+
+enum ReqType{
+	NORMAL_REQ = 0; // normal request
+	SUBSCRIBE_REQ = 1; // response，由HTTP协议栈丢弃响应
+}
+
+enum RespType{
+	RESP_SUCCESS                 = 0;     // 成功响应
+	RESP_ERR_OUTER               = 1;     // 外部错误响应
+	RESP_ERR_INNER_CRT_LINK_FAIL = 2;     // 建立TCP链接失败
+	RESP_ERR_INNER_REQ_TIMEROUT  = 3;     // 发送HTTP请求超时无响应
+	RESP_ERR_INNER_REQ_LOADCTRL  = 4;     // 负荷控制决绝
+	RESP_ERR_RECV_SVR_RST        = 5;     // 发送HTTP请求超时无响应
+    RESP_ERR_INNER_SEARCHDATA_NEED= 6;     // 会话内请求需要SearchData
+    RESP_ERR_INNER_PRETAI_NOTMATCH= 7;     // 业务要求的PRETAI标记与服务发现结果不匹配
+	RESP_ERR_INNER_OTHER         = 255;   // 其他内部错误响应
+}
+
+message Http2IpAddr {
+	bytes ip = 1;
+	uint32 port = 2;
+}
+
+enum HttpTransPro {
+Trans_TCP= 0;
+Trans_TLS = 1;
+}
+
+message Http2TransParam {
+    Http2IpAddr local = 1;
+    Http2IpAddr remote = 2;
+	uint32 streamId = 3;
+	HttpTransPro protocol=4;
+}
+
+message Http2Jid {
+	uint32  jno = 1;  //v4平台下对应jno
+    uint32  comId = 2;  //v4平台下对应模块号
+}
+
+message Http2AppInfo {
+	bytes  serviceAbility = 1;  //v4平台下该参数作废
+	bytes  serviceTypeName = 2; //v4平台下该参数作废
+	uint32 serviceInst = 3;     //v4平台下该参数作废
+	bytes  scTypeName = 4;      //v4平台下该参数作废
+	uint32 userGroupId = 5;     //v4平台下该参数作废
+
+	Http2Jid jid = 6;			//v4平台下，业务使用该参数
+}
+
+enum HttpVersion{
+	HTTP_2= 0; // http 2
+	HTTP_11 = 1; // http 1.1
+}

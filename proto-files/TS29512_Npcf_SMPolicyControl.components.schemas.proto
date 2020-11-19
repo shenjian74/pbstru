@@ -1,0 +1,39 @@
+syntax = "proto3";
+package TS29512_Npcf_SMPolicyControl.components.schemas;
+
+import "TS29571_CommonData.components.schemas.proto";
+
+message FlowDirection
+{
+	enum EFlowDirection
+	{
+		INVALID_FlowDirection = 0;
+		DOWNLINK = 1;
+		UPLINK = 2;
+		BIDIRECTIONAL = 3;
+		UNSPECIFIED = 4;
+	}
+
+	oneof flowDirection_
+	{
+		EFlowDirection eFlowDirection_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message DeleteSMPolicy
+{
+	bytes smPolicyId_ = 1;
+}
+
+message GetSMPolicy
+{
+	bytes smPolicyId_ = 1;
+}
+
+message UpdateSMPolicy
+{
+	bytes smPolicyId_ = 1;
+}
+

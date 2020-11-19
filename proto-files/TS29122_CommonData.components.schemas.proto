@@ -1,0 +1,318 @@
+syntax = "proto3";
+package TS29122_CommonData.components.schemas;
+
+import "TS29554_Npcf_BDTPolicyControl.components.schemas.proto";
+import "TS29571_CommonData.components.schemas.proto";
+import "TS29572_Nlmf_Location.components.schemas.proto";
+
+message AccumulatedUsage
+{
+	Volume downlinkVolume_ = 1;
+	DurationSec duration_ = 2;
+	Volume totalVolume_ = 3;
+	Volume uplinkVolume_ = 4;
+}
+
+message Acknowledgement
+{
+	bytes details_ = 1;
+}
+
+message Bandwidth
+{
+	int64 bandwidth_ = 1;
+}
+
+message BdtReferenceId
+{
+	bytes bdtReferenceId_ = 1;
+}
+
+message BdtReferenceIdRm
+{
+	bytes bdtReferenceIdRm_ = 1;
+}
+
+message Binary
+{
+	bytes binary_ = 1;
+}
+
+message Bytes
+{
+	bytes bytes_ = 1;
+}
+
+message ConfigResult
+{
+	repeated ExternalId externalIds_ = 1;
+	repeated Msisdn msisdns_ = 2;
+	ResultReason resultReason_ = 3;
+}
+
+message DateTime
+{
+	bytes dateTime_ = 1;
+}
+
+message DateTimeRm
+{
+	bytes dateTimeRm_ = 1;
+}
+
+message DateTimeRo
+{
+	bytes dateTimeRo_ = 1;
+}
+
+message DayOfWeek
+{
+	int64 dayOfWeek_ = 1;
+}
+
+message DurationMin
+{
+	int32 durationMin_ = 1;
+}
+
+message DurationSec
+{
+	int64 durationSec_ = 1;
+}
+
+message DurationSecRm
+{
+	int64 durationSecRm_ = 1;
+}
+
+message DurationSecRo
+{
+	int64 durationSecRo_ = 1;
+}
+
+message Event
+{
+	enum EEvent
+	{
+		INVALID_Event = 0;
+		SESSION_TERMINATION = 1;
+		LOSS_OF_BEARER = 2;
+		RECOVERY_OF_BEARER = 3;
+		RELEASE_OF_BEARER = 4;
+		USAGE_REPORT = 5;
+		FAILED_RESOURCES_ALLOCATION = 6;
+	}
+
+	oneof event_
+	{
+		EEvent eEvent_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message EventReport
+{
+	AccumulatedUsage accumulatedUsage_ = 1;
+	Event event_ = 2;
+	repeated TS29571_CommonData.components.schemas.Int64 flowIds_ = 3;
+}
+
+message ExternalGroupId
+{
+	bytes externalGroupId_ = 1;
+}
+
+message ExternalId
+{
+	bytes externalId_ = 1;
+}
+
+message FlowInfo
+{
+	repeated TS29571_CommonData.components.schemas.Bytes flowDescriptions_ = 1;
+	TS29571_CommonData.components.schemas.Int64 flowId_ = 2;
+}
+
+message InvalidParam
+{
+	TS29571_CommonData.components.schemas.Bytes param_ = 1;
+	TS29571_CommonData.components.schemas.Bytes reason_ = 2;
+}
+
+message Ipv4Addr
+{
+	bytes ipv4Addr_ = 1;
+}
+
+message Ipv4AddrRo
+{
+	bytes ipv4AddrRo_ = 1;
+}
+
+message Ipv6Addr
+{
+	bytes ipv6Addr_ = 1;
+}
+
+message Ipv6AddrRo
+{
+	bytes ipv6AddrRo_ = 1;
+}
+
+message Link
+{
+	bytes link_ = 1;
+}
+
+message LocationArea
+{
+	repeated TS29571_CommonData.components.schemas.Bytes cellIds_ = 1;
+	repeated TS29572_Nlmf_Location.components.schemas.CivicAddress civicAddresses_ = 2;
+	repeated TS29571_CommonData.components.schemas.Bytes enodeBIds_ = 3;
+	repeated TS29572_Nlmf_Location.components.schemas.GeographicArea geographicAreas_ = 4;
+	repeated TS29571_CommonData.components.schemas.Bytes routingAreaIds_ = 5;
+	repeated TS29571_CommonData.components.schemas.Bytes trackingAreaIds_ = 6;
+}
+
+message LocationArea5G
+{
+	repeated TS29572_Nlmf_Location.components.schemas.CivicAddress civicAddresses_ = 1;
+	repeated TS29572_Nlmf_Location.components.schemas.GeographicArea geographicAreas_ = 2;
+	TS29554_Npcf_BDTPolicyControl.components.schemas.NetworkAreaInfo nwAreaInfo_ = 3;
+}
+
+message Mcc
+{
+	bytes mcc_ = 1;
+}
+
+message Mnc
+{
+	bytes mnc_ = 1;
+}
+
+message Msisdn
+{
+	bytes msisdn_ = 1;
+}
+
+message NotificationData
+{
+	repeated EventReport eventReports_ = 1;
+	Link transaction_ = 2;
+}
+
+message PlmnId
+{
+	Mcc mcc_ = 1;
+	Mnc mnc_ = 2;
+}
+
+message Port
+{
+	int64 port_ = 1;
+}
+
+message PortRo
+{
+	int64 portRo_ = 1;
+}
+
+message ProblemDetails
+{
+	TS29571_CommonData.components.schemas.Bytes cause_ = 1;
+	TS29571_CommonData.components.schemas.Bytes detail_ = 2;
+	Uri instance_ = 3;
+	repeated InvalidParam invalidParams_ = 4;
+	TS29571_CommonData.components.schemas.Int64 status_ = 5;
+	TS29571_CommonData.components.schemas.Bytes title_ = 6;
+	Uri type_ = 7;
+}
+
+message ResourceId
+{
+	bytes resourceId_ = 1;
+}
+
+message ResultReason
+{
+	enum EResultReason
+	{
+		INVALID_ResultReason = 0;
+		ROAMING_NOT_ALLOWED = 1;
+		OTHER_REASON = 2;
+	}
+
+	oneof resultReason_
+	{
+		EResultReason eResultReason_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message ScsAsId
+{
+	bytes scsAsId_ = 1;
+}
+
+message SponsorInformation
+{
+	TS29571_CommonData.components.schemas.Bytes aspId_ = 1;
+	TS29571_CommonData.components.schemas.Bytes sponsorId_ = 2;
+}
+
+message TestNotification
+{
+	Link subscription_ = 1;
+}
+
+message TimeOfDay
+{
+	bytes timeOfDay_ = 1;
+}
+
+message TimeWindow
+{
+	DateTime startTime_ = 1;
+	DateTime stopTime_ = 2;
+}
+
+message Uri
+{
+	bytes uri_ = 1;
+}
+
+message UsageThreshold
+{
+	Volume downlinkVolume_ = 1;
+	DurationSec duration_ = 2;
+	Volume totalVolume_ = 3;
+	Volume uplinkVolume_ = 4;
+}
+
+message UsageThresholdRm
+{
+	VolumeRm downlinkVolume_ = 1;
+	DurationSecRm duration_ = 2;
+	VolumeRm totalVolume_ = 3;
+	VolumeRm uplinkVolume_ = 4;
+}
+
+message Volume
+{
+	int64 volume_ = 1;
+}
+
+message VolumeRm
+{
+	int64 volumeRm_ = 1;
+}
+
+message WebsockNotifConfig
+{
+	TS29571_CommonData.components.schemas.Bool requestWebsocketUri_ = 1;
+	Link websocketUri_ = 2;
+}
+

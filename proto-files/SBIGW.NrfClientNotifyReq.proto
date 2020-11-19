@@ -1,0 +1,15 @@
+syntax = "proto3";
+package SBIGW;
+
+import "TS29510_Nnrf_NFManagement.components.schemas.proto";
+import "Http2Proxy.Http2Common.proto";
+
+message NrfClientNotifyReq{
+    TS29510_Nnrf_NFManagement.components.schemas.NotificationEventType event=1;
+    bytes nfInstanceUri=2;
+    TS29510_Nnrf_NFManagement.components.schemas.NFProfile nfProfile=3;
+    http2proxy.Http2Jid httpJid = 4;
+   uint64 sequence = 5;
+   bool    static = 6;
+   TS29510_Nnrf_NFManagement.components.schemas.NFType nfType=7;
+}

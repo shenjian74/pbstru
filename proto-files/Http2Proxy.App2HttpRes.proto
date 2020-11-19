@@ -1,0 +1,16 @@
+syntax = "proto3";
+package http2proxy;
+
+import "Http2Proxy.Http2Common.proto";
+
+message App2HttpRes
+{
+	uint64 sequence = 1; // 反向代理生成的序列号
+	uint32 responseCode = 2;
+	bytes data = 3;
+	bytes contentType = 4;
+	bytes location = 5;
+	Http2TransParam transParam = 6;
+	map<string,bytes> header = 7;
+    HttpVersion version = 8;
+}

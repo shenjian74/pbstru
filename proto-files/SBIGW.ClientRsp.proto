@@ -1,0 +1,27 @@
+syntax = "proto3";
+package SBIGW;
+
+import "SBIGW.Comm.proto";
+import "Http2Proxy.Http2Common.proto";
+import "TS29571_CommonData.components.schemas.proto";
+import "TS29510_Nnrf_NFManagement.components.schemas.proto";
+
+message SearResultParam{
+    bool static = 1 ;//服务发现结果是否来自于本地NRF。
+    bytes nfid = 2 ;
+    bytes fqdn = 3 ;
+    bytes scheme = 4;
+    repeated TS29571_CommonData.components.schemas.Tai taiList=5;
+    repeated TS29510_Nnrf_NFManagement.components.schemas.TaiRange taiRangeList=6;
+}
+
+message ClientRsp{
+	bytes instanceKey = 1;
+	uint32 returnCode = 2;//缺省成功
+	http2proxy.RespType respType = 3;//缺省成功响应
+	HttpRspMsg rspMsg = 4;
+	bytes route = 5;
+	http2proxy.Http2TransParam transParam = 6;
+	map<string,bytes> appext = 7; //业务扩展参数，不会在http码流中体现，http透明使用用，业务在请求中带给httplb，httplb在响应中会带回给业务
+    SearResultParam searchResultParam = 8;        
+}

@@ -1,0 +1,48 @@
+syntax = "proto3";
+package SBIGW;
+
+import "Http2Proxy.Http2Common.proto";
+import "SBIGW.Comm.proto";
+import "TS29510_Nnrf_NFManagement.components.schemas.proto";
+import "TS29510_Nnrf_NFDiscovery.components.schemas.proto";
+
+message ProfileInfo{
+    uint32   ipv4Profile=1;//0为无效值
+    uint32    ipv4ProfileWithTls=2;//0为无效值       
+    uint32    ipv6Profile=3;//0为无效值
+    uint32    ipv6ProfileWithTls=4;//0为无效值
+}
+
+
+
+message SearchResultFlag{
+    bool nfid= 1 ;//缺省不需要
+    bool fqdn= 2 ;//缺省不需要
+    bool scheme = 3;//缺省不需要
+    bool Talists = 4;//缺省不需要
+    bool TaRanges = 5;//缺省不需要
+}
+
+
+
+message ClientReq
+{
+	bytes instanceKey = 1;
+	http2proxy.Http2AppInfo appInfo = 2;
+	bool  bNoNeedRsp = 3;//缺省需要
+	HttpReqMsg  reqMsg =4;
+	ProfileInfo cliPfInfo= 5;	
+	TS29510_Nnrf_NFDiscovery.components.schemas.SearchNFInstances searchParam =6;
+    TS29510_Nnrf_NFManagement.components.schemas.ServiceName  servicename =7;
+    SearchResultFlag resultFlag  = 8;
+	bytes  route = 9;
+	bytes userID = 10; 	
+	map<string,bytes> appext =11; //业务扩展参数，不会在码流中体现，在响应中会带回给业务	        
+    bool traced = 12; //缺省不跟踪
+    uint32  replaceDataUriNum=13;//缺省不替换
+    ProfileInfo servPfInfo= 14;
+    TS29510_Nnrf_NFManagement.components.schemas.NFType targetNfType=15;//目的网元类型
+    TS29510_Nnrf_NFManagement.components.schemas.NFType  nfType=16;//本网元类新
+    uint32 priority = 17;//请求优先级，取值范围0~5，在负荷控制场景下，优先级低的将会被先拒绝,，5级始终不会被拒绝。
+    bool interplmn = 18;//服务访问是否跨plmn
+}

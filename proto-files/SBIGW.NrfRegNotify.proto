@@ -1,0 +1,6 @@
+syntax = "proto3";
+package SBIGW;
+
+message SbiRegNotify{
+    uint32 nrfProfileId=1;
+}

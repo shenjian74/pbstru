@@ -1,0 +1,34 @@
+syntax = "proto3";
+package TS29520_Nnwdaf_AnalyticsInfo.components.schemas;
+
+import "TS29571_CommonData.components.schemas.proto";
+
+message EventId
+{
+	enum EEventId
+	{
+		INVALID_EventId = 0;
+		LOAD_LEVEL_INFORMATION = 1;
+		NETWORK_PERFORMANCE = 2;
+		NF_LOAD = 3;
+		SERVICE_EXPERIENCE = 4;
+		UE_MOBILITY = 5;
+		UE_COMMUNICATION = 6;
+		QOS_SUSTAINABILITY = 7;
+		ABNORMAL_BEHAVIOUR = 8;
+		USER_DATA_CONGESTION = 9;
+	}
+
+	oneof eventId_
+	{
+		EEventId eEventId_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message GetNWDAFAnalytics
+{
+	EventId event_id_ = 1;
+}
+

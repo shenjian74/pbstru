@@ -1,0 +1,218 @@
+syntax = "proto3";
+package TS29520_Nnwdaf_EventsSubscription.components.schemas;
+
+import "TS29571_CommonData.components.schemas.proto";
+
+message Accuracy
+{
+	enum EAccuracy
+	{
+		INVALID_Accuracy = 0;
+		LOW = 1;
+		HIGH = 2;
+	}
+
+	oneof accuracy_
+	{
+		EAccuracy eAccuracy_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message CongestionType
+{
+	enum ECongestionType
+	{
+		INVALID_CongestionType = 0;
+		USER_PLANE = 1;
+		CONTROL_PLANE = 2;
+		USER_AND_CONTROL_PLANE = 3;
+	}
+
+	oneof congestionType_
+	{
+		ECongestionType eCongestionType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message Exception
+{
+	ExceptionId excepId_ = 1;
+	TS29571_CommonData.components.schemas.Int64 excepLevel_ = 2;
+	ExceptionTrend excepTrend_ = 3;
+}
+
+message ExceptionId
+{
+	enum EExceptionId
+	{
+		INVALID_ExceptionId = 0;
+		UNEXPECTED_UE_LOCATION = 1;
+		UNEXPECTED_LONG_LIVE_FLOW = 2;
+		UNEXPECTED_LARGE_RATE_FLOW = 3;
+		UNEXPECTED_WAKEUP = 4;
+		SUSPICION_OF_DDOS_ATTACK = 5;
+		WRONG_DESTINATION_ADDRESS = 6;
+		TOO_FREQUENT_SERVICE_ACCESS = 7;
+		ABNORMAL_TRAFFIC_VOLUME = 8;
+		UNEXPECTED_RADIO_LINK_FAILURES = 9;
+		PING_PONG_ACROSS_CELLS = 10;
+	}
+
+	oneof exceptionId_
+	{
+		EExceptionId eExceptionId_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message ExceptionTrend
+{
+	enum EExceptionTrend
+	{
+		INVALID_ExceptionTrend = 0;
+		UP = 1;
+		DOWN = 2;
+		UNKNOW = 3;
+		STABLE = 4;
+	}
+
+	oneof exceptionTrend_
+	{
+		EExceptionTrend eExceptionTrend_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message ExpectedAnalyticsType
+{
+	enum EExpectedAnalyticsType
+	{
+		INVALID_ExpectedAnalyticsType = 0;
+		MOBILITY = 1;
+		COMMUN = 2;
+		MOBILITY_AND_COMMUN = 3;
+	}
+
+	oneof expectedAnalyticsType_
+	{
+		EExpectedAnalyticsType eExpectedAnalyticsType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message MatchingDirection
+{
+	enum EMatchingDirection
+	{
+		INVALID_MatchingDirection = 0;
+		ASCENDING = 1;
+		DESCENDING = 2;
+		CROSSED = 3;
+	}
+
+	oneof matchingDirection_
+	{
+		EMatchingDirection eMatchingDirection_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message NetworkPerfType
+{
+	enum ENetworkPerfType
+	{
+		INVALID_NetworkPerfType = 0;
+		GNB_ACTIVE_RATIO = 1;
+		GNB_COMPUTING_USAGE = 2;
+		GNB_MEMORY_USAGE = 3;
+		GNB_DISK_USAGE = 4;
+		NUM_OF_UE = 5;
+		SESS_SUCC_RATIO = 6;
+		HO_SUCC_RATIO = 7;
+	}
+
+	oneof networkPerfType_
+	{
+		ENetworkPerfType eNetworkPerfType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message NotificationMethod
+{
+	enum ENotificationMethod
+	{
+		INVALID_NotificationMethod = 0;
+		PERIODIC = 1;
+		THRESHOLD = 2;
+	}
+
+	oneof notificationMethod_
+	{
+		ENotificationMethod eNotificationMethod_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message NwdafEvent
+{
+	enum ENwdafEvent
+	{
+		INVALID_NwdafEvent = 0;
+		SLICE_LOAD_LEVEL = 1;
+		NETWORK_PERFORMANCE = 2;
+		NF_LOAD = 3;
+		SERVICE_EXPERIENCE = 4;
+		UE_MOBILITY = 5;
+		UE_COMMUNICATION = 6;
+		QOS_SUSTAINABILITY = 7;
+		ABNORMAL_BEHAVIOUR = 8;
+		USER_DATA_CONGESTION = 9;
+	}
+
+	oneof nwdafEvent_
+	{
+		ENwdafEvent eNwdafEvent_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message TimeUnit
+{
+	enum ETimeUnit
+	{
+		INVALID_TimeUnit = 0;
+		MINUTE = 1;
+		HOUR = 2;
+		DAY = 3;
+	}
+
+	oneof timeUnit_
+	{
+		ETimeUnit eTimeUnit_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message DeleteNWDAFEventsSubscription
+{
+	bytes subscriptionId_ = 1;
+}
+
+message UpdateNWDAFEventsSubscription
+{
+	bytes subscriptionId_ = 1;
+}
+

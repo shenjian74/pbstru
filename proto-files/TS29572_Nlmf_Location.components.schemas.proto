@@ -1,0 +1,625 @@
+syntax = "proto3";
+package TS29572_Nlmf_Location.components.schemas;
+
+import "TS29571_CommonData.components.schemas.proto";
+
+message Accuracy
+{
+	float accuracy_ = 1;
+}
+
+message AccuracyFulfilmentIndicator
+{
+	enum EAccuracyFulfilmentIndicator
+	{
+		INVALID_AccuracyFulfilmentIndicator = 0;
+		REQUESTED_ACCURACY_FULFILLED = 1;
+		REQUESTED_ACCURACY_NOT_FULFILLED = 2;
+	}
+
+	oneof accuracyFulfilmentIndicator_
+	{
+		EAccuracyFulfilmentIndicator eAccuracyFulfilmentIndicator_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message AgeOfLocationEstimate
+{
+	int64 ageOfLocationEstimate_ = 1;
+}
+
+message Altitude
+{
+	double altitude_ = 1;
+}
+
+message Angle
+{
+	int64 angle_ = 1;
+}
+
+message BarometricPressure
+{
+	int64 barometricPressure_ = 1;
+}
+
+message CivicAddress
+{
+	TS29571_CommonData.components.schemas.Bytes a1_ = 1;
+	TS29571_CommonData.components.schemas.Bytes a2_ = 2;
+	TS29571_CommonData.components.schemas.Bytes a3_ = 3;
+	TS29571_CommonData.components.schemas.Bytes a4_ = 4;
+	TS29571_CommonData.components.schemas.Bytes a5_ = 5;
+	TS29571_CommonData.components.schemas.Bytes a6_ = 6;
+	TS29571_CommonData.components.schemas.Bytes aDDCODE_ = 7;
+	TS29571_CommonData.components.schemas.Bytes bLD_ = 8;
+	TS29571_CommonData.components.schemas.Bytes fLR_ = 9;
+	TS29571_CommonData.components.schemas.Bytes hNO_ = 10;
+	TS29571_CommonData.components.schemas.Bytes hNS_ = 11;
+	TS29571_CommonData.components.schemas.Bytes lMK_ = 12;
+	TS29571_CommonData.components.schemas.Bytes lOC_ = 13;
+	TS29571_CommonData.components.schemas.Bytes nAM_ = 14;
+	TS29571_CommonData.components.schemas.Bytes pC_ = 15;
+	TS29571_CommonData.components.schemas.Bytes pCN_ = 16;
+	TS29571_CommonData.components.schemas.Bytes pLC_ = 17;
+	TS29571_CommonData.components.schemas.Bytes pOBOX_ = 18;
+	TS29571_CommonData.components.schemas.Bytes pOD_ = 19;
+	TS29571_CommonData.components.schemas.Bytes pOM_ = 20;
+	TS29571_CommonData.components.schemas.Bytes pRD_ = 21;
+	TS29571_CommonData.components.schemas.Bytes pRM_ = 22;
+	TS29571_CommonData.components.schemas.Bytes rD_ = 23;
+	TS29571_CommonData.components.schemas.Bytes rDBR_ = 24;
+	TS29571_CommonData.components.schemas.Bytes rDSEC_ = 25;
+	TS29571_CommonData.components.schemas.Bytes rDSUBBR_ = 26;
+	TS29571_CommonData.components.schemas.Bytes rOOM_ = 27;
+	TS29571_CommonData.components.schemas.Bytes sEAT_ = 28;
+	TS29571_CommonData.components.schemas.Bytes sTS_ = 29;
+	TS29571_CommonData.components.schemas.Bytes uNIT_ = 30;
+	TS29571_CommonData.components.schemas.Bytes country_ = 31;
+}
+
+message Confidence
+{
+	int64 confidence_ = 1;
+}
+
+message CorrelationID
+{
+	bytes correlationID_ = 1;
+}
+
+message EllipsoidArc
+{
+	Confidence confidence_ = 1;
+	Angle includedAngle_ = 2;
+	InnerRadius innerRadius_ = 3;
+	Angle offsetAngle_ = 4;
+	GeographicalCoordinates point_ = 5;
+	Uncertainty uncertaintyRadius_ = 6;
+	SupportedGADShapes shape_ = 7;
+}
+
+message EventClass
+{
+	enum EEventClass
+	{
+		INVALID_EventClass = 0;
+		SUPPLEMENTARY_SERVICES = 1;
+	}
+
+	oneof eventClass_
+	{
+		EEventClass eEventClass_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message EventReportCounter
+{
+	int64 eventReportCounter_ = 1;
+}
+
+message EventReportDuration
+{
+	int64 eventReportDuration_ = 1;
+}
+
+message ExternalClientType
+{
+	enum EExternalClientType
+	{
+		INVALID_ExternalClientType = 0;
+		EMERGENCY_SERVICES = 1;
+		VALUE_ADDED_SERVICES = 2;
+		PLMN_OPERATOR_SERVICES = 3;
+		LAWFUL_INTERCEPT_SERVICES = 4;
+		PLMN_OPERATOR_BROADCAST_SERVICES = 5;
+		PLMN_OPERATOR_OM = 6;
+		PLMN_OPERATOR_ANONYMOUS_STATISTICS = 7;
+		PLMN_OPERATOR_TARGET_MS_SERVICE_SUPPORT = 8;
+	}
+
+	oneof externalClientType_
+	{
+		EExternalClientType eExternalClientType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message GADShape
+{
+	SupportedGADShapes shape_ = 1;
+}
+
+message GeographicArea
+{
+	oneof geographicArea_
+	{
+		Point point_ = 1;
+		PointUncertaintyCircle pointUncertaintyCircle_ = 2;
+		PointUncertaintyEllipse pointUncertaintyEllipse_ = 3;
+		Polygon polygon_ = 4;
+		PointAltitude pointAltitude_ = 5;
+		PointAltitudeUncertainty pointAltitudeUncertainty_ = 6;
+		EllipsoidArc ellipsoidArc_ = 7;
+	}
+
+}
+
+message GeographicalCoordinates
+{
+	TS29571_CommonData.components.schemas.Double lat_ = 1;
+	TS29571_CommonData.components.schemas.Double lon_ = 2;
+}
+
+message GnssId
+{
+	enum EGnssId
+	{
+		INVALID_GnssId = 0;
+		GPS = 1;
+		GALILEO = 2;
+		SBAS = 3;
+		MODERNIZED_GPS = 4;
+		QZSS = 5;
+		GLONASS = 6;
+	}
+
+	oneof gnssId_
+	{
+		EGnssId eGnssId_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message HorizontalSpeed
+{
+	float horizontalSpeed_ = 1;
+}
+
+message InnerRadius
+{
+	int32 innerRadius_ = 1;
+}
+
+message LMFIdentification
+{
+	bytes lMFIdentification_ = 1;
+}
+
+message LcsPriority
+{
+	enum ELcsPriority
+	{
+		INVALID_LcsPriority = 0;
+		HIGHEST_PRIORITY = 1;
+		NORMAL_PRIORITY = 2;
+	}
+
+	oneof lcsPriority_
+	{
+		ELcsPriority eLcsPriority_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message LcsQosClass
+{
+	enum ELcsQosClass
+	{
+		INVALID_LcsQosClass = 0;
+		BEST_EFFORT = 1;
+		ASSURED = 2;
+	}
+
+	oneof lcsQosClass_
+	{
+		ELcsQosClass eLcsQosClass_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message LcsServiceType
+{
+	int64 lcsServiceType_ = 1;
+}
+
+message LdrReference
+{
+	bytes ldrReference_ = 1;
+}
+
+message LdrType
+{
+	enum ELdrType
+	{
+		INVALID_LdrType = 0;
+		UE_AVAILABLE = 1;
+		PERIODIC = 2;
+		ENTERING_INTO_AREA = 3;
+		LEAVING_FROM_AREA = 4;
+		BEING_INSIDE_AREA = 5;
+		MOTION = 6;
+	}
+
+	oneof ldrType_
+	{
+		ELdrType eLdrType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message LinearDistance
+{
+	int64 linearDistance_ = 1;
+}
+
+message MaximumInterval
+{
+	int64 maximumInterval_ = 1;
+}
+
+message MinimumInterval
+{
+	int64 minimumInterval_ = 1;
+}
+
+message OccurrenceInfo
+{
+	enum EOccurrenceInfo
+	{
+		INVALID_OccurrenceInfo = 0;
+		ONE_TIME_EVENT = 1;
+		MULTIPLE_TIME_EVENT = 2;
+	}
+
+	oneof occurrenceInfo_
+	{
+		EOccurrenceInfo eOccurrenceInfo_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message Orientation
+{
+	int64 orientation_ = 1;
+}
+
+message Point
+{
+	GeographicalCoordinates point_ = 1;
+	SupportedGADShapes shape_ = 2;
+}
+
+message PointAltitude
+{
+	Altitude altitude_ = 1;
+	GeographicalCoordinates point_ = 2;
+	SupportedGADShapes shape_ = 3;
+}
+
+message PointAltitudeUncertainty
+{
+	Altitude altitude_ = 1;
+	Confidence confidence_ = 2;
+	GeographicalCoordinates point_ = 3;
+	Uncertainty uncertaintyAltitude_ = 4;
+	UncertaintyEllipse uncertaintyEllipse_ = 5;
+	SupportedGADShapes shape_ = 6;
+}
+
+message PointList
+{
+	repeated GeographicalCoordinates pointList_ = 1;
+}
+
+message PointUncertaintyCircle
+{
+	GeographicalCoordinates point_ = 1;
+	Uncertainty uncertainty_ = 2;
+	SupportedGADShapes shape_ = 3;
+}
+
+message PointUncertaintyEllipse
+{
+	Confidence confidence_ = 1;
+	GeographicalCoordinates point_ = 2;
+	UncertaintyEllipse uncertaintyEllipse_ = 3;
+	SupportedGADShapes shape_ = 4;
+}
+
+message Polygon
+{
+	PointList pointList_ = 1;
+	SupportedGADShapes shape_ = 2;
+}
+
+message PositioningMethod
+{
+	enum EPositioningMethod
+	{
+		INVALID_PositioningMethod = 0;
+		CELLID = 1;
+		ECID = 2;
+		OTDOA = 3;
+		BAROMETRIC_PRESSURE = 4;
+		WLAN = 5;
+		BLUETOOTH = 6;
+		MBS = 7;
+		MOTION_SENSOR = 8;
+	}
+
+	oneof positioningMethod_
+	{
+		EPositioningMethod ePositioningMethod_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message PositioningMode
+{
+	enum EPositioningMode
+	{
+		INVALID_PositioningMode = 0;
+		UE_BASED = 1;
+		UE_ASSISTED = 2;
+		CONVENTIONAL = 3;
+	}
+
+	oneof positioningMode_
+	{
+		EPositioningMode ePositioningMode_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message ReportedEventType
+{
+	enum EReportedEventType
+	{
+		INVALID_ReportedEventType = 0;
+		PERIODIC_EVENT = 1;
+		ENTERING_AREA_EVENT = 2;
+		LEAVING_AREA_EVENT = 3;
+		BEING_INSIDE_AREA_EVENT = 4;
+		MOTION_EVENT = 5;
+		MAXIMUM_INTERVAL_EXPIRATION_EVENT = 6;
+		LOCATION_CANCELLATION_EVENT = 7;
+	}
+
+	oneof reportedEventType_
+	{
+		EReportedEventType eReportedEventType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message ReportingAccessType
+{
+	enum EReportingAccessType
+	{
+		INVALID_ReportingAccessType = 0;
+		NR = 1;
+		EUTRA_CONNECTED_TO_5GC = 2;
+		NON_3GPP_CONNECTED_TO_5GC = 3;
+	}
+
+	oneof reportingAccessType_
+	{
+		EReportingAccessType eReportingAccessType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message ReportingAmount
+{
+	int64 reportingAmount_ = 1;
+}
+
+message ReportingAreaType
+{
+	enum EReportingAreaType
+	{
+		INVALID_ReportingAreaType = 0;
+		EPS_TRACKING_AREA_IDENTITY = 1;
+		E_UTRAN_CELL_GLOBAL_IDENTIFICATION = 2;
+		N5GS_TRACKING_AREA_IDENTITY = 3;
+		NR_CELL_GLOBAL_IDENTITY = 4;
+	}
+
+	oneof reportingAreaType_
+	{
+		EReportingAreaType eReportingAreaType_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message ReportingDuration
+{
+	int64 reportingDuration_ = 1;
+}
+
+message ReportingInterval
+{
+	int64 reportingInterval_ = 1;
+}
+
+message ResponseTime
+{
+	enum EResponseTime
+	{
+		INVALID_ResponseTime = 0;
+		LOW_DELAY = 1;
+		DELAY_TOLERANT = 2;
+	}
+
+	oneof responseTime_
+	{
+		EResponseTime eResponseTime_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message SamplingInterval
+{
+	int64 samplingInterval_ = 1;
+}
+
+message SpeedUncertainty
+{
+	float speedUncertainty_ = 1;
+}
+
+message SupportedGADShapes
+{
+	enum ESupportedGADShapes
+	{
+		INVALID_SupportedGADShapes = 0;
+		POINT = 1;
+		POINT_UNCERTAINTY_CIRCLE = 2;
+		POINT_UNCERTAINTY_ELLIPSE = 3;
+		POLYGON = 4;
+		POINT_ALTITUDE = 5;
+		POINT_ALTITUDE_UNCERTAINTY = 6;
+		ELLIPSOID_ARC = 7;
+	}
+
+	oneof supportedGADShapes_
+	{
+		ESupportedGADShapes eSupportedGADShapes_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message TerminationCause
+{
+	enum ETerminationCause
+	{
+		INVALID_TerminationCause = 0;
+		TERMINATION_BY_UE = 1;
+		TERMINATION_BY_NETWORK = 2;
+		NORMAL_TERMINATION = 3;
+	}
+
+	oneof terminationCause_
+	{
+		ETerminationCause eTerminationCause_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message UeLocationServiceInd
+{
+	enum EUeLocationServiceInd
+	{
+		INVALID_UeLocationServiceInd = 0;
+		LOCATION_ESTIMATE = 1;
+		LOCATION_ASSISTANCE_DATA = 2;
+	}
+
+	oneof ueLocationServiceInd_
+	{
+		EUeLocationServiceInd eUeLocationServiceInd_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message Uncertainty
+{
+	float uncertainty_ = 1;
+}
+
+message UncertaintyEllipse
+{
+	Orientation orientationMajor_ = 1;
+	Uncertainty semiMajor_ = 2;
+	Uncertainty semiMinor_ = 3;
+}
+
+message Usage
+{
+	enum EUsage
+	{
+		INVALID_Usage = 0;
+		UNSUCCESS = 1;
+		SUCCESS_RESULTS_NOT_USED = 2;
+		SUCCESS_RESULTS_USED_TO_VERIFY_LOCATION = 3;
+		SUCCESS_RESULTS_USED_TO_GENERATE_LOCATION = 4;
+		SUCCESS_METHOD_NOT_DETERMINED = 5;
+	}
+
+	oneof usage_
+	{
+		EUsage eUsage_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+message VelocityRequested
+{
+	enum EVelocityRequested
+	{
+		INVALID_VelocityRequested = 0;
+		VELOCITY_IS_NOT_REQUESTED = 1;
+		VELOCITY_IS_REQUESTED = 2;
+	}
+
+	oneof velocityRequested_
+	{
+		EVelocityRequested eVelocityRequested_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+
+enum VerticalDirection
+{
+	INVALID_VerticalDirection = 0;
+	UPWARD = 1;
+	DOWNWARD = 2;
+}
+
+message VerticalSpeed
+{
+	float verticalSpeed_ = 1;
+}
+

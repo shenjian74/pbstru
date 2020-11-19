@@ -1,0 +1,20 @@
+syntax = "proto3";
+package SBIGW;
+
+import "Http2Proxy.Http2Common.proto";
+import "SBIGW.Comm.proto";
+
+message TraceMsg
+{
+    bytes instanceKey = 1;
+    bool isSend=2; // 本端，发送消息？
+    bool isReq=3;  // 消息是请求？
+    oneof httpmsg
+    {
+        HttpReqMsg req=4;
+        HttpRspMsg rsp=5;
+    }
+
+   http2proxy.Http2TransParam transParam = 6; // 传输层参数
+   uint32 eventId = 7;
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+package SBIGW;
+
+import "TS29571_CommonData.components.schemas.proto";
+import "TS29510_Nnrf_AccessToken.components.schemas.proto";
+import "SBIGW.Comm.proto";
+
+message NrfClientAccesstokenRsp
+{
+    bytes instanceKey = 1;  
+    uint32 responseCode = 2;
+    ERetType ret = 3; 
+    oneof data
+    {
+        TS29510_Nnrf_AccessToken.components.schemas.AccessTokenRsp accessTokenRsp=4;
+        TS29571_CommonData.components.schemas.ProblemDetails  problemDetails=5;
+    }
+}

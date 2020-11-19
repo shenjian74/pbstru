@@ -1,0 +1,22 @@
+syntax = "proto3";
+package http2proxy;
+
+import "Http2Proxy.Http2Common.proto";
+
+message Http2AppRes
+{
+	bytes url = 1;
+	bytes method = 2;
+	bytes data =3;
+	uint32 returnCode = 4;
+	bytes sessionID = 5;
+	uint32 responseCode = 6;
+	bytes contentType = 7;
+	bytes location = 8;
+	Http2TransParam transParam = 9;
+	map<string,bytes> header = 10;
+    HttpVersion version = 11;
+	ReqType reqType = 21;
+	map<string,bytes> appext = 22; //业务扩展参数，不会在http码流中体现，http透明使用用，业务在请求中带给httplb，httplb在响应中会带回给业务
+    RespType respType = 23;
+}

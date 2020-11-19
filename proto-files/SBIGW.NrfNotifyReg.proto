@@ -1,0 +1,17 @@
+syntax = "proto3";
+package SBIGW;
+
+import "Http2Proxy.Http2Common.proto";
+
+message SbiGwNotifyAppInfo
+{
+    http2proxy.Http2AppInfo appInfo = 1;
+    bool                    needLoadChgOnly = 2;   /*是否需要只有load变更的通知*/
+    bool                    traced = 3; /* 是否跟踪标志 */
+}
+
+message SbiGwNotifyReg
+{
+    map<uint32, SbiGwNotifyAppInfo > notifylistByType = 1;
+    map<string, SbiGwNotifyAppInfo>    notifylistById = 2;
+}

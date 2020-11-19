@@ -1,0 +1,17 @@
+syntax = "proto3";
+package http2proxy;
+
+import "Http2Proxy.Http2Common.proto";
+
+message App2HttpDetect{
+    bytes        instanceKey = 1;    //应用实例关键字，应用自解释参数，会在ACK中带回
+    Http2AppInfo appInfo     = 2;    //应用标识，ACK消息会发往该参数标识的目的进程
+    Http2IpAddr  remote      = 3;    //目的地址端口
+    uint32       clientPf    = 4;    //使用的客户端profile
+    uint32       timeForack  = 5;    //业务要求的ACK应答最晚时间，最小为1秒，业务不指定默认两秒。
+}
+
+message App2HttpDetectAck{
+    bytes        instanceKey = 1;
+    bool         available   = 2;    //true:目标可用，false：目标不可用。
+}

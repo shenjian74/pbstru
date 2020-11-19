@@ -1,0 +1,28 @@
+syntax = "proto3";
+package TS29510_Nnrf_Bootstrapping.components.schemas;
+
+import "TS29571_CommonData.components.schemas.proto";
+
+message BootstrappingInfo
+{
+	map <string, TS29571_CommonData.components.schemas.LinksValueSchema> _links_ = 1;
+	Status status_ = 2;
+}
+
+message Status
+{
+	enum EStatus
+	{
+		INVALID_Status = 0;
+		OPERATIVE = 1;
+		NON_OPERATIVE = 2;
+	}
+
+	oneof status_
+	{
+		EStatus eStatus_ = 1;
+		TS29571_CommonData.components.schemas.Bytes bytes_ = 2;
+	}
+
+}
+

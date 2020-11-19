@@ -1,0 +1,8 @@
+syntax = "proto3";
+package SBIGW;
+
+message SbiGwHeartBeatAck
+{
+    uint64 sequence = 1;
+    uint32 errorCode = 2;
+}
