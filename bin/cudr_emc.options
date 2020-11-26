@@ -1,0 +1,7 @@
+emc2sccu_indicate_migrate_req.vru_inst max_count:400
+emc2sccu_query_migrate_process_req.vru_inst max_count:400
+sc_kpi_data.scale_data max_count:2
+sccu2emc_kpi_report.sc_list max_count:403
+sc_kpi_data_scalescgroup.scale_data max_count:2
+sccu2emc_scalescgroup_kpi_report.sc_list max_count:403
+emc2sccu_scaleout_result_notify.sc_inst_list max_count:400

@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+message emc2sccu_indicate_migrate_req
+{
+    string session_id = 1;
+    string operation = 2;
+    repeated string vru_inst = 3;
+}
+
+message sccu2emc_indicate_migrate_rsp
+{
+    string session_id = 1;
+    string result = 2;
+}
+
+message emc2sccu_query_migrate_process_req
+{
+    string session_id = 1;
+    string operation = 2;
+    repeated string vru_inst = 3;
+}
+
+message sccu2emc_query_migrate_process_rsp
+{
+    string session_id = 1;
+    uint32 process = 2;
+}
+
+message emc2sccu_sampling_interval_notify
+{
+    uint32 sampling_interval = 1;
+}
+
+message scale_info
+{
+    string type = 1;
+    uint32 value = 2;
+}
+
+message sc_kpi_data
+{
+    string sc_type = 1;
+    string nfs_name = 2;
+    string flag_scaleout = 3;
+    string flag_scalein = 4;
+    repeated scale_info scale_data = 5;
+    uint32 scgroupno = 6;
+}
+
+message sccu2emc_kpi_report
+{
+    repeated sc_kpi_data sc_list = 1;
+}
+
+message sc_kpi_data_scalescgroup
+{
+    string sc_type = 1;
+    string nfs_name = 2;
+    string flag_scaleout = 3;
+    string flag_scalein = 4;
+    repeated scale_info scale_data = 5;
+    uint32 scgroupno_scaleout = 6;       // 非0则表示业务指定SC组号弹组，0则表示由LTM进行选择
+    uint32 scgroupno_scalein = 7;        // 非0则表示业务指定SC组号缩组，0则表示由LTM进行选择
+}
+
+message sccu2emc_scalescgroup_kpi_report
+{
+    repeated sc_kpi_data_scalescgroup sc_list = 1;
+}
+
+message emc2sccu_scaleout_result_notify
+{
+    string session_id = 1;
+    repeated string sc_inst_list = 2;
+}
+
+message sccu2emc_scaleout_result_notify_ack
+{
+    string session_id = 1;
+}
+
