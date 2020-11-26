@@ -133,7 +133,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     int retcode = 0;
     string filename = target_dir + "include" + path_sep + "pbstru_comm.h";
     FILE *fp = fopen(filename.c_str(), "wt");
-    if (NULL == fp)
+    if(NULL == fp)
     {
         printf("Cannot open file:%s for write.\n", filename.c_str());
         return 1;
@@ -250,7 +250,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
 
     filename = target_dir + "source" + path_sep + "pbstru_comm.c";
     fp = fopen(filename.c_str(), "wt");
-    if (NULL == fp)
+    if(NULL == fp)
     {
         printf("Cannot open file:%s for write.\n", filename.c_str());
         return 1;
@@ -290,13 +290,13 @@ int gen_comm(const string& nf_name, const string &target_dir)
 
     fprintf(fp, "void %s_encode_tag_byte_%s(BYTE *buf, const BYTE tag, const BYTE wire_type, size_t *offset, BOOL old_version) {\n", nf_name.c_str(), _BUILD_TIME_);
     fprintf(fp, "    if(tag < 16) {\n");
-    fprintf(fp, "        if (NULL != buf) {\n");
+    fprintf(fp, "        if(NULL != buf) {\n");
     fprintf(fp, "            buf[*offset] = (tag << 3) | wire_type;\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "        *offset += 1;\n");
     fprintf(fp, "    } else {\n");
-    fprintf(fp, "        if (NULL != buf) {\n");
-    fprintf(fp, "            if (TRUE == old_version) {\n");
+    fprintf(fp, "        if(NULL != buf) {\n");
+    fprintf(fp, "            if(TRUE == old_version) {\n");
     fprintf(fp, "                buf[*offset] = tag | 0x80;\n");
     fprintf(fp, "                buf[*offset+1] = ((BYTE)(tag/16) & 0x78) | wire_type;\n");
     fprintf(fp, "            } else {\n");
@@ -313,16 +313,16 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    DWORD remain_len = value;\n");
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "\n");
-    fprintf(fp, "    if (NULL == buf) {\n");
+    fprintf(fp, "    if(NULL == buf) {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
     fprintf(fp, "            remain_len = remain_len >> 7;\n");
-    fprintf(fp, "            if (0 == remain_len) {\n");
+    fprintf(fp, "            if(0 == remain_len) {\n");
     fprintf(fp, "                break;\n");
     fprintf(fp, "            }\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    } else {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
-    fprintf(fp, "            if ((remain_len >> 7) > 0) {\n");
+    fprintf(fp, "            if((remain_len >> 7) > 0) {\n");
     fprintf(fp, "                buf[(*offset) + iloop] = ((BYTE)remain_len) | 0x80;\n");
     fprintf(fp, "                remain_len = remain_len >> 7;\n");
     fprintf(fp, "            } else {\n");
@@ -352,16 +352,16 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    WORD64 remain_len = value;\n");
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "\n");
-    fprintf(fp, "    if (NULL == buf) {\n");
+    fprintf(fp, "    if(NULL == buf) {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
     fprintf(fp, "            remain_len = remain_len >> 7;\n");
-    fprintf(fp, "            if (0 == remain_len) {\n");
+    fprintf(fp, "            if(0 == remain_len) {\n");
     fprintf(fp, "                break;\n");
     fprintf(fp, "            }\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    } else {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
-    fprintf(fp, "            if ((remain_len >> 7) > 0) {\n");
+    fprintf(fp, "            if((remain_len >> 7) > 0) {\n");
     fprintf(fp, "                buf[(*offset) + iloop] = ((BYTE)remain_len) | 0x80;\n");
     fprintf(fp, "                remain_len = remain_len >> 7;\n");
     fprintf(fp, "            } else {\n");
@@ -390,16 +390,16 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "    size_t remain_len = value;\n");
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "\n");
-    fprintf(fp, "    if (NULL == buf) {\n");
+    fprintf(fp, "    if(NULL == buf) {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
     fprintf(fp, "            remain_len = remain_len >> 7;\n");
-    fprintf(fp, "            if (0 == remain_len) {\n");
+    fprintf(fp, "            if(0 == remain_len) {\n");
     fprintf(fp, "                break;\n");
     fprintf(fp, "            }\n");
     fprintf(fp, "        }\n");
     fprintf(fp, "    } else {\n");
     fprintf(fp, "        for (iloop = 0;; ++iloop) {\n");
-    fprintf(fp, "            if ((remain_len >> 7) > 0) {\n");
+    fprintf(fp, "            if((remain_len >> 7) > 0) {\n");
     fprintf(fp, "                buf[(*offset) + iloop] = ((BYTE)remain_len) | 0x80;\n");
     fprintf(fp, "                remain_len = remain_len >> 7;\n");
     fprintf(fp, "            } else {\n");
@@ -491,11 +491,11 @@ static bool get_max_count(const string &message_name, const string &field_name, 
     static string option_filename;
     string key = message_name + "." + field_name;
 
-    if (NULL == fp_option)
+    if(NULL == fp_option)
     {
         option_filename = proto_filename;
         size_t pos = option_filename.rfind(".");
-        if (pos == string::npos)
+        if(pos == string::npos)
         {
             option_filename += ".options";
         }
@@ -504,7 +504,7 @@ static bool get_max_count(const string &message_name, const string &field_name, 
             option_filename = option_filename.substr(0, pos) + ".options";
         }
         fp_option = fopen(option_filename.c_str(), "rt");
-        if (NULL == fp_option)
+        if(NULL == fp_option)
         {
             printf("Error: [%s:%d] Cannot open file:%s for read.\n", __THIS_FILE__, __LINE__, option_filename.c_str());
             max_count = "10";
@@ -515,19 +515,19 @@ static bool get_max_count(const string &message_name, const string &field_name, 
     for (rewind(fp_option); ;)
     {
         char buffer[1024];
-        if (NULL == fgets(buffer, sizeof(buffer), fp_option))
+        if(NULL == fgets(buffer, sizeof(buffer), fp_option))
         {
             break;
         }
-        if ('#' == buffer[0])
+        if('#' == buffer[0])
         {
             continue;
         }
         sscanf(buffer, "%s %s", str1, str2);
-        if (0 == strcmp(str1, key.c_str()))
+        if(0 == strcmp(str1, key.c_str()))
         {
             char *num_str = strstr(str2, "max_count:");
-            if (NULL == num_str)
+            if(NULL == num_str)
             {
                 printf("Error: [%s:%d] Cannot read item:\"%s max_count:?\" from option file:[%s].\n",
                     __THIS_FILE__, __LINE__, key.c_str(), option_filename.c_str());
@@ -1141,13 +1141,14 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<
     }
     fprintf(fp, "    var_%s->_message_length = 0;\n", desc->name().c_str());
 }
-
+            
 static int gen_source(const string& nf_name, const Descriptor *desc, string &target_dir, const map<string,string> &map_array_size, bool use_old_version)
 {
     int retcode = 0;
     string name_lower = desc->name();
     tolower(name_lower);
     string struct_name = struct_prefix + name_lower + struct_postfix;
+    char length_string[256];
 
     string basefile = name_lower + ".c";
     string filename = target_dir + "source" + path_sep + basefile;
@@ -1288,18 +1289,27 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             }
-            fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            strcpy(length_string, "sizeof(DWORD)");
+            fprintf(fp, "%sif(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+            fprintf(fp, "%s    return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+            fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            fprintf(fp, "%s    if(NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
             {
-                fprintf(fp, "%s    *((DWORD *)(buf + offset)) = var_%s->var_%s.item[i];\n",
+                fprintf(fp, "%s        *((DWORD *)(buf + offset)) = var_%s->var_%s.item[i];\n",
                         prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%s    *((DWORD *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s        *((DWORD *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
+            fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            fprintf(fp, "%s    offset += %s;\n", prefix_spaces.c_str(), length_string);
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
-            fprintf(fp, "%soffset += sizeof(DWORD);\n", prefix_spaces.c_str());
+            // fprintf(fp, "%soffset += sizeof(DWORD);\n", prefix_spaces.c_str());
             break;
 
         case FieldDescriptor::TYPE_FIXED64:
@@ -1308,17 +1318,26 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             }
-            fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            strcpy(length_string, "sizeof(WORD64)");
+            fprintf(fp, "%sif(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+            fprintf(fp, "%s    return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+            fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            fprintf(fp, "%s    if(NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
             {
-                fprintf(fp, "%s    *((WORD64 *)(buf + offset)) = var_%s->var_%s.item[i];\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s        *((WORD64 *)(buf + offset)) = var_%s->var_%s.item[i];\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%s    *((WORD64 *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s        *((WORD64 *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
+            fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            fprintf(fp, "%s    offset += %s;\n", prefix_spaces.c_str(), length_string);
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
-            fprintf(fp, "%soffset += sizeof(WORD64);\n", prefix_spaces.c_str());
+            // fprintf(fp, "%soffset += sizeof(WORD64);\n", prefix_spaces.c_str());
             break;
 
         case FieldDescriptor::TYPE_FLOAT:
@@ -1326,18 +1345,27 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX32, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             }
-            fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            strcpy(length_string, "sizeof(float)");
+            fprintf(fp, "%sif(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+            fprintf(fp, "%s    return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+            fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            fprintf(fp, "%s    if(NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
             {
-                fprintf(fp, "%s    *((float *)(buf + offset)) = var_%s->var_%s.item[i];\n",
+                fprintf(fp, "%s        *((float *)(buf + offset)) = var_%s->var_%s.item[i];\n",
                         prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%s    *((float *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s        *((float *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
+            fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            fprintf(fp, "%s    offset += %s;\n", prefix_spaces.c_str(), length_string);
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
-            fprintf(fp, "%soffset += sizeof(float);\n", prefix_spaces.c_str());
+            // fprintf(fp, "%soffset += sizeof(float);\n", prefix_spaces.c_str());
             break;
 
         case FieldDescriptor::TYPE_DOUBLE:
@@ -1345,18 +1373,27 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_FIX64, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             }
-            fprintf(fp, "%sif(NULL != buf) {\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            strcpy(length_string, "sizeof(double)");
+            fprintf(fp, "%sif(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+            fprintf(fp, "%s    return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+            fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            fprintf(fp, "%s    if(NULL != buf) {\n", prefix_spaces.c_str());
             if(field->is_repeated())
             {
-                fprintf(fp, "%s    *((double *)(buf + offset)) = var_%s->var_%s.item[i];\n",
+                fprintf(fp, "%s        *((double *)(buf + offset)) = var_%s->var_%s.item[i];\n",
                         prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%s    *((double *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s        *((double *)(buf + offset)) = var_%s->var_%s;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
+            fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+            ///////////////////////////////////////////////////////////////////
+            fprintf(fp, "%s    offset += %s;\n", prefix_spaces.c_str(), length_string);
             fprintf(fp, "%s}\n", prefix_spaces.c_str());
-            fprintf(fp, "%soffset += sizeof(double);\n", prefix_spaces.c_str());
+            // fprintf(fp, "%soffset += sizeof(double);\n", prefix_spaces.c_str());
             break;
 
         case FieldDescriptor::TYPE_BOOL:
@@ -1432,19 +1469,37 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                ///////////////////////////////////////////////////////////////////
+                sprintf(length_string, "var_%s->var_%s.item[i].length", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s    return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+                fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
+                ///////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    if(NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s        memcpy(buf + offset, (unsigned char *)var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+                ////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    offset += %s;\n", prefix_spaces.c_str(), length_string);
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
-                fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                // fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    memcpy(buf + offset, (unsigned char *)var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                ///////////////////////////////////////////////////////////////////
+                sprintf(length_string, "var_%s->var_%s.length", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s    return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+                fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
+                ///////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    if(NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s        memcpy(buf + offset, (unsigned char *)var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+                ////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    offset += %s;\n", prefix_spaces.c_str(), length_string);
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
-                fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                // fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             break;
 
@@ -1453,19 +1508,37 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                ///////////////////////////////////////////////////////////////////
+                sprintf(length_string, "var_%s->var_%s.item[i].length", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s    return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+                fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
+                ///////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    if(NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s        memcpy(buf + offset, var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+                ////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    offset += %s;\n", prefix_spaces.c_str(), length_string);
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
-                fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                // fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             else
             {
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    memcpy(buf + offset, var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                ///////////////////////////////////////////////////////////////////
+                sprintf(length_string, "var_%s->var_%s.length", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s    return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+                fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
+                ///////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    if(NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s        memcpy(buf + offset, var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+                ////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    offset += %s;\n", prefix_spaces.c_str(), length_string);
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
-                fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                // fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
             break;
 
@@ -1473,14 +1546,14 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
             if(field->is_repeated())
             {
-                fprintf(fp, "%sif (0 == var_%s->var_%s.item[i]._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif(0 == var_%s->var_%s.item[i]._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s.item[i]._message_length = _internal_encode_message_%s_%s(&(var_%s->var_%s.item[i]), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s.item[i]._message_length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
             }
             else
             {
-                fprintf(fp, "%sif (0 == var_%s->var_%s._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%sif(0 == var_%s->var_%s._message_length) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s    var_%s->var_%s._message_length = _internal_encode_message_%s_%s(&(var_%s->var_%s), NULL);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s._message_length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
@@ -1489,17 +1562,47 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             if(field->is_repeated())
             {
                 fprintf(fp, "%sif(NULL == buf) {\n", prefix_spaces.c_str());
-                fprintf(fp, "%s    offset += var_%s->var_%s.item[i]._message_length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                ///////////////////////////////////////////////////////////////////
+                sprintf(length_string, "var_%s->var_%s.item[i]._message_length", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    if(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s        return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+                fprintf(fp, "%s    } else {\n", prefix_spaces.c_str());
+                fprintf(fp, "%s        offset += %s;\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+                // fprintf(fp, "%s    offset += var_%s->var_%s.item[i]._message_length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
-                fprintf(fp, "%s    offset += _internal_encode_message_%s_%s(&(var_%s->var_%s.item[i]), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                ///////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    size_t encode_length = _internal_encode_message_%s_%s(&(var_%s->var_%s.item[i]), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                strcpy(length_string, "encode_length");
+                fprintf(fp, "%s    if(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s        return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+                fprintf(fp, "%s    } else {\n", prefix_spaces.c_str());
+                fprintf(fp, "%s        offset += %s;\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+                // fprintf(fp, "%s    offset += _internal_encode_message_%s_%s(&(var_%s->var_%s.item[i]), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
             }
             else
             {
                 fprintf(fp, "%sif(NULL == buf) {\n", prefix_spaces.c_str());
-                fprintf(fp, "%s    offset += var_%s->var_%s._message_length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
+                ///////////////////////////////////////////////////////////////////
+                sprintf(length_string, "var_%s->var_%s._message_length", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    if(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s        return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+                fprintf(fp, "%s    } else {\n", prefix_spaces.c_str());
+                fprintf(fp, "%s        offset += %s;\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+                // fprintf(fp, "%s    offset += var_%s->var_%s._message_length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s} else {\n", prefix_spaces.c_str());
-                fprintf(fp, "%s    offset += _internal_encode_message_%s_%s(&(var_%s->var_%s), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                ///////////////////////////////////////////////////////////////////
+                fprintf(fp, "%s    size_t encode_length = _internal_encode_message_%s_%s(&(var_%s->var_%s), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
+                strcpy(length_string, "encode_length");
+                fprintf(fp, "%s    if(offset > (SIZE_MAX - %s)) {\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s        return SIZE_MAX; /* size_t overflow */\n", prefix_spaces.c_str());
+                fprintf(fp, "%s    } else {\n", prefix_spaces.c_str());
+                fprintf(fp, "%s        offset += %s;\n", prefix_spaces.c_str(), length_string);
+                fprintf(fp, "%s    }\n", prefix_spaces.c_str());
+                // fprintf(fp, "%s    offset += _internal_encode_message_%s_%s(&(var_%s->var_%s), buf + offset);\n", prefix_spaces.c_str(), field->message_type()->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
             }
             break;
@@ -1525,7 +1628,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     ////////////////////////////////////////
     fprintf(fp, "size_t encode_message_%s_safe_%s(%s* var_%s, BYTE* buf, size_t buf_size) {\n", desc->name().c_str(), _BUILD_TIME_, struct_name.c_str(), desc->name().c_str());
     fprintf(fp, "    _clear_message_%s_len_%s(var_%s); \n\n", desc->name().c_str(), _BUILD_TIME_, desc->name().c_str());
-    fprintf(fp, "    if (_internal_encode_message_%s_%s(var_%s, NULL) > buf_size) {\n", desc->name().c_str(), _BUILD_TIME_, desc->name().c_str());
+    fprintf(fp, "    if(_internal_encode_message_%s_%s(var_%s, NULL) > buf_size) {\n", desc->name().c_str(), _BUILD_TIME_, desc->name().c_str());
     fprintf(fp, "        return 0;\n");
     fprintf(fp, "    }\n");
     fprintf(fp, "    return _internal_encode_message_%s_%s(var_%s, buf);\n", desc->name().c_str(), _BUILD_TIME_, desc->name().c_str());
@@ -1586,7 +1689,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                if((offset + sizeof(DWORD)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                if((offset+sizeof(DWORD))>buf_len || (offset>(SIZE_MAX-sizeof(DWORD)))) {\n", spaces);
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
@@ -1600,7 +1703,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len) {\n");
+                fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len || (offset>(SIZE_MAX-sizeof(DWORD)))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1610,7 +1713,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else
             {
-                fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len) {\n");
+                fprintf(fp, "                if((offset + sizeof(DWORD)) > buf_len || (offset>(SIZE_MAX-sizeof(DWORD)))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1645,7 +1748,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                if((offset + sizeof(float)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                if((offset + sizeof(float)) > buf_len || (offset>(SIZE_MAX-sizeof(float)))) {\n", spaces);
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
@@ -1659,7 +1762,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                if((offset + sizeof(float)) > buf_len) {\n");
+                fprintf(fp, "                if((offset + sizeof(float)) > buf_len || (offset>(SIZE_MAX-sizeof(float)))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1669,7 +1772,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else
             {
-                fprintf(fp, "                if((offset + sizeof(float)) > buf_len) {\n");
+                fprintf(fp, "                if((offset + sizeof(float)) > buf_len || (offset>(SIZE_MAX-sizeof(float)))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1705,7 +1808,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                if((offset + sizeof(WORD64)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                if((offset + sizeof(WORD64)) > buf_len || (offset>(SIZE_MAX-sizeof(WORD64)))) {\n", spaces);
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
@@ -1719,7 +1822,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len) {\n");
+                fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len || (offset>(SIZE_MAX-sizeof(WORD64)))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1729,7 +1832,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else
             {
-                fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len) {\n");
+                fprintf(fp, "                if((offset + sizeof(WORD64)) > buf_len || (offset>(SIZE_MAX-sizeof(WORD64)))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1764,7 +1867,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_MAXCOUNT);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
-                fprintf(fp, "%s                if((offset + sizeof(double)) > buf_len) {\n", spaces);
+                fprintf(fp, "%s                if((offset + sizeof(double)) > buf_len || (offset>(SIZE_MAX-sizeof(double)))) {\n", spaces);
                 fprintf(fp, "%s                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n", spaces);
                 fprintf(fp, "%s                    return FALSE;\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
@@ -1778,7 +1881,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else if(field->is_optional())
             {
-                fprintf(fp, "                if((offset + sizeof(double)) > buf_len) {\n");
+                fprintf(fp, "                if((offset + sizeof(double)) > buf_len || (offset>(SIZE_MAX-sizeof(double)))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -1788,7 +1891,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             }
             else
             {
-                fprintf(fp, "                if((offset + sizeof(double)) > buf_len) {\n");
+                fprintf(fp, "                if((offset + sizeof(double)) > buf_len || (offset>(SIZE_MAX-sizeof(double)))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2014,7 +2117,9 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len || (offset>(SIZE_MAX-var_%s->var_%s.item[var_%s->var_%s.count].length))) {\n", 
+                desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(),
+                desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2025,7 +2130,9 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else if(field->is_optional())
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len || (offset>(SIZE_MAX-var_%s->var_%s.length))) {\n", 
+                desc->name().c_str(), field->name().c_str(),
+                desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2036,7 +2143,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len || (offset>(SIZE_MAX-(offset>(SIZE_MAX-sizeof(DWORD)))))) {\n", desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2058,7 +2165,9 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.item[var_%s->var_%s.count].length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len) {\n", desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.item[var_%s->var_%s.count].length) > buf_len || (offset>(SIZE_MAX-var_%s->var_%s.item[var_%s->var_%s.count].length))) {\n", 
+                desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(),
+                desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2069,7 +2178,9 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else if(field->is_optional())
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len || (offset>(SIZE_MAX-var_%s->var_%s.length))) {\n", 
+                desc->name().c_str(), field->name().c_str(),
+                desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2080,7 +2191,9 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &(var_%s->var_%s.length), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len) {\n", desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "                if((offset + var_%s->var_%s.length) > buf_len || (offset>(SIZE_MAX-var_%s->var_%s.length))) {\n", 
+                desc->name().c_str(), field->name().c_str(),
+                desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2102,7 +2215,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "                    return FALSE;  /* out of range */\n");
                 fprintf(fp, "                }\n");
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_message_len, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                if(offset + tmp_message_len > buf_len) {\n");
+                fprintf(fp, "                if(offset + tmp_message_len > buf_len || (offset>(SIZE_MAX-tmp_message_len))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2115,7 +2228,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else if(field->is_optional())
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_message_len, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                if(offset + tmp_message_len > buf_len) {\n");
+                fprintf(fp, "                if(offset + tmp_message_len > buf_len || (offset>(SIZE_MAX-tmp_message_len))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2128,7 +2241,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "                decode_size_%s(buf+offset, buf_len-offset, &tmp_message_len, &offset);\n", _BUILD_TIME_);
-                fprintf(fp, "                if(offset + tmp_message_len > buf_len) {\n");
+                fprintf(fp, "                if(offset + tmp_message_len > buf_len || (offset>(SIZE_MAX-tmp_message_len))) {\n");
                 fprintf(fp, "                    PRINT_ERRINFO(PBSTRU_RC_BUFOVERFLOW);\n");
                 fprintf(fp, "                    return FALSE;\n");
                 fprintf(fp, "                }\n");
@@ -2244,7 +2357,7 @@ static inline void freep(char **p)
 
 int create_path(string &path)
 {
-    if (path[path.length() - 1] != path_sep[0])
+    if(path[path.length() - 1] != path_sep[0])
     {
         path += path_sep;
     }
@@ -2561,7 +2674,7 @@ int main(int argc, char *argv[])
         }
 
         f = importer->Import(no_map_filename);
-        if (NULL == f)
+        if(NULL == f)
         {
             printf("Cannot import file:%s", no_map_filename);
             retcode = 3;
