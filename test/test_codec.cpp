@@ -14,6 +14,7 @@
 #include "ut_test_message.h"
 #include "ut_test_sub_message.h"
 #include "http2appreq.h"
+#include "codec_cudr_snf_sub_req.h"
 
 #define _THIS_FILE "test_codec.cpp"
 
@@ -1954,6 +1955,22 @@ t16      t17      t18      t19      t20      t21
 
         assert(1 == var_gcr.var_tenant.count);
         assert(1 == var_gcr.var_tenant.item[0].var_tenant_id);
+    }
+    
+    {
+        BYTE buf[1024];
+        size_t buf_len;
+        FILE *fp = fopen("my.dat", "rb");
+        assert(NULL != fp);
+        buf_len = fread(buf, 1, sizeof(buf), fp);
+        fclose(fp);
+        std::string pb_string = get_pb_string(buf, buf_len, "snf.proto", 
+            "zte.cudr.snf.codec_cudr_snf_sub_req", _THIS_FILE, __LINE__);
+        assert(pb_string.length() > 0);
+        
+        st_codec_cudr_snf_sub_req var_req;
+        BOOL bret = decode_message_codec_cudr_snf_sub_req(buf, buf_len, &var_req);
+        assert(TRUE == bret);
     }
 
     printf("sizeof(st_addrequest): %zu\n", sizeof(st_addrequest));

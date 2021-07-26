@@ -1,0 +1,2 @@
+zte.cudr.snf.sub_req_subscriber.cp_addrs max_count:10
+zte.cudr.snf.codec_cudr_snf_sub_req.subscribers max_count:10

@@ -1,0 +1,48 @@
+syntax = "proto2";
+package zte.cudr.snf;
+
+
+message LogicalAddr {
+    required  uint32 nf_id  = 1;
+    required  uint32 commid = 2;
+    required  uint32 jid    = 3;
+}
+
+message ContactPointAddr {
+    optional LogicalAddr direct_addr   = 1;  // 直接CP
+    optional bytes       indirect_addr = 2;  // 间接CP
+}
+
+message sub_req_subscriber {
+    required string           suber_name          = 1; //订阅者名称
+    optional uint32           suber_use_proxy     = 2; //是否使用UAGW作为代理 
+    optional uint32           suber_expiry        = 3; //订阅者有效期
+    optional bool             expired_with_topic  = 4; //订阅者是否随TOPIC同时老化
+    optional bool             support_cascade_ntf = 5; //阅者是否支持级联变更通知
+    optional LogicalAddr      cp_proxy_addr       = 6; //代理地址
+    repeated ContactPointAddr cp_addrs            = 7; //cp的地址
+    optional bool             remove_previous_cp  = 8; //是否删除已有的cp
+}
+
+message topic_base_info {
+    required string      topic_name          = 1;  //topic名称
+    required uint32      topic_sub_scope     = 2;  //topic订阅范围
+    required uint32      topic_sub_type      = 3;  //topic订阅类型
+    optional uint32      topic_expiry        = 4;  //topic的有效期
+    optional uint32      topic_ntf_sla       = 5;  //topic变更通知投递等级
+    optional bool        topic_single_suber  = 6;  //topic是否只允许一个订阅者
+}
+
+/* 订阅请求消息 */
+message codec_cudr_snf_sub_req {
+    required uint32      msg_id              = 1;  //msg ID
+    required uint32      reliability         = 2;  //topic订阅数据可靠性
+    required topic_base_info base_info       = 3;  //topic基本信息
+    required bytes       sub_content         = 4;  //订阅内容
+    optional string      sub_meta            = 5;  //订阅元数据
+    optional uint32      sub_expiry          = 6;  //订阅有效期
+    optional uint64      sub_id              = 7;  //订阅ID
+    optional bool        remove_previous_sub = 8;  //是否删除已有的订阅
+    optional bool        ignore_exist_sub    = 9;  //是否忽略已有的订阅
+    repeated sub_req_subscriber subscribers  = 10; //订阅者信息
+}

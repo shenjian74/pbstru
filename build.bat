@@ -20,7 +20,7 @@ rd /S /Q build
 md build
 cd build
 :: cmake.exe -DCMAKE_C_FLAGS="-Wno-narrowing" -DCMAKE_CXX_FLAGS="-Wno-narrowing" ..
-cmake.exe ..
+cmake.exe --debug-output ..
 cd ..
 
 :makefile_found
@@ -32,7 +32,7 @@ del /S /Q /F build >nul
 rd /S /Q build
 md build
 cd build
-cmake.exe ..
+cmake.exe --debug-output ..
 msbuild.exe pbstru.vcxproj
 move Debug\pbstru.exe ..\bin
 cd ..\bin
@@ -42,8 +42,9 @@ del /S /Q /F build
 rd /S /Q build
 md build
 cd build
-cmake.exe ..
+cmake.exe --debug-output  ..
 msbuild.exe test_codec.vcxproj
+del ..\..\bin\test_codec.exe
 move /y Debug\test_codec.exe ..\..\bin
 cd ..\..\bin
 test_codec.exe
