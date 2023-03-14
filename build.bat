@@ -1,4 +1,3 @@
-call "C:\Program Files (x86)\Microsoft Visual C++ Build Tools\vcbuildtools_msbuild.bat"
 set path=%path%;"C:\Program Files (x86)\CMake\bin\"
 dir protobuf3 | find "cmake"   
 if %errorlevel%==0 goto found
@@ -19,22 +18,23 @@ del /S /Q /F build
 rd /S /Q build
 md build
 cd build
-:: cmake.exe -DCMAKE_C_FLAGS="-Wno-narrowing" -DCMAKE_CXX_FLAGS="-Wno-narrowing" ..
-cmake.exe --debug-output ..
+cmake.exe -G "MinGW Makefiles" -DCMAKE_C_FLAGS="-Wno-narrowing" -DCMAKE_CXX_FLAGS="-Wno-narrowing" ..
 cd ..
 
 :makefile_found
 cd build
-msbuild.exe protoc.vcxproj
-copy Debug\protoc.exe ..\..\..\bin
+mingw32-make.exe
+
 cd ..\..\..
 del /S /Q /F build >nul
 rd /S /Q build
 md build
 cd build
-cmake.exe --debug-output ..
-msbuild.exe pbstru.vcxproj
-move Debug\pbstru.exe ..\bin
+cmake.exe -G "MinGW Makefiles" ..
+mingw32-make.exe
+del ..\bin\test_codec.exe
+move /y pbstru.exe ..\bin
+
 cd ..\bin
 call gen_codec.bat
 cd ..\test
@@ -42,10 +42,10 @@ del /S /Q /F build
 rd /S /Q build
 md build
 cd build
-cmake.exe --debug-output  ..
-msbuild.exe test_codec.vcxproj
+cmake.exe -G "MinGW Makefiles" ..
+mingw32-make.exe
 del ..\..\bin\test_codec.exe
-move /y Debug\test_codec.exe ..\..\bin
+move /y test_codec.exe ..\..\bin
 cd ..\..\bin
 test_codec.exe
 cd ..

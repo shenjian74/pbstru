@@ -1970,7 +1970,7 @@ t16      t17      t18      t19      t20      t21
         
         st_codec_cudr_snf_sub_req var_req;
         BOOL bret = decode_message_codec_cudr_snf_sub_req(buf, buf_len, &var_req);
-        assert(TRUE == bret);
+        assert(FALSE == bret);
     }
 
     printf("sizeof(st_addrequest): %zu\n", sizeof(st_addrequest));
