@@ -1,17 +1,16 @@
-PBStru
-----
+# PBStru
 
-![](https://travis-ci.com/shenjian74/pbstru.svg?branch=master)
+![pbstru.svg](https://travis-ci.com/shenjian74/pbstru.svg?branch=master)
 
 [中文](README-cn.md)
 
 ## Introduction
 
-PBStru is a C source file generator for serialize data using [PROTOBUF](https://github.com/protocolbuffers/protobuf). 
+PBStru is a C source file generator for serialize data using [PROTOBUF](https://github.com/protocolbuffers/protobuf).
 
 ## Principle
 
-```
+``` txt
     .proto definition file --> |              | --> encode/decode source code --> | --> Link with your application
                                | -- PBStru--> |                                   |
 ```
@@ -25,21 +24,21 @@ Characteristics：
 ## How to compile
 
 ### Windows
-	
-* Pre-install the mingw32 compiler.
-* Run "build.bat" to build "pbstru/bin/pbstru.exe"
+
+- Pre-install the mingw32 compiler.
+- Run "build.bat" to build "pbstru/bin/pbstru.exe"
 
 ### linux
-	
-* Run "build.sh" to build "pbstru/bin/pbstru"。
+
+- Run "build.sh" to build "pbstru/bin/pbstru"。
 
 ## How to execute
 
-1. Create/Modify your .proto file. you can add message, add fields to message. For Best practices keep the message compatibility. 
+1. Create/Modify your .proto file. you can add message, add fields to message. For Best practices keep the message compatibility.
 2. input parameters is one or multi proto files and target directory name.
 
-```
-	Usage: pbstru xxx.proto [xxx.proto] target_dir
+``` txt
+    Usage: pbstru xxx.proto [xxx.proto] target_dir
 ```
 
 ## How to use
@@ -73,13 +72,13 @@ decode_message_Response(BYTE *buf, size_t buf_len, &var_response);
 
 ## Notice
 
-* PBStru use static array to store repeat fields, so you must define the max_size in options file. PBStru will report error information if you forget to set it. For example:
+- PBStru use static array to store repeat fields, so you must define the max_size in options file. PBStru will report error information if you forget to set it. For example:
 
-```
+``` txt
     Cannot read item:"zte.cdb.ccc.CCAResReportRequest.tenant_id max_count:?" from option file.
 ```
 
-* PROTOBUF compatibility principles（Important）
+- PROTOBUF compatibility principles（Important）
 
 1. Do not Change the tag already existed.
 1. Do not add or delete required field.

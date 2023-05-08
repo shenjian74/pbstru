@@ -33,7 +33,7 @@ md build
 cd build
 cmake.exe -G "MinGW Makefiles" ..
 mingw32-make.exe
-del ..\bin\test_codec.exe
+del /Q ..\bin\pbstru.exe
 move /y pbstru.exe ..\bin
 
 cd ..\bin
@@ -45,9 +45,10 @@ md build
 cd build
 cmake.exe -G "MinGW Makefiles" ..
 mingw32-make.exe
-del ..\..\bin\test_codec.exe
+del /Q ..\..\bin\test_codec.exe
 move /y test_codec.exe ..\..\bin
 cd ..\..\bin
+copy /y /v ..\protobuf3\cmake\build\protoc.exe .
 test_codec.exe
 cd ..
 
