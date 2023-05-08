@@ -1,10 +1,11 @@
+@echo off
 set path=%path%;"C:\Program Files (x86)\CMake\bin\"
 dir protobuf3 | find "cmake"   
 if %errorlevel%==0 goto found
 if %errorlevel%==1 goto not_found
 
 :not_found
-echo "无法找到protobuf3子目录，windows下需要手工解压protobuf-all-3.5.1.tar.gz到protobuf3子目录"
+@echo Cannnot find ./protobuf3，please uncompress protobuf-all-3.5.1.tar.gz to ./protobuf3 at first.
 goto end
 
 :found
@@ -51,5 +52,4 @@ test_codec.exe
 cd ..
 
 :end
-echo 'Done."
-
+@echo Done.
