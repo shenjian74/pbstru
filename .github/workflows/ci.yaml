@@ -6,7 +6,8 @@ jobs:
     steps:
       - run: sudo apt-get -y update && sudo apt-get install -y gcc g++ cmake autoconf libtool
   build:
+    runs-on: ubuntu-latest
     needs: before_build
     steps:
       - uses: actions/checkout@v2
-        run: ./build.sh
+      - run: ./build.sh
