@@ -1,6 +1,6 @@
 # PBStru
 
-![pbstru.svg](https://travis-ci.com/shenjian74/pbstru.svg?branch=master)
+![workflow](https://github.com/shenjian74/pbstru/actions/workflows/ci.yaml/badge.svg)
 
 [中文](README-cn.md)
 

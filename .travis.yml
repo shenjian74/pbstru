@@ -1,5 +1,0 @@
-language: C++
-cache: ccache
-sudo: required
-before_install: sudo apt-get -y update && sudo apt-get install -y gcc g++ cmake autoconf libtool
-script: ./build.sh
