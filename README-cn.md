@@ -1,6 +1,6 @@
 # PBStru
 
-![workflow](https://github.com/shenjian74/pbstru/actions/workflows/ci.yaml/badge.svg)
+![workflow](https://github.com/shenjian74/pbstru/actions/workflows/build.yaml/badge.svg)
 
 [English](README.md)
 
