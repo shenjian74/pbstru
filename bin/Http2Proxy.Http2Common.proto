@@ -5,7 +5,57 @@ enum ReqType{
 	NORMAL_REQ = 0; // normal request
 	SUBSCRIBE_REQ = 1; // response，由HTTP协议栈丢弃响应
 }
-	
+
+enum RespType{
+    RESP_SUCCESS                                                = 0;     // 成功响应
+    RESP_ERR_OUTER                                              = 1;     // 外部错误响应
+    RESP_ERR_INNER_CRT_LINK_FAIL                                = 2;     // 建立TCP链接失败
+    RESP_ERR_INNER_REQ_TIMEROUT                                 = 3;     // 发送HTTP请求超时无响应
+    RESP_ERR_INNER_REQ_LOADCTRL                                 = 4;     // 负荷控制决绝
+    RESP_ERR_RECV_SVR_RST                                       = 5;     // 收到了服务端的RST
+    RESP_ERR_INNER_SEARCHDATA_NEED                              = 6;     // 缺少SearchData
+    RESP_ERR_INNER_PRETAI_NOTMATCH                              = 7;     // 业务要求的PRETAI标记与服务发现结果不匹配
+    RESP_ERR_INNER_REQMSG_NEED                                  = 8;     // 缺少reqMsg
+    RESP_ERR_INNER_CLIENT_REQ_TIMEOUT                           = 9;     // 路由请求发送超时
+    RESP_ERR_INNER_INVALID_SVR_PROFILEID                        = 10;    // 当业务需要替换消息体中的callback uri时，填写的servPfInfo无效或错误,
+    RESP_ERR_INNER_CLIENT_INVALID_RP_PROFILEID                  = 11;    // 当业务指定路由策略模板时，本地未配置该模板,
+    RESP_ERR_INNER_APIVERSIONNOTMATCH_RSP                       = 12;    // APIversion校验失败响应
+    RESP_ERR_INNER_OAUTH_REQ_TIMEOUT                            = 13;    // ACCESSTOKEN请求超时
+    RESP_ERR_INNER_SELECT_SCP_NODE_FAIL                         = 14;    // SCP节点调度失败响应
+    RESP_ERR_INNER_REQWITHSRV_LOCALINFO_NOMATCH                 = 15;    // 自主路由校验本端信息类型不匹配
+    RESP_ERR_INNER_ROUTE_TABLE_FULL                             = 16;    // 路由表满
+    RESP_ERR_INNER_ROUTESET_INVALID_AND_CURANCHORNF_INVALID_ERR = 17;    // 会话内请求因路由集不可用且当前锚定NF不可用导致的路由失败
+    RESP_ERR_INNER_REQ_FLOWCTRL                                 = 18;    // 流控拒绝
+    RESP_ERR_INNER_REGISTER_IN_PROCESS                          = 19;    // 注册的状态为注册中引起的注册失败
+    RESP_ERR_INNER_ALL_TARGET_NF_OVERLOAD                       = 20;    // 由于目的NF全部过载，或部分过载+其他全部局向状态不可用导致的失败
+    RESP_ERR_INNER_ALL_SCP_SEPP_SERVER_OVERLOAD                 = 21;    // 由于SCP/SEPP服务器全部过载，或部分过载+其他全部局向状态不可用导致的失败
+    RESP_ERR_INNER_SUBSCRIBE_ROAM_FORBIDDEN                     = 22;    // 不允许异网漫游订阅
+    RESP_ERR_INNER_DISCOVERY_LOADCTRL                           = 23;    // 客户端路由请求负荷控制拒绝
+    RESP_ERR_INNER_CLIENTROUTEREQ_LOADCTRL                      = 24;    // 业务服务发现请求负荷控制拒绝
+    RESP_ERR_CLIENT_SPECIFIED_SCP_DIALTEST_FAIL                 = 25;    // 客户端路由指定SCP拨测处理失败
+    RESP_ERR_INNER_ALL_TARGET_NF_NONSELECTABLE                  = 26;    // 所有目的NF都不可选
+    RESP_ERR_INNER_ALL_TARGET_NF_SIGNALDETECT_FAIL              = 27;    // 由于目的NF全部业务信令检测异常，或部分检测异常+其他全部局向状态不可用导致的失败
+    RESP_ERR_INNER_DISCOVERY_START                              = 200;   // 服务发现失败导致的路由失败开始
+    RESP_ERR_INNER_DISCOVERY_FAIL                               = 201;   // 路由触发的服务发现失败
+    RESP_ERR_INNER_DISCOVERY_NF_NOTFOUND                        = 202;   // 服务发现返回404，或者返回成功但是NFProfieList为空时。
+    RESP_ERR_INNER_DISCOVERY_NO_REGISTERED_NF                   = 203;   // 服务发现结果没有状态为“已注册”的NF
+    RESP_ERR_INNER_DISCOVERY_NO_ANY_SRV                         = 204;   // 服务发现结果没有任何服务
+    RESP_ERR_INNER_DISCOVERY_NO_MATCHED_SRV_NAME                = 205;   // 服务发现结果没有与本次路由请求访问的服务名相匹配的服务
+    RESP_ERR_INNER_DISCOVERY_NO_VALID_IPNODE                    = 206;   // 根据服务的IPEndPoint和本次路由请求的客户端profile无法构造任何有效的IP节点
+    RESP_ERR_INNER_DISCOVERY_NO_REGISTERED_NFSRV                = 207;   // 服务发现结果没有状态为“已注册”的NF服务
+    RESP_ERR_INNER_DISCOVERY_FLOWCONTROLFORPARAL                = 208;   // 服务发现并发流控导致的失败
+    RESP_ERR_INNER_DISCOVERY_REQ_TIMEOUT                        = 209;   // 服务发现请求超时
+    RESP_ERR_INNER_DISCOVERY_NRF_FLOWCONTROL                    = 210;   // 处在NRF流控期间的失败类型
+    RESP_ERR_INNER_DISCOVERY_NRF_ALLOFFLINE                     = 211;   // 主备NRF均不可用导致的服务发现失败
+    RESP_ERR_INNER_DISCOVERY_FLOWCONTROLFORTPS                  = 212;   // 服务发现TPS控制导致的失败
+    RESP_ERR_INNER_NRFCLIENT_LOADCTRL                           = 213;   // NRFCLIENT负荷控制导致的失败
+    RESP_ERR_INNER_DISCOVERY_CENTRE_FLOWCONTROL                 = 214;   // Normal上集中服务发现流控失败
+    RESP_ERR_INNER_GZIP_DECOMPRESS_FAIL                         = 215;   // 服务发现响应gzip解压失败
+    RESP_ERR_INNER_TLS_CERT_REVOKED                             = 216;     // TLS证书吊销
+    RESP_ERR_INNER_DISCOVERY_END                                = 254 ;  // 服务发现失败导致的路由失败结束
+    RESP_ERR_INNER_OTHER                                        = 255;   // 其他内部错误响应
+}
+
 message Http2IpAddr {
 	bytes ip = 1;
 	uint32 port = 2;

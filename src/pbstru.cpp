@@ -415,7 +415,7 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "void decode_size_%s(const BYTE *buf, const size_t buflen, size_t *value, size_t *offset) {\n", _BUILD_TIME_);
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "    *value = 0;\n");
-    fprintf(fp, "    for(iloop=0; iloop<buflen; ++iloop){\n");
+    fprintf(fp, "    for(iloop=0; iloop<4; ++iloop){  /* 限制最多4个字节，防止value溢出 */\n");
     fprintf(fp, "        *value += ((size_t)(buf[iloop] & 0x7F)) << (7*iloop);\n");
     fprintf(fp, "        if(0 == (buf[iloop] & 0x80)){\n");
     fprintf(fp, "            break;\n");

@@ -12,7 +12,7 @@ message Http2AppReq
 	bytes accept = 5;
 	bytes contentType = 6;
 	Http2TransParam transParam = 7;
-	map<string,bytes> header = 8;
+//map<string,bytes> header = 8;
 	Http2Jid httpJid = 9;
     HttpVersion version = 10;
 }
