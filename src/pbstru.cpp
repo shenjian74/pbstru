@@ -92,7 +92,7 @@ const char path_sep[] = "/";
 
 const char _BUILD_TIME_[] =
 {
-    BUILD_YEAR_CH2, BUILD_YEAR_CH3, BUILD_YEAR_CH2, BUILD_YEAR_CH3, 
+    BUILD_YEAR_CH0, BUILD_YEAR_CH1, BUILD_YEAR_CH2, BUILD_YEAR_CH3,
     BUILD_MONTH_CH0, BUILD_MONTH_CH1, BUILD_DAY_CH0, BUILD_DAY_CH1,
     BUILD_HOUR_CH0, BUILD_HOUR_CH1, BUILD_MIN_CH0, BUILD_MIN_CH1, BUILD_SEC_CH0, BUILD_SEC_CH1,
     '\0'
@@ -1920,7 +1920,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s                    return FALSE;  /* out of range */\n", spaces);
                 fprintf(fp, "%s                }\n", spaces);
                 fprintf(fp, "%s                decode_varint64_%s(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s.item[var_%s->var_%s.count]), &offset);\n", spaces, _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
-                if(FieldDescriptor::TYPE_SINT64==field->type()) { 
+                if(FieldDescriptor::TYPE_SINT64==field->type()) {
                     fprintf(fp, "%s                var_%s->var_%s.item[var_%s->var_%s.count] = decode_zigzag64_%s(var_%s->var_%s.item[var_%s->var_%s.count]);\n", spaces, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 }
                 fprintf(fp, "%s                var_%s->var_%s.count += 1;\n", spaces, desc->name().c_str(), field->name().c_str());
@@ -1932,7 +1932,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else if(field->is_optional())
             {
                 fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                if(FieldDescriptor::TYPE_SINT64 == field->type()) { 
+                if(FieldDescriptor::TYPE_SINT64 == field->type()) {
                     fprintf(fp, "                var_%s->var_%s = decode_zigzag64_%s(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 }
                 fprintf(fp, "                var_%s->has_%s = TRUE;\n", desc->name().c_str(), field->name().c_str());
@@ -1940,7 +1940,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
             else
             {
                 fprintf(fp, "                decode_varint64_%s(buf+offset, buf_len-offset, (WORD64 *)&(var_%s->var_%s), &offset);\n", _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
-                if(FieldDescriptor::TYPE_SINT64 == field->type()) { 
+                if(FieldDescriptor::TYPE_SINT64 == field->type()) {
                     fprintf(fp, "                var_%s->var_%s = decode_zigzag64_%s(var_%s->var_%s);\n", desc->name().c_str(), field->name().c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 }
             }
@@ -2591,5 +2591,3 @@ int main(int argc, char *argv[])
     retcode = gen_comm(nf_name, target_dir);
     return retcode;
 }
-
-
