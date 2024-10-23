@@ -179,15 +179,14 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "#define FALSE 0\n");
     fprintf(fp, "#endif\n");
     fprintf(fp, "\n");
-    fprintf(fp, "#define cudr_memcpy __builtin_memcpy\n");
-    fprintf(fp, "\n");
     fprintf(fp, "#else\n");
     fprintf(fp, "/* include data type definitions */\n");
     fprintf(fp, "#include \"tulip.h\"\n");
     fprintf(fp, "#include \"tulip_oss.h\"\n");
-    fprintf(fp, "#include \"comfunc.h\"\n");
     fprintf(fp, "\n");
     fprintf(fp, "#endif\n");
+    fprintf(fp, "\n");
+    fprintf(fp, "#define pbstru_memcpy __builtin_memcpy\n");
     fprintf(fp, "\n");
     fprintf(fp, "/* store utf-8 encoding string */\n");
     fprintf(fp, "typedef struct {\n");
@@ -419,7 +418,8 @@ int gen_comm(const string& nf_name, const string &target_dir)
     fprintf(fp, "void decode_size_%s(const BYTE *buf, const size_t buflen, size_t *value, size_t *offset) {\n", _BUILD_TIME_);
     fprintf(fp, "    size_t iloop;\n");
     fprintf(fp, "    *value = 0;\n");
-    fprintf(fp, "    for(iloop=0; iloop<4; ++iloop){  /* 限制最多4个字节，防止value溢出 */\n");
+    fprintf(fp, "    size_t max_loop = buflen<4?buflen:4;\n");
+    fprintf(fp, "    for(iloop=0; iloop<max_loop; ++iloop){  /* 限制最多4个字节，防止value溢出 */\n");
     fprintf(fp, "        *value += ((size_t)(buf[iloop] & 0x7F)) << (7*iloop);\n");
     fprintf(fp, "        if(0 == (buf[iloop] & 0x80)){\n");
     fprintf(fp, "            break;\n");
@@ -1437,7 +1437,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    cudr_memcpy(buf + offset, (unsigned char *)var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    pbstru_memcpy(buf + offset, (unsigned char *)var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
@@ -1446,7 +1446,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    cudr_memcpy(buf + offset, (unsigned char *)var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    pbstru_memcpy(buf + offset, (unsigned char *)var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
@@ -1458,7 +1458,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s.item[i].length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.item[i].length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    cudr_memcpy(buf + offset, var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    pbstru_memcpy(buf + offset, var_%s->var_%s.item[i].data, var_%s->var_%s.item[i].length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%soffset += var_%s->var_%s.item[i].length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
@@ -1467,7 +1467,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
                 fprintf(fp, "%s%s_encode_tag_byte_%s(buf, %d, WIRE_TYPE_LENGTH_DELIMITED, &offset, %s);\n", prefix_spaces.c_str(), nf_name.c_str(), _BUILD_TIME_, field->number(), use_old_version?"TRUE":"FALSE");
                 fprintf(fp, "%sencode_size_%s(var_%s->var_%s.length, buf, &offset);\n", prefix_spaces.c_str(), _BUILD_TIME_, desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%sif (NULL != buf && var_%s->var_%s.length > 0) {\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
-                fprintf(fp, "%s    cudr_memcpy(buf + offset, var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
+                fprintf(fp, "%s    pbstru_memcpy(buf + offset, var_%s->var_%s.data, var_%s->var_%s.length);\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str(), desc->name().c_str(), field->name().c_str());
                 fprintf(fp, "%s}\n", prefix_spaces.c_str());
                 fprintf(fp, "%soffset += var_%s->var_%s.length;\n", prefix_spaces.c_str(), desc->name().c_str(), field->name().c_str());
             }
