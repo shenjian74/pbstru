@@ -110,22 +110,20 @@ static string& trim(string& text)
     return text;
 }
 
-static string &tolower(string& text)
+static void tolower(string& text)
 {
     for(string::iterator it=text.begin(); it!=text.end(); it++)
     {
         *it = tolower(*it);
     }
-    return text;
 }
 
-static string &toupper(string& text)
+static void toupper(string& text)
 {
     for(string::iterator it=text.begin(); it!=text.end(); it++)
     {
         *it = (char) toupper(*it);
     }
-    return text;
 }
 
 // Generate public file pbstru_comm.h and pbstru_comm.c
@@ -2182,9 +2180,9 @@ int gen_all_from_file(const string& nf_name, const FileDescriptor *f, string &ta
         } else {
             int largest_tag = 0;
             // Get largest tag value
-            for(int i=0; i<desc->field_count(); ++i)
+            for(int j=0; j<desc->field_count(); ++j)
             {
-                const FieldDescriptor *field = desc->field(i);
+                const FieldDescriptor *field = desc->field(j);
                 if(field->number() > largest_tag) {
                     largest_tag = field->number();
                 }
