@@ -101,9 +101,9 @@ const char _BUILD_TIME_[] =
 
 static string& trim(string& text)
 {
-    char trim_chars[] = " \n\r\t";
     if(!text.empty())
     {
+        const char trim_chars[] = " \n\r\t";
         text.erase(0, text.find_first_not_of(trim_chars));
         text.erase(text.find_last_not_of(trim_chars) + 1);
     }
@@ -112,7 +112,7 @@ static string& trim(string& text)
 
 static void tolower(string& text)
 {
-    for(string::iterator it=text.begin(); it!=text.end(); it++)
+    for(string::iterator it=text.begin(); it!=text.end(); ++it)
     {
         *it = tolower(*it);
     }
@@ -497,14 +497,11 @@ static bool get_max_count(const string &message_name, const string &field_name, 
     {
         option_filename = proto_filename;
         size_t pos = option_filename.rfind(".");
-        if (pos == string::npos)
+        if (pos != string::npos)
         {
-            option_filename += ".options";
+            option_filename.replace(pos, option_filename.length() - pos, "");
         }
-        else
-        {
-            option_filename = option_filename.substr(0, pos) + ".options";
-        }
+        option_filename += ".options";
         fp_option = fopen(option_filename.c_str(), "rt");
         if (NULL == fp_option)
         {
@@ -525,7 +522,7 @@ static bool get_max_count(const string &message_name, const string &field_name, 
         {
             continue;
         }
-        sscanf(buffer, "%s %s", str1, str2);
+        sscanf(buffer, "%127[^ ] %63s", str1, str2);
         if (0 == strcmp(str1, key.c_str()))
         {
             char *num_str = strstr(str2, "max_count:");
@@ -802,7 +799,7 @@ static void print_field_in_struct(FILE *fp, const FieldDescriptor *field)
     }
 }
 
-static int gen_header(const string& nf_name, const Descriptor *desc, string &target_dir, map<string, string> &map_array_size)
+static int gen_header(const string& nf_name, const Descriptor *desc, const string &target_dir, map<string, string> &map_array_size)
 {
     int retcode = 0;
     string name_lower = desc->name();
@@ -1144,7 +1141,7 @@ static void print_clear_message_len(FILE *fp, const Descriptor *desc, const map<
     fprintf(fp, "    var_%s->_message_length = 0;\n", desc->name().c_str());
 }
 
-static int gen_source(const string& nf_name, const Descriptor *desc, string &target_dir, const map<string,string> &map_array_size, bool use_old_version)
+static int gen_source(const string& nf_name, const Descriptor *desc, const string &target_dir, const map<string,string> &map_array_size, bool use_old_version)
 {
     int retcode = 0;
     string name_lower = desc->name();
@@ -2166,7 +2163,7 @@ static int gen_source(const string& nf_name, const Descriptor *desc, string &tar
     return retcode;
 }
 
-int gen_all_from_file(const string& nf_name, const FileDescriptor *f, string &target_dir)
+int gen_all_from_file(const string& nf_name, const FileDescriptor *f, const string &target_dir)
 {
     int retcode = 0;
     for(int i=0; i<f->message_type_count(); ++i)
@@ -2284,7 +2281,6 @@ int create_path(string &path)
 int get_syntax(LPCSTR proto_filename)
 {
     int syntax = 0;
-    char str_syntax[128];
     char buf[8 * 1024];
 
     FILE *fp = fopen(proto_filename, "rt");
@@ -2299,9 +2295,6 @@ int get_syntax(LPCSTR proto_filename)
             else
             {
                 int i = 0;
-                int start = 0;
-                int len = 0;
-
                 for(;; ++i)
                 {
                     if(' ' != buf[i] && '\t' != buf[i])
@@ -2312,6 +2305,9 @@ int get_syntax(LPCSTR proto_filename)
 
                 if(0 == memcmp(buf+i, "syntax", 6))
                 {
+                    int start = 0;
+                    int len = 0;
+                    char str_syntax[128];
                     for(;; ++i)
                     {
                         if(isdigit(buf[i]))
@@ -2343,12 +2339,7 @@ int get_syntax(LPCSTR proto_filename)
 void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
 {
     char buf[8 * 1024];
-    char key_type[40];
-    char key_value[256];
-    char field_name[80];
-    char field_no[40];
     char append_buf[8*1024];
-    set<string> map_entrys;
 
     append_buf[0] = EOS;
     FILE *fp = fopen(pbv3_filename, "rt");
@@ -2366,9 +2357,6 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
                 else
                 {
                     size_t i = 0;
-                    size_t start = 0;
-                    size_t len = 0;
-
                     for(;; ++i)
                     {
                         if(' ' != buf[i] && '\t' != buf[i])
@@ -2379,6 +2367,14 @@ void convert_pbv3(LPCSTR pbv3_filename, LPCSTR pbv2_filename)
 
                     if(0 == memcmp(buf+i, "map", 3))
                     {
+                        size_t start = 0;
+                        size_t len = 0;
+                        char key_type[40];
+                        char key_value[256];
+                        char field_name[80];
+                        char field_no[40];
+                        set<string> map_entrys;
+
                         printf("%s", buf+i);
                         for(i=i+3;; ++i)
                         {
